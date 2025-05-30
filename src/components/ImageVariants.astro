@@ -1,0 +1,73 @@
+---
+interface Props {
+  postId: string;
+  type?: 'default' | 'og' | 'thumb' | 'wsp';
+  alt?: string;
+  className?: string;
+  lazy?: boolean;
+  debug?: boolean;
+  fetchpriority?: 'high' | 'low' | 'auto';
+  width?: number;
+  height?: number;
+}
+
+const { 
+  postId, 
+  type = 'default', 
+  alt = '', 
+  className = '',
+  lazy = true,
+  debug = false,
+  fetchpriority = 'auto',
+  width: customWidth,
+  height: customHeight
+} = Astro.props;
+
+// Determinar el sufijo según el tipo
+const suffix = type === 'default' ? '' : `-${type}`;
+const imagePath = `/images/${postId}/portada${suffix}.webp`;
+
+// Determinar si la imagen debe cargarse de forma diferida
+const loading = lazy ? 'lazy' : 'eager';
+const decoding = lazy ? 'async' : 'sync';
+
+// Dimensiones predeterminadas según el tipo
+let width, height;
+switch (type) {
+  case 'og':
+    width = customWidth || 1200;
+    height = customHeight || 630;
+    break;
+  case 'thumb':
+    width = customWidth || 600;
+    height = customHeight || 315;
+    break;
+  case 'wsp':
+    width = customWidth || 1080;
+    height = customHeight || 1080;
+    break;
+  default:
+    width = customWidth || 1200;
+    height = customHeight || null;
+}
+
+// Asegurar que siempre haya un texto alternativo descriptivo
+const altText = alt || `Imagen para el artículo ${postId.replace(/-/g, ' ')}`;
+---
+
+<img 
+  src={imagePath} 
+  alt={altText} 
+  class={className} 
+  loading={loading} 
+  decoding={decoding}
+  width={width}
+  height={height ? height : undefined}
+  fetchpriority={fetchpriority}
+  onerror="this.onerror=null; this.src='/placeholder-image.webp';"
+/>
+
+
+
+
+

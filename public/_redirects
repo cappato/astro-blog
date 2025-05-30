@@ -1,0 +1,9 @@
+# Redirecciones permanentes de matiascappato.com a cappato.dev
+https://matiascappato.com/* https://cappato.dev/:splat 301!
+https://www.matiascappato.com/* https://cappato.dev/:splat 301!
+
+# Asegurar que www.cappato.dev redirija a cappato.dev (sin www)
+https://www.cappato.dev/* https://cappato.dev/:splat 301!
+
+# Mantener SPA routing
+/* /index.html 200

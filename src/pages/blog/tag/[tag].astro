@@ -1,0 +1,138 @@
+---
+// Importaciones necesarias
+import { getCollection } from 'astro:content';
+import TagComponent from '../../../components/Tag.astro';
+import SEOHead from '../../../components/SEOHead.astro';
+import BlogNavbar from '../../../components/BlogNavbar.astro';
+import Footer from '../../../components/Footer.astro';
+import CommonScripts from '../../../components/CommonScripts.astro';
+import Favicons from '../../../components/Favicons.astro';
+
+// Función requerida para rutas dinámicas
+export async function getStaticPaths() {
+  const allPosts = await getCollection('blog', (post) => !post.data.draft || import.meta.env.DEV);
+  
+  // Extraer todas las etiquetas únicas de todos los posts
+  const uniqueTags = [...new Set(
+    allPosts.flatMap(post => post.data.tags || [])
+  )];
+  
+  // Crear una ruta para cada etiqueta
+  return uniqueTags.map(tag => ({
+    params: { tag },
+    props: { tag }
+  }));
+}
+
+// Recibir la etiqueta como prop
+const { tag } = Astro.props;
+
+// Obtener los posts con esta etiqueta
+const posts = await getCollection('blog', (post) => {
+  return post.data.tags?.includes(tag) && (!post.data.draft || import.meta.env.DEV);
+});
+
+// Ordenar por fecha (más reciente primero)
+posts.sort((a, b) => b.data.date.getTime() - a.data.date.getTime());
+
+// Metadatos para SEO
+const title = `Artículos sobre ${tag} | Blog de Matías Cappato`;
+const description = `Explora artículos y tutoriales sobre ${tag}. Aprende consejos, técnicas y mejores prácticas relacionadas con ${tag} en el blog de Matías Cappato.`;
+
+// Fecha actual para el layout
+const currentDate = new Date();
+---
+
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>{title}</title>
+  <SEOHead 
+    title={title}
+    description={description}
+    image="/images/blog-cover.webp"
+    imageAlt={`Artículos sobre ${tag} en el blog de Matías Cappato`}
+    type="website"
+    keywords={[tag, "blog", "desarrollo web", "programación"]}
+  />
+  <Favicons />
+  <CommonScripts />
+  <link rel="stylesheet" href="/styles/blog.css">
+</head>
+<body class="bg-gray-900 text-gray-100 font-sans">
+  <BlogNavbar currentPath={`/blog/tag/${tag}`} />
+  
+  <main class="container mx-auto px-4 py-8">
+    <!-- Mostrar la etiqueta actual con un tamaño más grande -->
+    <div class="mb-8">
+      <h1 class="text-3xl font-bold mb-2">Artículos con la etiqueta</h1>
+      <TagComponent tag={tag} size="lg" />
+    </div>
+    
+    <!-- Mostrar la lista de posts con esta etiqueta -->
+    {posts.length > 0 ? (
+      <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+        {posts.map(post => (
+          <article class="bg-gray-800 rounded-lg overflow-hidden shadow-lg hover:shadow-xl transition-shadow">
+            <a href={`/blog/${post.data.slug || post.slug}`} class="block">
+              {post.data.postId ? (
+                <img 
+                  src={`/images/${post.data.postId}/portada-thumb.webp`} 
+                  alt={post.data.imageAlt || post.data.title}
+                  class="w-full h-48 object-cover"
+                  loading="lazy"
+                />
+              ) : post.data.image ? (
+                <img 
+                  src={post.data.image.url} 
+                  alt={post.data.image.alt || post.data.title}
+                  class="w-full h-48 object-cover"
+                  loading="lazy"
+                />
+              ) : (
+                <div class="w-full h-48 bg-gray-700 flex items-center justify-center">
+                  <span class="text-gray-400">Sin imagen</span>
+                </div>
+              )}
+            </a>
+            
+            <div class="p-4">
+              <h2 class="text-xl font-bold mb-2">
+                <a href={`/blog/${post.data.slug || post.slug}`} class="text-primary hover:underline">
+                  {post.data.title}
+                </a>
+              </h2>
+              
+              <p class="text-gray-300 text-sm mb-3">
+                {new Date(post.data.date).toLocaleDateString('es-ES', {
+                  year: 'numeric',
+                  month: 'long',
+                  day: 'numeric'
+                })}
+              </p>
+              
+              <p class="text-gray-400 mb-4 line-clamp-3">
+                {post.data.description}
+              </p>
+              
+              <a href={`/blog/${post.data.slug || post.slug}`} class="text-primary hover:underline text-sm font-medium">
+                Leer más →
+              </a>
+            </div>
+          </article>
+        ))}
+      </div>
+    ) : (
+      <div class="text-center py-12">
+        <p class="text-xl text-gray-400">No hay artículos con esta etiqueta aún.</p>
+      </div>
+    )}
+  </main>
+  
+  <Footer />
+</body>
+</html>
+
+

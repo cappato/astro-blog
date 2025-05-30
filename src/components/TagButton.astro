@@ -1,0 +1,18 @@
+---
+interface Props {
+  tag: string;
+}
+
+const { tag } = Astro.props;
+const url = `/blog/tag/${tag.toLowerCase()}`;
+---
+
+<a 
+  href={url} 
+  class="bg-gray-800 hover:bg-gray-700 text-primary font-medium text-xs px-2 py-1 rounded trans_"
+  aria-label={`Ver artículos con la etiqueta ${tag}`}
+>
+  #{tag}
+</a>
+
+

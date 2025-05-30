@@ -1,0 +1,75 @@
+---
+import Icon from './Icon.astro';
+---
+
+<!-- Footer -->
+<footer class="bg-gray-800 py-8 mt-16">
+    <div class="container mx-auto px-4">
+        <div class="flex flex-col md:flex-row justify-between items-center">
+            <div class="text-gray-400 mb-4 md:mb-0">
+                &copy; {new Date().getFullYear()} Matías Sebastián Cappato. All rights reserved.
+            </div>
+            <div class="flex space-x-6">
+                <a href="https://github.com/cappato" 
+                   target="_blank"
+                   rel="noopener noreferrer"
+                   class="text-gray-400 hover:text-primary transition social-button" 
+                   aria-label="GitHub Profile">
+                    <Icon name="github" size={24} />
+                </a>
+                
+                <a href="https://www.linkedin.com/in/matiascappato/" 
+                   target="_blank"
+                   rel="noopener noreferrer"
+                   class="text-gray-400 hover:text-primary transition social-button" 
+                   aria-label="LinkedIn Profile">
+                    <Icon name="linkedin" size={24} />
+                </a>
+                
+                <a href="mailto:matias@cappato.dev" 
+                   class="text-gray-400 hover:text-primary transition social-button" 
+                   aria-label="Email">
+                    <Icon name="email" size={24} />
+                </a>
+            </div>
+        </div>
+    </div>
+</footer>
+
+<style>
+  /* Estilo para los botones sociales */
+  .social-button {
+    display: inline-block;
+    padding: 8px;
+    border-radius: 50%;
+  }
+  
+  .social-button:hover {
+    background-color: rgba(255, 255, 255, 0.1);
+  }
+  
+  /* Añadir estilos para accesibilidad con teclado */
+  .social-button:focus {
+    outline: 2px solid #4f46e5;
+    outline-offset: 2px;
+  }
+</style>
+
+<script>
+  // Añadir soporte para navegación con teclado
+  document.querySelectorAll('.social-button').forEach((button) => {
+    button.addEventListener('keydown', function(e) {
+      if (e instanceof KeyboardEvent && (e.key === 'Enter' || e.key === ' ')) {
+        e.preventDefault();
+        if (button instanceof HTMLElement) {
+          button.click();
+        }
+      }
+    });
+  });
+</script>
+
+
+
+
+

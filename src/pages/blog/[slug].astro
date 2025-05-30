@@ -1,0 +1,42 @@
+---
+import { getCollection, type CollectionEntry } from 'astro:content';
+import PostLayout from '../../layouts/PostLayout.astro';
+
+// Genera las rutas para todos los posts
+export async function getStaticPaths() {
+  const blogEntries = await getCollection('blog', ({ data }: CollectionEntry<'blog'>) => {
+    // En producción, filtra los borradores
+    return import.meta.env.PROD ? !data.draft : true;
+  });
+  
+  return blogEntries.map((entry: CollectionEntry<'blog'>) => ({
+    // Usa el slug personalizado si existe, de lo contrario usa el slug automático
+    params: { slug: entry.data.slug || entry.slug },
+    props: { entry },
+  }));
+}
+
+// Definir el tipo para la entrada
+interface Props {
+  entry: CollectionEntry<'blog'>;
+}
+
+// Obtiene los datos del post actual
+const { entry } = Astro.props;
+const { Content } = await entry.render();
+---
+
+<PostLayout
+  title={entry.data.title}
+  description={entry.data.description}
+  date={entry.data.date}
+  author={entry.data.author}
+  image={entry.data.image}
+  postId={entry.data.postId}
+  imageAlt={entry.data.imageAlt}
+  tags={entry.data.tags}
+>
+  <Content />
+</PostLayout>
+
+

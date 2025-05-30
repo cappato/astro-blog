@@ -1,0 +1,33 @@
+# Build
+dist/
+.output/
+.astro/
+
+# Dependencias
+node_modules/
+
+# Imágenes originales (sin procesar)
+images/raw/
+
+# Entorno
+.env
+.env.*
+!.env.example
+
+# Logs
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+
+# Editor
+.vscode/
+.idea/
+*.suo
+*.ntvs*
+*.njsproj
+*.sln
+.DS_Store
+
+# Windows Zone.Identifier files
+*:Zone.Identifier

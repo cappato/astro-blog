@@ -1,0 +1,68 @@
+---
+import Logo from './Logo.astro';
+import Icon from './Icon.astro';
+import NavLink from './NavLink.astro';
+
+const navItems = [
+  { href: "#about", label: "About me", section: "about" },
+  { href: "#experience", label: "Experience", section: "experience" },
+  { href: "#education", label: "Education", section: "education" },
+  { href: "#skills", label: "Skills", section: "skills" },
+  { href: "#achievements", label: "Achievements", section: "achievements" },
+  { href: "#hobbies", label: "Hobbies", section: "hobbies" },
+  { href: "#contact", label: "Contact", section: "contact" }
+];
+---
+
+<nav class="sticky top-0 z-10 bg-gray-800 shadow-md">
+  <div class="container mx-auto px-6 sm:px-4 py-3">
+    <div class="flex justify-between items-center">
+      <a href="/" class="flex items-center gap-3">
+        <Logo size="medium" />
+        <span class="text-primary text-2xl font-bold">Matías S. Cappato</span>
+      </a>
+
+      <div class="hidden md:block">
+        <ul class="flex space-x-4 lg:space-x-6">
+          {navItems.map(item => (
+            <li>
+              <NavLink
+                href={item.href}
+                section={item.section}
+                className="nav-link px-3 py-2 rounded-md hover:bg-gray-700 text-gray-300 hover:text-primary transition-all duration-200 flex items-center"
+              >
+                {item.label}
+              </NavLink>
+            </li>
+          ))}
+        </ul>
+      </div>
+
+      <button class="md:hidden text-gray-300 focus:outline-none" id="mobile-menu-button">
+        <span class="sr-only">Abrir menú de navegación</span>
+        <Icon name="menu" size={24} />
+      </button>
+    </div>
+  </div>
+</nav>
+
+<div id="mobile-menu" class="fixed inset-0 bg-gray-900 bg-opacity-95 z-50 hidden">
+  <div class="flex flex-col h-full">
+    <div class="flex justify-end p-4">
+      <button id="close-menu" class="text-gray-300 hover:text-primary focus:outline-none p-2 rounded-full hover:bg-gray-800 transition-all duration-200">
+        <Icon name="close" size={24} />
+      </button>
+    </div>
+    <div class="flex-1 flex flex-col items-center justify-center space-y-6 text-xl">
+      {navItems.map(item => (
+        <NavLink
+          href={item.href}
+          section={item.section}
+          className="nav-link-mobile px-5 py-3 rounded-md hover:bg-gray-800 text-gray-300 hover:text-primary transition-all duration-200 w-64 text-center"
+        >
+          {item.label}
+        </NavLink>
+      ))}
+    </div>
+  </div>
+</div>

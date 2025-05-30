@@ -1,0 +1,97 @@
+---
+// Componente para metadatos específicos para IA
+interface Props {
+  title: string;
+  description: string;
+  type: 'website' | 'article' | 'profile';
+  url: string;
+  datePublished?: Date;
+  dateModified?: Date;
+  tags?: string[];
+  author?: string;
+}
+
+const { 
+  title, 
+  description, 
+  type, 
+  url,
+  datePublished,
+  dateModified,
+  tags = [],
+  author = "Matías Cappato"
+} = Astro.props;
+
+const siteUrl = 'https://cappato.dev';
+const fullUrl = url.startsWith('http') ? url : `${siteUrl}${url}`;
+
+// Definir el tipo para el objeto aiMetadata
+interface AIMetadataType {
+  "@context": string;
+  "@type": string;
+  "name": string;
+  "description": string;
+  "url": string;
+  "keywords": string;
+  "author": {
+    "@type": string;
+    "name": string;
+    "url": string;
+  };
+  "inLanguage": string;
+  "isAccessibleForFree": boolean;
+  "potentialAction": {
+    "@type": string;
+    "target": string;
+  };
+  "datePublished"?: string;
+  "dateModified"?: string;
+  "mainEntityOfPage"?: {
+    "@type": string;
+    "@id": string;
+  };
+}
+
+// Crear objeto de metadatos para IA
+const aiMetadata: AIMetadataType = {
+  "@context": "https://schema.org",
+  "@type": type === 'profile' ? 'Person' : type === 'article' ? 'BlogPosting' : 'WebSite',
+  "name": title,
+  "description": description,
+  "url": fullUrl,
+  "keywords": tags.join(", "),
+  "author": {
+    "@type": "Person",
+    "name": author,
+    "url": `${siteUrl}/about`
+  },
+  "inLanguage": "es",
+  "isAccessibleForFree": true,
+  "potentialAction": {
+    "@type": "ReadAction",
+    "target": fullUrl
+  }
+};
+
+// Añadir campos específicos para artículos
+if (type === 'article' && datePublished) {
+  aiMetadata.datePublished = datePublished.toISOString();
+  aiMetadata.dateModified = dateModified ? dateModified.toISOString() : datePublished.toISOString();
+  aiMetadata.mainEntityOfPage = {
+    "@type": "WebPage",
+    "@id": fullUrl
+  };
+}
+---
+
+<!-- Metadatos específicos para IA -->
+<script type="application/ld+json" set:html={JSON.stringify(aiMetadata)} />
+
+<!-- Metadatos para asistentes de IA -->
+<meta name="ai:description" content={description} />
+<meta name="ai:keywords" content={tags.join(", ")} />
+<meta name="ai:type" content={type} />
+{datePublished && <meta name="ai:published" content={datePublished.toISOString()} />}
+{dateModified && <meta name="ai:modified" content={dateModified.toISOString()} />}
+<meta name="ai:author" content={author} />
+

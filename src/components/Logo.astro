@@ -1,0 +1,46 @@
+---
+interface Props {
+  size?: 'small' | 'medium' | 'large' | 'xlarge' | 'xxlarge';
+  type?: 'modern' | 'original';
+}
+
+const { size = 'medium', type = 'modern' } = Astro.props;
+
+// Mapeo simple de tamaños a clases de Tailwind
+const sizeClasses = {
+  small: 'h-8 w-8',
+  medium: 'h-14 w-14',
+  large: 'h-20 w-20',
+  xlarge: 'h-24 w-24',
+  xxlarge: 'h-32 w-32'
+};
+
+// Ruta del logo según el tipo
+const logoPath = type === 'modern' 
+  ? '/images/logo/logo-modern.webp' 
+  : '/images/logo/logo-transparent.webp';
+---
+
+<div class={`${sizeClasses[size]} flex items-center justify-center`}>
+  <img 
+    src={logoPath}
+    alt="Matías S. Cappato Logo" 
+    class="h-full w-auto object-contain"
+  />
+</div>
+
+<style>
+  .logo-container {
+    position: relative;
+  }
+  
+  .logo-container img {
+    position: relative;
+    object-position: center;
+  }
+</style>
+
+
+
+
+

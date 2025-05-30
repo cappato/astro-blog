@@ -1,0 +1,218 @@
+---
+import Favicons from '../components/Favicons.astro';
+import '../styles/global.css';
+import CommonScripts from '../components/CommonScripts.astro';
+import SocialHead from '../components/SocialHead.astro';
+import ImageVariants from '../components/ImageVariants.astro';
+import BlogPostSchema from '../components/BlogPostSchema.astro';
+import ShareButtons from '../components/ShareButtons.astro';
+import ShareMessage from '../components/ShareMessage.astro';
+import CopyToast from '../components/CopyToast.astro';
+import Logo from '../components/Logo.astro';
+import BlogNavbar from '../components/BlogNavbar.astro';
+import Footer from '../components/Footer.astro';
+import TagList from '../components/TagList.astro';
+import { getReadingTime, formatReadingTime } from '../utils/readingTime';
+import AIMetadata from '../components/AIMetadata.astro';
+
+// Definir la interfaz para las props
+interface Props {
+  title: string;
+  description: string;
+  date: Date;
+  author: string;
+  // Sistema antiguo
+  image?: {
+    url: string;
+    alt: string;
+  };
+  // Nuevo sistema
+  postId?: string;
+  imageAlt?: string;
+  tags?: string[];
+}
+
+// Props que recibe el componente
+const { title, description, date, author, image, postId, imageAlt, tags } = Astro.props;
+
+// Determinar qué sistema de imágenes usar
+const useNewImageSystem = !!postId;
+
+// Determinar la imagen para compartir
+const shareImage = useNewImageSystem
+  ? {
+      url: `/images/${postId}/portada-og.webp`,
+      alt: imageAlt || title,
+      width: 1200,
+      height: 630
+    }
+  : {
+      url: image?.url || '',
+      alt: image?.alt || title,
+      width: 1200,
+      height: 630
+    };
+
+// Formatear la fecha
+const formattedDate = date.toLocaleDateString('es-ES', {
+  year: 'numeric',
+  month: 'long',
+  day: 'numeric'
+});
+
+// Calcular tiempo de lectura
+const content = await Astro.slots.render('default');
+const readingTime = getReadingTime(content);
+const readingTimeText = formatReadingTime(readingTime);
+
+// URL actual para compartir
+const currentUrl = Astro.url.href;
+---
+
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>{title} | Matías Cappato</title>
+  
+  <!-- Meta descripción mejorada y única para cada post -->
+  <meta name="description" content={description || `Artículo sobre ${title} por Matías Cappato. ${tags?.join(', ')}`} />
+  
+  <!-- Favicons -->
+  <Favicons />
+  
+  <!-- Componente de metadatos sociales -->
+  <SocialHead
+    title={title}
+    description={description}
+    image={shareImage}
+    type="article"
+    postId={postId}
+  />
+  
+  <!-- Schema.org JSON-LD para artículos -->
+  <BlogPostSchema
+    title={title}
+    description={description}
+    date={date}
+    author={author || "Matías Cappato"}
+    image={shareImage.url}
+    url={Astro.url.href}
+    updatedDate={date}
+    tags={tags || []}
+  />
+  
+  <!-- Metadatos específicos para IA -->
+  <AIMetadata
+    title={title}
+    description={description}
+    type="article"
+    url={currentUrl}
+    datePublished={date}
+    dateModified={date}
+    tags={tags || []}
+    author={author || "Matías Cappato"}
+  />
+
+  <!-- Añadir metadatos adicionales para SEO -->
+  {tags && <meta name="keywords" content={tags.join(', ')} />}
+  <meta name="author" content={author || "Matías Cappato"} />
+  <meta name="robots" content="index, follow" />
+  
+  <CommonScripts />
+  <link rel="stylesheet" href="/styles/blog.css">
+</head>
+<body class="bg-gray-900 text-gray-100 font-sans">
+  <BlogNavbar currentPath={Astro.url.pathname} />
+  
+  <main id="main-content" class="container mx-auto px-4 py-8">
+    <!-- Contenido del artículo -->
+    <article class="max-w-3xl mx-auto">
+      <!-- Imagen destacada -->
+      <div class="w-full h-64 md:h-80 overflow-hidden">
+        {useNewImageSystem ? (
+          <ImageVariants 
+            postId={postId} 
+            type="default" 
+            alt={imageAlt || title} 
+            className="w-full h-full object-cover"
+            lazy={false}
+            fetchpriority="high"
+            width={1200}
+            height={630}
+            debug={import.meta.env.DEV}
+          />
+        ) : (
+          <img 
+            src={image?.url} 
+            alt={image?.alt || title}
+            width="1200"
+            height="630" 
+            class="w-full h-full object-cover"
+            loading="eager"
+            fetchpriority="high"
+          />
+        )}
+      </div>
+      
+      <div class="p-6">
+        <!-- Metadatos del post -->
+        <div class="mb-6 border-b border-gray-700 pb-4">
+          <h1 class="text-3xl font-bold text-primary mb-3">{title}</h1>
+          <div class="flex flex-wrap items-center text-sm text-gray-400 mb-3">
+            <span class="mr-4 flex items-center">
+              <i class="fas fa-user mr-1"></i> {author}
+            </span>
+            <span class="mr-4 flex items-center">
+              <i class="fas fa-calendar mr-1"></i> {formattedDate}
+            </span>
+            <span class="flex items-center">
+              <i class="fas fa-clock mr-1"></i> {readingTimeText}
+            </span>
+          </div>
+          
+          <!-- Barra de compartir horizontal (componente) -->
+          <ShareButtons url={currentUrl} title={title} compact={true} />
+          
+          <!-- Tags -->
+          {tags && tags.length > 0 && (
+            <TagList tags={tags} />
+          )}
+        </div>
+        
+        <!-- Contenido del post -->
+        <div class="prose prose-invert prose-lg max-w-none">
+          <slot />
+        </div>
+
+        <!-- Botones para compartir -->
+        <div class="mt-8 pt-6 border-t border-gray-700">
+          <h3 class="text-lg font-medium mb-4">¿Te gustó este artículo? ¡Compártelo!</h3>
+          
+          <!-- Componente de botones para compartir (versión completa) -->
+          <ShareButtons url={currentUrl} title={title} compact={false} showTitle={false} />
+          
+          <!-- Componente de mensaje para compartir -->
+          <div class="mt-6">
+            <ShareMessage 
+              title={title} 
+              description={description} 
+              url={currentUrl} 
+              tags={tags} 
+            />
+          </div>
+        </div>
+      </div>
+    </article>
+  </main>
+
+  <!-- Usar el mismo componente Footer que funciona en la home -->
+  <Footer />
+  
+  <!-- Componente de toast para notificaciones de copia -->
+  <CopyToast />
+</body>
+</html>
+
+

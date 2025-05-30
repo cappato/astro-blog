@@ -1,0 +1,84 @@
+---
+import '../styles/global.css';
+import CommonScripts from '../components/CommonScripts.astro';
+import Favicons from '../components/Favicons.astro';
+import Navbar from '../components/Navbar.astro';
+import Footer from '../components/Footer.astro';
+import SEOHead from '../components/SEOHead.astro';
+import AIMetadata from '../components/AIMetadata.astro';
+
+interface Props {
+    title: string;
+    description?: string;
+    image?: string;
+    imageAlt?: string;
+    type?: 'website' | 'article';
+    keywords?: string[];
+    publishedDate?: string;
+    modifiedDate?: string;
+}
+
+const { 
+    title, 
+    description = "Matías Cappato - Desarrollador web especializado en crear experiencias digitales modernas y accesibles.",
+    image,
+    imageAlt,
+    type = 'website',
+    keywords = [],
+    publishedDate,
+    modifiedDate
+} = Astro.props;
+
+// Convertir fechas a objetos Date si son strings
+const pubDate = publishedDate ? new Date(publishedDate) : undefined;
+const modDate = modifiedDate ? new Date(modifiedDate) : undefined;
+
+const currentUrl = Astro.url.pathname;
+---
+
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{title}</title>
+    <SEOHead 
+        title={title}
+        description={description}
+        image={image}
+        imageAlt={imageAlt}
+        type={type}
+        keywords={keywords}
+        publishedDate={pubDate}
+        modifiedDate={modDate}
+    />
+    <AIMetadata
+        title={title}
+        description={description}
+        type={type}
+        url={currentUrl}
+        datePublished={pubDate}
+        dateModified={modDate}
+        tags={keywords}
+    />
+    <Favicons />
+    <CommonScripts />
+</head>
+<body class="bg-gray-900 text-gray-100 font-sans overflow-x-hidden">
+    <Navbar />
+    <slot />
+    <Footer />
+</body>
+</html>
+
+
+
+
+
+
+
+
+
+
+
+
