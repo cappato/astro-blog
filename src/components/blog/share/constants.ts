@@ -4,55 +4,41 @@
 
 import type { SocialConfig } from './types';
 import { SocialPlatform } from './types';
+import { SOCIAL_COLORS } from '../../../config/colors';
+import { SHARE_APIS, POPUP_CONFIG, BREAKPOINTS } from '../../../config/urls';
 
 /** Configuración de colores con mejor contraste para accesibilidad */
 export const SOCIAL_CONFIGS: Record<SocialPlatform, SocialConfig> = {
   facebook: {
     name: 'Facebook',
-    colors: {
-      bg: '#699CF9',
-      hover: '#5A8AE0',
-      text: '#FFFFFF'
-    },
+    colors: SOCIAL_COLORS.facebook,
     iconName: 'facebook',
     ariaLabel: 'Compartir en Facebook'
   },
   twitter: {
     name: 'Twitter',
-    colors: {
-      bg: '#699CF9',
-      hover: '#5A8AE0',
-      text: '#FFFFFF'
-    },
+    colors: SOCIAL_COLORS.twitter,
     iconName: 'twitter',
     ariaLabel: 'Compartir en Twitter'
   },
   linkedin: {
     name: 'LinkedIn',
-    colors: {
-      bg: '#699CF9',
-      hover: '#5A8AE0',
-      text: '#FFFFFF'
-    },
+    colors: SOCIAL_COLORS.linkedin,
     iconName: 'linkedin',
     ariaLabel: 'Compartir en LinkedIn'
   },
   whatsapp: {
     name: 'WhatsApp',
-    colors: {
-      bg: '#A2F678',
-      hover: '#8FDB6A',
-      text: '#FFFFFF'
-    },
+    colors: SOCIAL_COLORS.whatsapp,
     iconName: 'whatsapp',
     ariaLabel: 'Compartir en WhatsApp'
   },
   copy: {
     name: 'Copiar enlace',
     colors: {
-      bg: '#699CF9',
-      hover: '#5A8AE0',
-      text: '#FFFFFF'
+      bg: SOCIAL_COLORS.facebook.bg, // Usar el mismo azul consistente
+      hover: SOCIAL_COLORS.facebook.hover,
+      text: SOCIAL_COLORS.facebook.text
     },
     iconName: 'link',
     ariaLabel: 'Copiar enlace al portapapeles'
@@ -68,29 +54,29 @@ export const ICON_SIZES = {
 
 /** Configuración de ventanas emergentes para compartir */
 export const POPUP_FEATURES = {
-  facebook: 'width=600,height=400,scrollbars=yes,resizable=yes',
-  twitter: 'width=550,height=420,scrollbars=yes,resizable=yes',
-  linkedin: 'width=550,height=420,scrollbars=yes,resizable=yes'
+  facebook: `width=${POPUP_CONFIG.facebook.width},height=${POPUP_CONFIG.facebook.height},${POPUP_CONFIG.facebook.features}`,
+  twitter: `width=${POPUP_CONFIG.twitter.width},height=${POPUP_CONFIG.twitter.height},${POPUP_CONFIG.twitter.features}`,
+  linkedin: `width=${POPUP_CONFIG.linkedin.width},height=${POPUP_CONFIG.linkedin.height},${POPUP_CONFIG.linkedin.features}`
 } as const;
 
 /** URLs base para compartir en redes sociales */
 export const SHARE_URLS = {
-  facebook: 'https://www.facebook.com/sharer.php',
-  twitter: 'https://twitter.com/intent/tweet',
-  linkedin: 'https://www.linkedin.com/sharing/share-offsite/',
-  whatsapp: 'https://wa.me/'
+  facebook: SHARE_APIS.facebook.web,
+  twitter: SHARE_APIS.twitter.web,
+  linkedin: SHARE_APIS.linkedin.web,
+  whatsapp: SHARE_APIS.whatsapp.web
 } as const;
 
 /** URLs móviles específicas */
 export const MOBILE_URLS = {
-  facebook: 'fb://facewebmodal/f'
+  facebook: SHARE_APIS.facebook.mobile
 } as const;
 
 /** Expresión regular para detectar dispositivos móviles */
 export const MOBILE_USER_AGENT_REGEX = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i;
 
 /** Breakpoint para considerar un dispositivo como móvil */
-export const MOBILE_BREAKPOINT = 768;
+export const MOBILE_BREAKPOINT = BREAKPOINTS.mobile;
 
 /** Plataformas por defecto a mostrar */
 export const DEFAULT_PLATFORMS: readonly SocialPlatform[] = [

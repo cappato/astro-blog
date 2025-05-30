@@ -1,5 +1,6 @@
 ---
 // Componente dedicado para gestionar todos los favicons del sitio
+import { COLORS } from '../../config';
 ---
 
 <!-- Favicons para todos los dispositivos y navegadores -->
@@ -14,7 +15,7 @@
 <link rel="icon" type="image/png" sizes="512x512" href="/android-chrome-512x512.png">
 
 <!-- Colores de tema para navegadores móviles -->
-<meta name="theme-color" content="#699CF9">
-<meta name="msapplication-TileColor" content="#699CF9">
+<meta name="theme-color" content={COLORS.primary}>
+<meta name="msapplication-TileColor" content={COLORS.primary}>
 
 

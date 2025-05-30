@@ -1,4 +1,6 @@
 ---
+import { SITE_INFO, SEO_DEFAULTS } from '../../config';
+
 // Props para el componente
 export interface Props {
   title: string;
@@ -16,18 +18,18 @@ export interface Props {
 const {
   title,
   description,
-  image = '/images/og-default.webp',
-  imageAlt = 'Matías Cappato - Desarrollador Web',
+  image = SEO_DEFAULTS.defaultImage,
+  imageAlt = SEO_DEFAULTS.defaultImageAlt,
   type = 'website',
   keywords = [],
   publishedDate,
   modifiedDate,
-  author = 'Matías Cappato',
+  author = SITE_INFO.author.name,
   canonicalUrl,
 } = Astro.props;
 
 // URL canónica
-const siteUrl = 'https://cappato.dev';
+const siteUrl = SITE_INFO.url;
 const canonical = canonicalUrl ? `${siteUrl}${canonicalUrl}` : Astro.url.href;
 const imageUrl = image.startsWith('http') ? image : `${siteUrl}${image}`;
 
@@ -50,7 +52,7 @@ const modDate = modifiedDate instanceof Date ? modifiedDate : undefined;
 <meta property="og:description" content={description} />
 <meta property="og:image" content={imageUrl} />
 <meta property="og:image:alt" content={imageAlt} />
-<meta property="og:site_name" content="Matías Cappato" />
+<meta property="og:site_name" content={SITE_INFO.title} />
 {pubDate && <meta property="article:published_time" content={pubDate.toISOString()} />}
 {modDate && <meta property="article:modified_time" content={modDate.toISOString()} />}
 
@@ -67,7 +69,7 @@ const modDate = modifiedDate instanceof Date ? modifiedDate : undefined;
 
 <!-- Schema.org JSON-LD para Google -->
 <script type="application/ld+json" set:html={JSON.stringify(
-  type === 'article' 
+  type === 'article'
     ? {
         "@context": "https://schema.org",
         "@type": "BlogPosting",

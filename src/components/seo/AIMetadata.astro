@@ -1,4 +1,6 @@
 ---
+import { SITE_INFO } from '../../config';
+
 // Componente para metadatos específicos para IA
 interface Props {
   title: string;
@@ -11,18 +13,18 @@ interface Props {
   author?: string;
 }
 
-const { 
-  title, 
-  description, 
-  type, 
+const {
+  title,
+  description,
+  type,
   url,
   datePublished,
   dateModified,
   tags = [],
-  author = "Matías Cappato"
+  author = SITE_INFO.author.name
 } = Astro.props;
 
-const siteUrl = 'https://cappato.dev';
+const siteUrl = SITE_INFO.url;
 const fullUrl = url.startsWith('http') ? url : `${siteUrl}${url}`;
 
 // Definir el tipo para el objeto aiMetadata

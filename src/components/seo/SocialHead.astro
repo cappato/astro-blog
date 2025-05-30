@@ -1,4 +1,6 @@
 ---
+import { SITE_INFO, SOCIAL_LINKS } from '../../config';
+
 interface Props {
   title: string;
   description: string;
@@ -14,29 +16,29 @@ interface Props {
   postId?: string;
 }
 
-const { 
-  title, 
-  description, 
+const {
+  title,
+  description,
   image,
   type = 'article',
   canonicalUrl = Astro.url.href,
-  twitterUsername = '@matiascappato',
+  twitterUsername = SOCIAL_LINKS.twitter.username,
   postId = ''
 } = Astro.props;
 
 // Determinar la URL base correcta - siempre usar cappato.dev como dominio principal
-const SITE_URL = 'https://cappato.dev';
+const SITE_URL = SITE_INFO.url;
 
 // Asegurar que la URL de la imagen sea absoluta
-const imageUrl = image.url.startsWith('http') 
-  ? image.url 
+const imageUrl = image.url.startsWith('http')
+  ? image.url
   : new URL(image.url, SITE_URL).toString();
 
 // URL para versión JPG (mayor compatibilidad)
 const jpgImageUrl = imageUrl.replace('-og.webp', '-og-jpg.jpeg');
 
 // URL canónica absoluta - siempre usar cappato.dev
-const absoluteCanonicalUrl = canonicalUrl.startsWith('http') 
+const absoluteCanonicalUrl = canonicalUrl.startsWith('http')
   ? canonicalUrl.replace('matiascappato.com', 'cappato.dev')
   : new URL(canonicalUrl, SITE_URL).toString();
 ---
