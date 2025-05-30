@@ -1,6 +1,7 @@
 ---
 import SEOHead from '../seo/SEOHead.astro';
 import CommonScripts from './CommonScripts.astro';
+import ThemeScript from '../scripts/ThemeScript.astro';
 
 interface Props {
   title: string;
@@ -24,6 +25,9 @@ const {
 <!DOCTYPE html>
 <html lang="es">
 <head>
+  <!-- Script de tema temprano para evitar flash -->
+  <ThemeScript />
+
   <SEOHead
     title={title}
     description={description}
@@ -47,7 +51,7 @@ const {
   <!-- Slot para estilos adicionales específicos de página -->
   <slot name="head" />
 </head>
-<body class="bg-background-primary text-text-primary font-sans min-h-screen flex flex-col">
+<body class="bg-background-primary dark:bg-gray-900 text-text-primary dark:text-gray-100 font-sans min-h-screen flex flex-col transition-colors duration-300">
   <!-- Mejora: Skip to content para accesibilidad -->
   <a href="#main-content" class="sr-only focus:not-sr-only focus:absolute focus:p-4 focus:bg-primary focus:text-white focus:z-50">
     Saltar al contenido principal

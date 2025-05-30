@@ -1,0 +1,92 @@
+---
+/**
+ * Script de inicialización temprana del tema
+ * Se ejecuta antes del renderizado para evitar flash de tema incorrecto
+ */
+---
+
+<script is:inline>
+  // Script inline que se ejecuta inmediatamente
+  (function() {
+    'use strict';
+    
+    const STORAGE_KEY = 'theme-preference';
+    
+    /**
+     * Obtener tema inicial
+     */
+    function getInitialTheme() {
+      // Verificar localStorage primero
+      try {
+        const savedTheme = localStorage.getItem(STORAGE_KEY);
+        if (savedTheme === 'light' || savedTheme === 'dark') {
+          return savedTheme;
+        }
+      } catch (e) {
+        // localStorage no disponible (SSR, etc.)
+        console.warn('localStorage no disponible para tema');
+      }
+
+      // Fallback a preferencia del sistema
+      if (typeof window !== 'undefined' && window.matchMedia) {
+        if (window.matchMedia('(prefers-color-scheme: dark)').matches) {
+          return 'dark';
+        }
+      }
+
+      return 'light'; // Default
+    }
+
+    /**
+     * Aplicar tema inmediatamente
+     */
+    function applyTheme(theme) {
+      const html = document.documentElement;
+      
+      if (theme === 'dark') {
+        html.classList.add('dark');
+      } else {
+        html.classList.remove('dark');
+      }
+      
+      // Guardar en localStorage si está disponible
+      try {
+        localStorage.setItem(STORAGE_KEY, theme);
+      } catch (e) {
+        // Ignorar errores de localStorage
+      }
+    }
+
+    // Aplicar tema inmediatamente
+    const initialTheme = getInitialTheme();
+    applyTheme(initialTheme);
+
+    // Prevenir flash de contenido sin estilo
+    document.documentElement.style.colorScheme = initialTheme;
+    
+    // Hacer disponible globalmente para otros scripts
+    window.__THEME_INITIAL__ = initialTheme;
+  })();
+</script>
+
+<style>
+  /* CSS para prevenir flash de contenido sin estilo */
+  html {
+    /* Transición suave para cambios de tema */
+    transition: background-color 0.3s ease-in-out, color 0.3s ease-in-out;
+  }
+
+  /* Asegurar que el tema se aplique correctamente desde el inicio */
+  html:not(.dark) {
+    color-scheme: light;
+  }
+
+  html.dark {
+    color-scheme: dark;
+  }
+
+  /* Prevenir flash de contenido */
+  body {
+    transition: background-color 0.3s ease-in-out, color 0.3s ease-in-out;
+  }
+</style>
