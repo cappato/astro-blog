@@ -1,14 +1,18 @@
+---
+import Card from '../ui/Card.astro';
+---
+
 <!-- Hobbies Section -->
 <section id="hobbies" class="container mx-auto px-6 sm:px-4 py-10">
-    <h2 class="text-3xl font-bold text-primary mb-6 border-b border-gray-700 pb-2 max-w-3xl mx-auto">Hobbies</h2>
-    
+    <h2 class="text-3xl font-bold text-primary mb-6 border-b border-surface-700 pb-2 max-w-3xl mx-auto">Hobbies</h2>
+
     <div class="max-w-3xl mx-auto">
-        <div class="bg-gray-800 rounded-lg p-4 sm:p-6 shadow-lg">
-            <ul class="list-disc pl-5 space-y-3 text-gray-300">
+        <Card variant="default">
+            <ul class="list-disc pl-5 space-y-3 text-surface-300">
                 <li>Passionate about programming.</li>
                 <li>Enjoy playing chess, surfing, and swimming.</li>
                 <li>Took a lifeguard course as a personal interest.</li>
             </ul>
-        </div>
+        </Card>
     </div>
 </section>
