@@ -1,22 +1,22 @@
 ---
 // Importaciones necesarias
 import { getCollection } from 'astro:content';
-import TagComponent from '../../../components/Tag.astro';
-import SEOHead from '../../../components/SEOHead.astro';
-import BlogNavbar from '../../../components/BlogNavbar.astro';
-import Footer from '../../../components/Footer.astro';
-import CommonScripts from '../../../components/CommonScripts.astro';
-import Favicons from '../../../components/Favicons.astro';
+import TagComponent from '../../../components/ui/Tag.astro';
+import SEOHead from '../../../components/seo/SEOHead.astro';
+import BlogNavbar from '../../../components/layout/BlogNavbar.astro';
+import Footer from '../../../components/layout/Footer.astro';
+import CommonScripts from '../../../components/layout/CommonScripts.astro';
+import Favicons from '../../../components/seo/Favicons.astro';
 
 // Función requerida para rutas dinámicas
 export async function getStaticPaths() {
   const allPosts = await getCollection('blog', (post) => !post.data.draft || import.meta.env.DEV);
-  
+
   // Extraer todas las etiquetas únicas de todos los posts
   const uniqueTags = [...new Set(
     allPosts.flatMap(post => post.data.tags || [])
   )];
-  
+
   // Crear una ruta para cada etiqueta
   return uniqueTags.map(tag => ({
     params: { tag },
@@ -49,7 +49,7 @@ const currentDate = new Date();
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>{title}</title>
-  <SEOHead 
+  <SEOHead
     title={title}
     description={description}
     image="/images/blog-cover.webp"
@@ -63,14 +63,14 @@ const currentDate = new Date();
 </head>
 <body class="bg-gray-900 text-gray-100 font-sans">
   <BlogNavbar currentPath={`/blog/tag/${tag}`} />
-  
+
   <main class="container mx-auto px-4 py-8">
     <!-- Mostrar la etiqueta actual con un tamaño más grande -->
     <div class="mb-8">
       <h1 class="text-3xl font-bold mb-2">Artículos con la etiqueta</h1>
       <TagComponent tag={tag} size="lg" />
     </div>
-    
+
     <!-- Mostrar la lista de posts con esta etiqueta -->
     {posts.length > 0 ? (
       <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
@@ -78,15 +78,15 @@ const currentDate = new Date();
           <article class="bg-gray-800 rounded-lg overflow-hidden shadow-lg hover:shadow-xl transition-shadow">
             <a href={`/blog/${post.data.slug || post.slug}`} class="block">
               {post.data.postId ? (
-                <img 
-                  src={`/images/${post.data.postId}/portada-thumb.webp`} 
+                <img
+                  src={`/images/${post.data.postId}/portada-thumb.webp`}
                   alt={post.data.imageAlt || post.data.title}
                   class="w-full h-48 object-cover"
                   loading="lazy"
                 />
               ) : post.data.image ? (
-                <img 
-                  src={post.data.image.url} 
+                <img
+                  src={post.data.image.url}
                   alt={post.data.image.alt || post.data.title}
                   class="w-full h-48 object-cover"
                   loading="lazy"
@@ -97,14 +97,14 @@ const currentDate = new Date();
                 </div>
               )}
             </a>
-            
+
             <div class="p-4">
               <h2 class="text-xl font-bold mb-2">
                 <a href={`/blog/${post.data.slug || post.slug}`} class="text-primary hover:underline">
                   {post.data.title}
                 </a>
               </h2>
-              
+
               <p class="text-gray-300 text-sm mb-3">
                 {new Date(post.data.date).toLocaleDateString('es-ES', {
                   year: 'numeric',
@@ -112,11 +112,11 @@ const currentDate = new Date();
                   day: 'numeric'
                 })}
               </p>
-              
+
               <p class="text-gray-400 mb-4 line-clamp-3">
                 {post.data.description}
               </p>
-              
+
               <a href={`/blog/${post.data.slug || post.slug}`} class="text-primary hover:underline text-sm font-medium">
                 Leer más →
               </a>
@@ -130,7 +130,7 @@ const currentDate = new Date();
       </div>
     )}
   </main>
-  
+
   <Footer />
 </body>
 </html>

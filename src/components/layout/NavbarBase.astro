@@ -1,5 +1,5 @@
 ---
-import Logo from './Logo.astro';
+import Logo from '../ui/Logo.astro';
 
 interface Props {
   currentPath?: string;
@@ -16,7 +16,7 @@ const { currentPath = '/' } = Astro.props;
         <Logo size="medium" />
         <span class="text-primary text-2xl font-bold">Matías S. Cappato</span>
       </a>
-      
+
       <!-- Slot para contenido específico de cada navbar -->
       <slot />
     </div>

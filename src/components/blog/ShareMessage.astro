@@ -1,5 +1,5 @@
 ---
-import Icon from './Icon.astro';
+import Icon from '../ui/Icon.astro';
 
 interface Props {
   title: string;
@@ -19,16 +19,16 @@ const message = `¡Acabo de leer "${title}" en el blog de Matías Cappato! ${des
   <h4 class="text-primary font-medium mb-2">Mensaje sugerido para compartir:</h4>
   <div class="relative">
     <label for="share-message" class="sr-only">Mensaje para compartir</label>
-    <textarea 
-      id="share-message" 
+    <textarea
+      id="share-message"
       name="share-message"
-      class="w-full bg-gray-800 text-gray-300 p-3 rounded-md border border-gray-700 focus:border-primary focus:ring-1 focus:ring-primary min-h-[100px] resize-none" 
+      class="w-full bg-gray-800 text-gray-300 p-3 rounded-md border border-gray-700 focus:border-primary focus:ring-1 focus:ring-primary min-h-[100px] resize-none"
       readonly
       aria-label="Mensaje para compartir en redes sociales"
     >{message}</textarea>
-    
-    <button 
-      id="copy-message" 
+
+    <button
+      id="copy-message"
       class="mt-3 w-full sm:w-auto px-6 py-3 bg-primary hover:bg-primary-dark text-white font-medium rounded-md transition-colors duration-200 flex items-center justify-center gap-2 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary"
       aria-label="Copiar mensaje al portapapeles"
     >
@@ -45,12 +45,12 @@ const message = `¡Acabo de leer "${title}" en el blog de Matías Cappato! ${des
   document.addEventListener('DOMContentLoaded', () => {
     const copyButton = document.getElementById('copy-message');
     const messageTextarea = document.getElementById('share-message') as HTMLTextAreaElement;
-    
+
     if (copyButton && messageTextarea) {
       copyButton.addEventListener('click', () => {
         // Seleccionar el texto (usando el método correcto para HTMLTextAreaElement)
         messageTextarea.select();
-        
+
         // Copiar al portapapeles
         navigator.clipboard.writeText(messageTextarea.value)
           .then(() => {
@@ -62,13 +62,13 @@ const message = `¡Acabo de leer "${title}" en el blog de Matías Cappato! ${des
               </svg>
               ¡Copiado!
             `;
-            
+
             // Mostrar toast
-            const toastEvent = new CustomEvent('show-toast', { 
-              detail: { message: '¡Mensaje copiado al portapapeles!' } 
+            const toastEvent = new CustomEvent('show-toast', {
+              detail: { message: '¡Mensaje copiado al portapapeles!' }
             });
             document.dispatchEvent(toastEvent);
-            
+
             // Restaurar el texto original después de 2 segundos
             setTimeout(() => {
               copyButton.innerHTML = originalText;
@@ -77,8 +77,8 @@ const message = `¡Acabo de leer "${title}" en el blog de Matías Cappato! ${des
           .catch(err => {
             console.error('Error al copiar: ', err);
             // Mostrar mensaje de error
-            const toastEvent = new CustomEvent('show-toast', { 
-              detail: { message: 'Error al copiar el mensaje' } 
+            const toastEvent = new CustomEvent('show-toast', {
+              detail: { message: 'Error al copiar el mensaje' }
             });
             document.dispatchEvent(toastEvent);
           });

@@ -1,6 +1,6 @@
 ---
 import NavbarBase from './NavbarBase.astro';
-import Logo from './Logo.astro';
+import Logo from '../ui/Logo.astro';
 
 interface Props {
   currentPath?: string;
@@ -20,7 +20,7 @@ const isMainBlogPage = currentPath === '/blog';
         <Logo size="medium" />
         <span class="text-primary text-2xl font-bold">Matías S. Cappato</span>
       </a>
-      
+
       <div>
         {isMainBlogPage ? (
           <span class="text-secondary font-medium px-4 py-2 rounded-md bg-gray-700 bg-opacity-50">Blog</span>

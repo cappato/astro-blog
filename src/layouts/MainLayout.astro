@@ -1,11 +1,11 @@
 ---
 import '../styles/global.css';
-import CommonScripts from '../components/CommonScripts.astro';
-import Favicons from '../components/Favicons.astro';
-import Navbar from '../components/Navbar.astro';
-import Footer from '../components/Footer.astro';
-import SEOHead from '../components/SEOHead.astro';
-import AIMetadata from '../components/AIMetadata.astro';
+import CommonScripts from '../components/layout/CommonScripts.astro';
+import Favicons from '../components/seo/Favicons.astro';
+import Navbar from '../components/layout/Navbar.astro';
+import Footer from '../components/layout/Footer.astro';
+import SEOHead from '../components/seo/SEOHead.astro';
+import AIMetadata from '../components/seo/AIMetadata.astro';
 
 interface Props {
     title: string;
@@ -18,8 +18,8 @@ interface Props {
     modifiedDate?: string;
 }
 
-const { 
-    title, 
+const {
+    title,
     description = "Matías Cappato - Desarrollador web especializado en crear experiencias digitales modernas y accesibles.",
     image,
     imageAlt,
@@ -42,7 +42,7 @@ const currentUrl = Astro.url.pathname;
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>{title}</title>
-    <SEOHead 
+    <SEOHead
         title={title}
         description={description}
         image={image}

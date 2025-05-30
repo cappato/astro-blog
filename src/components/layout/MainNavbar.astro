@@ -1,6 +1,6 @@
 ---
 import NavbarBase from './NavbarBase.astro';
-import Icon from './Icon.astro';
+import Icon from '../ui/Icon.astro';
 
 interface NavItem {
   href: string;
@@ -21,8 +21,8 @@ const { items } = Astro.props;
     <ul class="flex space-x-4 lg:space-x-6">
       {items.map(item => (
         <li>
-          <a 
-            href={item.href} 
+          <a
+            href={item.href}
             class="nav-link px-3 py-2 rounded-md hover:bg-gray-700 text-gray-300 hover:text-primary transition-all duration-200 flex items-center"
             data-section={item.section}
           >
@@ -32,24 +32,24 @@ const { items } = Astro.props;
       ))}
     </ul>
   </div>
-  
+
   <!-- Botón de menú móvil -->
-  <button 
-    class="md:hidden text-gray-300 focus:outline-none" 
+  <button
+    class="md:hidden text-gray-300 focus:outline-none"
     id="mobile-menu-button"
     aria-label="Abrir menú de navegación"
     aria-expanded="false"
     aria-controls="mobile-menu">
     <i class="fas fa-bars text-xl"></i>
   </button>
-  
+
   <!-- Menú móvil (slot adicional) -->
   <div slot="additional-content">
     <div id="mobile-menu" class="fixed inset-0 bg-gray-900 bg-opacity-95 z-50 hidden">
       <div class="flex flex-col h-full">
         <div class="flex justify-end p-4">
-          <button 
-            id="close-menu" 
+          <button
+            id="close-menu"
             class="text-gray-300 hover:text-primary focus:outline-none p-2 rounded-full hover:bg-gray-800 transition-all duration-200"
             aria-label="Cerrar menú de navegación">
             <Icon name="close" size={24} />
@@ -57,8 +57,8 @@ const { items } = Astro.props;
         </div>
         <div class="flex-1 flex flex-col items-center justify-center space-y-6 text-xl">
           {items.map(item => (
-            <a 
-              href={item.href} 
+            <a
+              href={item.href}
               class="nav-link-mobile px-5 py-3 rounded-md hover:bg-gray-800 text-gray-300 hover:text-primary transition-all duration-200 w-64 text-center"
               data-section={item.section}
             >
@@ -79,20 +79,20 @@ const { items } = Astro.props;
     const mobileMenu = document.getElementById('mobile-menu');
     const closeMenuButton = document.getElementById('close-menu');
     const mobileMenuLinks = document.querySelectorAll('.nav-link-mobile');
-    
+
     if (mobileMenuButton && mobileMenu && closeMenuButton) {
       mobileMenuButton.addEventListener('click', () => {
         mobileMenu.classList.remove('hidden');
         document.body.classList.add('overflow-hidden');
         mobileMenuButton.setAttribute('aria-expanded', 'true');
       });
-      
+
       closeMenuButton.addEventListener('click', () => {
         mobileMenu.classList.add('hidden');
         document.body.classList.remove('overflow-hidden');
         mobileMenuButton.setAttribute('aria-expanded', 'false');
       });
-      
+
       mobileMenuLinks.forEach(link => {
         link.addEventListener('click', () => {
           mobileMenu.classList.add('hidden');
@@ -101,31 +101,31 @@ const { items } = Astro.props;
         });
       });
     }
-    
+
     // 2. Navegación con scroll suave
     const allNavLinks = document.querySelectorAll('.nav-link, .nav-link-mobile');
-    
+
     allNavLinks.forEach(link => {
       link.addEventListener('click', (e) => {
         e.preventDefault();
         const href = link.getAttribute('href');
         if (!href) return;
-        
+
         const targetId = href.substring(1);
         const targetElement = document.getElementById(targetId);
-        
+
         if (targetElement) {
           // Ajuste especial para la sección About
           const navbarHeight = 80; // Altura aproximada del navbar
           let offset = navbarHeight;
-          
+
           // Si es la sección About, añadir offset adicional
           if (targetId === 'about') {
             offset = navbarHeight + 20; // Añadir 20px extra para About
           }
-          
+
           const targetPosition = targetElement.getBoundingClientRect().top + window.scrollY - offset;
-          
+
           window.scrollTo({
             top: targetPosition,
             behavior: 'smooth'
@@ -133,44 +133,44 @@ const { items } = Astro.props;
         }
       });
     });
-    
+
     // 3. Activación de enlaces según la sección visible
     const navLinks = document.querySelectorAll('.nav-link');
     const mobileNavLinks = document.querySelectorAll('.nav-link-mobile');
-    
+
     function setActiveLink() {
       // Obtener todas las secciones
       const sections = document.querySelectorAll('section');
       const sectionAnchors = document.querySelectorAll('.section-anchor');
       let currentSection = '';
-      
+
       // Determinar qué sección está actualmente visible
       sectionAnchors.forEach((anchor, index) => {
         const sectionId = anchor.getAttribute('id') || '';
         const section = sections[index];
-        
+
         if (section) {
           const sectionTop = section.getBoundingClientRect().top;
           const sectionBottom = sectionTop + section.offsetHeight;
-          
+
           // Si la parte superior de la ventana está dentro de esta sección
           if (sectionTop <= 100 && sectionBottom > 0) {
             currentSection = sectionId;
           }
         }
       });
-      
+
       // Si estamos en la parte superior de la página, activar "about"
       if (window.scrollY < 300) {
         currentSection = 'about';
       }
-      
+
       // Actualizar clases en los enlaces de navegación
       if (currentSection) {
         navLinks.forEach(link => {
           const href = link.getAttribute('href');
           if (!href) return;
-          
+
           const linkTarget = href.substring(1);
           if (linkTarget === currentSection) {
             link.classList.add('active');
@@ -178,11 +178,11 @@ const { items } = Astro.props;
             link.classList.remove('active');
           }
         });
-        
+
         mobileNavLinks.forEach(link => {
           const href = link.getAttribute('href');
           if (!href) return;
-          
+
           const linkTarget = href.substring(1);
           if (linkTarget === currentSection) {
             link.classList.add('active');
@@ -192,13 +192,13 @@ const { items } = Astro.props;
         });
       }
     }
-    
+
     // Activar el enlace al hacer scroll
     window.addEventListener('scroll', setActiveLink);
-    
+
     // Activar el enlace al cargar la página
     setActiveLink();
-    
+
     // Ejecutar cada 100ms para asegurar que siempre esté actualizado
     setInterval(setActiveLink, 100);
   });

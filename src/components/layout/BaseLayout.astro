@@ -1,6 +1,6 @@
 ---
-import SEOHead from '../components/SEOHead.astro';
-import CommonScripts from '../components/CommonScripts.astro';
+import SEOHead from '../seo/SEOHead.astro';
+import CommonScripts from './CommonScripts.astro';
 
 interface Props {
   title: string;
@@ -11,10 +11,10 @@ interface Props {
   keywords?: string[];
 }
 
-const { 
-  title, 
-  description, 
-  image, 
+const {
+  title,
+  description,
+  image,
   imageAlt,
   type = 'website',
   keywords
@@ -24,7 +24,7 @@ const {
 <!DOCTYPE html>
 <html lang="es">
 <head>
-  <SEOHead 
+  <SEOHead
     title={title}
     description={description}
     image={image}
@@ -33,17 +33,17 @@ const {
     keywords={keywords}
   />
   <CommonScripts />
-  
+
   <!-- Mejora: Precargar fuentes críticas -->
   <link rel="preload" href="/fonts/main-font.woff2" as="font" type="font/woff2" crossorigin>
-  
+
   <!-- Mejora: Preconectar a dominios de terceros -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  
+
   <!-- Mejora: Tema de color para móviles -->
   <meta name="theme-color" content="#111827">
-  
+
   <!-- Slot para estilos adicionales específicos de página -->
   <slot name="head" />
 </head>
@@ -52,15 +52,15 @@ const {
   <a href="#main-content" class="sr-only focus:not-sr-only focus:absolute focus:p-4 focus:bg-primary focus:text-white focus:z-50">
     Saltar al contenido principal
   </a>
-  
+
   <header>
     <slot name="header" />
   </header>
-  
+
   <main id="main-content" class="flex-grow">
     <slot />
   </main>
-  
+
   <footer>
     <slot name="footer" />
   </footer>

@@ -1,11 +1,11 @@
 ---
-import BlogNavbar from '../../components/BlogNavbar.astro';
-import Footer from '../../components/Footer.astro';
-import CommonScripts from '../../components/CommonScripts.astro';
-import Favicons from '../../components/Favicons.astro';
-import SEOHead from '../../components/SEOHead.astro';
+import BlogNavbar from '../../components/layout/BlogNavbar.astro';
+import Footer from '../../components/layout/Footer.astro';
+import CommonScripts from '../../components/layout/CommonScripts.astro';
+import Favicons from '../../components/seo/Favicons.astro';
+import SEOHead from '../../components/seo/SEOHead.astro';
 import { getCollection } from 'astro:content';
-import TagList from '../../components/TagList.astro';
+import TagList from '../../components/blog/TagList.astro';
 
 // Obtener todos los posts del blog
 const posts = await getCollection('blog', (post) => {
@@ -29,7 +29,7 @@ const description = "Artículos sobre desarrollo web, programación, tecnología
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>{title}</title>
-    <SEOHead 
+    <SEOHead
         title={title}
         description={description}
         image="/images/blog-cover.webp"
@@ -43,7 +43,7 @@ const description = "Artículos sobre desarrollo web, programación, tecnología
 </head>
 <body class="bg-gray-900 text-gray-100 font-sans">
     <BlogNavbar currentPath="/blog" />
-    
+
     <main class="container mx-auto px-4 py-8">
         <header class="mb-12 text-center">
             <h1 class="text-4xl font-bold mb-4 text-primary">Blog</h1>
@@ -61,18 +61,18 @@ const description = "Artículos sobre desarrollo web, programación, tecnología
                 ))}
             </div>
         </section>
-        
+
         <!-- Lista de posts -->
         <section>
             <h2 class="text-2xl font-bold mb-6">Artículos recientes</h2>
-            
+
             <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
                 {posts.map(post => (
                     <article class="bg-gray-800 rounded-lg overflow-hidden shadow-lg hover:shadow-xl transition-shadow">
                         <a href={`/blog/${post.data.slug || post.slug}`} class="block">
                             {post.data.postId ? (
-                                <img 
-                                    src={`/images/${post.data.postId}/portada-thumb.webp`} 
+                                <img
+                                    src={`/images/${post.data.postId}/portada-thumb.webp`}
                                     alt={post.data.imageAlt || post.data.title}
                                     class="w-full h-48 object-cover"
                                     loading="lazy"
@@ -80,8 +80,8 @@ const description = "Artículos sobre desarrollo web, programación, tecnología
                                     height="315"
                                 />
                             ) : post.data.image ? (
-                                <img 
-                                    src={post.data.image.url} 
+                                <img
+                                    src={post.data.image.url}
                                     alt={post.data.image.alt || post.data.title}
                                     class="w-full h-48 object-cover"
                                     loading="lazy"
@@ -94,14 +94,14 @@ const description = "Artículos sobre desarrollo web, programación, tecnología
                                 </div>
                             )}
                         </a>
-                        
+
                         <div class="p-4">
                             <h3 class="text-xl font-bold mb-2">
                                 <a href={`/blog/${post.data.slug || post.slug}`} class="text-primary hover:underline">
                                     {post.data.title}
                                 </a>
                             </h3>
-                            
+
                             <p class="text-gray-300 text-sm mb-3">
                                 {new Date(post.data.date).toLocaleDateString('es-ES', {
                                     year: 'numeric',
@@ -109,15 +109,15 @@ const description = "Artículos sobre desarrollo web, programación, tecnología
                                     day: 'numeric'
                                 })}
                             </p>
-                            
+
                             <p class="text-gray-400 mb-4 line-clamp-3">
                                 {post.data.description}
                             </p>
-                            
+
                             {post.data.tags && (
                                 <TagList tags={post.data.tags} />
                             )}
-                            
+
                             <a href={`/blog/${post.data.slug || post.slug}`} class="mt-4 inline-block text-primary hover:underline text-sm font-medium">
                                 Leer más →
                             </a>
@@ -127,7 +127,7 @@ const description = "Artículos sobre desarrollo web, programación, tecnología
             </div>
         </section>
     </main>
-    
+
     <Footer />
 </body>
 </html>

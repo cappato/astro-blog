@@ -1,5 +1,5 @@
 ---
-import Icon from './Icon.astro';
+import Icon from '../ui/Icon.astro';
 ---
 
 <!-- Footer -->
@@ -10,24 +10,24 @@ import Icon from './Icon.astro';
                 &copy; {new Date().getFullYear()} Matías Sebastián Cappato. All rights reserved.
             </div>
             <div class="flex space-x-6">
-                <a href="https://github.com/cappato" 
+                <a href="https://github.com/cappato"
                    target="_blank"
                    rel="noopener noreferrer"
-                   class="text-gray-400 hover:text-primary transition social-button" 
+                   class="text-gray-400 hover:text-primary transition social-button"
                    aria-label="GitHub Profile">
                     <Icon name="github" size={24} />
                 </a>
-                
-                <a href="https://www.linkedin.com/in/matiascappato/" 
+
+                <a href="https://www.linkedin.com/in/matiascappato/"
                    target="_blank"
                    rel="noopener noreferrer"
-                   class="text-gray-400 hover:text-primary transition social-button" 
+                   class="text-gray-400 hover:text-primary transition social-button"
                    aria-label="LinkedIn Profile">
                     <Icon name="linkedin" size={24} />
                 </a>
-                
-                <a href="mailto:matias@cappato.dev" 
-                   class="text-gray-400 hover:text-primary transition social-button" 
+
+                <a href="mailto:matias@cappato.dev"
+                   class="text-gray-400 hover:text-primary transition social-button"
                    aria-label="Email">
                     <Icon name="email" size={24} />
                 </a>
@@ -43,11 +43,11 @@ import Icon from './Icon.astro';
     padding: 8px;
     border-radius: 50%;
   }
-  
+
   .social-button:hover {
     background-color: rgba(255, 255, 255, 0.1);
   }
-  
+
   /* Añadir estilos para accesibilidad con teclado */
   .social-button:focus {
     outline: 2px solid #4f46e5;
