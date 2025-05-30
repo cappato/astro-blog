@@ -1,64 +1,174 @@
-# Scripts de Utilidad para el Blog
+# 🖼️ Sistema de Optimización de Imágenes
 
-Este directorio contiene scripts de utilidad para el mantenimiento y optimización del blog.
+Sistema modular y mantenible para optimización automática de imágenes del blog.
 
-## Optimización de Imágenes (`optimize-images.js`)
-
-Script para optimizar automáticamente las imágenes del blog, generando versiones WebP y diferentes variantes para redes sociales.
-
-### Comandos Disponibles
-
-| Comando | Descripción |
-|---------|-------------|
-| `npm run optimize-images` | Optimiza todas las imágenes de todos los posts |
-| `npm run optimize-images -- --postId=bienvenida` | Optimiza solo las imágenes del post especificado |
-| `npm run optimize-images -- --force` | Fuerza la regeneración de todas las imágenes, incluso si no han cambiado |
-| `npm run optimize-images -- --file=images/raw/seccion/imagen.jpg` | Optimiza una imagen específica (genera: public/images/seccion/imagen.webp) |
-
-### Estructura de Directorios
+## 📁 Estructura del Proyecto
 
 ```
-/images
-  ├─ /raw/           ← Solo local, no comiteada (en .gitignore)
-  │    └─ /postId/     ← ID corto único del post
-  │         ├─ portada.jpg  ← OBLIGATORIO: Imagen principal del post
-  │         └─ extra1.jpg, extra2.jpg...  ← Imágenes adicionales (opcionales)
-  └─ /public/images/
-       └─ /postId/     ← Archivos optimizados exportados
-            ├─ portada.webp
-            ├─ portada-og.webp
-            ├─ portada-thumb.webp
-            ├─ portada-wsp.webp
-            └─ extra1.webp...
+scripts/
+├── optimize-images.js          # 🎯 Script principal refactorizado
+├── optimize-images-old.js      # 📦 Versión original (backup)
+├── lib/                        # 📚 Módulos especializados
+│   ├── presets.js             # ⚙️ Configuración de presets
+│   ├── file-utils.js          # 📂 Utilidades de archivos
+│   ├── image-processor.js     # 🔧 Procesamiento de imágenes
+│   └── logger.js              # 📝 Sistema de logging
+└── README.md                   # 📖 Esta documentación
 ```
 
-### Presets de Optimización
+## 🚀 Uso del Script
+
+### **Comandos básicos:**
+
+```bash
+# Optimizar todas las imágenes
+npm run optimize-images
+
+# Optimizar un post específico
+npm run optimize-images -- --postId=mi-post
+
+# Forzar regeneración de todas las imágenes
+npm run optimize-images -- --force
+
+# Optimizar una imagen específica
+npm run optimize-images -- --file=images/raw/post/imagen.jpg
+
+# Modo debug con información detallada
+npm run optimize-images -- --debug
+```
+
+### **Opciones avanzadas:**
+
+```bash
+# Aplicar preset específico a una imagen
+npm run optimize-images -- --file=imagen.jpg --preset=og
+
+# Ver ayuda completa
+npm run optimize-images -- --help
+```
+
+## ⚙️ Presets Disponibles
 
 | Preset | Dimensiones | Formato | Calidad | Uso |
 |--------|-------------|---------|---------|-----|
-| default | 1200px ancho | WebP | 80% | Imagen estándar para el blog |
-| og | 1200x630px | WebP | 80% | Open Graph (redes sociales) |
-| og-jpg | 1200x630px | JPEG | 80% | Open Graph (mayor compatibilidad) |
-| thumb | 600x315px | WebP | 80% | Miniaturas |
-| wsp | 1080x1080px | WebP | 80% | WhatsApp |
-| avif | 1200px ancho | AVIF | 65% | Formato moderno (menor tamaño) |
-| og-avif | 1200x630px | AVIF | 65% | Open Graph en formato AVIF |
-| lqip | 20px ancho | WebP | 20% | Placeholder de baja calidad |
+| `default` | 1200px ancho | WebP | 80% | Imágenes generales |
+| `og` | 1200x630px | WebP | 80% | Open Graph (redes sociales) |
+| `og-jpg` | 1200x630px | JPEG | 80% | Open Graph (compatibilidad) |
+| `thumb` | 600x315px | WebP | 80% | Thumbnails |
+| `wsp` | 1080x1080px | WebP | 80% | WhatsApp Stories |
+| `avif` | 1200px ancho | AVIF | 65% | Formato moderno |
+| `og-avif` | 1200x630px | AVIF | 65% | Open Graph moderno |
+| `lqip` | 20px ancho | WebP | 20% | Placeholder baja calidad |
 
-### Ejemplos de Uso
+## 📂 Estructura de Archivos
 
-#### Optimizar una imagen específica
-
-```bash
-npm run optimize-images -- --file=images/raw/ui/logo.png
+### **Entrada (Raw):**
+```
+images/raw/
+├── mi-post/
+│   ├── portada.jpg        # ← Imagen principal (todos los presets)
+│   ├── imagen-1.png       # ← Otras imágenes (solo default)
+│   └── imagen-2.jpg
+└── otro-post/
+    └── portada.webp
 ```
 
-Esto generará `public/images/ui/logo.webp` optimizado.
-
-#### Optimizar todas las imágenes de un post
-
-```bash
-npm run optimize-images -- --postId=mi-articulo
+### **Salida (Public):**
+```
+public/images/
+├── mi-post/
+│   ├── portada.webp           # Default
+│   ├── portada-og.webp        # Open Graph
+│   ├── portada-og-jpg.jpeg    # Open Graph JPEG
+│   ├── portada-thumb.webp     # Thumbnail
+│   ├── portada-wsp.webp       # WhatsApp
+│   ├── portada-avif.avif      # AVIF moderno
+│   ├── portada-og-avif.avif   # Open Graph AVIF
+│   ├── portada-lqip.webp      # Placeholder
+│   ├── portada-lqip.txt       # Base64 para inline
+│   ├── imagen-1.webp          # Solo default
+│   └── imagen-2.webp          # Solo default
+└── otro-post/
+    └── portada.webp
 ```
 
-Esto procesará todas las imágenes en `images/raw/mi-articulo/` y generará las versiones optimizadas en `public/images/mi-articulo/`.
+## 🔧 Arquitectura Modular
+
+### **presets.js**
+- ✅ Configuración centralizada de todos los presets
+- ✅ Utilidades para validación de archivos
+- ✅ Generación de nombres de archivo
+
+### **file-utils.js**
+- ✅ Operaciones del sistema de archivos
+- ✅ Detección de cambios (timestamps)
+- ✅ Gestión de directorios de entrada y salida
+
+### **image-processor.js**
+- ✅ Procesamiento con Sharp
+- ✅ Validación de imágenes
+- ✅ Generación de LQIP (placeholders)
+- ✅ Cálculo de dimensiones optimizadas
+
+### **logger.js**
+- ✅ Logging estructurado con colores
+- ✅ Barras de progreso
+- ✅ Estadísticas de procesamiento
+- ✅ Diferentes niveles (error, warn, info, debug)
+
+## 📊 Características
+
+### **✅ Mejoras del refactoring:**
+
+- **🏗️ Modular**: Código separado por responsabilidades
+- **🔧 Mantenible**: Fácil de modificar y extender
+- **📝 Documentado**: Funciones con documentación clara
+- **🚀 Performante**: Procesamiento optimizado
+- **📊 Informativo**: Logging detallado con estadísticas
+- **🛡️ Robusto**: Validación y manejo de errores
+- **⚡ Inteligente**: Solo procesa archivos modificados
+
+### **🎯 Funcionalidades:**
+
+- **Detección automática** de imágenes de portada
+- **Múltiples formatos** (WebP, JPEG, PNG, AVIF)
+- **Presets personalizables** para diferentes usos
+- **Generación de LQIP** para lazy loading
+- **Validación de imágenes** antes del procesamiento
+- **Barras de progreso** en tiempo real
+- **Estadísticas detalladas** del procesamiento
+
+## 🔄 Migración desde la versión anterior
+
+El script refactorizado es **100% compatible** con la versión anterior:
+
+- ✅ **Mismos comandos** funcionan igual
+- ✅ **Misma estructura** de archivos
+- ✅ **Mismos presets** disponibles
+- ✅ **Mejor logging** y información
+- ✅ **Más opciones** de debug
+
+## 🐛 Debugging
+
+Para obtener información detallada del procesamiento:
+
+```bash
+npm run optimize-images -- --debug
+```
+
+Esto mostrará:
+- 🔍 Información detallada de cada paso
+- 📊 Metadatos de las imágenes
+- ⏱️ Tiempos de procesamiento
+- 🗂️ Rutas de archivos procesados
+
+## 📈 Estadísticas de Refactoring
+
+| Métrica | Antes | Después |
+|---------|-------|---------|
+| **Líneas de código** | 304 líneas | 4 módulos especializados |
+| **Funciones** | Mezcladas | Separadas por responsabilidad |
+| **Mantenibilidad** | Difícil | Fácil |
+| **Testabilidad** | Baja | Alta |
+| **Reutilización** | Limitada | Modular |
+| **Logging** | Básico | Profesional |
