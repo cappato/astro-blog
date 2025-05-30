@@ -1,4 +1,4 @@
-<div id="copy-toast" class="fixed bottom-20 right-4 bg-gray-800 text-white px-4 py-2 rounded-md shadow-lg opacity-0 transition-opacity duration-300 z-50">
+<div id="copy-toast" class="fixed bottom-20 right-4 bg-background-secondary text-text-primary px-4 py-2 rounded-md shadow-lg opacity-0 transition-opacity duration-300 z-50">
   <i class="fas fa-check mr-2"></i> Enlace copiado al portapapeles
 </div>
 
@@ -8,21 +8,21 @@
     const showToast = (message = 'Enlace copiado al portapapeles') => {
       const toast = document.getElementById('copy-toast');
       if (!toast) return;
-      
+
       // Actualizar el mensaje si es necesario
       if (message && message !== 'Enlace copiado al portapapeles') {
         toast.innerHTML = `<i class="fas fa-check mr-2"></i> ${message}`;
       }
-      
+
       // Mostrar el toast
       toast.style.opacity = '1';
-      
+
       // Ocultar después de 2 segundos
       setTimeout(() => {
         toast.style.opacity = '0';
       }, 2000);
     };
-    
+
     // Escuchar el evento personalizado
     document.addEventListener('show-toast', ((event) => {
       // Usar casting para acceder a detail

@@ -13,8 +13,8 @@
 html body .container a[href^="/blog/tag/"],
 html body main a[href^="/blog/tag/"],
 html body article a[href^="/blog/tag/"] {
-  background-color: rgba(55, 65, 81, 0.5); /* bg-gray-700 bg-opacity-50 */
-  color: #A2F678; /* text-secondary */
+  background-color: rgba(55, 65, 81, 0.5); /* bg-background-tertiary bg-opacity-50 */
+  color: theme('colors.secondary.DEFAULT'); /* text-secondary */
   font-weight: 500; /* font-medium */
   transition: all 0.2s ease;
   padding: 0.25rem 0.5rem;
@@ -89,7 +89,7 @@ a {
 
 /* Optimización para focus */
 :focus {
-  outline: 2px solid #699CF9; /* Nuevo azul RGB(105, 156, 249) */
+  outline: 2px solid theme('colors.primary.DEFAULT');
   outline-offset: 2px;
 }
 
@@ -105,8 +105,8 @@ a {
 
 /* Estilos para enlaces de navegación activos */
 .nav-link.active, .nav-link-mobile.active {
-  background-color: rgba(105, 156, 249, 0.15); /* Nuevo azul con transparencia */
-  color: #699CF9; /* Nuevo azul RGB(105, 156, 249) */
+  background-color: rgba(105, 156, 249, 0.15); /* primary con transparencia */
+  color: theme('colors.primary.DEFAULT');
   font-weight: 500;
 }
 
@@ -140,14 +140,14 @@ a:hover {
 }
 
 /* Mejorar contraste para elementos interactivos */
-button, 
+button,
 .btn,
 [role="button"] {
   font-weight: 500;
 }
 
 /* Asegurar que los textos pequeños tengan suficiente contraste */
-.text-xs, 
+.text-xs,
 .text-sm {
   font-weight: 500; /* Ligeramente más grueso para compensar el tamaño pequeño */
 }
