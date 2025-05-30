@@ -11,7 +11,7 @@ const { tags, className = '' } = Astro.props;
   {tags.map(tag => (
     <a
       href={`/blog/tag/${tag.toLowerCase()}`}
-      class="tag-link bg-gray-200 dark:bg-gray-700 hover:bg-gray-300 dark:hover:bg-gray-600 text-secondary font-medium text-xs px-2 py-1 rounded-md transition-colors duration-200"
+      class="tag-link bg-background-tertiary bg-opacity-50 hover:bg-opacity-70 text-secondary font-medium text-xs px-2 py-1 rounded-md transition-colors duration-200"
     >
       #{tag}
     </a>

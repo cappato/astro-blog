@@ -15,7 +15,7 @@ const navItems = [
 ];
 ---
 
-<nav class="sticky top-0 z-10 bg-gray-50 dark:bg-gray-800 shadow-md transition-colors duration-300">
+<nav class="sticky top-0 z-10 bg-background-secondary shadow-md">
   <div class="container mx-auto px-6 sm:px-4 py-3">
     <div class="flex justify-between items-center">
       <a href="/" class="flex items-center gap-3">
@@ -30,7 +30,7 @@ const navItems = [
               <NavLink
                 href={item.href}
                 section={item.section}
-                className="nav-link px-3 py-2 rounded-md hover:bg-gray-200 dark:hover:bg-gray-700 text-gray-600 dark:text-gray-300 hover:text-primary transition-all duration-200 flex items-center"
+                className="nav-link px-3 py-2 rounded-md hover:bg-background-tertiary text-text-secondary hover:text-primary transition-all duration-200 flex items-center"
               >
                 {item.label}
               </NavLink>
@@ -43,7 +43,7 @@ const navItems = [
       <div class="flex items-center gap-3">
         <ThemeToggle size="md" />
 
-        <button class="md:hidden text-gray-600 dark:text-gray-300 focus:outline-none" id="mobile-menu-button">
+        <button class="md:hidden text-text-secondary focus:outline-none" id="mobile-menu-button">
         <span class="sr-only">Abrir menú de navegación</span>
         <Icon name="menu" size={24} />
       </button>

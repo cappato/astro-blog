@@ -83,7 +83,7 @@ const buttonClasses = `
   type Theme = 'light' | 'dark';
 
   class ThemeManager {
-    private currentTheme: Theme = 'light';
+    private currentTheme: Theme;
     private readonly STORAGE_KEY = 'theme-preference';
     private readonly sunIcon: HTMLElement | null;
     private readonly moonIcon: HTMLElement | null;
@@ -94,11 +94,6 @@ const buttonClasses = `
       this.moonIcon = document.getElementById('moon-icon');
       this.toggleButton = document.getElementById('theme-toggle');
 
-      if (!this.toggleButton) {
-        console.warn('ThemeToggle: Botón no encontrado');
-        return;
-      }
-
       // Inicializar tema
       this.currentTheme = this.getInitialTheme();
       this.applyTheme(this.currentTheme);
@@ -106,8 +101,6 @@ const buttonClasses = `
 
       // Configurar event listeners
       this.setupEventListeners();
-
-      console.log('ThemeManager inicializado correctamente');
     }
 
     /**
@@ -134,27 +127,15 @@ const buttonClasses = `
     private applyTheme(theme: Theme): void {
       const html = document.documentElement;
 
-      // Aplicar clase dark
       if (theme === 'dark') {
         html.classList.add('dark');
       } else {
         html.classList.remove('dark');
       }
 
-      // Aplicar color-scheme para mejor compatibilidad
-      html.style.colorScheme = theme;
-
       // Guardar en localStorage
-      try {
-        localStorage.setItem(this.STORAGE_KEY, theme);
-      } catch (e) {
-        console.warn('No se pudo guardar tema en localStorage:', e);
-      }
-
+      localStorage.setItem(this.STORAGE_KEY, theme);
       this.currentTheme = theme;
-
-      // Debug log
-      console.log(`Tema aplicado: ${theme}, clase dark: ${html.classList.contains('dark')}`);
     }
 
     /**
@@ -197,9 +178,7 @@ const buttonClasses = `
      */
     private setupEventListeners(): void {
       // Click en el botón
-      this.toggleButton?.addEventListener('click', (e) => {
-        e.preventDefault();
-        e.stopPropagation();
+      this.toggleButton?.addEventListener('click', () => {
         this.toggleTheme();
       });
 
@@ -207,7 +186,6 @@ const buttonClasses = `
       this.toggleButton?.addEventListener('keydown', (e) => {
         if (e.key === 'Enter' || e.key === ' ') {
           e.preventDefault();
-          e.stopPropagation();
           this.toggleTheme();
         }
       });
@@ -242,21 +220,18 @@ const buttonClasses = `
   }
 
   // Inicializar cuando el DOM esté listo
-  function initThemeManager() {
-    if (document.getElementById('theme-toggle')) {
-      new ThemeManager();
-    }
-  }
+  document.addEventListener('DOMContentLoaded', () => {
+    new ThemeManager();
+  });
 
-  // Múltiples formas de inicialización para asegurar que funcione
+  // También inicializar inmediatamente por si el script se carga después
   if (document.readyState === 'loading') {
-    document.addEventListener('DOMContentLoaded', initThemeManager);
+    document.addEventListener('DOMContentLoaded', () => {
+      new ThemeManager();
+    });
   } else {
-    initThemeManager();
+    new ThemeManager();
   }
-
-  // También escuchar cuando Astro navegue (SPA mode)
-  document.addEventListener('astro:page-load', initThemeManager);
 </script>
 
 <style>

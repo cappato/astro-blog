@@ -35,8 +35,27 @@ export default {
           DEFAULT: '#A2F678'
         },
 
-        // Usar grises estándar que ya tienen variantes dark
-        // Los componentes usarán: bg-gray-50 dark:bg-gray-900, etc.
+        // Grises del sistema (modo oscuro por defecto, claro con dark:)
+        background: {
+          primary: '#FFFFFF', // Claro por defecto
+          secondary: '#F9FAFB', // Claro por defecto
+          tertiary: '#F3F4F6' // Claro por defecto
+        },
+
+        // Colores de texto (modo claro por defecto, oscuro con dark:)
+        text: {
+          primary: '#111827', // Claro por defecto
+          secondary: '#374151', // Claro por defecto
+          tertiary: '#6B7280', // Claro por defecto
+          muted: '#9CA3AF' // Claro por defecto
+        },
+
+        // Colores de borde (modo claro por defecto, oscuro con dark:)
+        border: {
+          primary: '#E5E7EB', // Claro por defecto
+          secondary: '#D1D5DB', // Claro por defecto
+          accent: '#699CF9'
+        },
 
         // Colores semánticos
         success: {

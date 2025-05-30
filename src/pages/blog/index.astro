@@ -26,53 +26,6 @@ const description = "Artículos sobre desarrollo web, programación, tecnología
 <!DOCTYPE html>
 <html lang="es">
 <head>
-    <!-- Script de tema temprano para evitar flash -->
-    <script is:inline>
-      (function() {
-        'use strict';
-        const STORAGE_KEY = 'theme-preference';
-
-        function getInitialTheme() {
-          try {
-            const savedTheme = localStorage.getItem(STORAGE_KEY);
-            if (savedTheme === 'light' || savedTheme === 'dark') {
-              return savedTheme;
-            }
-          } catch (e) {
-            console.warn('localStorage no disponible para tema');
-          }
-
-          if (typeof window !== 'undefined' && window.matchMedia) {
-            if (window.matchMedia('(prefers-color-scheme: dark)').matches) {
-              return 'dark';
-            }
-          }
-
-          return 'light';
-        }
-
-        function applyTheme(theme) {
-          const html = document.documentElement;
-          if (theme === 'dark') {
-            html.classList.add('dark');
-          } else {
-            html.classList.remove('dark');
-          }
-          html.style.colorScheme = theme;
-          try {
-            localStorage.setItem(STORAGE_KEY, theme);
-          } catch (e) {
-            console.warn('No se pudo guardar tema:', e);
-          }
-        }
-
-        const initialTheme = getInitialTheme();
-        applyTheme(initialTheme);
-        document.documentElement.style.colorScheme = initialTheme;
-        window.__THEME_INITIAL__ = initialTheme;
-      })();
-    </script>
-
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>{title}</title>
@@ -88,21 +41,21 @@ const description = "Artículos sobre desarrollo web, programación, tecnología
     <CommonScripts />
     <link rel="stylesheet" href="/styles/blog.css">
 </head>
-<body class="bg-white dark:bg-gray-900 text-gray-900 dark:text-gray-100 font-sans min-h-screen transition-colors duration-300">
+<body class="bg-gray-900 text-gray-100 font-sans">
     <BlogNavbar currentPath="/blog" />
 
     <main class="container mx-auto px-4 py-8">
         <header class="mb-12 text-center">
             <h1 class="text-4xl font-bold mb-4 text-primary">Blog</h1>
-            <p class="text-xl text-gray-600 dark:text-gray-300 max-w-2xl mx-auto">{description}</p>
+            <p class="text-xl text-gray-300 max-w-2xl mx-auto">{description}</p>
         </header>
 
         <!-- Filtro por etiquetas -->
         <section class="mb-12">
-            <h2 class="text-2xl font-bold mb-4 text-gray-900 dark:text-gray-100">Explorar por tema</h2>
+            <h2 class="text-2xl font-bold mb-4">Explorar por tema</h2>
             <div class="flex flex-wrap gap-2">
                 {allTags.map(tag => (
-                    <a href={`/blog/tag/${tag}`} class="bg-gray-200 dark:bg-gray-800 hover:bg-gray-300 dark:hover:bg-gray-700 text-secondary px-3 py-1 rounded-md transition">
+                    <a href={`/blog/tag/${tag}`} class="bg-gray-800 hover:bg-gray-700 text-secondary px-3 py-1 rounded-md transition">
                         #{tag}
                     </a>
                 ))}
@@ -111,11 +64,11 @@ const description = "Artículos sobre desarrollo web, programación, tecnología
 
         <!-- Lista de posts -->
         <section>
-            <h2 class="text-2xl font-bold mb-6 text-gray-900 dark:text-gray-100">Artículos recientes</h2>
+            <h2 class="text-2xl font-bold mb-6">Artículos recientes</h2>
 
             <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
                 {posts.map(post => (
-                    <article class="bg-gray-100 dark:bg-gray-800 rounded-lg overflow-hidden shadow-lg hover:shadow-xl transition-shadow">
+                    <article class="bg-gray-800 rounded-lg overflow-hidden shadow-lg hover:shadow-xl transition-shadow">
                         <a href={`/blog/${post.data.slug || post.slug}`} class="block">
                             {post.data.postId ? (
                                 <img
@@ -136,8 +89,8 @@ const description = "Artículos sobre desarrollo web, programación, tecnología
                                     height="315"
                                 />
                             ) : (
-                                <div class="w-full h-48 bg-gray-300 dark:bg-gray-700 flex items-center justify-center">
-                                    <span class="text-gray-500 dark:text-gray-400">Sin imagen</span>
+                                <div class="w-full h-48 bg-gray-700 flex items-center justify-center">
+                                    <span class="text-gray-400">Sin imagen</span>
                                 </div>
                             )}
                         </a>
@@ -149,7 +102,7 @@ const description = "Artículos sobre desarrollo web, programación, tecnología
                                 </a>
                             </h3>
 
-                            <p class="text-gray-600 dark:text-gray-300 text-sm mb-3">
+                            <p class="text-gray-300 text-sm mb-3">
                                 {new Date(post.data.date).toLocaleDateString('es-ES', {
                                     year: 'numeric',
                                     month: 'long',
@@ -157,7 +110,7 @@ const description = "Artículos sobre desarrollo web, programación, tecnología
                                 })}
                             </p>
 
-                            <p class="text-gray-700 dark:text-gray-400 mb-4 line-clamp-3">
+                            <p class="text-gray-400 mb-4 line-clamp-3">
                                 {post.data.description}
                             </p>
 
