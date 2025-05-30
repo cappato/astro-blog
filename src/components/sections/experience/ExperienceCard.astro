@@ -22,14 +22,14 @@ const formattedTechnologies = formatTechnologies(experience.technologies);
 const formattedResponsibilities = formatResponsibilities(experience.responsibilities);
 ---
 
-<div class={`bg-gray-100 dark:bg-gray-800 rounded-lg p-4 sm:p-6 shadow-lg transition-colors duration-300 ${className}`}>
+<div class={`bg-gray-800 rounded-lg p-4 sm:p-6 shadow-lg ${className}`}>
   <!-- Company and Position Header -->
   <header class="mb-4">
     <h3 class="text-xl sm:text-2xl font-bold text-secondary mb-2">
       {experience.website ? (
-        <a 
-          href={experience.website} 
-          target="_blank" 
+        <a
+          href={experience.website}
+          target="_blank"
           rel="noopener noreferrer"
           class="hover:text-primary transition-colors duration-200"
           aria-label={`Visit ${experience.company} website`}
@@ -41,17 +41,17 @@ const formattedResponsibilities = formatResponsibilities(experience.responsibili
         experience.company
       )}
     </h3>
-    
-    <h4 class="text-lg sm:text-xl text-gray-700 dark:text-gray-300 mb-2">
+
+    <h4 class="text-lg sm:text-xl text-gray-300 mb-2">
       {experience.position}
       {experience.current && (
-        <span class="ml-2 inline-flex items-center px-2 py-1 rounded-full text-xs font-medium bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-200">
+        <span class="ml-2 inline-flex items-center px-2 py-1 rounded-full text-xs font-medium bg-green-900 text-green-200">
           Current
         </span>
       )}
     </h4>
-    
-    <p class="text-gray-600 dark:text-gray-400 mb-4">
+
+    <p class="text-gray-400 mb-4">
       {experience.period}
       {experience.location && (
         <span class="ml-2">| {experience.location}</span>
@@ -62,7 +62,7 @@ const formattedResponsibilities = formatResponsibilities(experience.responsibili
   <!-- Description (if available) -->
   {experience.description && (
     <div class="mb-4">
-      <p class="text-gray-700 dark:text-gray-300 italic">
+      <p class="text-gray-300 italic">
         {experience.description}
       </p>
     </div>
@@ -71,11 +71,11 @@ const formattedResponsibilities = formatResponsibilities(experience.responsibili
   <!-- Technologies Section -->
   {formattedTechnologies.length > 0 && (
     <div class="mb-4">
-      <h5 class="font-bold text-gray-700 dark:text-gray-300 mb-2 flex items-center">
+      <h5 class="font-bold text-gray-300 mb-2 flex items-center">
         <span class="mr-2">🛠️</span>
         Technologies and Tools:
       </h5>
-      <ul class="list-disc pl-5 space-y-1 text-gray-700 dark:text-gray-300">
+      <ul class="list-disc pl-5 space-y-1 text-gray-300">
         {formattedTechnologies.map(tech => (
           <li class="leading-relaxed">{tech}</li>
         ))}
@@ -86,11 +86,11 @@ const formattedResponsibilities = formatResponsibilities(experience.responsibili
   <!-- Responsibilities Section -->
   {formattedResponsibilities.length > 0 && (
     <div>
-      <h5 class="font-bold text-gray-700 dark:text-gray-300 mb-2 flex items-center">
+      <h5 class="font-bold text-gray-300 mb-2 flex items-center">
         <span class="mr-2">🎯</span>
         Responsibilities and Achievements:
       </h5>
-      <ul class="list-disc pl-5 space-y-1 text-gray-700 dark:text-gray-300">
+      <ul class="list-disc pl-5 space-y-1 text-gray-300">
         {formattedResponsibilities.map(responsibility => (
           <li class="leading-relaxed">{responsibility}</li>
         ))}
