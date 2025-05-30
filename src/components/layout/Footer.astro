@@ -3,10 +3,10 @@ import Icon from '../ui/Icon.astro';
 ---
 
 <!-- Footer -->
-<footer class="bg-background-secondary dark:bg-gray-800 py-8 mt-16 transition-colors duration-300">
+<footer class="bg-gray-50 dark:bg-gray-800 py-8 mt-16 transition-colors duration-300">
     <div class="container mx-auto px-4">
         <div class="flex flex-col md:flex-row justify-between items-center">
-            <div class="text-text-tertiary dark:text-gray-400 mb-4 md:mb-0">
+            <div class="text-gray-600 dark:text-gray-400 mb-4 md:mb-0">
                 &copy; {new Date().getFullYear()} Matías Sebastián Cappato. All rights reserved.
             </div>
             <div class="flex space-x-6">
@@ -27,7 +27,7 @@ import Icon from '../ui/Icon.astro';
                 </a>
 
                 <a href="mailto:matias@cappato.dev"
-                   class="text-text-tertiary hover:text-primary transition social-button"
+                   class="text-gray-600 dark:text-gray-400 hover:text-primary transition social-button"
                    aria-label="Email">
                     <Icon name="email" size={24} />
                 </a>

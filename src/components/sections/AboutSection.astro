@@ -4,43 +4,43 @@ import Icon from '../ui/Icon.astro';
 
 <!-- About Section -->
 <section id="about" class="container mx-auto px-6 sm:px-4 py-10">
-    <h2 class="text-3xl font-bold text-primary mb-6 border-b border-gray-700 pb-2 max-w-3xl mx-auto">About me</h2>
+    <h2 class="text-3xl font-bold text-primary mb-6 border-b border-gray-300 dark:border-gray-700 pb-2 max-w-3xl mx-auto">About me</h2>
 
-    <div class="max-w-3xl mx-auto bg-gray-800 rounded-xl shadow-lg p-4 sm:p-6">
+    <div class="max-w-3xl mx-auto bg-gray-100 dark:bg-gray-800 rounded-xl shadow-lg p-4 sm:p-6">
         <div class="flex flex-col md:flex-row items-center md:items-start gap-6">
-            <div class="w-32 h-32 md:w-48 md:h-48 rounded-full overflow-hidden bg-gray-700 flex-shrink-0">
+            <div class="w-32 h-32 md:w-48 md:h-48 rounded-full overflow-hidden bg-gray-300 dark:bg-gray-700 flex-shrink-0">
                 <!-- Real profile image -->
                 <img src="/images/profile.webp" alt="Matías Sebastián Cappato" class="w-full h-full object-cover">
             </div>
             <div class="flex-1">
                 <h1 class="text-2xl md:text-4xl font-bold text-primary mb-2 text-center md:text-left">Matías Sebastián Cappato</h1>
                 <h2 class="text-lg md:text-2xl text-secondary mb-4 text-center md:text-left">System Analyst | Full Stack Developer</h2>
-                <div class="space-y-2 text-gray-300">
+                <div class="space-y-2 text-gray-700 dark:text-gray-300">
                     <p class="flex items-center text-sm sm:text-base">
                         <span class="w-6 mr-2"><Icon name="location" size={16} /></span>
                         Mar del Plata, Buenos Aires, Argentina
                     </p>
                     <p class="flex items-center text-sm sm:text-base">
                         <span class="w-6 mr-2"><Icon name="email" size={16} /></span>
-                        <a href="mailto:matias@cappato.dev" class="text-blue-400 hover:underline">matias@cappato.dev</a>
+                        <a href="mailto:matias@cappato.dev" class="text-blue-600 dark:text-blue-400 hover:underline">matias@cappato.dev</a>
                     </p>
                     <p class="flex items-center text-sm sm:text-base">
                         <span class="w-6 mr-2"><Icon name="github" size={16} /></span>
-                        <a href="https://github.com/cappato" class="text-blue-400 hover:underline">github.com/cappato</a>
+                        <a href="https://github.com/cappato" class="text-blue-600 dark:text-blue-400 hover:underline">github.com/cappato</a>
                     </p>
                     <p class="flex items-center text-sm sm:text-base">
                         <span class="w-6 mr-2"><Icon name="linkedin" size={16} /></span>
-                        <a href="https://www.linkedin.com/in/matiascappato/" class="text-blue-400 hover:underline">linkedin.com/in/matiascappato</a>
+                        <a href="https://www.linkedin.com/in/matiascappato/" class="text-blue-600 dark:text-blue-400 hover:underline">linkedin.com/in/matiascappato</a>
                     </p>
                 </div>
                 <div class="mt-6 flex flex-wrap justify-center md:justify-start gap-3">
                     <a href="#"
-                       class="bg-blue-700 hover:bg-blue-800 text-white px-3 py-2 rounded-lg transition text-sm sm:text-base"
+                       class="bg-blue-600 hover:bg-blue-700 dark:bg-blue-700 dark:hover:bg-blue-800 text-white px-3 py-2 rounded-lg transition text-sm sm:text-base"
                        aria-label="Descargar currículum">
                        Download Resume
                     </a>
                     <a href="#contact"
-                       class="bg-gray-700 hover:bg-gray-600 text-white px-3 py-2 rounded-lg transition text-sm sm:text-base">
+                       class="bg-gray-300 hover:bg-gray-400 dark:bg-gray-700 dark:hover:bg-gray-600 text-gray-900 dark:text-white px-3 py-2 rounded-lg transition text-sm sm:text-base">
                        Contact
                     </a>
                 </div>

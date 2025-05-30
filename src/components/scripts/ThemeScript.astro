@@ -9,9 +9,9 @@
   // Script inline que se ejecuta inmediatamente
   (function() {
     'use strict';
-    
+
     const STORAGE_KEY = 'theme-preference';
-    
+
     /**
      * Obtener tema inicial
      */
@@ -42,19 +42,26 @@
      */
     function applyTheme(theme) {
       const html = document.documentElement;
-      
+
       if (theme === 'dark') {
         html.classList.add('dark');
       } else {
         html.classList.remove('dark');
       }
-      
+
+      // Aplicar color-scheme
+      html.style.colorScheme = theme;
+
       // Guardar en localStorage si está disponible
       try {
         localStorage.setItem(STORAGE_KEY, theme);
       } catch (e) {
         // Ignorar errores de localStorage
+        console.warn('No se pudo guardar tema:', e);
       }
+
+      // Debug log
+      console.log(`Tema inicial aplicado: ${theme}, clase dark: ${html.classList.contains('dark')}`);
     }
 
     // Aplicar tema inmediatamente
@@ -63,7 +70,7 @@
 
     // Prevenir flash de contenido sin estilo
     document.documentElement.style.colorScheme = initialTheme;
-    
+
     // Hacer disponible globalmente para otros scripts
     window.__THEME_INITIAL__ = initialTheme;
   })();
