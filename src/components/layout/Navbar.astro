@@ -2,7 +2,6 @@
 import Logo from '../ui/Logo.astro';
 import Icon from '../ui/Icon.astro';
 import NavLink from './navigation/NavLink.astro';
-import ThemeToggle from '../ui/ThemeToggle.astro';
 
 const navItems = [
   { href: "#about", label: "About me", section: "about" },
@@ -39,11 +38,7 @@ const navItems = [
         </ul>
       </div>
 
-      <!-- Theme toggle y menú móvil -->
-      <div class="flex items-center gap-3">
-        <ThemeToggle size="md" />
-
-        <button class="md:hidden text-text-secondary focus:outline-none" id="mobile-menu-button">
+      <button class="md:hidden text-text-secondary focus:outline-none" id="mobile-menu-button">
         <span class="sr-only">Abrir menú de navegación</span>
         <Icon name="menu" size={24} />
       </button>

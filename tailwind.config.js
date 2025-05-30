@@ -1,7 +1,6 @@
 /** @type {import('tailwindcss').Config} */
 export default {
   content: ['./src/**/*.{astro,html,js,jsx,md,mdx,svelte,ts,tsx,vue}'],
-  darkMode: 'class', // Habilitar dark mode con clase
   theme: {
     extend: {
       colors: {
@@ -35,25 +34,25 @@ export default {
           DEFAULT: '#A2F678'
         },
 
-        // Grises del sistema (modo oscuro por defecto, claro con dark:)
+        // Grises del sistema
         background: {
-          primary: '#FFFFFF', // Claro por defecto
-          secondary: '#F9FAFB', // Claro por defecto
-          tertiary: '#F3F4F6' // Claro por defecto
+          primary: '#111827',
+          secondary: '#1F2937',
+          tertiary: '#374151'
         },
 
-        // Colores de texto (modo claro por defecto, oscuro con dark:)
+        // Colores de texto
         text: {
-          primary: '#111827', // Claro por defecto
-          secondary: '#374151', // Claro por defecto
-          tertiary: '#6B7280', // Claro por defecto
-          muted: '#9CA3AF' // Claro por defecto
+          primary: '#F9FAFB',
+          secondary: '#D1D5DB',
+          tertiary: '#9CA3AF',
+          muted: '#6B7280'
         },
 
-        // Colores de borde (modo claro por defecto, oscuro con dark:)
+        // Colores de borde
         border: {
-          primary: '#E5E7EB', // Claro por defecto
-          secondary: '#D1D5DB', // Claro por defecto
+          primary: '#374151',
+          secondary: '#4B5563',
           accent: '#699CF9'
         },
 
