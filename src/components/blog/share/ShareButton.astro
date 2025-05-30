@@ -1,0 +1,134 @@
+---
+/**
+ * Componente ShareButton individual con TypeScript
+ * Botón reutilizable para compartir en una plataforma específica
+ */
+
+import Icon from '../../ui/Icon.astro';
+import type { ShareButtonProps } from './types';
+import { SocialPlatform } from './types';
+import { SOCIAL_CONFIGS, ICON_SIZES } from './constants';
+import { generateShareUrl, generateElementId } from './utils';
+
+interface Props extends ShareButtonProps {}
+
+const {
+  platform,
+  shareData,
+  variant = 'full',
+  size = 'md',
+  showLabel = true,
+  className = ''
+} = Astro.props;
+
+// Obtener configuración de la plataforma
+const config = SOCIAL_CONFIGS[platform];
+const iconSize = ICON_SIZES[size];
+const isCompact = variant === 'compact';
+
+// Generar ID único para el elemento
+const elementId = generateElementId(platform, variant);
+
+// Generar URL de compartir (excepto para copy y facebook que se manejan con JS)
+const shareUrl = platform === SocialPlatform.COPY || platform === SocialPlatform.FACEBOOK 
+  ? '#' 
+  : generateShareUrl(platform, shareData);
+
+// Determinar si debe abrir en nueva ventana
+const shouldOpenInNewWindow = platform !== SocialPlatform.COPY;
+
+// Clases CSS dinámicas
+const baseClasses = 'flex items-center justify-center transition-all duration-200 font-medium focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500';
+
+const sizeClasses = isCompact 
+  ? 'w-8 h-8 rounded-full' 
+  : 'px-4 py-2 rounded-md';
+
+const colorClasses = `bg-[${config.colors.bg}] hover:bg-[${config.colors.hover}] text-white`;
+
+const finalClasses = `${baseClasses} ${sizeClasses} ${colorClasses} ${className}`.trim();
+
+// Props adicionales para diferentes tipos de elementos
+const commonProps = {
+  id: elementId,
+  class: finalClasses,
+  title: config.ariaLabel,
+  'aria-label': config.ariaLabel,
+  'data-platform': platform,
+  'data-url': shareData.url,
+  'data-title': shareData.title
+};
+---
+
+{platform === SocialPlatform.COPY ? (
+  <!-- Botón para copiar enlace -->
+  <button 
+    {...commonProps}
+    type="button"
+    data-action="copy"
+  >
+    <Icon name={config.iconName} size={iconSize} />
+    {!isCompact && showLabel && <span class="ml-2">{config.name}</span>}
+  </button>
+) : platform === SocialPlatform.FACEBOOK ? (
+  <!-- Enlace especial para Facebook (manejo móvil) -->
+  <a 
+    {...commonProps}
+    href="#"
+    data-action="facebook-share"
+  >
+    <Icon name={config.iconName} size={iconSize} />
+    {!isCompact && showLabel && <span class="ml-2">{config.name}</span>}
+  </a>
+) : (
+  <!-- Enlace estándar para otras plataformas -->
+  <a 
+    {...commonProps}
+    href={shareUrl}
+    target={shouldOpenInNewWindow ? '_blank' : undefined}
+    rel={shouldOpenInNewWindow ? 'noopener noreferrer' : undefined}
+  >
+    <Icon name={config.iconName} size={iconSize} />
+    {!isCompact && showLabel && <span class="ml-2">{config.name}</span>}
+  </a>
+)}
+
+<style>
+  /* Estilos adicionales para accesibilidad y animaciones */
+  button, a {
+    transition: all 0.2s ease-in-out;
+  }
+
+  button:hover, a:hover {
+    transform: translateY(-1px);
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+  }
+
+  button:active, a:active {
+    transform: translateY(0);
+  }
+
+  /* Mejoras de accesibilidad */
+  button:focus-visible, a:focus-visible {
+    outline: 2px solid #4f46e5;
+    outline-offset: 2px;
+  }
+
+  /* Animación suave para el hover */
+  @media (prefers-reduced-motion: no-preference) {
+    button, a {
+      transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+  }
+
+  /* Respeto por las preferencias de movimiento reducido */
+  @media (prefers-reduced-motion: reduce) {
+    button, a {
+      transition: none;
+    }
+    
+    button:hover, a:hover {
+      transform: none;
+    }
+  }
+</style>

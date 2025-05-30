@@ -1,5 +1,10 @@
 ---
-import Icon from '../ui/Icon.astro';
+/**
+ * Componente ShareButtons - Wrapper para mantener compatibilidad
+ * Redirige al nuevo componente refactorizado con TypeScript
+ */
+
+import ShareButtonsNew from './share/ShareButtons.astro';
 
 interface Props {
   url: string;
@@ -9,162 +14,13 @@ interface Props {
 }
 
 const { url, title, compact = false, showTitle = true } = Astro.props;
-
-// Asegurarse de que la URL sea absoluta
-const absoluteUrl = url.startsWith('http') ? url : new URL(url, Astro.url.origin).toString();
-
-// Colores con mejor contraste para accesibilidad
-const socialColors = {
-  facebook: {
-    bg: "#699CF9", // Nuevo azul RGB(105, 156, 249)
-    hover: "#5A8AE0", // Versión más oscura para hover
-  },
-  twitter: {
-    bg: "#699CF9",
-    hover: "#5A8AE0", // Versión más oscura para hover
-  },
-  linkedin: {
-    bg: "#699CF9",
-    hover: "#5A8AE0", // Versión más oscura para hover
-  },
-  whatsapp: {
-    bg: "#A2F678",
-    hover: "#8FDB6A", // Versión más oscura para hover
-  },
-  copy: {
-    bg: "#699CF9", // Usar nuestro color primario actualizado
-    hover: "#5A8AE0", // Versión más oscura para hover
-  }
-};
 ---
 
-<div class={compact ? 'mt-4 mb-3' : 'mt-8'}>
-  {showTitle && !compact && <h3 class="text-lg font-medium mb-4">¿Te gustó este artículo? ¡Compártelo!</h3>}
-
-  <div class="flex items-center">
-    {compact && <span class="text-xs text-gray-300 mr-3">Compartir:</span>}
-
-    <div class={`flex ${compact ? 'space-x-2' : 'flex-wrap gap-3'}`}>
-      <!-- Botón de copiar enlace -->
-      <button id={compact ? "copy-link-top" : "copy-link-bottom"}
-              class={compact
-                ? `w-8 h-8 flex items-center justify-center bg-[${socialColors.copy.bg}] hover:bg-[${socialColors.copy.hover}] text-white rounded-full transition font-medium`
-                : `bg-[${socialColors.copy.bg}] hover:bg-[${socialColors.copy.hover}] text-white px-4 py-2 rounded-md transition flex items-center font-medium`
-              }
-              title="Copiar enlace"
-              aria-label="Copiar enlace">
-        <Icon name="link" size={compact ? 16 : 18} />
-        {!compact && <span class="ml-2">Copiar enlace</span>}
-      </button>
-
-      <!-- Facebook - Versión compatible con móviles -->
-      <a href="#"
-         id={compact ? "facebook-share-top" : "facebook-share-bottom"}
-         data-url={absoluteUrl}
-         data-title={title}
-         class={compact
-           ? `w-8 h-8 flex items-center justify-center bg-[${socialColors.facebook.bg}] hover:bg-[${socialColors.facebook.hover}] text-white rounded-full transition font-medium`
-           : `bg-[${socialColors.facebook.bg}] hover:bg-[${socialColors.facebook.hover}] text-white px-4 py-2 rounded-md transition flex items-center font-medium`
-         }
-         title="Compartir en Facebook"
-         aria-label="Compartir en Facebook">
-        <Icon name="facebook" size={compact ? 16 : 18} />
-        {!compact && <span class="ml-2">Facebook</span>}
-      </a>
-
-      <!-- Twitter -->
-      <a href={`https://twitter.com/intent/tweet?text=${encodeURIComponent(title)}&url=${encodeURIComponent(absoluteUrl)}`}
-         target="_blank"
-         rel="noopener noreferrer"
-         class={compact
-           ? `w-8 h-8 flex items-center justify-center bg-[${socialColors.twitter.bg}] hover:bg-[${socialColors.twitter.hover}] text-white rounded-full transition font-medium`
-           : `bg-[${socialColors.twitter.bg}] hover:bg-[${socialColors.twitter.hover}] text-white px-4 py-2 rounded-md transition flex items-center font-medium`
-         }
-         title="Compartir en Twitter"
-         aria-label="Compartir en Twitter">
-        <Icon name="twitter" size={compact ? 16 : 18} />
-        {!compact && <span class="ml-2">Twitter</span>}
-      </a>
-
-      <!-- LinkedIn -->
-      <a href={`https://www.linkedin.com/sharing/share-offsite/?url=${encodeURIComponent(absoluteUrl)}&title=${encodeURIComponent(title)}`}
-         target="_blank"
-         rel="noopener noreferrer"
-         class={compact
-           ? `w-8 h-8 flex items-center justify-center bg-[${socialColors.linkedin.bg}] hover:bg-[${socialColors.linkedin.hover}] text-white rounded-full transition font-medium`
-           : `bg-[${socialColors.linkedin.bg}] hover:bg-[${socialColors.linkedin.hover}] text-white px-4 py-2 rounded-md transition flex items-center font-medium`
-         }
-         title="Compartir en LinkedIn"
-         aria-label="Compartir en LinkedIn">
-        <Icon name="linkedin" size={compact ? 16 : 18} />
-        {!compact && <span class="ml-2">LinkedIn</span>}
-      </a>
-
-      <!-- WhatsApp -->
-      <a href={`https://wa.me/?text=${encodeURIComponent(`¡Hola! Encontré este artículo: ${title} ${absoluteUrl}`)}`}
-         target="_blank"
-         rel="noopener noreferrer"
-         class={compact
-           ? `w-8 h-8 flex items-center justify-center bg-[${socialColors.whatsapp.bg}] hover:bg-[${socialColors.whatsapp.hover}] text-white rounded-full transition font-medium`
-           : `bg-[${socialColors.whatsapp.bg}] hover:bg-[${socialColors.whatsapp.hover}] text-white px-4 py-2 rounded-md transition flex items-center font-medium`
-         }
-         title="Compartir en WhatsApp"
-         aria-label="Compartir en WhatsApp">
-        <Icon name="whatsapp" size={compact ? 16 : 18} />
-        {!compact && <span class="ml-2">WhatsApp</span>}
-      </a>
-    </div>
-  </div>
-</div>
-
-<script>
-  // Script para copiar enlace al portapapeles
-  document.addEventListener('DOMContentLoaded', () => {
-    const copyButtons = document.querySelectorAll('[id^="copy-link"]');
-
-    copyButtons.forEach(button => {
-      button.addEventListener('click', () => {
-        const url = window.location.href;
-        navigator.clipboard.writeText(url)
-          .then(() => {
-            // Mostrar toast de confirmación
-            const toastEvent = new CustomEvent('show-toast', {
-              detail: { message: '¡Enlace copiado al portapapeles!' }
-            });
-            document.dispatchEvent(toastEvent);
-          })
-          .catch(err => {
-            console.error('Error al copiar: ', err);
-            // Mostrar mensaje de error
-            const toastEvent = new CustomEvent('show-toast', {
-              detail: { message: 'Error al copiar el enlace' }
-            });
-            document.dispatchEvent(toastEvent);
-          });
-      });
-    });
-
-    // Script para compartir en Facebook (compatible con móviles)
-    const facebookButtons = document.querySelectorAll('[id^="facebook-share"]');
-
-    facebookButtons.forEach(button => {
-      button.addEventListener('click', (e) => {
-        e.preventDefault();
-
-        const url = button.getAttribute('data-url') || '';
-
-        // Detectar si es móvil
-        const isMobile = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
-
-        if (isMobile) {
-          // En móviles, usar la API de Facebook para Android/iOS
-          window.open(`fb://facewebmodal/f?href=${encodeURIComponent(url)}`, '_blank');
-        } else {
-          // En desktop, usar la URL web estándar
-          window.open(`https://www.facebook.com/sharer.php?u=${encodeURIComponent(url)}`, '_blank', 'width=600,height=400');
-        }
-      });
-    });
-  });
-</script>
+<!-- Usar el nuevo componente refactorizado -->
+<ShareButtonsNew
+  url={url}
+  title={title}
+  compact={compact}
+  showTitle={showTitle}
+/>
 
