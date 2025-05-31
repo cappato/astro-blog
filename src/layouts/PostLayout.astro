@@ -127,7 +127,7 @@ const currentUrl = Astro.url.href;
   <CommonScripts />
   <link rel="stylesheet" href="/styles/blog.css">
 </head>
-<body class="bg-gray-900 text-gray-100 font-sans">
+<body class="font-sans transition-theme">
   <BlogNavbar currentPath={Astro.url.pathname} />
 
   <main id="main-content" class="container mx-auto px-4 py-8">
@@ -186,13 +186,13 @@ const currentUrl = Astro.url.href;
         </div>
 
         <!-- Contenido del post -->
-        <div class="prose prose-invert prose-lg max-w-none">
+        <div class="prose prose-lg max-w-none dark:prose-invert">
           <slot />
         </div>
 
         <!-- Botones para compartir -->
-        <div class="mt-8 pt-6 border-t border-gray-700">
-          <h3 class="text-lg font-medium mb-4">¿Te gustó este artículo? ¡Compártelo!</h3>
+        <div class="mt-8 pt-6 border-t border-border dark:border-border-dark">
+          <h3 class="text-lg font-medium mb-4 text-primary-content">¿Te gustó este artículo? ¡Compártelo!</h3>
 
           <!-- Componente de botones para compartir (versión completa) -->
           <ShareButtons url={currentUrl} title={title} compact={false} showTitle={false} />

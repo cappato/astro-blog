@@ -4,8 +4,15 @@
 
 import type { SocialConfig } from './types';
 import { SocialPlatform } from './types';
-import { SOCIAL_COLORS } from '../../../config/colors';
 import { SHARE_APIS, POPUP_CONFIG, BREAKPOINTS } from '../../../config/urls';
+
+// Colores directos en lugar de importar archivo eliminado
+const SOCIAL_COLORS = {
+  facebook: { bg: '#699CF9', hover: '#5A8AE0', text: '#FFFFFF' },
+  twitter: { bg: '#699CF9', hover: '#5A8AE0', text: '#FFFFFF' },
+  linkedin: { bg: '#699CF9', hover: '#5A8AE0', text: '#FFFFFF' },
+  whatsapp: { bg: '#6B8E23', hover: '#5A7A1E', text: '#FFFFFF' }
+};
 
 /** Configuración de colores con mejor contraste para accesibilidad */
 export const SOCIAL_CONFIGS: Record<SocialPlatform, SocialConfig> = {

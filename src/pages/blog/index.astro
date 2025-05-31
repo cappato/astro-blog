@@ -1,4 +1,5 @@
 ---
+import '../../styles/global.css';
 import BlogNavbar from '../../components/layout/navbar/BlogNavbar.astro';
 import Footer from '../../components/layout/footer/Footer.astro';
 import CommonScripts from '../../components/layout/CommonScripts.astro';
@@ -7,6 +8,7 @@ import SEOHead from '../../components/seo/SEOHead.astro';
 import ThemeScript from '../../components/layout/ThemeScript.astro';
 import { getCollection } from 'astro:content';
 import TagList from '../../components/blog/TagList.astro';
+import BaseTag from '../../components/ui/BaseTag.astro';
 
 // Obtener todos los posts del blog
 const posts = await getCollection('blog', (post) => {
@@ -45,34 +47,32 @@ const description = "Artículos sobre desarrollo web, programación, tecnología
     <CommonScripts />
     <link rel="stylesheet" href="/styles/blog.css">
 </head>
-<body class="bg-gray-900 text-gray-100 font-sans">
+<body class="font-sans transition-theme">
     <BlogNavbar currentPath="/blog" />
 
     <main class="container mx-auto px-4 py-8">
         <header class="mb-12 text-center">
             <h1 class="text-4xl font-bold mb-4 text-primary">Blog</h1>
-            <p class="text-xl text-gray-300 max-w-2xl mx-auto">{description}</p>
+            <p class="text-xl text-content max-w-2xl mx-auto">{description}</p>
         </header>
 
         <!-- Filtro por etiquetas -->
         <section class="mb-12">
-            <h2 class="text-2xl font-bold mb-4">Explorar por tema</h2>
+            <h2 class="text-2xl font-bold mb-4 text-content">Explorar por tema</h2>
             <div class="flex flex-wrap gap-2">
                 {allTags.map(tag => (
-                    <a href={`/blog/tag/${tag}`} class="bg-gray-800 hover:bg-gray-700 text-secondary px-3 py-1 rounded-md transition">
-                        #{tag}
-                    </a>
+                    <BaseTag tag={tag} href={`/blog/tag/${tag}`} />
                 ))}
             </div>
         </section>
 
         <!-- Lista de posts -->
         <section>
-            <h2 class="text-2xl font-bold mb-6">Artículos recientes</h2>
+            <h2 class="text-2xl font-bold mb-6 text-content">Artículos recientes</h2>
 
             <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
                 {posts.map(post => (
-                    <article class="bg-gray-800 rounded-lg overflow-hidden shadow-lg hover:shadow-xl transition-shadow">
+                    <article class="card-base overflow-hidden shadow-theme-lg hover:shadow-xl transition-all duration-200">
                         <a href={`/blog/${post.data.slug || post.slug}`} class="block">
                             {post.data.postId ? (
                                 <img
@@ -93,8 +93,8 @@ const description = "Artículos sobre desarrollo web, programación, tecnología
                                     height="315"
                                 />
                             ) : (
-                                <div class="w-full h-48 bg-gray-700 flex items-center justify-center">
-                                    <span class="text-gray-400">Sin imagen</span>
+                                <div class="w-full h-48 bg-muted flex items-center justify-center dark:bg-muted-dark">
+                                    <span class="text-content">Sin imagen</span>
                                 </div>
                             )}
                         </a>
@@ -106,7 +106,7 @@ const description = "Artículos sobre desarrollo web, programación, tecnología
                                 </a>
                             </h3>
 
-                            <p class="text-gray-300 text-sm mb-3">
+                            <p class="text-content text-sm mb-3 opacity-75">
                                 {new Date(post.data.date).toLocaleDateString('es-ES', {
                                     year: 'numeric',
                                     month: 'long',
@@ -114,7 +114,7 @@ const description = "Artículos sobre desarrollo web, programación, tecnología
                                 })}
                             </p>
 
-                            <p class="text-gray-400 mb-4 line-clamp-3">
+                            <p class="text-content mb-4 line-clamp-3 opacity-90">
                                 {post.data.description}
                             </p>
 

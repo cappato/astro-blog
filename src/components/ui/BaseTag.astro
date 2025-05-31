@@ -1,0 +1,58 @@
+---
+/**
+ * Componente BaseTag - Botón/enlace unificado para tags
+ * Usa el sistema de temas para garantizar contraste consistente
+ */
+
+interface Props {
+  tag: string;
+  href?: string;
+  variant?: 'default' | 'compact' | 'large';
+  className?: string;
+  onClick?: string;
+}
+
+const {
+  tag,
+  href = `/blog/tag/${tag.toLowerCase()}`,
+  variant = 'default',
+  className = '',
+  onClick
+} = Astro.props;
+
+// Variantes de tamaño
+const variants = {
+  default: 'text-tag',
+  compact: 'text-tag text-xs px-1.5 py-0.5',
+  large: 'text-tag text-sm px-3 py-2'
+};
+
+const tagClasses = `${variants[variant]} ${className}`.trim();
+
+// Props comunes para accesibilidad
+const commonProps = {
+  class: tagClasses,
+  'aria-label': `Ver artículos con la etiqueta ${tag}`,
+  title: `Explorar artículos sobre ${tag}`
+};
+---
+
+{onClick ? (
+  <!-- Botón interactivo (para filtros, etc.) -->
+  <button
+    {...commonProps}
+    type="button"
+    onclick={onClick}
+    data-tag={tag}
+  >
+    #{tag}
+  </button>
+) : (
+  <!-- Enlace de navegación (comportamiento por defecto) -->
+  <a
+    {...commonProps}
+    href={href}
+  >
+    #{tag}
+  </a>
+)}

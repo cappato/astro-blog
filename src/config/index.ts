@@ -5,12 +5,10 @@
 
 // Exportar todas las configuraciones
 export * from './site';
-export * from './colors';
 export * from './urls';
 
 // Re-exportar las configuraciones más utilizadas para fácil acceso
 export { SITE_INFO, SOCIAL_LINKS, NAVIGATION, SEO_DEFAULTS, BLOG_CONFIG } from './site';
-export { COLORS, PRIMARY_COLORS, SOCIAL_COLORS, THEME_CONFIG } from './colors';
 export { SHARE_APIS, INTERNAL_URLS, URL_UTILS, BREAKPOINTS } from './urls';
 
 /**
@@ -26,18 +24,18 @@ export const CONFIG = {
     author: 'Matías Cappato',
     language: 'es'
   },
-  
+
   // Colores principales
   colors: {
     primary: '#699CF9',
     primaryHover: '#5A8AE0',
-    secondary: '#A2F678',
-    secondaryHover: '#8FDB6A',
+    secondary: '#6B8E23',
+    secondaryHover: '#5A7A1E',
     background: '#111827',
     surface: '#1F2937',
     text: '#F9FAFB'
   },
-  
+
   // Redes sociales
   social: {
     twitter: '@matiascappato',
@@ -45,14 +43,14 @@ export const CONFIG = {
     linkedin: 'matiascappato',
     email: 'matias@cappato.dev'
   },
-  
+
   // Blog
   blog: {
     postsPerPage: 10,
     dateFormat: 'dd/MM/yyyy',
     excerptLength: 160
   },
-  
+
   // SEO
   seo: {
     defaultImage: '/images/og-default.webp',
@@ -80,7 +78,7 @@ export const validateConfig = (): boolean => {
     CONFIG.colors.primary,
     CONFIG.colors.secondary
   ];
-  
+
   return required.every(value => value && value.length > 0);
 };
 
@@ -91,7 +89,7 @@ export const validateConfig = (): boolean => {
 export const getEnvConfig = () => {
   const isDev = import.meta.env.DEV;
   const isProd = import.meta.env.PROD;
-  
+
   return {
     isDev,
     isProd,
@@ -113,21 +111,21 @@ export const COMPONENT_DEFAULTS = {
     variant: 'primary' as const,
     disabled: false
   },
-  
+
   // Imágenes
   image: {
     quality: 80,
     format: 'webp' as const,
     loading: 'lazy' as const
   },
-  
+
   // Modales
   modal: {
     closeOnEscape: true,
     closeOnOverlay: true,
     showCloseButton: true
   },
-  
+
   // Formularios
   form: {
     validateOnBlur: true,

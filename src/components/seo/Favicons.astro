@@ -1,6 +1,7 @@
 ---
 // Componente dedicado para gestionar todos los favicons del sitio
-import { COLORS } from '../../config';
+// Usar color directo en lugar de importar COLORS eliminado
+const primaryColor = '#699CF9';
 ---
 
 <!-- Favicons para todos los dispositivos y navegadores -->
@@ -15,7 +16,7 @@ import { COLORS } from '../../config';
 <link rel="icon" type="image/png" sizes="512x512" href="/android-chrome-512x512.png">
 
 <!-- Colores de tema para navegadores móviles -->
-<meta name="theme-color" content={COLORS.primary}>
-<meta name="msapplication-TileColor" content={COLORS.primary}>
+<meta name="theme-color" content={primaryColor}>
+<meta name="msapplication-TileColor" content={primaryColor}>
 
 

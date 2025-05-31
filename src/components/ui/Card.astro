@@ -5,17 +5,17 @@ interface Props {
   as?: 'div' | 'article' | 'section';
 }
 
-const { 
-  variant = 'default', 
-  className = '', 
-  as: Element = 'div' 
+const {
+  variant = 'default',
+  className = '',
+  as: Element = 'div'
 } = Astro.props;
 
-// Definir las variantes de la card
+// Definir las variantes de la card usando el nuevo sistema de temas
 const variants = {
-  default: 'bg-surface-800 rounded-lg p-4 sm:p-6 shadow-card',
-  hover: 'bg-surface-800 rounded-lg p-4 sm:p-6 shadow-card hover:shadow-card-hover transition-all duration-300 hover:-translate-y-1',
-  compact: 'bg-surface-800 rounded-lg p-3 sm:p-4 shadow-card'
+  default: 'card-base p-4 sm:p-6',
+  hover: 'card-base card-hover p-4 sm:p-6',
+  compact: 'card-base p-3 sm:p-4'
 };
 
 const cardClasses = `${variants[variant]} ${className}`;

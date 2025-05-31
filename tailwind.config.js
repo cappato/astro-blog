@@ -5,45 +5,70 @@ export default {
   theme: {
     extend: {
       colors: {
-        // Colores principales usando el sistema centralizado
+        // Colores principales - funcionan en ambos temas
         primary: {
-          DEFAULT: '#699CF9', // Azul principal RGB(105, 156, 249)
+          DEFAULT: '#699CF9', // Azul principal
           50: '#EBF2FF',
           100: '#D6E4FF',
           200: '#B3CCFF',
           300: '#8FB5FF',
           400: '#699CF9',
-          500: '#5A8AE0', // Hover
+          500: '#5A8AE0',
           600: '#4A73C7',
           700: '#3B5CAE',
           800: '#2C4595',
           900: '#1D2E7C'
         },
         secondary: {
-          DEFAULT: '#A2F678', // Verde secundario RGB(162, 246, 120)
-          50: '#F0FFF4',
-          100: '#C6F6D5',
-          200: '#9AE6B4',
-          300: '#68D391',
-          400: '#A2F678',
-          500: '#8FDB6A', // Hover
-          600: '#7BC258',
-          700: '#68A946',
-          800: '#559034',
-          900: '#427722'
+          DEFAULT: '#6B8E23', // Verde militar (Olive Drab)
+          50: '#F7F8F3',
+          100: '#E8EDD7',
+          200: '#D1DBAF',
+          300: '#B4C687',
+          400: '#8FA85F',
+          500: '#6B8E23',
+          600: '#5A7A1E',
+          700: '#4A6619',
+          800: '#3A5214',
+          900: '#2A3E0F'
         },
-        // Grises personalizados para mejor consistencia
+        // Colores semánticos que se adaptan al tema
+        background: {
+          DEFAULT: '#f8fafc', // Light mode - Gris muy suave en lugar de blanco puro
+          dark: '#0f172a'     // Dark mode
+        },
+        foreground: {
+          DEFAULT: '#1e293b', // Light mode - Gris oscuro en lugar de negro puro
+          dark: '#f8fafc'     // Dark mode
+        },
+        'primary-content': {
+          DEFAULT: '#1e293b', // Light mode - Gris oscuro para texto principal
+          dark: '#f8fafc'     // Dark mode - Gris claro para texto principal
+        },
+        muted: {
+          DEFAULT: '#f1f5f9', // Light mode
+          dark: '#1e293b'     // Dark mode
+        },
+        border: {
+          DEFAULT: '#e2e8f0', // Light mode
+          dark: '#334155'     // Dark mode
+        },
+        card: {
+          DEFAULT: 'rgba(255, 255, 255, 0.7)', // Light mode - Blanco semi-transparente
+          dark: '#1e293b'     // Dark mode
+        },
+        // Grises mejorados para ambos temas
         surface: {
-          50: '#F9FAFB',
-          100: '#F3F4F6',
-          200: '#E5E7EB',
-          300: '#D1D5DB',
-          400: '#9CA3AF',
-          500: '#6B7280',
-          600: '#4B5563',
-          700: '#374151',
-          800: '#1F2937',
-          900: '#111827' // Fondo principal oscuro
+          50: '#f8fafc',   // Muy claro (light mode)
+          100: '#f1f5f9',  // Claro
+          200: '#e2e8f0',  // Claro medio
+          300: '#cbd5e1',  // Medio claro
+          400: '#94a3b8',  // Medio
+          500: '#64748b',  // Medio oscuro
+          600: '#475569',  // Oscuro medio
+          700: '#334155',  // Oscuro
+          800: '#1e293b',  // Muy oscuro
+          900: '#0f172a'   // Extremo oscuro (dark mode)
         }
       },
       // Espaciado consistente
