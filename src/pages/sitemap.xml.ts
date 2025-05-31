@@ -5,12 +5,11 @@ export async function GET() {
     return import.meta.env.PROD ? !data.draft : true;
   });
 
-  return {
-    body: generateSitemap(blogEntries),
+  return new Response(generateSitemap(blogEntries), {
     headers: {
       'Content-Type': 'application/xml',
     },
-  };
+  });
 }
 
 function generateSitemap(posts: CollectionEntry<'blog'>[]): string {
