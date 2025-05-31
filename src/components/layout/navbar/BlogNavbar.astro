@@ -1,0 +1,23 @@
+---
+import BaseNavbar from './BaseNavbar.astro';
+
+interface Props {
+  currentPath?: string;
+}
+
+const { currentPath = '/blog' } = Astro.props;
+
+// Determinar si estamos en la página principal del blog o en un post
+const isMainBlogPage = currentPath === '/blog';
+---
+
+<BaseNavbar>
+  <!-- Navegación específica para blog -->
+  <div slot="navigation">
+    {isMainBlogPage ? (
+      <span class="text-secondary font-medium px-4 py-2 rounded-md bg-surface-700 bg-opacity-50">Blog</span>
+    ) : (
+      <a href="/blog" class="text-secondary font-medium px-4 py-2 rounded-md bg-surface-700 bg-opacity-50 hover:bg-opacity-70 transition-all duration-200">Blog</a>
+    )}
+  </div>
+</BaseNavbar>

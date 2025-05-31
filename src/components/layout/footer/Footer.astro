@@ -1,0 +1,71 @@
+---
+import Icon from '../../ui/Icon.astro';
+
+// Datos del footer centralizados
+const currentYear = new Date().getFullYear();
+const socialLinks = [
+  {
+    href: "https://github.com/cappato",
+    icon: "github" as const,
+    label: "GitHub Profile",
+    external: true
+  },
+  {
+    href: "https://www.linkedin.com/in/matiascappato/",
+    icon: "linkedin" as const,
+    label: "LinkedIn Profile",
+    external: true
+  },
+  {
+    href: "mailto:matias@cappato.dev",
+    icon: "email" as const,
+    label: "Email",
+    external: false
+  }
+];
+---
+
+<!-- Footer -->
+<footer class="bg-surface-800 py-8 mt-16">
+    <div class="container mx-auto px-4">
+        <div class="flex flex-col md:flex-row justify-between items-center">
+            <div class="text-surface-400 mb-4 md:mb-0">
+                &copy; {currentYear} Matías Sebastián Cappato. All rights reserved.
+            </div>
+            <div class="flex space-x-6">
+                {socialLinks.map(link => (
+                    <a
+                        href={link.href}
+                        {...(link.external && {
+                            target: "_blank",
+                            rel: "noopener noreferrer"
+                        })}
+                        class="footer-social-link text-surface-400 hover:text-primary transition-colors duration-200 inline-block p-2 rounded-full hover:bg-surface-700 focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2 focus:ring-offset-surface-800"
+                        aria-label={link.label}
+                    >
+                        <Icon name={link.icon} size={24} />
+                    </a>
+                ))}
+            </div>
+        </div>
+    </div>
+</footer>
+
+<!-- JavaScript optimizado para navegación con teclado -->
+<script>
+  document.addEventListener('DOMContentLoaded', () => {
+    // Soporte para navegación con teclado en enlaces sociales
+    const socialLinks = document.querySelectorAll('.footer-social-link');
+
+    socialLinks.forEach((link) => {
+      link.addEventListener('keydown', (e) => {
+        if (e instanceof KeyboardEvent && (e.key === 'Enter' || e.key === ' ')) {
+          e.preventDefault();
+          if (link instanceof HTMLElement) {
+            link.click();
+          }
+        }
+      });
+    });
+  });
+</script>

@@ -2,8 +2,8 @@
 import '../styles/global.css';
 import CommonScripts from '../components/layout/CommonScripts.astro';
 import Favicons from '../components/seo/Favicons.astro';
-import Navbar from '../components/layout/Navbar.astro';
-import Footer from '../components/layout/Footer.astro';
+import HomeNavbar from '../components/layout/navbar/HomeNavbar.astro';
+import Footer from '../components/layout/footer/Footer.astro';
 import SEOHead from '../components/seo/SEOHead.astro';
 import AIMetadata from '../components/seo/AIMetadata.astro';
 
@@ -65,7 +65,7 @@ const currentUrl = Astro.url.pathname;
     <CommonScripts />
 </head>
 <body class="bg-gray-900 text-gray-100 font-sans overflow-x-hidden">
-    <Navbar />
+    <HomeNavbar />
     <slot />
     <Footer />
 </body>
