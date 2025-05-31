@@ -5,6 +5,7 @@ import Footer from '../../components/layout/footer/Footer.astro';
 import CommonScripts from '../../components/layout/CommonScripts.astro';
 import Favicons from '../../components/seo/Favicons.astro';
 import SEOHead from '../../components/seo/SEOHead.astro';
+import { AutoSchema } from '../../features/schema';
 import ThemeScript from '../../components/layout/ThemeScript.astro';
 import { getCollection } from 'astro:content';
 import TagList from '../../components/blog/TagList.astro';
@@ -44,6 +45,10 @@ const description = "Artículos sobre desarrollo web, programación, tecnología
         keywords={["blog", "desarrollo web", "programación", "javascript", "react", "node.js"]}
     />
     <Favicons />
+
+    <!-- Schema.org structured data - FULLY AUTOMATED -->
+    <AutoSchema />
+
     <CommonScripts />
     <link rel="stylesheet" href="/styles/blog.css">
 </head>

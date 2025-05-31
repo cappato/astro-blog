@@ -1,0 +1,63 @@
+---
+/**
+ * AutoSchema Component - Schema.org Feature
+ * Automatic schema generation with zero configuration
+ * 
+ * Usage:
+ *   <AutoSchema />                    <!-- Auto-detects page type -->
+ *   <AutoSchema post={entry} />       <!-- For blog posts -->
+ *   <AutoSchema type="home" />        <!-- Force specific type -->
+ */
+
+import type { CollectionEntry } from 'astro:content';
+import { generateSchema, toJsonLd, type SchemaContext } from './engine.ts';
+import type { PageType } from './config.ts';
+
+interface Props {
+  post?: CollectionEntry<'blog'>;
+  type?: PageType;
+}
+
+const { post, type } = Astro.props;
+
+// Build context for schema generation
+const context: SchemaContext = {
+  url: Astro.url.href,
+  post,
+  pageType: type
+};
+
+// Generate schemas
+let schemas: any[] = [];
+let errorMessage = '';
+
+try {
+  schemas = generateSchema(context);
+} catch (error) {
+  console.error('AutoSchema: Error generating schemas:', error);
+  errorMessage = error instanceof Error ? error.message : 'Unknown error';
+  schemas = [];
+}
+
+// Convert to JSON-LD
+const jsonLd = schemas.length > 0 ? toJsonLd(schemas) : '';
+
+// Log for debugging in development
+if (import.meta.env.DEV && schemas.length > 0) {
+  console.log(`AutoSchema: Generated ${schemas.length} schema(s) for ${Astro.url.pathname}`);
+}
+
+if (import.meta.env.DEV && errorMessage) {
+  console.warn(`AutoSchema: ${errorMessage}`);
+}
+---
+
+{schemas.length > 0 && (
+  <!-- Auto-generated Schema.org JSON-LD -->
+  <script type="application/ld+json" is:inline set:html={jsonLd}></script>
+)}
+
+{import.meta.env.DEV && schemas.length === 0 && (
+  <!-- Development warning for missing schemas -->
+  <!-- <script>console.warn('AutoSchema: No schemas generated for', window.location.pathname);</script> -->
+)}

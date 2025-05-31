@@ -1,0 +1,75 @@
+---
+/**
+ * Unified Schema.org JSON-LD markup component
+ * Dynamically renders appropriate schemas based on page type
+ */
+
+import type { CollectionEntry } from 'astro:content';
+import { 
+  getHomeSchema,
+  getBlogIndexSchema,
+  getBlogPostSchema,
+  schemasToJsonLd,
+  type BaseSchema
+} from '../../utils/schema.ts';
+
+interface Props {
+  type?: 'home' | 'blog-index' | 'blog-post';
+  data?: {
+    post?: CollectionEntry<'blog'>;
+    postUrl?: string;
+    imageUrl?: string;
+  };
+}
+
+const { type = 'home', data } = Astro.props;
+
+// Validate props and generate schemas based on page type
+let schemas: BaseSchema[] = [];
+
+try {
+  switch (type) {
+    case 'home':
+      schemas = getHomeSchema();
+      break;
+
+    case 'blog-index':
+      schemas = getBlogIndexSchema();
+      break;
+
+    case 'blog-post':
+      if (!data?.post || !data?.postUrl) {
+        console.error('SchemaMarkup: Post data and URL are required for blog-post schema type');
+        // Fallback to empty array to prevent breaking the page
+        schemas = [];
+      } else {
+        schemas = getBlogPostSchema({
+          post: data.post,
+          postUrl: data.postUrl,
+          imageUrl: data.imageUrl
+        });
+      }
+      break;
+
+    default:
+      console.error(`SchemaMarkup: Unknown schema type: ${type}. Supported types: home, blog-index, blog-post`);
+      schemas = [];
+  }
+} catch (error) {
+  console.error('SchemaMarkup: Error generating schemas:', error);
+  schemas = [];
+}
+
+// Only render if we have valid schemas
+if (schemas.length === 0) {
+  console.warn('SchemaMarkup: No schemas generated, skipping render');
+}
+
+// Convert to JSON-LD
+const jsonLd = schemasToJsonLd(schemas);
+---
+
+{schemas.length > 0 && (
+  <!-- Schema.org JSON-LD structured data -->
+  <script type="application/ld+json" is:inline set:html={jsonLd}></script>
+)}

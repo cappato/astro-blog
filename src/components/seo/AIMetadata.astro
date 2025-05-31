@@ -86,10 +86,7 @@ if (type === 'article' && datePublished) {
 }
 ---
 
-<!-- Metadatos específicos para IA -->
-<script type="application/ld+json" set:html={JSON.stringify(aiMetadata)} />
-
-<!-- Metadatos para asistentes de IA -->
+<!-- Metadatos para asistentes de IA (Schema.org JSON-LD is handled by SchemaMarkup.astro) -->
 <meta name="ai:description" content={description} />
 <meta name="ai:keywords" content={tags.join(", ")} />
 <meta name="ai:type" content={type} />

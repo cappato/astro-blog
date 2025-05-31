@@ -5,7 +5,7 @@ import CommonScripts from '../components/layout/CommonScripts.astro';
 import ThemeScript from '../components/layout/ThemeScript.astro';
 import SocialHead from '../components/seo/SocialHead.astro';
 import ImageVariants from '../components/media/ImageVariants.astro';
-import BlogPostSchema from '../components/seo/schemas/BlogPostSchema.astro';
+import { AutoSchema } from '../features/schema';
 import ShareButtons from '../components/blog/ShareButtons.astro';
 import ShareMessage from '../components/blog/ShareMessage.astro';
 import CopyToast from '../components/blog/CopyToast.astro';
@@ -15,6 +15,8 @@ import Footer from '../components/layout/footer/Footer.astro';
 import TagList from '../components/blog/TagList.astro';
 import { getReadingTime, formatReadingTime } from '../utils/readingTime';
 import AIMetadata from '../components/seo/AIMetadata.astro';
+
+import type { CollectionEntry } from 'astro:content';
 
 // Definir la interfaz para las props
 interface Props {
@@ -31,10 +33,12 @@ interface Props {
   postId?: string;
   imageAlt?: string;
   tags?: string[];
+  // Para el nuevo sistema de schemas
+  entry?: CollectionEntry<'blog'>;
 }
 
 // Props que recibe el componente
-const { title, description, date, author, image, postId, imageAlt, tags } = Astro.props;
+const { title, description, date, author, image, postId, imageAlt, tags, entry } = Astro.props;
 
 // Determinar qué sistema de imágenes usar
 const useNewImageSystem = !!postId;
@@ -95,17 +99,8 @@ const currentUrl = Astro.url.href;
     postId={postId}
   />
 
-  <!-- Schema.org JSON-LD para artículos -->
-  <BlogPostSchema
-    title={title}
-    description={description}
-    date={date}
-    author={author || "Matías Cappato"}
-    image={shareImage.url}
-    url={Astro.url.href}
-    updatedDate={date}
-    tags={tags || []}
-  />
+  <!-- Schema.org JSON-LD para artículos - FULLY AUTOMATED -->
+  <AutoSchema post={entry} />
 
   <!-- Metadatos específicos para IA -->
   <AIMetadata

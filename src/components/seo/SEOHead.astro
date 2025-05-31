@@ -67,50 +67,7 @@ const modDate = modifiedDate instanceof Date ? modifiedDate : undefined;
 <!-- Enlace a metadatos para IA -->
 <link rel="ai-metadata" href="/ai-metadata.json" />
 
-<!-- Schema.org JSON-LD para Google -->
-<script type="application/ld+json" set:html={JSON.stringify(
-  type === 'article'
-    ? {
-        "@context": "https://schema.org",
-        "@type": "BlogPosting",
-        "headline": title,
-        "description": description,
-        "image": imageUrl,
-        "author": {
-          "@type": "Person",
-          "name": author,
-          "url": siteUrl
-        },
-        "publisher": {
-          "@type": "Person",
-          "name": "Matías Cappato",
-          "url": siteUrl,
-          "logo": {
-            "@type": "ImageObject",
-            "url": `${siteUrl}/images/logo.webp`
-          }
-        },
-        "datePublished": pubDate?.toISOString(),
-        "dateModified": modDate?.toISOString() || pubDate?.toISOString(),
-        "mainEntityOfPage": {
-          "@type": "WebPage",
-          "@id": canonical
-        },
-        "keywords": keywords.join(', ')
-      }
-    : {
-        "@context": "https://schema.org",
-        "@type": "WebSite",
-        "name": "Matías Cappato",
-        "url": siteUrl,
-        "description": description,
-        "potentialAction": {
-          "@type": "SearchAction",
-          "target": `${siteUrl}/search?q={search_term_string}`,
-          "query-input": "required name=search_term_string"
-        }
-      }
-)} />
+<!-- Schema.org JSON-LD is now handled by SchemaMarkup.astro component -->
 
 
 
