@@ -1,5 +1,6 @@
 ---
 import Logo from '../../ui/Logo.astro';
+import ThemeToggle from '../../ui/ThemeToggle.astro';
 
 interface Props {
   className?: string;
@@ -20,8 +21,14 @@ const { className = '' } = Astro.props;
       <!-- Slot para navegación específica de cada página -->
       <slot name="navigation" />
 
-      <!-- Slot para acciones adicionales (botones, etc.) -->
-      <slot name="actions" />
+      <!-- Acciones del navbar (theme toggle + acciones adicionales) -->
+      <div class="flex items-center gap-3">
+        <!-- Theme toggle (siempre visible) -->
+        <ThemeToggle size="md" />
+
+        <!-- Slot para acciones adicionales (botones, etc.) -->
+        <slot name="actions" />
+      </div>
     </div>
   </div>
 </nav>

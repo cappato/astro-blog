@@ -6,6 +6,7 @@ import HomeNavbar from '../components/layout/navbar/HomeNavbar.astro';
 import Footer from '../components/layout/footer/Footer.astro';
 import SEOHead from '../components/seo/SEOHead.astro';
 import AIMetadata from '../components/seo/AIMetadata.astro';
+import ThemeScript from '../components/layout/ThemeScript.astro';
 
 interface Props {
     title: string;
@@ -42,6 +43,9 @@ const currentUrl = Astro.url.pathname;
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>{title}</title>
+
+    <!-- Script anti-flicker (debe ir lo antes posible) -->
+    <ThemeScript />
     <SEOHead
         title={title}
         description={description}

@@ -2,6 +2,7 @@
 import Favicons from '../components/seo/Favicons.astro';
 import '../styles/global.css';
 import CommonScripts from '../components/layout/CommonScripts.astro';
+import ThemeScript from '../components/layout/ThemeScript.astro';
 import SocialHead from '../components/seo/SocialHead.astro';
 import ImageVariants from '../components/media/ImageVariants.astro';
 import BlogPostSchema from '../components/seo/schemas/BlogPostSchema.astro';
@@ -75,6 +76,9 @@ const currentUrl = Astro.url.href;
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>{title} | Matías Cappato</title>
+
+  <!-- Script anti-flicker (debe ir lo antes posible) -->
+  <ThemeScript />
 
   <!-- Meta descripción mejorada y única para cada post -->
   <meta name="description" content={description || `Artículo sobre ${title} por Matías Cappato. ${tags?.join(', ')}`} />

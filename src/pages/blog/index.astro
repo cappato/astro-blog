@@ -4,6 +4,7 @@ import Footer from '../../components/layout/footer/Footer.astro';
 import CommonScripts from '../../components/layout/CommonScripts.astro';
 import Favicons from '../../components/seo/Favicons.astro';
 import SEOHead from '../../components/seo/SEOHead.astro';
+import ThemeScript from '../../components/layout/ThemeScript.astro';
 import { getCollection } from 'astro:content';
 import TagList from '../../components/blog/TagList.astro';
 
@@ -29,6 +30,9 @@ const description = "Artículos sobre desarrollo web, programación, tecnología
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>{title}</title>
+
+    <!-- Script anti-flicker (debe ir lo antes posible) -->
+    <ThemeScript />
     <SEOHead
         title={title}
         description={description}
