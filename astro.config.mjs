@@ -1,7 +1,6 @@
 // @ts-check
 import { defineConfig } from 'astro/config';
 import tailwind from '@astrojs/tailwind';
-import partytown from '@astrojs/partytown';
 
 // https://astro.build/config
 export default defineConfig({
@@ -16,13 +15,6 @@ export default defineConfig({
       // Configuración de Tailwind
       configFile: './tailwind.config.js', // Usar configFile en lugar de config
       applyBaseStyles: true,
-    }),
-    partytown({
-      config: {
-        forward: ['dataLayer.push'],
-        debug: false,
-        lib: '/~partytown/',
-      },
     }),
   ],
   build: {

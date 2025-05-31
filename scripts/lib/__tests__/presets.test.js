@@ -16,12 +16,37 @@ import {
   generateOutputFilename
 } from '../presets.js';
 
+// Test constants for image processing
+const TEST_CONSTANTS = {
+  DIMENSIONS: {
+    DEFAULT_WIDTH: 1200,
+    OG_WIDTH: 1200,
+    OG_HEIGHT: 630,
+    LQIP_WIDTH: 20,
+  },
+  QUALITY: {
+    DEFAULT: 80,
+    LQIP: 20,
+  },
+  FORMATS: {
+    WEBP: 'webp',
+    JPG: 'jpg',
+    AVIF: 'avif',
+  },
+  PATHS: {
+    RAW_DIR: 'images/raw',
+    PUBLIC_DIR: 'public/images',
+  },
+  PRESETS: {
+    EXPECTED: ['default', 'og', 'og-jpg', 'thumb', 'wsp', 'avif', 'og-avif', 'lqip'],
+  }
+};
+
 describe('PRESETS configuration', () => {
   it('should have all required presets', () => {
-    const expectedPresets = ['default', 'og', 'og-jpg', 'thumb', 'wsp', 'avif', 'og-avif', 'lqip'];
     const actualPresets = Object.keys(PRESETS);
 
-    expectedPresets.forEach(preset => {
+    TEST_CONSTANTS.PRESETS.EXPECTED.forEach(preset => {
       expect(actualPresets).toContain(preset);
     });
   });
@@ -50,27 +75,27 @@ describe('PRESETS configuration', () => {
   it('should have specific preset configurations', () => {
     // Default preset
     expect(PRESETS.default).toEqual({
-      width: 1200,
+      width: TEST_CONSTANTS.DIMENSIONS.DEFAULT_WIDTH,
       height: null,
-      format: 'webp',
-      quality: 80
+      format: TEST_CONSTANTS.FORMATS.WEBP,
+      quality: TEST_CONSTANTS.QUALITY.DEFAULT
     });
 
     // Open Graph preset
     expect(PRESETS.og).toEqual({
-      width: 1200,
-      height: 630,
-      format: 'webp',
-      quality: 80,
+      width: TEST_CONSTANTS.DIMENSIONS.OG_WIDTH,
+      height: TEST_CONSTANTS.DIMENSIONS.OG_HEIGHT,
+      format: TEST_CONSTANTS.FORMATS.WEBP,
+      quality: TEST_CONSTANTS.QUALITY.DEFAULT,
       fit: 'cover'
     });
 
     // LQIP preset
     expect(PRESETS.lqip).toEqual({
-      width: 20,
+      width: TEST_CONSTANTS.DIMENSIONS.LQIP_WIDTH,
       height: null,
-      format: 'webp',
-      quality: 20,
+      format: TEST_CONSTANTS.FORMATS.WEBP,
+      quality: TEST_CONSTANTS.QUALITY.LQIP,
       fit: 'inside'
     });
   });
@@ -78,8 +103,8 @@ describe('PRESETS configuration', () => {
 
 describe('PATHS configuration', () => {
   it('should have correct path configuration', () => {
-    expect(PATHS.RAW_DIR).toBe('images/raw');
-    expect(PATHS.PUBLIC_DIR).toBe('public/images');
+    expect(PATHS.RAW_DIR).toBe(TEST_CONSTANTS.PATHS.RAW_DIR);
+    expect(PATHS.PUBLIC_DIR).toBe(TEST_CONSTANTS.PATHS.PUBLIC_DIR);
   });
 });
 

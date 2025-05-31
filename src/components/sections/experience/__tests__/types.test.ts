@@ -1,21 +1,43 @@
 import { describe, it, expect } from 'vitest';
 import type { ExperienceItem, ExperienceCardProps, ExperienceSectionProps } from '../types';
 
+// Test constants for type validation
+const TYPE_TEST_CONSTANTS = {
+  SAMPLE_DATA: {
+    COMPANY: "Test Company",
+    POSITION: "Developer",
+    PERIOD: "2020 - Present",
+    TECHNOLOGIES: ["JavaScript", "TypeScript"],
+    RESPONSIBILITIES: ["Developed applications", "Maintained code"],
+    TECH_COUNT: 3,
+    RESP_COUNT: 2,
+    FIRST_TECH: "Tech1",
+    FIRST_RESP: "Resp1",
+  },
+  REQUIRED_FIELDS: {
+    COMPANY: "Required",
+    POSITION: "Required",
+    PERIOD: "Required",
+    TECHNOLOGIES: ["Required"],
+    RESPONSIBILITIES: ["Required"],
+  }
+} as const;
+
 describe('Experience Types', () => {
   describe('ExperienceItem Interface', () => {
     it('should accept valid experience item', () => {
       const validExperience: ExperienceItem = {
-        company: "Test Company",
-        position: "Developer",
-        period: "2020 - Present",
-        technologies: ["JavaScript", "TypeScript"],
-        responsibilities: ["Developed applications", "Maintained code"]
+        company: TYPE_TEST_CONSTANTS.SAMPLE_DATA.COMPANY,
+        position: TYPE_TEST_CONSTANTS.SAMPLE_DATA.POSITION,
+        period: TYPE_TEST_CONSTANTS.SAMPLE_DATA.PERIOD,
+        technologies: TYPE_TEST_CONSTANTS.SAMPLE_DATA.TECHNOLOGIES,
+        responsibilities: TYPE_TEST_CONSTANTS.SAMPLE_DATA.RESPONSIBILITIES
       };
 
       // Type checking - if this compiles, the type is correct
-      expect(validExperience.company).toBe("Test Company");
-      expect(validExperience.position).toBe("Developer");
-      expect(validExperience.period).toBe("2020 - Present");
+      expect(validExperience.company).toBe(TYPE_TEST_CONSTANTS.SAMPLE_DATA.COMPANY);
+      expect(validExperience.position).toBe(TYPE_TEST_CONSTANTS.SAMPLE_DATA.POSITION);
+      expect(validExperience.period).toBe(TYPE_TEST_CONSTANTS.SAMPLE_DATA.PERIOD);
       expect(Array.isArray(validExperience.technologies)).toBe(true);
       expect(Array.isArray(validExperience.responsibilities)).toBe(true);
     });
@@ -48,10 +70,10 @@ describe('Experience Types', () => {
         responsibilities: ["Resp1", "Resp2"]
       };
 
-      expect(experience.technologies).toHaveLength(3);
-      expect(experience.responsibilities).toHaveLength(2);
-      expect(experience.technologies[0]).toBe("Tech1");
-      expect(experience.responsibilities[0]).toBe("Resp1");
+      expect(experience.technologies).toHaveLength(TYPE_TEST_CONSTANTS.SAMPLE_DATA.TECH_COUNT);
+      expect(experience.responsibilities).toHaveLength(TYPE_TEST_CONSTANTS.SAMPLE_DATA.RESP_COUNT);
+      expect(experience.technologies[0]).toBe(TYPE_TEST_CONSTANTS.SAMPLE_DATA.FIRST_TECH);
+      expect(experience.responsibilities[0]).toBe(TYPE_TEST_CONSTANTS.SAMPLE_DATA.FIRST_RESP);
     });
   });
 
@@ -156,13 +178,13 @@ describe('Experience Types', () => {
     it('should enforce required fields', () => {
       // This test ensures TypeScript compilation catches missing required fields
       // If any of these cause compilation errors, the types are working correctly
-      
+
       const validExperience: ExperienceItem = {
-        company: "Required",
-        position: "Required", 
-        period: "Required",
-        technologies: ["Required"],
-        responsibilities: ["Required"]
+        company: TYPE_TEST_CONSTANTS.REQUIRED_FIELDS.COMPANY,
+        position: TYPE_TEST_CONSTANTS.REQUIRED_FIELDS.POSITION,
+        period: TYPE_TEST_CONSTANTS.REQUIRED_FIELDS.PERIOD,
+        technologies: TYPE_TEST_CONSTANTS.REQUIRED_FIELDS.TECHNOLOGIES,
+        responsibilities: TYPE_TEST_CONSTANTS.REQUIRED_FIELDS.RESPONSIBILITIES
       };
 
       expect(validExperience).toBeDefined();

@@ -1,6 +1,38 @@
 /**
  * Sistema de gestión de temas para Astro + Tailwind CSS
  * Maneja el cambio entre tema oscuro y claro con persistencia
+ *
+ * CARACTERÍSTICAS:
+ * - ✅ Anti-flicker: Script SSR que aplica tema antes del render
+ * - ✅ Persistencia: Guarda preferencia en localStorage
+ * - ✅ Reactivo: Sistema de listeners para cambios de tema
+ * - ✅ Accesible: Actualiza meta theme-color para móviles
+ * - ✅ TypeScript: Tipado estricto y validación
+ *
+ * USO EN LAYOUTS:
+ * ```astro
+ * ---
+ * import ThemeScript from '../components/layout/ThemeScript.astro';
+ * ---
+ * <head>
+ *   <!-- IMPORTANTE: Debe ir temprano en el <head> para evitar flicker -->
+ *   <ThemeScript />
+ * </head>
+ * ```
+ *
+ * USO EN COMPONENTES:
+ * ```typescript
+ * import { useTheme } from '../utils/theme.ts';
+ *
+ * const { theme, setTheme, toggleTheme, subscribe } = useTheme();
+ * ```
+ *
+ * REEMPLAZA A:
+ * - ❌ theme-init.ts (eliminado - era redundante)
+ * - ❌ Lógica duplicada en ThemeScript.astro (ahora usa getThemeInitScript)
+ *
+ * @author Matías Cappato
+ * @version 2.0.0 - Unificado y optimizado
  */
 
 export type Theme = 'light' | 'dark';
@@ -10,6 +42,14 @@ export const THEME_CONFIG = {
   STORAGE_KEY: 'theme-preference',
   HTML_CLASS: 'dark',
   ATTRIBUTE: 'data-theme'
+} as const;
+
+/**
+ * Colores para meta theme-color en dispositivos móviles
+ */
+export const THEME_COLORS = {
+  DARK: '#111827',
+  LIGHT: '#ffffff',
 } as const;
 
 /**
@@ -77,15 +117,34 @@ export class ThemeManager {
     if (typeof document === 'undefined') return;
 
     const html = document.documentElement;
-    
+
     if (theme === 'dark') {
       html.classList.add(THEME_CONFIG.HTML_CLASS);
     } else {
       html.classList.remove(THEME_CONFIG.HTML_CLASS);
     }
 
-    // También establecer un atributo data para CSS adicional si es necesario
+    // Establecer atributo data-theme para CSS adicional
     html.setAttribute(THEME_CONFIG.ATTRIBUTE, theme);
+
+    // Establecer dataset para acceso más fácil desde JavaScript
+    html.dataset.theme = theme;
+
+    // Actualizar meta theme-color para móviles
+    this.updateMetaThemeColor(theme);
+  }
+
+  /**
+   * Actualiza el meta theme-color para dispositivos móviles
+   */
+  private updateMetaThemeColor(theme: Theme): void {
+    if (typeof document === 'undefined') return;
+
+    const metaThemeColor = document.querySelector('meta[name="theme-color"]');
+    if (metaThemeColor) {
+      const color = theme === 'dark' ? THEME_COLORS.DARK : THEME_COLORS.LIGHT;
+      metaThemeColor.setAttribute('content', color);
+    }
   }
 
   /**
@@ -113,7 +172,7 @@ export class ThemeManager {
    */
   subscribe(listener: (theme: Theme) => void): () => void {
     this.listeners.add(listener);
-    
+
     // Retorna función para desuscribirse
     return () => {
       this.listeners.delete(listener);
@@ -154,4 +213,54 @@ export function useTheme() {
  */
 export function initTheme(): void {
   themeManager.init();
+}
+
+/**
+ * Script anti-flicker que debe ejecutarse en el <head>
+ * Aplica el tema inmediatamente para prevenir flash de contenido
+ *
+ * @param minify - Si true, minifica el script para mejor performance
+ */
+export function getThemeInitScript(minify: boolean = true): string {
+  const script = `
+    (function() {
+      const STORAGE_KEY = '${THEME_CONFIG.STORAGE_KEY.replace(/'/g, "\\'")}';
+      const DEFAULT_THEME = '${THEME_CONFIG.DEFAULT_THEME}';
+      const HTML_CLASS = '${THEME_CONFIG.HTML_CLASS}';
+
+      if (typeof window === 'undefined' || typeof document === 'undefined') return;
+
+      let theme = DEFAULT_THEME;
+
+      try {
+        const stored = localStorage.getItem(STORAGE_KEY);
+        if (stored === 'light' || stored === 'dark') {
+          theme = stored;
+        }
+      } catch (error) {
+        console.warn('Theme init: localStorage not available');
+      }
+
+      const html = document.documentElement;
+
+      if (theme === 'dark') {
+        html.classList.add(HTML_CLASS);
+      } else {
+        html.classList.remove(HTML_CLASS);
+      }
+
+      html.setAttribute('${THEME_CONFIG.ATTRIBUTE}', theme);
+    })();
+  `;
+
+  if (minify) {
+    return script
+      .replace(/\s+/g, ' ')
+      .replace(/;\s*}/g, ';}')
+      .replace(/{\s*/g, '{')
+      .replace(/\s*}/g, '}')
+      .trim();
+  }
+
+  return script;
 }

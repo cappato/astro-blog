@@ -1,7 +1,7 @@
-import { getCollection } from 'astro:content';
+import { getCollection, type CollectionEntry } from 'astro:content';
 
-export async function get() {
-  const blogEntries = await getCollection('blog', ({ data }) => {
+export async function GET() {
+  const blogEntries = await getCollection('blog', ({ data }: CollectionEntry<'blog'>) => {
     return import.meta.env.PROD ? !data.draft : true;
   });
 
@@ -13,9 +13,9 @@ export async function get() {
   };
 }
 
-function generateSitemap(posts) {
+function generateSitemap(posts: CollectionEntry<'blog'>[]): string {
   const siteUrl = 'https://cappato.dev';
-  
+
   return `<?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   <url>

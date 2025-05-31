@@ -2,17 +2,21 @@
 // Componente para scripts comunes
 ---
 
-<!-- Google Analytics con Partytown -->
-<script type="text/partytown" src="https://www.googletagmanager.com/gtag/js?id=G-S1N3G4VERM"></script>
-<script type="text/partytown">
-    window.dataLayer = window.dataLayer || [];
-    function gtag(){dataLayer.push(arguments);}
-    gtag('js', new Date());
-    gtag('config', 'G-S1N3G4VERM', {
-      'anonymize_ip': true,
-      'cookie_expires': 365 * 24 * 60 * 60 // 1 año
-    });
-</script>
+<!-- Google Analytics - Solo en producción -->
+{import.meta.env.PROD && (
+  <>
+    <script is:inline async src="https://www.googletagmanager.com/gtag/js?id=G-S1N3G4VERM"></script>
+    <script is:inline>
+      window.dataLayer = window.dataLayer || [];
+      function gtag(){dataLayer.push(arguments);}
+      gtag('js', new Date());
+      gtag('config', 'G-S1N3G4VERM', {
+        'anonymize_ip': true,
+        'cookie_expires': 365 * 24 * 60 * 60 // 1 año
+      });
+    </script>
+  </>
+)}
 
 <!-- No añadir scripts de Cloudflare manualmente, ya que Cloudflare los inyecta automáticamente -->
 
