@@ -12,29 +12,19 @@
 
 /* Botón de copiar con mejor contraste - Sin usar !important */
 html body button[id="copy-message"] {
-  background-color: #4F46E5; /* Indigo-600 para mejor contraste */
-  color: #ffffff; /* text-white */
-  font-weight: 600;
-  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
-  border: 2px solid transparent;
-  transition: all 0.2s ease;
+  @apply bg-primary text-white font-semibold shadow-lg border-2 border-transparent transition-all duration-200;
 }
 
 html body button[id="copy-message"]:hover {
-  background-color: #4338CA; /* Indigo-700 para hover */
-  transform: translateY(-1px);
-  box-shadow: 0 6px 8px -1px rgba(0, 0, 0, 0.1), 0 3px 5px -1px rgba(0, 0, 0, 0.06);
+  @apply bg-primary-600 -translate-y-0.5 shadow-xl;
 }
 
 html body button[id="copy-message"]:focus {
-  outline: none;
-  border-color: #818CF8; /* Indigo-400 */
-  box-shadow: 0 0 0 3px rgba(79, 70, 229, 0.4);
+  @apply outline-none border-primary-400 ring-4 ring-primary/40;
 }
 
 html body button[id="copy-message"]:active {
-  transform: translateY(0);
-  background-color: #3730A3; /* Indigo-800 para active */
+  @apply translate-y-0 bg-primary-800;
 }
 
 /* Optimización para evitar CLS */
@@ -73,8 +63,7 @@ a {
 
 /* Optimización para focus */
 :focus {
-  outline: 2px solid #699CF9; /* Nuevo azul RGB(105, 156, 249) */
-  outline-offset: 2px;
+  @apply outline-2 outline-primary outline-offset-2;
 }
 
 /* Optimización para reducir motion */
@@ -89,9 +78,7 @@ a {
 
 /* Estilos para enlaces de navegación activos */
 .nav-link.active, .nav-link-mobile.active {
-  background-color: rgba(105, 156, 249, 0.15); /* Nuevo azul con transparencia */
-  color: #699CF9; /* Nuevo azul RGB(105, 156, 249) */
-  font-weight: 500;
+  @apply bg-primary/15 text-primary font-medium;
 }
 
 /* Scroll suave para toda la página */
@@ -140,22 +127,20 @@ button,
 }
 
 ::-webkit-scrollbar-thumb {
-  background: #9CA3AF; /* gray-400 para light mode */
-  border-radius: 4px;
-  transition: background-color 0.2s ease;
+  @apply bg-gray-400 rounded transition-colors duration-200;
 }
 
 ::-webkit-scrollbar-thumb:hover {
-  background: #6B7280; /* gray-500 para hover en light mode */
+  @apply bg-gray-500;
 }
 
 /* Scrollbar para dark mode */
 .dark ::-webkit-scrollbar-thumb {
-  background: #4B5563; /* gray-600 para dark mode */
+  @apply bg-gray-600;
 }
 
 .dark ::-webkit-scrollbar-thumb:hover {
-  background: #6B7280; /* gray-500 para hover en dark mode */
+  @apply bg-gray-500;
 }
 
 /* Scrollbar para Firefox */

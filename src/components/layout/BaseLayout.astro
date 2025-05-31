@@ -41,8 +41,9 @@ const {
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 
-  <!-- Mejora: Tema de color para móviles -->
-  <meta name="theme-color" content="#111827">
+  <!-- Mejora: Tema de color para móviles - Dinámico según tema -->
+  <meta name="theme-color" content="#111827" media="(prefers-color-scheme: dark)">
+  <meta name="theme-color" content="#f8fafc" media="(prefers-color-scheme: light)">
 
   <!-- Slot para estilos adicionales específicos de página -->
   <slot name="head" />

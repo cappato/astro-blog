@@ -1,7 +1,9 @@
 ---
 // Componente dedicado para gestionar todos los favicons del sitio
-// Usar color directo en lugar de importar COLORS eliminado
-const primaryColor = '#699CF9';
+// Importar colores del sistema de configuración
+import { CONFIG } from '../../config/index.ts';
+
+const primaryColor = CONFIG.colors.primary;
 ---
 
 <!-- Favicons para todos los dispositivos y navegadores -->

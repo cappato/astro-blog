@@ -30,18 +30,18 @@ const isCompact = variant === 'compact';
 const elementId = generateElementId(platform, variant);
 
 // Generar URL de compartir (excepto para copy y facebook que se manejan con JS)
-const shareUrl = platform === SocialPlatform.COPY || platform === SocialPlatform.FACEBOOK 
-  ? '#' 
+const shareUrl = platform === SocialPlatform.COPY || platform === SocialPlatform.FACEBOOK
+  ? '#'
   : generateShareUrl(platform, shareData);
 
 // Determinar si debe abrir en nueva ventana
 const shouldOpenInNewWindow = platform !== SocialPlatform.COPY;
 
 // Clases CSS dinámicas
-const baseClasses = 'flex items-center justify-center transition-all duration-200 font-medium focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500';
+const baseClasses = 'flex items-center justify-center transition-all duration-200 font-medium focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary';
 
-const sizeClasses = isCompact 
-  ? 'w-8 h-8 rounded-full' 
+const sizeClasses = isCompact
+  ? 'w-8 h-8 rounded-full'
   : 'px-4 py-2 rounded-md';
 
 const colorClasses = `bg-[${config.colors.bg}] hover:bg-[${config.colors.hover}] text-white`;
@@ -62,7 +62,7 @@ const commonProps = {
 
 {platform === SocialPlatform.COPY ? (
   <!-- Botón para copiar enlace -->
-  <button 
+  <button
     {...commonProps}
     type="button"
     data-action="copy"
@@ -72,7 +72,7 @@ const commonProps = {
   </button>
 ) : platform === SocialPlatform.FACEBOOK ? (
   <!-- Enlace especial para Facebook (manejo móvil) -->
-  <a 
+  <a
     {...commonProps}
     href="#"
     data-action="facebook-share"
@@ -82,7 +82,7 @@ const commonProps = {
   </a>
 ) : (
   <!-- Enlace estándar para otras plataformas -->
-  <a 
+  <a
     {...commonProps}
     href={shareUrl}
     target={shouldOpenInNewWindow ? '_blank' : undefined}
@@ -110,8 +110,7 @@ const commonProps = {
 
   /* Mejoras de accesibilidad */
   button:focus-visible, a:focus-visible {
-    outline: 2px solid #4f46e5;
-    outline-offset: 2px;
+    @apply outline-2 outline-primary outline-offset-2;
   }
 
   /* Animación suave para el hover */
@@ -126,7 +125,7 @@ const commonProps = {
     button, a {
       transition: none;
     }
-    
+
     button:hover, a:hover {
       transform: none;
     }
