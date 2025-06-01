@@ -1,11 +1,16 @@
 ---
-import { SITE_INFO } from '../../config';
+/**
+ * AI Metadata Component
+ * Centralized AI metadata generation with configuration-driven approach
+ * Generates both meta tags and structured data for AI assistants
+ */
 
-// Componente para metadatos específicos para IA
+import { SITE_INFO, AI_METADATA_CONFIG } from '../../config/site.ts';
+
 interface Props {
   title: string;
   description: string;
-  type: 'website' | 'article' | 'profile';
+  type: 'website' | 'article' | 'profile' | 'blog';
   url: string;
   datePublished?: Date;
   dateModified?: Date;
@@ -21,76 +26,96 @@ const {
   datePublished,
   dateModified,
   tags = [],
-  author = SITE_INFO.author.name
+  author = AI_METADATA_CONFIG.author.name
 } = Astro.props;
 
+const config = AI_METADATA_CONFIG;
 const siteUrl = SITE_INFO.url;
 const fullUrl = url.startsWith('http') ? url : `${siteUrl}${url}`;
 
-// Definir el tipo para el objeto aiMetadata
-interface AIMetadataType {
-  "@context": string;
-  "@type": string;
-  "name": string;
-  "description": string;
-  "url": string;
-  "keywords": string;
-  "author": {
-    "@type": string;
-    "name": string;
-    "url": string;
-  };
-  "inLanguage": string;
-  "isAccessibleForFree": boolean;
-  "potentialAction": {
-    "@type": string;
-    "target": string;
-  };
-  "datePublished"?: string;
-  "dateModified"?: string;
-  "mainEntityOfPage"?: {
-    "@type": string;
-    "@id": string;
-  };
-}
+// AI Metadata Manager Class
+class AIMetadataManager {
+  private config = config;
 
-// Crear objeto de metadatos para IA
-const aiMetadata: AIMetadataType = {
-  "@context": "https://schema.org",
-  "@type": type === 'profile' ? 'Person' : type === 'article' ? 'BlogPosting' : 'WebSite',
-  "name": title,
-  "description": description,
-  "url": fullUrl,
-  "keywords": tags.join(", "),
-  "author": {
-    "@type": "Person",
-    "name": author,
-    "url": `${siteUrl}/about`
-  },
-  "inLanguage": "es",
-  "isAccessibleForFree": true,
-  "potentialAction": {
-    "@type": "ReadAction",
-    "target": fullUrl
+  public generateStructuredData(props: {
+    title: string;
+    description: string;
+    type: string;
+    fullUrl: string;
+    datePublished?: Date;
+    dateModified?: Date;
+    tags: string[];
+    author?: string;
+  }) {
+    const baseMetadata = {
+      "@context": this.config.schemaContext,
+      "@type": this.getContentType(props.type),
+      "name": props.title,
+      "description": props.description,
+      "url": props.fullUrl,
+      "keywords": (props.tags || []).join(", "),
+      "author": {
+        "@type": this.config.author.type,
+        "name": props.author || this.config.author.name,
+        "url": this.config.author.url
+      },
+      "inLanguage": this.config.language,
+      "isAccessibleForFree": this.config.isAccessibleForFree,
+      "potentialAction": {
+        "@type": this.config.actionTypes.read,
+        "target": props.fullUrl
+      }
+    };
+
+    // Add article-specific fields
+    if (props.type === 'article' && props.datePublished) {
+      return {
+        ...baseMetadata,
+        "datePublished": props.datePublished.toISOString(),
+        "dateModified": props.dateModified ? props.dateModified.toISOString() : props.datePublished.toISOString(),
+        "mainEntityOfPage": {
+          "@type": "WebPage",
+          "@id": props.fullUrl
+        }
+      };
+    }
+
+    return baseMetadata;
   }
-};
 
-// Añadir campos específicos para artículos
-if (type === 'article' && datePublished) {
-  aiMetadata.datePublished = datePublished.toISOString();
-  aiMetadata.dateModified = dateModified ? dateModified.toISOString() : datePublished.toISOString();
-  aiMetadata.mainEntityOfPage = {
-    "@type": "WebPage",
-    "@id": fullUrl
-  };
+  public getContentType(type: string): string {
+    return this.config.contentTypes[type as keyof typeof this.config.contentTypes] || this.config.contentTypes.website;
+  }
+
+  public generateMetaTagName(suffix: string): string {
+    return `${this.config.metaTagPrefix}${suffix}`;
+  }
 }
+
+const aiManager = new AIMetadataManager();
+const structuredData = aiManager.generateStructuredData({
+  title,
+  description,
+  type,
+  fullUrl,
+  datePublished,
+  dateModified,
+  tags,
+  author
+});
 ---
 
-<!-- Metadatos para asistentes de IA (Schema.org JSON-LD is handled by SchemaMarkup.astro) -->
-<meta name="ai:description" content={description} />
-<meta name="ai:keywords" content={tags.join(", ")} />
-<meta name="ai:type" content={type} />
-{datePublished && <meta name="ai:published" content={datePublished.toISOString()} />}
-{dateModified && <meta name="ai:modified" content={dateModified.toISOString()} />}
-<meta name="ai:author" content={author} />
+<!-- AI-specific meta tags -->
+<meta name={aiManager.generateMetaTagName('description')} content={description} />
+<meta name={aiManager.generateMetaTagName('keywords')} content={tags.join(", ")} />
+<meta name={aiManager.generateMetaTagName('type')} content={type} />
+{datePublished && <meta name={aiManager.generateMetaTagName('published')} content={datePublished.toISOString()} />}
+{dateModified && <meta name={aiManager.generateMetaTagName('modified')} content={dateModified.toISOString()} />}
+<meta name={aiManager.generateMetaTagName('author')} content={author || config.author.name} />
+
+<!-- Link to AI metadata file -->
+<link rel="ai-metadata" href={config.metadataFilePath} />
+
+<!-- Structured data for AI (JSON-LD) -->
+<script type="application/ld+json" is:inline set:html={JSON.stringify(structuredData)} />
 

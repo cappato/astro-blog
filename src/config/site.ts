@@ -292,6 +292,84 @@ export const ANALYTICS_CONFIG = {
   }
 } as const;
 
+/** Favicon System Configuration */
+export const FAVICON_CONFIG = {
+  /** Theme colors for mobile browsers */
+  themeColor: {
+    light: '#699CF9',
+    dark: '#699CF9'
+  },
+
+  /** Microsoft tile color */
+  msApplicationTileColor: '#699CF9',
+
+  /** Favicon paths configuration */
+  paths: {
+    appleTouchIcon: '/apple-touch-icon.png',
+    favicon32: '/favicon-32x32.png',
+    favicon16: '/favicon-16x16.png',
+    manifest: '/site.webmanifest',
+    shortcutIcon: '/favicon.ico',
+    androidChrome192: '/android-chrome-192x192.png',
+    androidChrome512: '/android-chrome-512x512.png'
+  },
+
+  /** Icon sizes configuration */
+  sizes: {
+    appleTouchIcon: '180x180',
+    favicon32: '32x32',
+    favicon16: '16x16',
+    androidChrome192: '192x192',
+    androidChrome512: '512x512'
+  },
+
+  /** MIME types */
+  mimeTypes: {
+    png: 'image/png',
+    ico: 'image/x-icon'
+  }
+} as const;
+
+/** AI Metadata Configuration */
+export const AI_METADATA_CONFIG = {
+  /** Language configuration */
+  language: 'es',
+
+  /** Schema.org context */
+  schemaContext: 'https://schema.org',
+
+  /** Default accessibility */
+  isAccessibleForFree: true,
+
+  /** AI metadata file path */
+  metadataFilePath: '/ai-metadata.json',
+
+  /** Meta tag prefixes */
+  metaTagPrefix: 'ai:',
+
+  /** Author configuration */
+  author: {
+    type: 'Person',
+    name: SITE_INFO.author.name,
+    url: `${SITE_INFO.url}/about`
+  },
+
+  /** Action types */
+  actionTypes: {
+    read: 'ReadAction',
+    view: 'ViewAction',
+    search: 'SearchAction'
+  },
+
+  /** Content types mapping */
+  contentTypes: {
+    website: 'WebSite',
+    article: 'BlogPosting',
+    profile: 'Person',
+    blog: 'Blog'
+  }
+} as const;
+
 /** Configuración de performance */
 export const PERFORMANCE_CONFIG = {
   /** Configuración de imágenes */
@@ -301,14 +379,14 @@ export const PERFORMANCE_CONFIG = {
     sizes: [400, 800, 1200, 1600],
     placeholder: 'blur'
   },
-  
+
   /** Configuración de lazy loading */
   lazyLoading: {
     enabled: true,
     threshold: 0.1,
     rootMargin: '50px'
   },
-  
+
   /** Configuración de prefetch */
   prefetch: {
     enabled: true,

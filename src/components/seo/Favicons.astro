@@ -1,24 +1,68 @@
 ---
-// Componente dedicado para gestionar todos los favicons del sitio
-// Importar colores del sistema de configuración
-import { CONFIG } from '../../config/index.ts';
+/**
+ * Favicon System Component
+ * Centralized favicon management with configuration-driven approach
+ * Supports all devices and browsers with theme color integration
+ */
 
-const primaryColor = CONFIG.colors.primary;
+import { FAVICON_CONFIG } from '../../config/site.ts';
+
+interface Props {
+  themeColor?: string;
+  msApplicationTileColor?: string;
+}
+
+const {
+  themeColor = FAVICON_CONFIG.themeColor.light,
+  msApplicationTileColor = FAVICON_CONFIG.msApplicationTileColor
+} = Astro.props;
+
+const config = FAVICON_CONFIG;
 ---
 
-<!-- Favicons para todos los dispositivos y navegadores -->
-<link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
-<link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
-<link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
-<link rel="manifest" href="/site.webmanifest">
-<link rel="shortcut icon" href="/favicon.ico">
+<!-- Apple Touch Icon -->
+<link
+  rel="apple-touch-icon"
+  sizes={config.sizes.appleTouchIcon}
+  href={config.paths.appleTouchIcon}
+>
 
-<!-- Iconos específicos para Android Chrome -->
-<link rel="icon" type="image/png" sizes="192x192" href="/android-chrome-192x192.png">
-<link rel="icon" type="image/png" sizes="512x512" href="/android-chrome-512x512.png">
+<!-- Standard Favicons -->
+<link
+  rel="icon"
+  type={config.mimeTypes.png}
+  sizes={config.sizes.favicon32}
+  href={config.paths.favicon32}
+>
+<link
+  rel="icon"
+  type={config.mimeTypes.png}
+  sizes={config.sizes.favicon16}
+  href={config.paths.favicon16}
+>
 
-<!-- Colores de tema para navegadores móviles -->
-<meta name="theme-color" content={primaryColor}>
-<meta name="msapplication-TileColor" content={primaryColor}>
+<!-- Web App Manifest -->
+<link rel="manifest" href={config.paths.manifest}>
+
+<!-- Shortcut Icon (ICO fallback) -->
+<link rel="shortcut icon" href={config.paths.shortcutIcon}>
+
+<!-- Android Chrome Icons -->
+<link
+  rel="icon"
+  type={config.mimeTypes.png}
+  sizes={config.sizes.androidChrome192}
+  href={config.paths.androidChrome192}
+>
+<link
+  rel="icon"
+  type={config.mimeTypes.png}
+  sizes={config.sizes.androidChrome512}
+  href={config.paths.androidChrome512}
+>
+
+<!-- Theme Colors for Mobile Browsers -->
+<meta name="theme-color" content={themeColor}>
+<meta name="msapplication-TileColor" content={msApplicationTileColor}>
 
 
