@@ -4,7 +4,7 @@ import CommonScripts from '../components/layout/CommonScripts.astro';
 import Favicons from '../components/seo/Favicons.astro';
 import HomeNavbar from '../components/layout/navbar/HomeNavbar.astro';
 import Footer from '../components/layout/footer/Footer.astro';
-import SEOHead from '../components/seo/SEOHead.astro';
+import MetaTags from '../components/seo/MetaTags.astro';
 import AIMetadata from '../components/seo/AIMetadata.astro';
 import { AutoSchema } from '../features/schema';
 import ThemeScript from '../components/layout/ThemeScript.astro';
@@ -47,11 +47,10 @@ const currentUrl = Astro.url.pathname;
 
     <!-- Script anti-flicker (debe ir lo antes posible) -->
     <ThemeScript />
-    <SEOHead
+    <MetaTags
         title={title}
         description={description}
-        image={image}
-        imageAlt={imageAlt}
+        image={image ? { url: image, alt: imageAlt } : undefined}
         type={type}
         keywords={keywords}
         publishedDate={pubDate}

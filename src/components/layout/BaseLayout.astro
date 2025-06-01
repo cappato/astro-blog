@@ -1,5 +1,5 @@
 ---
-import SEOHead from '../seo/SEOHead.astro';
+import MetaTags from '../seo/MetaTags.astro';
 import CommonScripts from './CommonScripts.astro';
 
 interface Props {
@@ -24,11 +24,10 @@ const {
 <!DOCTYPE html>
 <html lang="es">
 <head>
-  <SEOHead
+  <MetaTags
     title={title}
     description={description}
-    image={image}
-    imageAlt={imageAlt}
+    image={image ? { url: image, alt: imageAlt } : undefined}
     type={type}
     keywords={keywords}
   />

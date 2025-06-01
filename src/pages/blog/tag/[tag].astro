@@ -3,7 +3,7 @@
 import '../../../styles/global.css';
 import { getCollection } from 'astro:content';
 import TagButton from '../../../components/ui/TagButton.astro';
-import SEOHead from '../../../components/seo/SEOHead.astro';
+import MetaTags from '../../../components/seo/MetaTags.astro';
 import BlogNavbar from '../../../components/layout/navbar/BlogNavbar.astro';
 import Footer from '../../../components/layout/footer/Footer.astro';
 import CommonScripts from '../../../components/layout/CommonScripts.astro';
@@ -54,11 +54,10 @@ const currentDate = new Date();
 
   <!-- Script anti-flicker (debe ir lo antes posible) -->
   <ThemeScript />
-  <SEOHead
+  <MetaTags
     title={title}
     description={description}
-    image="/images/blog-cover.webp"
-    imageAlt={`Artículos sobre ${tag} en el blog de Matías Cappato`}
+    image={{ url: "/images/blog-cover.webp", alt: `Artículos sobre ${tag} en el blog de Matías Cappato` }}
     type="website"
     keywords={[tag, "blog", "desarrollo web", "programación"]}
   />

@@ -78,15 +78,15 @@ export const NAVIGATION = {
   ]
 } as const;
 
-/** Configuración SEO por defecto */
-export const SEO_DEFAULTS = {
-  /** Imagen por defecto para Open Graph */
+/** Meta Tags Management Configuration */
+export const META_TAGS_CONFIG = {
+  /** Default image for Open Graph */
   defaultImage: '/images/og-default.webp',
-  
-  /** Alt text por defecto para imágenes */
+
+  /** Default alt text for images */
   defaultImageAlt: 'Matías Cappato - Desarrollador Web',
-  
-  /** Keywords por defecto */
+
+  /** Default keywords */
   defaultKeywords: [
     'Matías Cappato',
     'Desarrollador Web',
@@ -100,13 +100,41 @@ export const SEO_DEFAULTS = {
     'Tutoriales',
     'Programación'
   ],
-  
-  /** Configuración de Twitter Cards */
-  twitterCard: 'summary_large_image',
-  
-  /** Configuración de Open Graph */
-  ogType: 'website',
-  ogSiteName: SITE_INFO.title
+
+  /** Twitter Cards configuration */
+  twitter: {
+    card: 'summary_large_image',
+    creator: SOCIAL_LINKS.twitter.username
+  },
+
+  /** Open Graph configuration */
+  openGraph: {
+    type: 'website',
+    siteName: SITE_INFO.title,
+    locale: 'es_ES'
+  },
+
+  /** Image format configuration */
+  imageFormats: {
+    webp: {
+      extension: '.webp',
+      mimeType: 'image/webp'
+    },
+    jpeg: {
+      extension: '-og-jpg.jpeg',
+      mimeType: 'image/jpeg'
+    }
+  }
+} as const;
+
+/** Legacy export for backward compatibility */
+export const SEO_DEFAULTS = {
+  defaultImage: META_TAGS_CONFIG.defaultImage,
+  defaultImageAlt: META_TAGS_CONFIG.defaultImageAlt,
+  defaultKeywords: META_TAGS_CONFIG.defaultKeywords,
+  twitterCard: META_TAGS_CONFIG.twitter.card,
+  ogType: META_TAGS_CONFIG.openGraph.type,
+  ogSiteName: META_TAGS_CONFIG.openGraph.siteName
 } as const;
 
 /** Configuración del blog */

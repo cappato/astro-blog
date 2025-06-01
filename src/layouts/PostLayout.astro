@@ -3,7 +3,7 @@ import Favicons from '../components/seo/Favicons.astro';
 import '../styles/global.css';
 import CommonScripts from '../components/layout/CommonScripts.astro';
 import ThemeScript from '../components/layout/ThemeScript.astro';
-import SocialHead from '../components/seo/SocialHead.astro';
+import MetaTags from '../components/seo/MetaTags.astro';
 import ImageVariants from '../components/media/ImageVariants.astro';
 import { AutoSchema } from '../features/schema';
 import ShareButtons from '../components/blog/ShareButtons.astro';
@@ -90,12 +90,15 @@ const currentUrl = Astro.url.href;
   <!-- Favicons -->
   <Favicons />
 
-  <!-- Componente de metadatos sociales -->
-  <SocialHead
+  <!-- Unified meta tags component -->
+  <MetaTags
     title={title}
     description={description}
     image={shareImage}
     type="article"
+    publishedDate={date}
+    modifiedDate={date}
+    author={author}
     postId={postId}
   />
 

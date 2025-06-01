@@ -1,0 +1,113 @@
+---
+/**
+ * Unified Meta Tags component
+ * Handles all meta tags including SEO, Open Graph, and Twitter Cards
+ * Eliminates duplication between SEOHead and SocialHead components
+ */
+
+import { SITE_INFO, META_TAGS_CONFIG } from '../../config/site.ts';
+
+interface Props {
+  title: string;
+  description: string;
+  image?: {
+    url: string;
+    alt: string;
+    width?: number;
+    height?: number;
+  };
+  type?: 'website' | 'article';
+  keywords?: string[];
+  publishedDate?: Date;
+  modifiedDate?: Date;
+  author?: string;
+  canonicalUrl?: string;
+  twitterUsername?: string;
+  postId?: string;
+}
+
+const {
+  title,
+  description,
+  image,
+  type = META_TAGS_CONFIG.openGraph.type,
+  keywords = META_TAGS_CONFIG.defaultKeywords,
+  publishedDate,
+  modifiedDate,
+  author = SITE_INFO.author.name,
+  canonicalUrl,
+  twitterUsername = META_TAGS_CONFIG.twitter.creator,
+  postId = ''
+} = Astro.props;
+
+// Generate canonical URL
+const siteUrl = SITE_INFO.url;
+const canonical = canonicalUrl 
+  ? `${siteUrl}${canonicalUrl}` 
+  : Astro.url.href.replace('matiascappato.com', 'cappato.dev');
+
+// Handle image configuration
+const defaultImageConfig = {
+  url: META_TAGS_CONFIG.defaultImage,
+  alt: META_TAGS_CONFIG.defaultImageAlt
+};
+
+const imageConfig = image || defaultImageConfig;
+const imageUrl = imageConfig.url.startsWith('http') 
+  ? imageConfig.url 
+  : new URL(imageConfig.url, siteUrl).toString();
+
+// Generate alternative image formats
+const jpegImageUrl = imageUrl.includes('-og.webp') 
+  ? imageUrl.replace('-og.webp', META_TAGS_CONFIG.imageFormats.jpeg.extension)
+  : imageUrl;
+
+// Validate dates
+const pubDate = publishedDate instanceof Date ? publishedDate : undefined;
+const modDate = modifiedDate instanceof Date ? modifiedDate : undefined;
+---
+
+<!-- Basic SEO meta tags -->
+<meta name="title" content={title} />
+<meta name="description" content={description} />
+<meta name="keywords" content={keywords.join(', ')} />
+<meta name="author" content={author} />
+<link rel="canonical" href={canonical} />
+
+<!-- Open Graph / Facebook -->
+<meta property="og:type" content={type} />
+<meta property="og:url" content={canonical} />
+<meta property="og:title" content={title} />
+<meta property="og:description" content={description} />
+<meta property="og:site_name" content={META_TAGS_CONFIG.openGraph.siteName} />
+<meta property="og:locale" content={META_TAGS_CONFIG.openGraph.locale} />
+
+<!-- Open Graph Images - WebP (primary) -->
+<meta property="og:image" content={imageUrl} />
+{imageConfig.width && <meta property="og:image:width" content={imageConfig.width.toString()} />}
+{imageConfig.height && <meta property="og:image:height" content={imageConfig.height.toString()} />}
+<meta property="og:image:type" content={META_TAGS_CONFIG.imageFormats.webp.mimeType} />
+<meta property="og:image:alt" content={imageConfig.alt} />
+
+<!-- Open Graph Images - JPEG (fallback for compatibility) -->
+<meta property="og:image" content={jpegImageUrl} />
+{imageConfig.width && <meta property="og:image:width" content={imageConfig.width.toString()} />}
+{imageConfig.height && <meta property="og:image:height" content={imageConfig.height.toString()} />}
+<meta property="og:image:type" content={META_TAGS_CONFIG.imageFormats.jpeg.mimeType} />
+<meta property="og:image:alt" content={imageConfig.alt} />
+
+<!-- Article-specific Open Graph meta tags -->
+{pubDate && <meta property="article:published_time" content={pubDate.toISOString()} />}
+{modDate && <meta property="article:modified_time" content={modDate.toISOString()} />}
+
+<!-- Twitter Cards -->
+<meta name="twitter:card" content={META_TAGS_CONFIG.twitter.card} />
+<meta name="twitter:url" content={canonical} />
+<meta name="twitter:title" content={title} />
+<meta name="twitter:description" content={description} />
+<meta name="twitter:image" content={imageUrl} />
+<meta name="twitter:image:alt" content={imageConfig.alt} />
+{twitterUsername && <meta name="twitter:creator" content={twitterUsername} />}
+
+<!-- AI Metadata link -->
+<link rel="ai-metadata" href="/ai-metadata.json" />
