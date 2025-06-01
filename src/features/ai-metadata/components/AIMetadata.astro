@@ -1,0 +1,118 @@
+---
+/**
+ * AI Metadata Component - Modular Feature Version
+ * 
+ * Centralized AI metadata generation with configuration-driven approach.
+ * Generates both meta tags and structured data for AI assistants.
+ * 
+ * @example Basic usage:
+ * ```astro
+ * <AIMetadata
+ *   title="Page Title"
+ *   description="Page description"
+ *   type="website"
+ *   url="/page"
+ * />
+ * ```
+ * 
+ * @example Blog post usage:
+ * ```astro
+ * <AIMetadata
+ *   title={post.title}
+ *   description={post.description}
+ *   type="article"
+ *   url={`/blog/${post.slug}`}
+ *   datePublished={post.date}
+ *   tags={post.tags}
+ * />
+ * ```
+ */
+
+import type { AIMetadataProps } from '../engine/types.ts';
+import { AIMetadataManager } from '../engine/ai-metadata-manager.ts';
+
+// Props interface with defaults
+interface Props extends AIMetadataProps {
+  // All props are inherited from AIMetadataProps
+}
+
+const {
+  title,
+  description,
+  type,
+  url,
+  datePublished,
+  dateModified,
+  tags = [],
+  author,
+  language
+} = Astro.props;
+
+// Get site information from Astro
+const siteUrl = Astro.site?.toString() || 'https://localhost:3000';
+const siteInfo = {
+  url: siteUrl,
+  title: 'Site Title', // Will be overridden by actual site config
+  description: 'Site Description',
+  author: {
+    name: 'Site Author',
+    email: 'author@site.com'
+  }
+};
+
+// Create AI metadata manager instance
+const aiManager = new AIMetadataManager({}, siteInfo);
+
+// Generate structured data
+const structuredData = aiManager.generateStructuredData({
+  title,
+  description,
+  type,
+  url,
+  datePublished,
+  dateModified,
+  tags,
+  author,
+  language
+});
+
+// Generate meta tags
+const metaTags = aiManager.generateMetaTags({
+  title,
+  description,
+  type,
+  url,
+  datePublished,
+  dateModified,
+  tags,
+  author,
+  language
+});
+
+// Get metadata file link
+const metadataFileLink = aiManager.getMetadataFileLink();
+
+// Generate JSON-LD content
+const jsonLdContent = aiManager.generateJsonLd({
+  title,
+  description,
+  type,
+  url,
+  datePublished,
+  dateModified,
+  tags,
+  author,
+  language
+});
+---
+
+<!-- AI-specific meta tags -->
+{metaTags.map(tag => (
+  <meta name={tag.name} content={tag.content} />
+))}
+
+<!-- Link to AI metadata file -->
+<link rel="ai-metadata" href={metadataFileLink} />
+
+<!-- Structured data for AI (JSON-LD) -->
+<script type="application/ld+json" is:inline set:html={jsonLdContent} />
