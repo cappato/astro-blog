@@ -2,16 +2,10 @@
 import BaseNavbar from './BaseNavbar.astro';
 import Icon from '../../ui/Icon.astro';
 import NavLink from '../navigation/NavLink.astro';
+import { NAVIGATION_CONFIG } from '../../../config/site.ts';
 
-const navItems = [
-  { href: "#about", label: "About me", section: "about" },
-  { href: "#experience", label: "Experience", section: "experience" },
-  { href: "#education", label: "Education", section: "education" },
-  { href: "#skills", label: "Skills", section: "skills" },
-  { href: "#achievements", label: "Achievements", section: "achievements" },
-  { href: "#hobbies", label: "Hobbies", section: "hobbies" },
-  { href: "#contact", label: "Contact", section: "contact" }
-];
+// Use centralized navigation configuration
+const navItems = NAVIGATION_CONFIG.homeNavItems;
 ---
 
 <BaseNavbar>

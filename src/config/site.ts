@@ -59,23 +59,70 @@ export const SOCIAL_LINKS = {
   }
 } as const;
 
-/** Configuración de navegación */
-export const NAVIGATION = {
-  /** Enlaces principales del menú */
-  main: [
+/** Navigation System Configuration */
+export const NAVIGATION_CONFIG = {
+  /** Home page navigation items */
+  homeNavItems: [
+    { href: "#about", label: "About me", section: "about" },
+    { href: "#experience", label: "Experience", section: "experience" },
+    { href: "#education", label: "Education", section: "education" },
+    { href: "#skills", label: "Skills", section: "skills" },
+    { href: "#achievements", label: "Achievements", section: "achievements" },
+    { href: "#hobbies", label: "Hobbies", section: "hobbies" },
+    { href: "#contact", label: "Contact", section: "contact" }
+  ],
+
+  /** Main navigation links */
+  mainNavItems: [
     { name: 'Inicio', href: '/', icon: 'home' },
     { name: 'Blog', href: '/blog', icon: 'blog' },
     { name: 'Sobre mí', href: '/#about', icon: 'user' },
     { name: 'Contacto', href: '/#contact', icon: 'email' }
   ],
-  
-  /** Enlaces del footer */
-  footer: [
+
+  /** Footer navigation links */
+  footerNavItems: [
     { name: 'Política de Privacidad', href: '/privacy' },
     { name: 'Términos de Uso', href: '/terms' },
     { name: 'RSS', href: '/rss.xml' },
     { name: 'Sitemap', href: '/sitemap.xml' }
-  ]
+  ],
+
+  /** Navigation behavior configuration */
+  behavior: {
+    /** Navbar height for scroll offset calculations */
+    navbarHeight: 80,
+
+    /** Additional offset for specific sections */
+    sectionOffsets: {
+      about: 20,
+      default: 0
+    },
+
+    /** Scroll detection thresholds */
+    scrollThresholds: {
+      /** Minimum scroll to activate section detection */
+      minScroll: 300,
+      /** Section detection viewport offset */
+      sectionDetection: 100,
+      /** Bottom detection offset */
+      bottomDetection: 100
+    },
+
+    /** Performance settings */
+    performance: {
+      /** Section detection interval (ms) */
+      detectionInterval: 100,
+      /** Scroll debounce delay (ms) */
+      scrollDebounce: 16
+    }
+  }
+} as const;
+
+/** Legacy export for backward compatibility */
+export const NAVIGATION = {
+  main: NAVIGATION_CONFIG.mainNavItems,
+  footer: NAVIGATION_CONFIG.footerNavItems
 } as const;
 
 /** Meta Tags Management Configuration */
