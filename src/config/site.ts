@@ -184,33 +184,90 @@ export const SEO_DEFAULTS = {
   ogSiteName: META_TAGS_CONFIG.openGraph.siteName
 } as const;
 
-/** Configuración del blog */
-export const BLOG_CONFIG = {
-  /** Número de posts por página */
+/** Blog Post Configuration */
+export const BLOG_POST_CONFIG = {
+  /** Posts per page for pagination */
   postsPerPage: 10,
-  
-  /** Formato de fecha para mostrar */
-  dateFormat: 'dd/MM/yyyy',
-  
-  /** Configuración de excerpts */
-  excerptLength: 160,
-  
-  /** Tags por defecto */
-  defaultTags: ['blog', 'desarrollo', 'web'],
-  
-  /** Configuración de comentarios */
+
+  /** Date formatting configuration */
+  dateFormat: {
+    locale: 'es-ES',
+    options: {
+      year: 'numeric' as const,
+      month: 'long' as const,
+      day: 'numeric' as const
+    }
+  },
+
+  /** Content configuration */
+  content: {
+    excerptLength: 160,
+    readingSpeed: 200, // words per minute
+    defaultTags: ['blog', 'desarrollo', 'web']
+  },
+
+  /** URL configuration */
+  urls: {
+    basePath: '/blog',
+    tagBasePath: '/blog/tag'
+  },
+
+  /** Image configuration */
+  images: {
+    thumbnail: {
+      width: 600,
+      height: 315,
+      format: 'webp'
+    },
+    fallback: {
+      text: 'Sin imagen',
+      bgClass: 'bg-muted dark:bg-muted-dark'
+    }
+  },
+
+  /** Card styling configuration */
+  cardStyles: {
+    base: 'card-base overflow-hidden shadow-theme-lg hover:shadow-xl transition-all duration-200',
+    image: 'w-full h-48 object-cover',
+    content: 'p-4',
+    title: 'text-xl font-bold mb-2',
+    titleLink: 'text-primary hover:underline',
+    date: 'text-content text-sm mb-3 opacity-75',
+    description: 'text-content mb-4 line-clamp-3 opacity-90',
+    readMore: 'mt-4 inline-block text-primary hover:underline text-sm font-medium'
+  },
+
+  /** SEO configuration */
+  seo: {
+    blogTitle: 'Blog | Matías Cappato',
+    blogDescription: 'Artículos sobre desarrollo web, programación, tecnología y más por Matías Cappato. Aprende sobre JavaScript, React, Node.js y las últimas tendencias en desarrollo.',
+    tagTitleTemplate: 'Artículos sobre {tag} | Blog | Matías Cappato',
+    tagDescriptionTemplate: 'Descubre todos los artículos sobre {tag} en el blog de Matías Cappato. Aprende sobre desarrollo web, programación y tecnología.'
+  },
+
+  /** Comments configuration */
   comments: {
     enabled: false,
     provider: null // 'disqus' | 'giscus' | null
   },
-  
-  /** Configuración de RSS */
+
+  /** RSS configuration */
   rss: {
     enabled: true,
     title: `${SITE_INFO.title} - Blog`,
     description: 'Últimos artículos sobre desarrollo web y tecnología',
     feedUrl: `${SITE_INFO.url}/rss.xml`
   }
+} as const;
+
+/** Legacy export for backward compatibility */
+export const BLOG_CONFIG = {
+  postsPerPage: BLOG_POST_CONFIG.postsPerPage,
+  dateFormat: 'dd/MM/yyyy',
+  excerptLength: BLOG_POST_CONFIG.content.excerptLength,
+  defaultTags: BLOG_POST_CONFIG.content.defaultTags,
+  comments: BLOG_POST_CONFIG.comments,
+  rss: BLOG_POST_CONFIG.rss
 } as const;
 
 /** Configuración de analytics y tracking */

@@ -1,0 +1,76 @@
+---
+/**
+ * Blog Post Card Component
+ * Unified card component for displaying blog posts
+ * Eliminates duplication between blog index and tag pages
+ */
+
+import TagList from './TagList.astro';
+import type { BlogPostCardData } from '../../utils/blogPost.ts';
+import { BLOG_POST_CONFIG } from '../../config/site.ts';
+
+interface Props {
+  post: BlogPostCardData;
+  loading?: 'lazy' | 'eager';
+  className?: string;
+}
+
+const { 
+  post, 
+  loading = 'lazy',
+  className = ''
+} = Astro.props;
+
+const config = BLOG_POST_CONFIG;
+const styles = config.cardStyles;
+---
+
+<article class={`${styles.base} ${className}`}>
+  <!-- Post Image -->
+  <a href={post.url} class="block">
+    {post.image ? (
+      <img
+        src={post.image.url}
+        alt={post.image.alt}
+        class={styles.image}
+        loading={loading}
+        width={post.image.width || config.images.thumbnail.width}
+        height={post.image.height || config.images.thumbnail.height}
+      />
+    ) : (
+      <div class={`w-full h-48 ${config.images.fallback.bgClass} flex items-center justify-center`}>
+        <span class="text-content">{config.images.fallback.text}</span>
+      </div>
+    )}
+  </a>
+
+  <!-- Post Content -->
+  <div class={styles.content}>
+    <!-- Post Title -->
+    <h3 class={styles.title}>
+      <a href={post.url} class={styles.titleLink}>
+        {post.title}
+      </a>
+    </h3>
+
+    <!-- Post Date -->
+    <p class={styles.date}>
+      {post.formattedDate}
+    </p>
+
+    <!-- Post Description -->
+    <p class={styles.description}>
+      {post.description}
+    </p>
+
+    <!-- Post Tags -->
+    {post.tags && post.tags.length > 0 && (
+      <TagList tags={post.tags} />
+    )}
+
+    <!-- Read More Link -->
+    <a href={post.url} class={styles.readMore}>
+      Leer más →
+    </a>
+  </div>
+</article>

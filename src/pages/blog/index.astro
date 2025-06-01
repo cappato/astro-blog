@@ -8,23 +8,30 @@ import MetaTags from '../../components/seo/MetaTags.astro';
 import { AutoSchema } from '../../features/schema';
 import ThemeScript from '../../components/layout/ThemeScript.astro';
 import { getCollection } from 'astro:content';
-import TagList from '../../components/blog/TagList.astro';
 import BaseTag from '../../components/ui/BaseTag.astro';
+import BlogPostCard from '../../components/blog/BlogPostCard.astro';
+import {
+  getDisplayPosts,
+  getAllTags,
+  transformPostsToCardData,
+  getBlogSeoData,
+  getTagUrl
+} from '../../utils/blogPost.ts';
 
-// Obtener todos los posts del blog
-const posts = await getCollection('blog', (post) => {
-    return !post.data.draft || import.meta.env.DEV;
-});
+// Get all blog posts
+const allPosts = await getCollection('blog');
 
-// Ordenar por fecha (más reciente primero)
-posts.sort((a, b) => b.data.date.getTime() - a.data.date.getTime());
+// Filter and sort posts for display
+const posts = getDisplayPosts(allPosts);
 
-// Extraer todas las etiquetas únicas
-const allTags = [...new Set(posts.flatMap(post => post.data.tags || []))];
+// Extract all unique tags
+const allTags = getAllTags(allPosts);
 
-// Metadatos para SEO
-const title = "Blog | Matías Cappato";
-const description = "Artículos sobre desarrollo web, programación, tecnología y más por Matías Cappato. Aprende sobre JavaScript, React, Node.js y las últimas tendencias en desarrollo.";
+// Transform posts to card data
+const postCards = transformPostsToCardData(posts);
+
+// SEO metadata
+const { title, description } = getBlogSeoData();
 ---
 
 <!DOCTYPE html>
@@ -60,77 +67,26 @@ const description = "Artículos sobre desarrollo web, programación, tecnología
             <p class="text-xl text-content max-w-2xl mx-auto">{description}</p>
         </header>
 
-        <!-- Filtro por etiquetas -->
+        <!-- Tag filter section -->
         <section class="mb-12">
             <h2 class="text-2xl font-bold mb-4 text-content">Explorar por tema</h2>
             <div class="flex flex-wrap gap-2">
                 {allTags.map(tag => (
-                    <BaseTag tag={tag} href={`/blog/tag/${tag}`} />
+                    <BaseTag tag={tag} href={getTagUrl(tag)} />
                 ))}
             </div>
         </section>
 
-        <!-- Lista de posts -->
+        <!-- Posts list -->
         <section>
             <h2 class="text-2xl font-bold mb-6 text-content">Artículos recientes</h2>
 
             <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-                {posts.map(post => (
-                    <article class="card-base overflow-hidden shadow-theme-lg hover:shadow-xl transition-all duration-200">
-                        <a href={`/blog/${post.data.slug || post.slug}`} class="block">
-                            {post.data.postId ? (
-                                <img
-                                    src={`/images/${post.data.postId}/portada-thumb.webp`}
-                                    alt={post.data.imageAlt || post.data.title}
-                                    class="w-full h-48 object-cover"
-                                    loading="lazy"
-                                    width="600"
-                                    height="315"
-                                />
-                            ) : post.data.image ? (
-                                <img
-                                    src={post.data.image.url}
-                                    alt={post.data.image.alt || post.data.title}
-                                    class="w-full h-48 object-cover"
-                                    loading="lazy"
-                                    width="600"
-                                    height="315"
-                                />
-                            ) : (
-                                <div class="w-full h-48 bg-muted flex items-center justify-center dark:bg-muted-dark">
-                                    <span class="text-content">Sin imagen</span>
-                                </div>
-                            )}
-                        </a>
-
-                        <div class="p-4">
-                            <h3 class="text-xl font-bold mb-2">
-                                <a href={`/blog/${post.data.slug || post.slug}`} class="text-primary hover:underline">
-                                    {post.data.title}
-                                </a>
-                            </h3>
-
-                            <p class="text-content text-sm mb-3 opacity-75">
-                                {new Date(post.data.date).toLocaleDateString('es-ES', {
-                                    year: 'numeric',
-                                    month: 'long',
-                                    day: 'numeric'
-                                })}
-                            </p>
-
-                            <p class="text-content mb-4 line-clamp-3 opacity-90">
-                                {post.data.description}
-                            </p>
-
-                            {post.data.tags && (
-                                <TagList tags={post.data.tags} />
-                            )}
-
-                            <a href={`/blog/${post.data.slug || post.slug}`} class="mt-4 inline-block text-primary hover:underline text-sm font-medium">
-                                Leer más →
-                            </a>
-                        </div>
-                    </article>
+                {postCards.map((postCard, index) => (
+                    <BlogPostCard
+                        post={postCard}
+                        loading={index < 3 ? 'eager' : 'lazy'}
+                    />
                 ))}
             </div>
         </section>

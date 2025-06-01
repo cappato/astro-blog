@@ -1,5 +1,4 @@
 ---
-// Importaciones necesarias
 import '../../../styles/global.css';
 import { getCollection } from 'astro:content';
 import TagButton from '../../../components/ui/TagButton.astro';
@@ -9,40 +8,42 @@ import Footer from '../../../components/layout/footer/Footer.astro';
 import CommonScripts from '../../../components/layout/CommonScripts.astro';
 import Favicons from '../../../components/seo/Favicons.astro';
 import ThemeScript from '../../../components/layout/ThemeScript.astro';
+import BlogPostCard from '../../../components/blog/BlogPostCard.astro';
+import {
+  getAllTags,
+  getPostsByTag,
+  transformPostsToCardData,
+  getTagSeoData
+} from '../../../utils/blogPost.ts';
 
-// Función requerida para rutas dinámicas
+// Static paths generation for dynamic routes
 export async function getStaticPaths() {
-  const allPosts = await getCollection('blog', (post) => !post.data.draft || import.meta.env.DEV);
+  const allPosts = await getCollection('blog');
 
-  // Extraer todas las etiquetas únicas de todos los posts
-  const uniqueTags = [...new Set(
-    allPosts.flatMap(post => post.data.tags || [])
-  )];
+  // Extract all unique tags from all posts
+  const uniqueTags = getAllTags(allPosts);
 
-  // Crear una ruta para cada etiqueta
+  // Create a route for each tag
   return uniqueTags.map(tag => ({
     params: { tag },
     props: { tag }
   }));
 }
 
-// Recibir la etiqueta como prop
+// Get tag from props
 const { tag } = Astro.props;
 
-// Obtener los posts con esta etiqueta
-const posts = await getCollection('blog', (post) => {
-  return post.data.tags?.includes(tag) && (!post.data.draft || import.meta.env.DEV);
-});
+// Get all posts
+const allPosts = await getCollection('blog');
 
-// Ordenar por fecha (más reciente primero)
-posts.sort((a, b) => b.data.date.getTime() - a.data.date.getTime());
+// Get posts filtered by tag
+const posts = getPostsByTag(allPosts, tag);
 
-// Metadatos para SEO
-const title = `Artículos sobre ${tag} | Blog de Matías Cappato`;
-const description = `Explora artículos y tutoriales sobre ${tag}. Aprende consejos, técnicas y mejores prácticas relacionadas con ${tag} en el blog de Matías Cappato.`;
+// Transform posts to card data
+const postCards = transformPostsToCardData(posts);
 
-// Fecha actual para el layout
-const currentDate = new Date();
+// SEO metadata
+const { title, description } = getTagSeoData(tag);
 ---
 
 <!DOCTYPE html>
@@ -75,57 +76,14 @@ const currentDate = new Date();
       <TagButton tag={tag} />
     </div>
 
-    <!-- Mostrar la lista de posts con esta etiqueta -->
-    {posts.length > 0 ? (
+    <!-- Posts list with tag filter -->
+    {postCards.length > 0 ? (
       <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-        {posts.map(post => (
-          <article class="card-base overflow-hidden shadow-theme-lg hover:shadow-xl transition-all duration-200">
-            <a href={`/blog/${post.data.slug || post.slug}`} class="block">
-              {post.data.postId ? (
-                <img
-                  src={`/images/${post.data.postId}/portada-thumb.webp`}
-                  alt={post.data.imageAlt || post.data.title}
-                  class="w-full h-48 object-cover"
-                  loading="lazy"
-                />
-              ) : post.data.image ? (
-                <img
-                  src={post.data.image.url}
-                  alt={post.data.image.alt || post.data.title}
-                  class="w-full h-48 object-cover"
-                  loading="lazy"
-                />
-              ) : (
-                <div class="w-full h-48 bg-muted flex items-center justify-center dark:bg-muted-dark">
-                  <span class="text-content">Sin imagen</span>
-                </div>
-              )}
-            </a>
-
-            <div class="p-4">
-              <h2 class="text-xl font-bold mb-2">
-                <a href={`/blog/${post.data.slug || post.slug}`} class="text-primary hover:underline">
-                  {post.data.title}
-                </a>
-              </h2>
-
-              <p class="text-content text-sm mb-3 opacity-75">
-                {new Date(post.data.date).toLocaleDateString('es-ES', {
-                  year: 'numeric',
-                  month: 'long',
-                  day: 'numeric'
-                })}
-              </p>
-
-              <p class="text-content mb-4 line-clamp-3 opacity-90">
-                {post.data.description}
-              </p>
-
-              <a href={`/blog/${post.data.slug || post.slug}`} class="text-primary hover:underline text-sm font-medium">
-                Leer más →
-              </a>
-            </div>
-          </article>
+        {postCards.map((postCard, index) => (
+          <BlogPostCard
+            post={postCard}
+            loading={index < 3 ? 'eager' : 'lazy'}
+          />
         ))}
       </div>
     ) : (
