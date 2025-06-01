@@ -1,74 +1,74 @@
 #!/usr/bin/env node
 /**
- * Script de optimización de imágenes refactorizado
- * Versión modular y mantenible del optimizador de imágenes
- * 
- * COMANDOS DE EJEMPLO:
- * --------------------
- * 
- * 1. Optimizar todas las imágenes de todos los posts:
- *    node scripts/optimize-images-new.js
- * 
- * 2. Optimizar imágenes de un post específico:
- *    node scripts/optimize-images-new.js --postId=bienvenida
- * 
- * 3. Forzar regeneración de todas las imágenes:
- *    node scripts/optimize-images-new.js --force
- * 
- * 4. Optimizar una imagen específica:
- *    node scripts/optimize-images-new.js --file=images/raw/seccion/imagen.jpg
- * 
- * 5. Modo debug con información detallada:
- *    node scripts/optimize-images-new.js --debug
+ * Image optimization script - refactored version
+ * Modular and maintainable image optimizer for blog posts
+ *
+ * USAGE EXAMPLES:
+ * ---------------
+ *
+ * 1. Optimize all images from all posts:
+ *    node scripts/optimize-images.js
+ *
+ * 2. Optimize images from a specific post:
+ *    node scripts/optimize-images.js --postId=bienvenida
+ *
+ * 3. Force regeneration of all images:
+ *    node scripts/optimize-images.js --force
+ *
+ * 4. Optimize a specific image:
+ *    node scripts/optimize-images.js --file=images/raw/section/image.jpg
+ *
+ * 5. Debug mode with detailed information:
+ *    node scripts/optimize-images.js --debug
  */
 
 import yargs from 'yargs/yargs';
 import { hideBin } from 'yargs/helpers';
 
-// Importar módulos refactorizados
-import { PRESETS, getPreset, getPresetNames } from './lib/presets.js';
-import { 
-  ensureDirectories, 
-  getPostDirectories, 
-  getPostImages, 
-  needsProcessing, 
+// Import refactored modules
+import { PRESETS, getPreset, getPresetNames, IMAGE_CONFIG, generateOutputFilename, validatePreset } from './lib/presets.js';
+import {
+  ensureDirectories,
+  getPostDirectories,
+  getPostImages,
+  needsProcessing,
   createOutputDirectory,
-  resolveFilePath 
+  resolveFilePath
 } from './lib/file-utils.js';
-import { 
-  processImageWithPreset, 
-  generateLQIP, 
-  validateImage 
+import {
+  processImageWithPreset,
+  generateLQIP,
+  validateImage
 } from './lib/image-processor.js';
 import { logger, setLogLevel } from './lib/logger.js';
 
 /**
- * Configuración de argumentos de línea de comandos
+ * Command line arguments configuration
  */
 const argv = yargs(hideBin(process.argv))
   .option('postId', {
     alias: 'p',
     type: 'string',
-    description: 'ID del post a procesar'
+    description: 'Post ID to process'
   })
   .option('force', {
     alias: 'f',
     type: 'boolean',
-    description: 'Forzar regeneración de todas las imágenes'
+    description: 'Force regeneration of all images'
   })
   .option('file', {
     alias: 'i',
     type: 'string',
-    description: 'Ruta específica de una imagen a procesar'
+    description: 'Specific image file path to process'
   })
   .option('debug', {
     alias: 'd',
     type: 'boolean',
-    description: 'Activar modo debug con información detallada'
+    description: 'Enable debug mode with detailed information'
   })
   .option('preset', {
     type: 'string',
-    description: 'Preset específico a aplicar (para uso con --file)',
+    description: 'Specific preset to apply (for use with --file)',
     choices: getPresetNames()
   })
   .help()
@@ -76,122 +76,129 @@ const argv = yargs(hideBin(process.argv))
   .argv;
 
 /**
- * Procesar una imagen individual con un preset
- * @param {string} sourcePath - Ruta de la imagen fuente
- * @param {string} outputDir - Directorio de salida
- * @param {string} fileName - Nombre del archivo
- * @param {string} presetName - Nombre del preset
- * @param {boolean} force - Forzar regeneración
- * @returns {Promise<boolean>} True si se procesó exitosamente
+ * Process an individual image with a preset
+ * @param {string} sourcePath - Source image path
+ * @param {string} outputDir - Output directory
+ * @param {string} fileName - File name
+ * @param {string} presetName - Preset name
+ * @param {boolean} force - Force regeneration
+ * @returns {Promise<boolean>} True if processed successfully
  */
 async function processImage(sourcePath, outputDir, fileName, presetName, force = false) {
+  // Validate preset exists and is valid
   const preset = getPreset(presetName);
   if (!preset) {
-    logger.error(`Preset no encontrado: ${presetName}`);
+    logger.error(`Preset not found: ${presetName}`);
     return false;
   }
 
-  // Verificar si necesita procesamiento
-  const outputFileName = `${fileName.split('.')[0]}${presetName === 'default' ? '' : `-${presetName}`}.${preset.format}`;
+  if (!validatePreset(preset)) {
+    logger.error(`Invalid preset configuration: ${presetName}`);
+    return false;
+  }
+
+  // Generate output filename using centralized function
+  const baseName = fileName.split('.')[0];
+  const outputFileName = generateOutputFilename(baseName, presetName, preset.format);
   const outputPath = `${outputDir}/${outputFileName}`;
-  
+
   if (!needsProcessing(sourcePath, outputPath, force)) {
-    logger.skipped(`${outputFileName} (sin cambios)`);
+    logger.skipped(`${outputFileName} (no changes)`);
     return true;
   }
 
-  // Validar imagen antes de procesar
+  // Validate image before processing
   const validation = await validateImage(sourcePath);
   if (!validation.valid) {
-    logger.error(`Imagen inválida ${sourcePath}: ${validation.error}`);
+    logger.error(`Invalid image ${sourcePath}: ${validation.error}`);
     return false;
   }
 
   logger.processing(`${outputFileName}...`);
 
-  // Procesar imagen
+  // Process image
   const result = await processImageWithPreset(sourcePath, outputDir, fileName, preset, presetName);
-  
+
   if (result.success) {
     const sizeKB = (result.size / 1024).toFixed(1);
     logger.success(`${result.outputFileName} (${sizeKB} KB)`);
     return true;
   } else {
-    logger.error(`Error al procesar ${sourcePath}`, new Error(result.error));
+    logger.error(`Error processing ${sourcePath}`, new Error(result.error));
     return false;
   }
 }
 
 /**
- * Procesar todas las imágenes de un post
- * @param {string} postId - ID del post
- * @param {boolean} force - Forzar regeneración
- * @returns {Promise<boolean>} True si se procesó exitosamente
+ * Process all images from a post
+ * @param {string} postId - Post ID
+ * @param {boolean} force - Force regeneration
+ * @returns {Promise<boolean>} True if processed successfully
  */
 async function processPost(postId, force = false) {
   const images = getPostImages(postId);
-  
+
   if (!images.exists) {
-    logger.error(`No se encontró el directorio para el post "${postId}"`);
+    logger.error(`Directory not found for post "${postId}"`);
     return false;
   }
 
-  logger.section(`Procesando post: ${postId}`);
-  
+  logger.section(`Processing post: ${postId}`);
+
   if (images.allImages.length === 0) {
-    logger.warn(`No se encontraron imágenes en el post ${postId}`);
+    logger.warn(`No images found in post ${postId}`);
     return true;
   }
 
-  logger.info(`Encontradas ${images.allImages.length} imágenes`);
+  logger.info(`Found ${images.allImages.length} images`);
 
-  // Crear directorio de salida
+  // Create output directory
   const outputDir = createOutputDirectory(postId);
-  
+
   let processedCount = 0;
   let totalImages = 0;
 
-  // Procesar imagen de portada con todos los presets
+  // Process cover image with all presets
   if (images.coverImage) {
-    logger.info(`Imagen de portada encontrada: ${images.coverImage}`);
+    logger.info(`Cover image found: ${images.coverImage}`);
     const coverPath = `${images.directory}/${images.coverImage}`;
-    
+
     totalImages += getPresetNames().length;
-    
+
     for (const presetName of getPresetNames()) {
       const success = await processImage(coverPath, outputDir, images.coverImage, presetName, force);
       if (success) processedCount++;
-      
-      logger.progress(processedCount, totalImages, 'portada');
+
+      logger.progress(processedCount, totalImages, 'cover');
     }
 
-    // Generar LQIP para la portada
+    // Generate LQIP for cover image
     if (getPreset('lqip')) {
-      logger.processing('Generando LQIP...');
+      logger.processing('Generating LQIP...');
       const baseName = images.coverImage.split('.')[0];
       const lqipResult = await generateLQIP(coverPath, outputDir, baseName);
-      
+
       if (lqipResult.success) {
-        logger.success(`LQIP generado (${(lqipResult.size / 1024).toFixed(1)} KB)`);
+        logger.success(`LQIP generated (${(lqipResult.size / 1024).toFixed(1)} KB)`);
       } else {
-        logger.error('Error al generar LQIP', new Error(lqipResult.error));
+        logger.error('Error generating LQIP', new Error(lqipResult.error));
       }
     }
   } else {
-    logger.warn('No se encontró imagen de portada (portada.jpg/png/webp)');
-    logger.warn('Las variantes para redes sociales no se generarán');
+    logger.warn('Cover image not found (portada.jpg/png/webp)');
+    logger.warn('Social media variants will not be generated');
   }
 
-  // Procesar otras imágenes solo con preset default
+  // Process other images with default preset only
   if (images.otherImages.length > 0) {
     totalImages += images.otherImages.length;
-    
+
     for (const image of images.otherImages) {
       const imagePath = `${images.directory}/${image}`;
-      const success = await processImage(imagePath, outputDir, image, 'default', force);
+      const success = await processImage(imagePath, outputDir, image, IMAGE_CONFIG.DEFAULT_PRESET, force);
       if (success) processedCount++;
-      
-      logger.progress(processedCount, totalImages, 'otras imágenes');
+
+      logger.progress(processedCount, totalImages, 'other images');
     }
   }
 
@@ -199,88 +206,94 @@ async function processPost(postId, force = false) {
 }
 
 /**
- * Procesar un archivo específico
- * @param {string} filePath - Ruta del archivo
- * @param {string} presetName - Preset a aplicar
- * @param {boolean} force - Forzar regeneración
- * @returns {Promise<boolean>} True si se procesó exitosamente
+ * Process a specific file
+ * @param {string} filePath - File path
+ * @param {string} presetName - Preset to apply
+ * @param {boolean} force - Force regeneration
+ * @returns {Promise<boolean>} True if processed successfully
  */
-async function processSpecificFile(filePath, presetName = 'default', force = false) {
-  const fileInfo = resolveFilePath(filePath);
-  
-  if (!fileInfo.exists) {
-    logger.error(`No se encontró el archivo: ${filePath}`);
+async function processSpecificFile(filePath, presetName = IMAGE_CONFIG.DEFAULT_PRESET, force = false) {
+  // Validate preset before processing
+  if (!getPreset(presetName)) {
+    logger.error(`Invalid preset: ${presetName}`);
     return false;
   }
 
-  logger.section(`Procesando archivo específico: ${filePath}`);
+  const fileInfo = resolveFilePath(filePath);
 
-  // Validar imagen
+  if (!fileInfo.exists) {
+    logger.error(`File not found: ${filePath}`);
+    return false;
+  }
+
+  logger.section(`Processing specific file: ${filePath}`);
+
+  // Validate image
   const validation = await validateImage(fileInfo.absolutePath);
   if (!validation.valid) {
-    logger.error(`Imagen inválida: ${validation.error}`);
+    logger.error(`Invalid image: ${validation.error}`);
     return false;
   }
 
-  // Crear directorio de salida
+  // Create output directory
   const outputDir = fileInfo.outputPath.split('/').slice(0, -1).join('/');
-  
-  // Procesar con el preset especificado
+
+  // Process with specified preset
   const fileName = fileInfo.relativePath;
   return await processImage(fileInfo.absolutePath, outputDir, fileName, presetName, force);
 }
 
 /**
- * Función principal
+ * Main function
  */
 async function main() {
-  // Configurar logging
+  // Configure logging
   if (argv.debug) {
     setLogLevel('debug');
   }
 
-  logger.start('Iniciando optimización de imágenes...');
-  
-  // Asegurar que existan los directorios
+  logger.start('Starting image optimization...');
+
+  // Ensure directories exist
   ensureDirectories();
 
   try {
-    // Procesar archivo específico
+    // Process specific file
     if (argv.file) {
-      const preset = argv.preset || 'default';
+      const preset = argv.preset || IMAGE_CONFIG.DEFAULT_PRESET;
       const success = await processSpecificFile(argv.file, preset, argv.force);
-      
+
       if (success) {
-        logger.finish('Optimización de archivo específico completada');
+        logger.finish('Specific file optimization completed');
       } else {
-        logger.error('Error en la optimización del archivo');
+        logger.error('Error in file optimization');
         process.exit(1);
       }
       return;
     }
 
-    // Procesar post específico
+    // Process specific post
     if (argv.postId) {
       const success = await processPost(argv.postId, argv.force);
-      
+
       if (success) {
-        logger.finish(`Optimización del post "${argv.postId}" completada`);
+        logger.finish(`Post "${argv.postId}" optimization completed`);
       } else {
-        logger.error(`Error en la optimización del post "${argv.postId}"`);
+        logger.error(`Error in post "${argv.postId}" optimization`);
         process.exit(1);
       }
       return;
     }
 
-    // Procesar todos los posts
+    // Process all posts
     const postDirs = getPostDirectories();
-    
+
     if (postDirs.length === 0) {
-      logger.warn('No se encontraron directorios de posts en images/raw/');
+      logger.warn('No post directories found in images/raw/');
       return;
     }
 
-    logger.info(`Encontrados ${postDirs.length} directorios de posts`);
+    logger.info(`Found ${postDirs.length} post directories`);
 
     let successCount = 0;
     for (const postId of postDirs) {
@@ -289,19 +302,19 @@ async function main() {
     }
 
     if (successCount === postDirs.length) {
-      logger.finish('Optimización de todos los posts completada');
+      logger.finish('All posts optimization completed');
     } else {
-      logger.warn(`Se completaron ${successCount} de ${postDirs.length} posts`);
+      logger.warn(`Completed ${successCount} of ${postDirs.length} posts`);
     }
 
   } catch (error) {
-    logger.error('Error en el proceso principal', error);
+    logger.error('Error in main process', error);
     process.exit(1);
   }
 }
 
-// Ejecutar script
+// Execute script
 main().catch(error => {
-  logger.error('Error fatal', error);
+  logger.error('Fatal error', error);
   process.exit(1);
 });

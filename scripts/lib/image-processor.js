@@ -1,45 +1,45 @@
 /**
- * Procesador de imágenes usando Sharp
- * Funciones puras para transformación y optimización de imágenes
+ * Image processor using Sharp
+ * Pure functions for image transformation and optimization
  */
 
 import sharp from 'sharp';
 import fs from 'fs-extra';
 import path from 'path';
-import { generateOutputFilename } from './presets.js';
+import { generateOutputFilename, IMAGE_CONFIG, SUPPORTED_EXTENSIONS } from './presets.js';
 
 /**
- * Procesar una imagen con un preset específico
- * @param {string} sourcePath - Ruta de la imagen fuente
- * @param {string} outputDir - Directorio de salida
- * @param {string} fileName - Nombre del archivo
- * @param {Object} preset - Configuración del preset
- * @param {string} presetName - Nombre del preset
- * @returns {Promise<Object>} Resultado del procesamiento
+ * Process an image with a specific preset
+ * @param {string} sourcePath - Source image path
+ * @param {string} outputDir - Output directory
+ * @param {string} fileName - File name
+ * @param {Object} preset - Preset configuration
+ * @param {string} presetName - Preset name
+ * @returns {Promise<Object>} Processing result
  */
 export async function processImageWithPreset(sourcePath, outputDir, fileName, preset, presetName) {
   const baseName = path.basename(fileName, path.extname(fileName));
   const outputFileName = generateOutputFilename(baseName, presetName, preset.format);
   const outputPath = path.join(outputDir, outputFileName);
-  
+
   try {
-    // Configurar transformación base
+    // Configure base transformation
     let transform = sharp(sourcePath).resize({
       width: preset.width,
       height: preset.height,
       fit: preset.fit || 'inside',
       withoutEnlargement: true
     });
-    
-    // Aplicar formato específico
+
+    // Apply specific format
     transform = applyFormat(transform, preset.format, preset.quality);
-    
-    // Guardar imagen
+
+    // Save image
     await transform.toFile(outputPath);
-    
-    // Obtener información del archivo generado
+
+    // Get generated file information
     const stats = fs.statSync(outputPath);
-    
+
     return {
       success: true,
       outputPath,
@@ -63,62 +63,62 @@ export async function processImageWithPreset(sourcePath, outputDir, fileName, pr
 }
 
 /**
- * Aplicar formato específico a la transformación Sharp
- * @param {Object} transform - Instancia de Sharp
- * @param {string} format - Formato deseado
- * @param {number} quality - Calidad de compresión
- * @returns {Object} Transformación con formato aplicado
+ * Apply specific format to Sharp transformation
+ * @param {Object} transform - Sharp instance
+ * @param {string} format - Desired format
+ * @param {number} quality - Compression quality
+ * @returns {Object} Transformation with applied format
  */
 function applyFormat(transform, format, quality) {
   switch (format.toLowerCase()) {
     case 'webp':
       return transform.webp({ quality });
-    
+
     case 'jpeg':
     case 'jpg':
       return transform.jpeg({ quality });
-    
+
     case 'png':
-      return transform.png({ 
+      return transform.png({
         quality,
         compressionLevel: 9,
         adaptiveFiltering: true
       });
-    
+
     case 'avif':
       return transform.avif({ quality });
-    
+
     default:
-      throw new Error(`Formato no soportado: ${format}`);
+      throw new Error(`Unsupported format: ${format}`);
   }
 }
 
 /**
- * Generar placeholder de baja calidad (LQIP)
- * @param {string} sourcePath - Ruta de la imagen fuente
- * @param {string} outputDir - Directorio de salida
- * @param {string} baseName - Nombre base del archivo
- * @returns {Promise<Object>} Resultado de la generación
+ * Generate Low Quality Image Placeholder (LQIP)
+ * @param {string} sourcePath - Source image path
+ * @param {string} outputDir - Output directory
+ * @param {string} baseName - Base file name
+ * @returns {Promise<Object>} Generation result
  */
 export async function generateLQIP(sourcePath, outputDir, baseName) {
   const lqipPath = path.join(outputDir, `${baseName}-lqip.webp`);
   const base64Path = path.join(outputDir, `${baseName}-lqip.txt`);
-  
+
   try {
-    // Generar imagen LQIP
+    // Generate LQIP image using centralized configuration
     await sharp(sourcePath)
-      .resize(20) // Muy pequeña
-      .blur(5) // Aplicar desenfoque
-      .webp({ quality: 20 })
+      .resize(IMAGE_CONFIG.LQIP.width) // Very small
+      .blur(IMAGE_CONFIG.LQIP.blur) // Apply blur
+      .webp({ quality: IMAGE_CONFIG.LQIP.quality })
       .toFile(lqipPath);
-    
-    // Generar versión base64 para inline
+
+    // Generate base64 version for inline use
     const lqipBuffer = await fs.readFile(lqipPath);
     const base64 = lqipBuffer.toString('base64');
     const dataUri = `data:image/webp;base64,${base64}`;
-    
+
     await fs.writeFile(base64Path, dataUri);
-    
+
     return {
       success: true,
       lqipPath,
