@@ -1,0 +1,41 @@
+---
+/**
+ * Social Share Feature - Copy Toast Component
+ * Toast notification for copy operations
+ */
+---
+
+<div id="copy-toast" class="fixed bottom-20 right-4 bg-surface text-content px-4 py-2 rounded-md shadow-lg opacity-0 transition-opacity duration-300 z-50">
+  <i class="fas fa-check mr-2"></i> Enlace copiado al portapapeles
+</div>
+
+<script>
+  document.addEventListener('DOMContentLoaded', () => {
+    // Función para mostrar el toast
+    const showToast = (message = 'Enlace copiado al portapapeles') => {
+      const toast = document.getElementById('copy-toast');
+      if (!toast) return;
+
+      // Actualizar el mensaje si es necesario
+      if (message && message !== 'Enlace copiado al portapapeles') {
+        toast.innerHTML = `<i class="fas fa-check mr-2"></i> ${message}`;
+      }
+
+      // Mostrar el toast
+      toast.style.opacity = '1';
+
+      // Ocultar después de 2 segundos
+      setTimeout(() => {
+        toast.style.opacity = '0';
+      }, 2000);
+    };
+
+    // Escuchar el evento personalizado
+    document.addEventListener('show-toast', ((event) => {
+      // Usar casting para acceder a detail
+      const customEvent = event as CustomEvent<{message?: string}>;
+      const message = customEvent.detail?.message || 'Enlace copiado al portapapeles';
+      showToast(message);
+    }) as EventListener);
+  });
+</script>
