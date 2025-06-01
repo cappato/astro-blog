@@ -279,9 +279,124 @@ export function validateSitemapXML(xml: string): { valid: boolean; error?: strin
 
     return { valid: true };
   } catch (error) {
-    return { 
-      valid: false, 
-      error: error instanceof Error ? error.message : 'XML validation failed' 
+    return {
+      valid: false,
+      error: error instanceof Error ? error.message : 'XML validation failed'
     };
   }
+}
+
+/**
+ * Create complete Sitemap endpoint handler following the AI Metadata pattern
+ * @param siteConfig Site configuration object
+ * @param options Sitemap endpoint options
+ * @returns Astro endpoint handlers
+ */
+export function createSitemapEndpoint(siteConfig: any, options: SitemapEndpointOptions = {}) {
+  return {
+    /**
+     * GET handler for Sitemap endpoint
+     */
+    GET: async () => {
+      try {
+        // Import getCollection dynamically to avoid issues in non-Astro environments
+        const { getCollection } = await import('astro:content');
+
+        // Get blog posts
+        const blogEntries = await getCollection('blog');
+
+        // Create Sitemap configuration
+        const sitemapConfig = createSitemapConfig(siteConfig);
+
+        // Generate Sitemap
+        const response = handleSitemapRequest(blogEntries, sitemapConfig, {
+          maxUrls: 1000,
+          additionalPages: [],
+          ...options
+        });
+
+        return new Response(response.body, {
+          headers: response.headers,
+          status: response.status
+        });
+
+      } catch (error) {
+        console.error('Sitemap generation error:', error);
+
+        // Return error sitemap
+        const errorXML = `<?xml version="1.0" encoding="UTF-8"?>
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
+  <!-- Sitemap generation error: ${error instanceof Error ? error.message : 'Unknown error'} -->
+  <url>
+    <loc>${siteConfig.site?.url || siteConfig.url || ''}</loc>
+    <lastmod>${new Date().toISOString().split('T')[0]}</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>1.0</priority>
+  </url>
+</urlset>`;
+
+        return new Response(errorXML, {
+          headers: {
+            'Content-Type': 'application/xml; charset=utf-8'
+          },
+          status: 500
+        });
+      }
+    }
+  };
+}
+
+/**
+ * Create Sitemap endpoint handler with posts provided (for testing)
+ * @param siteConfig Site configuration object
+ * @param posts Blog posts array
+ * @param options Sitemap endpoint options
+ * @returns Astro endpoint handlers
+ */
+export function createSitemapEndpointWithPosts(siteConfig: any, posts: BlogPost[], options: SitemapEndpointOptions = {}) {
+  return {
+    /**
+     * GET handler for Sitemap endpoint
+     */
+    GET: () => {
+      try {
+        // Create Sitemap configuration
+        const sitemapConfig = createSitemapConfig(siteConfig);
+
+        // Generate Sitemap
+        const response = handleSitemapRequest(posts, sitemapConfig, {
+          maxUrls: 1000,
+          additionalPages: [],
+          ...options
+        });
+
+        return new Response(response.body, {
+          headers: response.headers,
+          status: response.status
+        });
+
+      } catch (error) {
+        console.error('Sitemap generation error:', error);
+
+        // Return error sitemap
+        const errorXML = `<?xml version="1.0" encoding="UTF-8"?>
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
+  <!-- Sitemap generation error: ${error instanceof Error ? error.message : 'Unknown error'} -->
+  <url>
+    <loc>${siteConfig.site?.url || siteConfig.url || ''}</loc>
+    <lastmod>${new Date().toISOString().split('T')[0]}</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>1.0</priority>
+  </url>
+</urlset>`;
+
+        return new Response(errorXML, {
+          headers: {
+            'Content-Type': 'application/xml; charset=utf-8'
+          },
+          status: 500
+        });
+      }
+    }
+  };
 }

@@ -180,3 +180,112 @@ export function createRSSConfig(siteConfig: any): RSSConfig {
     }
   };
 }
+
+/**
+ * Create complete RSS endpoint handler following the AI Metadata pattern
+ * @param siteConfig Site configuration object
+ * @param options RSS endpoint options
+ * @returns Astro endpoint handlers
+ */
+export function createRSSEndpoint(siteConfig: any, options: RSSEndpointOptions = {}) {
+  return {
+    /**
+     * GET handler for RSS endpoint
+     */
+    GET: async () => {
+      try {
+        // Import getCollection dynamically to avoid issues in non-Astro environments
+        const { getCollection } = await import('astro:content');
+
+        // Get blog posts
+        const blogEntries = await getCollection('blog');
+
+        // Create RSS configuration
+        const rssConfig = createRSSConfig(siteConfig);
+
+        // Generate RSS feed
+        const response = handleRSSRequest(blogEntries, rssConfig, {
+          maxItems: 20,
+          ...options
+        });
+
+        return new Response(response.body, {
+          headers: response.headers,
+          status: response.status
+        });
+
+      } catch (error) {
+        console.error('RSS generation error:', error);
+
+        // Return error RSS
+        const errorXML = `<?xml version="1.0" encoding="UTF-8"?>
+<rss version="2.0">
+  <channel>
+    <title>RSS Error</title>
+    <description>Error generating RSS feed</description>
+    <link>${siteConfig.site?.url || siteConfig.url || ''}</link>
+  </channel>
+</rss>`;
+
+        return new Response(errorXML, {
+          headers: {
+            'Content-Type': 'application/rss+xml; charset=utf-8'
+          },
+          status: 500
+        });
+      }
+    }
+  };
+}
+
+/**
+ * Create RSS endpoint handler with posts provided (for testing)
+ * @param siteConfig Site configuration object
+ * @param posts Blog posts array
+ * @param options RSS endpoint options
+ * @returns Astro endpoint handlers
+ */
+export function createRSSEndpointWithPosts(siteConfig: any, posts: BlogPost[], options: RSSEndpointOptions = {}) {
+  return {
+    /**
+     * GET handler for RSS endpoint
+     */
+    GET: () => {
+      try {
+        // Create RSS configuration
+        const rssConfig = createRSSConfig(siteConfig);
+
+        // Generate RSS feed
+        const response = handleRSSRequest(posts, rssConfig, {
+          maxItems: 20,
+          ...options
+        });
+
+        return new Response(response.body, {
+          headers: response.headers,
+          status: response.status
+        });
+
+      } catch (error) {
+        console.error('RSS generation error:', error);
+
+        // Return error RSS
+        const errorXML = `<?xml version="1.0" encoding="UTF-8"?>
+<rss version="2.0">
+  <channel>
+    <title>RSS Error</title>
+    <description>Error generating RSS feed</description>
+    <link>${siteConfig.site?.url || siteConfig.url || ''}</link>
+  </channel>
+</rss>`;
+
+        return new Response(errorXML, {
+          headers: {
+            'Content-Type': 'application/rss+xml; charset=utf-8'
+          },
+          status: 500
+        });
+      }
+    }
+  };
+}

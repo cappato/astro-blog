@@ -96,6 +96,7 @@ export {
   SitemapEndpointHandler,
   handleSitemapRequest,
   createSitemapConfig,
+  createSitemapEndpoint,
   generateRobotsTxt,
   validateSitemapXML
 } from './endpoints/sitemap-endpoint.ts';

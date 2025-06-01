@@ -1,18 +1,12 @@
-import { getCollection } from 'astro:content';
-import { generateRSSFeed } from '../utils/rss.ts';
-import { shouldIncludePost } from '../utils/shared/post-filters.ts';
+/**
+ * RSS Feed Endpoint - Using Modular Feature
+ * Main RSS endpoint that generates /rss.xml
+ */
 
-export async function GET() {
-  const blogEntries = await getCollection('blog', shouldIncludePost);
-  
-  // Ordenar por fecha (más recientes primero)
-  const sortedEntries = blogEntries.sort((a, b) => 
-    new Date(b.data.date).getTime() - new Date(a.data.date).getTime()
-  );
+import { createRSSEndpoint } from '../features/rss-feed';
+import { CONFIG } from '../config';
 
-  return new Response(generateRSSFeed(sortedEntries), {
-    headers: {
-      'Content-Type': 'application/rss+xml; charset=utf-8',
-    },
-  });
-}
+// Create endpoint using the modular feature
+export const { GET } = createRSSEndpoint(CONFIG, {
+  maxItems: 20 // Limit to 20 most recent posts
+});

@@ -78,7 +78,8 @@ export {
 export {
   RSSEndpointHandler,
   handleRSSRequest,
-  createRSSConfig
+  createRSSConfig,
+  createRSSEndpoint
 } from './endpoints/rss-endpoint.ts';
 
 // ============================================================================
