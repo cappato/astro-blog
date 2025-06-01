@@ -20,6 +20,7 @@ const documentMock = {
     classList: {
       add: vi.fn(),
       remove: vi.fn(),
+      toggle: vi.fn(), // Add toggle method for new implementation
     },
     setAttribute: vi.fn(),
     dataset: {},
@@ -117,7 +118,7 @@ describe('ThemeManager', () => {
       manager.setTheme('light');
 
       expect(manager.getTheme()).toBe('light');
-      expect(documentMock.documentElement.classList.remove).toHaveBeenCalledWith('dark');
+      expect(documentMock.documentElement.classList.toggle).toHaveBeenCalledWith('dark', false);
       expect(documentMock.documentElement.setAttribute).toHaveBeenCalledWith('data-theme', 'light');
       expect(localStorageMock.setItem).toHaveBeenCalledWith('theme-preference', 'light');
     });
@@ -128,7 +129,7 @@ describe('ThemeManager', () => {
 
       manager.setTheme('dark');
 
-      expect(documentMock.documentElement.classList.add).toHaveBeenCalledWith('dark');
+      expect(documentMock.documentElement.classList.toggle).toHaveBeenCalledWith('dark', true);
       expect(documentMock.documentElement.setAttribute).toHaveBeenCalledWith('data-theme', 'dark');
     });
 
@@ -198,20 +199,12 @@ describe('ThemeManager', () => {
     it('should apply initial theme to DOM', () => {
       manager.init();
 
-      expect(documentMock.documentElement.classList.add).toHaveBeenCalledWith('dark');
+      expect(documentMock.documentElement.classList.toggle).toHaveBeenCalledWith('dark', true);
       expect(documentMock.documentElement.setAttribute).toHaveBeenCalledWith('data-theme', 'dark');
     });
   });
 
   describe('enhanced DOM manipulation', () => {
-    it('should update dataset.theme when applying theme', () => {
-      const mockDataset = {};
-      documentMock.documentElement.dataset = mockDataset;
-
-      manager.setTheme('light');
-
-      expect(mockDataset.theme).toBe('light');
-    });
 
     it('should update meta theme-color for mobile devices', () => {
       const mockMetaElement = {

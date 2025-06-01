@@ -1,7 +1,7 @@
 ---
 /**
- * Componente ThemeToggle - Botón para cambiar entre tema claro y oscuro
- * Integrado con el sistema de temas TypeScript
+ * ThemeToggle Component - Button to switch between light and dark theme
+ * Integrated with TypeScript theme system
  */
 
 import Icon from './Icon.astro';
@@ -36,23 +36,23 @@ const iconSizes = {
   id="theme-toggle"
   type="button"
   class={`theme-toggle-btn inline-flex items-center justify-center rounded-lg bg-button hover:bg-button-hover text-content hover:text-primary transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2 focus:ring-offset-card ${sizeClasses[size]} ${className}`}
-  aria-label="Cambiar tema"
-  title="Cambiar tema"
+  aria-label="Toggle theme"
+  title="Toggle theme"
 >
-  <!-- Icono para tema claro (visible en modo oscuro) -->
+  <!-- Light theme icon (visible in dark mode) -->
   <span class="theme-icon-light hidden dark:inline-flex">
     <Icon name="sun" size={iconSizes[size]} />
   </span>
 
-  <!-- Icono para tema oscuro (visible en modo claro) -->
+  <!-- Dark theme icon (visible in light mode) -->
   <span class="theme-icon-dark inline-flex dark:hidden">
     <Icon name="moon" size={iconSizes[size]} />
   </span>
 
   {showLabel && (
     <span class="ml-2 text-sm font-medium">
-      <span class="theme-label-light hidden dark:inline">Claro</span>
-      <span class="theme-label-dark inline dark:hidden">Oscuro</span>
+      <span class="theme-label-light hidden dark:inline">Light</span>
+      <span class="theme-label-dark inline dark:hidden">Dark</span>
     </span>
   )}
 </button>
@@ -60,7 +60,7 @@ const iconSizes = {
 <script>
   import { themeManager } from '../../utils/theme.ts';
 
-  // Función para inicializar el toggle de tema
+  // Function to initialize theme toggle
   function initThemeToggle() {
     const toggleButton = document.getElementById('theme-toggle');
 
@@ -69,36 +69,36 @@ const iconSizes = {
       return;
     }
 
-    // Manejar click en el botón
+    // Handle button click
     toggleButton.addEventListener('click', () => {
       themeManager.toggleTheme();
     });
 
-    // Suscribirse a cambios de tema para actualizar el estado visual
+    // Subscribe to theme changes to update visual state
     themeManager.subscribe((theme) => {
-      // Actualizar aria-label dinámicamente
-      const newLabel = theme === 'dark' ? 'Cambiar a tema claro' : 'Cambiar a tema oscuro';
+      // Update aria-label dynamically
+      const newLabel = theme === 'dark' ? 'Switch to light theme' : 'Switch to dark theme';
       toggleButton.setAttribute('aria-label', newLabel);
       toggleButton.setAttribute('title', newLabel);
     });
 
-    // Inicializar el tema
+    // Initialize theme
     themeManager.init();
   }
 
-  // Inicializar cuando el DOM esté listo
+  // Initialize when DOM is ready
   if (document.readyState === 'loading') {
     document.addEventListener('DOMContentLoaded', initThemeToggle);
   } else {
     initThemeToggle();
   }
 
-  // Re-inicializar en navegación SPA (si aplica)
+  // Re-initialize on SPA navigation (if applicable)
   document.addEventListener('astro:page-load', initThemeToggle);
 </script>
 
 <style>
-  /* Estilos adicionales para transiciones suaves */
+  /* Additional styles for smooth transitions */
   .theme-toggle-btn {
     transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
   }
@@ -111,13 +111,13 @@ const iconSizes = {
     transform: translateY(0);
   }
 
-  /* Animación suave para el cambio de iconos */
+  /* Smooth animation for icon changes */
   .theme-icon-light,
   .theme-icon-dark {
     transition: opacity 0.2s ease-in-out;
   }
 
-  /* Respeto por las preferencias de movimiento reducido */
+  /* Respect reduced motion preferences */
   @media (prefers-reduced-motion: reduce) {
     .theme-toggle-btn {
       transition: none;

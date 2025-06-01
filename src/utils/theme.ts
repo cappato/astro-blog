@@ -1,38 +1,34 @@
 /**
- * Sistema de gestión de temas para Astro + Tailwind CSS
- * Maneja el cambio entre tema oscuro y claro con persistencia
+ * Theme Management System for Astro + Tailwind CSS
+ * Handles dark/light theme switching with persistence and anti-flicker
  *
- * CARACTERÍSTICAS:
- * - ✅ Anti-flicker: Script SSR que aplica tema antes del render
- * - ✅ Persistencia: Guarda preferencia en localStorage
- * - ✅ Reactivo: Sistema de listeners para cambios de tema
- * - ✅ Accesible: Actualiza meta theme-color para móviles
- * - ✅ TypeScript: Tipado estricto y validación
+ * FEATURES:
+ * - ✅ Anti-flicker: SSR script applies theme before render
+ * - ✅ Persistence: Saves preference in localStorage
+ * - ✅ Reactive: Listener system for theme changes
+ * - ✅ Accessible: Updates meta theme-color for mobile
+ * - ✅ TypeScript: Strict typing and validation
  *
- * USO EN LAYOUTS:
+ * LAYOUT USAGE:
  * ```astro
  * ---
  * import ThemeScript from '../components/layout/ThemeScript.astro';
  * ---
  * <head>
- *   <!-- IMPORTANTE: Debe ir temprano en el <head> para evitar flicker -->
+ *   <!-- IMPORTANT: Must be early in <head> to prevent flicker -->
  *   <ThemeScript />
  * </head>
  * ```
  *
- * USO EN COMPONENTES:
+ * COMPONENT USAGE:
  * ```typescript
  * import { useTheme } from '../utils/theme.ts';
  *
  * const { theme, setTheme, toggleTheme, subscribe } = useTheme();
  * ```
  *
- * REEMPLAZA A:
- * - ❌ theme-init.ts (eliminado - era redundante)
- * - ❌ Lógica duplicada en ThemeScript.astro (ahora usa getThemeInitScript)
- *
  * @author Matías Cappato
- * @version 2.0.0 - Unificado y optimizado
+ * @version 3.0.0 - Refactored and standardized
  */
 
 export type Theme = 'light' | 'dark';
@@ -45,15 +41,16 @@ export const THEME_CONFIG = {
 } as const;
 
 /**
- * Colores para meta theme-color en dispositivos móviles
+ * Theme colors for meta theme-color on mobile devices
+ * These values should match Tailwind's theme-meta colors
  */
 export const THEME_COLORS = {
-  DARK: '#111827',
-  LIGHT: '#ffffff',
+  DARK: '#111827',   // matches theme-meta.dark in tailwind.config.js
+  LIGHT: '#ffffff',  // matches theme-meta.light in tailwind.config.js
 } as const;
 
 /**
- * Clase principal para gestionar el sistema de temas
+ * Main class for managing the theme system
  */
 export class ThemeManager {
   private currentTheme: Theme;
@@ -64,7 +61,7 @@ export class ThemeManager {
   }
 
   /**
-   * Obtiene el tema inicial basado en localStorage o el tema por defecto
+   * Gets initial theme based on localStorage or default theme
    */
   private getInitialTheme(): Theme {
     if (typeof window === 'undefined') {
@@ -84,14 +81,14 @@ export class ThemeManager {
   }
 
   /**
-   * Obtiene el tema actual
+   * Gets current theme
    */
   getTheme(): Theme {
     return this.currentTheme;
   }
 
   /**
-   * Establece un nuevo tema
+   * Sets a new theme
    */
   setTheme(theme: Theme): void {
     if (this.currentTheme === theme) return;
@@ -103,7 +100,7 @@ export class ThemeManager {
   }
 
   /**
-   * Alterna entre tema claro y oscuro
+   * Toggles between light and dark theme
    */
   toggleTheme(): void {
     const newTheme = this.currentTheme === 'dark' ? 'light' : 'dark';
@@ -111,31 +108,25 @@ export class ThemeManager {
   }
 
   /**
-   * Aplica el tema al DOM
+   * Applies theme to DOM - simplified to avoid redundancy
    */
   private applyTheme(theme: Theme): void {
     if (typeof document === 'undefined') return;
 
     const html = document.documentElement;
 
-    if (theme === 'dark') {
-      html.classList.add(THEME_CONFIG.HTML_CLASS);
-    } else {
-      html.classList.remove(THEME_CONFIG.HTML_CLASS);
-    }
+    // Apply/remove dark class (primary method for Tailwind)
+    html.classList.toggle(THEME_CONFIG.HTML_CLASS, theme === 'dark');
 
-    // Establecer atributo data-theme para CSS adicional
+    // Set data-theme attribute for additional CSS targeting
     html.setAttribute(THEME_CONFIG.ATTRIBUTE, theme);
 
-    // Establecer dataset para acceso más fácil desde JavaScript
-    html.dataset.theme = theme;
-
-    // Actualizar meta theme-color para móviles
+    // Update meta theme-color for mobile browsers
     this.updateMetaThemeColor(theme);
   }
 
   /**
-   * Actualiza el meta theme-color para dispositivos móviles
+   * Updates meta theme-color for mobile devices
    */
   private updateMetaThemeColor(theme: Theme): void {
     if (typeof document === 'undefined') return;
@@ -148,7 +139,7 @@ export class ThemeManager {
   }
 
   /**
-   * Guarda el tema en localStorage
+   * Saves theme to localStorage
    */
   private saveTheme(theme: Theme): void {
     if (typeof window === 'undefined') return;
@@ -161,26 +152,26 @@ export class ThemeManager {
   }
 
   /**
-   * Inicializa el tema en el DOM (llamar al cargar la página)
+   * Initializes theme in DOM (call on page load)
    */
   init(): void {
     this.applyTheme(this.currentTheme);
   }
 
   /**
-   * Suscribe un listener para cambios de tema
+   * Subscribes a listener for theme changes
    */
   subscribe(listener: (theme: Theme) => void): () => void {
     this.listeners.add(listener);
 
-    // Retorna función para desuscribirse
+    // Return unsubscribe function
     return () => {
       this.listeners.delete(listener);
     };
   }
 
   /**
-   * Notifica a todos los listeners sobre el cambio de tema
+   * Notifies all listeners about theme change
    */
   private notifyListeners(theme: Theme): void {
     this.listeners.forEach(listener => {
@@ -193,11 +184,11 @@ export class ThemeManager {
   }
 }
 
-// Instancia singleton del gestor de temas
+// Singleton instance of theme manager
 export const themeManager = new ThemeManager();
 
 /**
- * Hook para usar en componentes que necesiten reaccionar a cambios de tema
+ * Hook for components that need to react to theme changes
  */
 export function useTheme() {
   return {
@@ -209,17 +200,17 @@ export function useTheme() {
 }
 
 /**
- * Función para inicializar el tema (llamar en el script principal)
+ * Function to initialize theme (call in main script)
  */
 export function initTheme(): void {
   themeManager.init();
 }
 
 /**
- * Script anti-flicker que debe ejecutarse en el <head>
- * Aplica el tema inmediatamente para prevenir flash de contenido
+ * Anti-flicker script that must run in <head>
+ * Applies theme immediately to prevent content flash
  *
- * @param minify - Si true, minifica el script para mejor performance
+ * @param minify - If true, minifies script for better performance
  */
 export function getThemeInitScript(minify: boolean = true): string {
   const script = `

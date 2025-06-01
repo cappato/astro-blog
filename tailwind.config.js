@@ -69,6 +69,11 @@ export default {
           700: '#334155',  // Oscuro
           800: '#1e293b',  // Muy oscuro
           900: '#0f172a'   // Extremo oscuro (dark mode)
+        },
+        // Theme colors for meta theme-color (mobile browsers)
+        'theme-meta': {
+          light: '#ffffff',
+          dark: '#111827'
         }
       },
       // Espaciado consistente
