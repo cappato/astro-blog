@@ -157,8 +157,11 @@ describe('RSS Feed Utilities', () => {
         const mockPost = createMockPost({
           slug: 'fallback-slug',
           data: {
-            slug: undefined,
-            date: new Date('2023-06-15')
+            title: 'Test Post with Fallback Slug',
+            description: 'Test description',
+            date: new Date('2023-06-15'),
+            author: 'Test Author',
+            slug: undefined
           }
         });
         const rssContent = generateRSSFeed([mockPost]);
@@ -170,7 +173,12 @@ describe('RSS Feed Utilities', () => {
       it('should format dates correctly in RFC 2822 format', () => {
         const testDate = new Date('2023-06-15T10:30:00Z');
         const mockPost = createMockPost({
-          data: { date: testDate }
+          data: {
+            title: 'Test Post with Date',
+            description: 'Test description',
+            date: testDate,
+            author: 'Test Author'
+          }
         });
         const rssContent = generateRSSFeed([mockPost]);
 
@@ -184,16 +192,20 @@ describe('RSS Feed Utilities', () => {
             slug: 'post-1',
             data: {
               title: 'First Post',
+              description: 'First post description',
               slug: 'first-post',
-              date: new Date('2023-01-01')
+              date: new Date('2023-01-01'),
+              author: 'Test Author'
             }
           }),
           createMockPost({
             slug: 'post-2',
             data: {
               title: 'Second Post',
+              description: 'Second post description',
               slug: 'second-post',
-              date: new Date('2023-02-01')
+              date: new Date('2023-02-01'),
+              author: 'Test Author'
             }
           })
         ];
@@ -211,7 +223,10 @@ describe('RSS Feed Utilities', () => {
         const mockPost = createMockPost({
           body: 'Este es un post muy largo con **markdown** y *formato* que debería ser truncado correctamente.',
           data: {
-            description: undefined
+            title: 'Test Post with Generated Excerpt',
+            description: undefined,
+            date: new Date('2023-06-15'),
+            author: 'Test Author'
           }
         });
         const rssContent = generateRSSFeed([mockPost]);
@@ -223,7 +238,9 @@ describe('RSS Feed Utilities', () => {
         const mockPost = createMockPost({
           data: {
             title: 'Post with <special> & "characters"',
-            description: 'Description with <tags> & "quotes" and \'apostrophes\''
+            description: 'Description with <tags> & "quotes" and \'apostrophes\'',
+            date: new Date('2023-06-15'),
+            author: 'Test Author'
           }
         });
         const rssContent = generateRSSFeed([mockPost]);
@@ -237,7 +254,10 @@ describe('RSS Feed Utilities', () => {
         const mockPost = createMockPost({
           body: longContent,
           data: {
-            description: undefined
+            title: 'Test Post with Long Content',
+            description: undefined,
+            date: new Date('2023-06-15'),
+            author: 'Test Author'
           }
         });
         const rssContent = generateRSSFeed([mockPost]);
@@ -260,10 +280,20 @@ describe('RSS Feed Utilities', () => {
 
       it('should set lastBuildDate to most recent post date', () => {
         const oldPost = createMockPost({
-          data: { date: new Date('2023-01-01') }
+          data: {
+            title: 'Old Post',
+            description: 'Old post description',
+            date: new Date('2023-01-01'),
+            author: 'Test Author'
+          }
         });
         const newPost = createMockPost({
-          data: { date: new Date('2023-06-15') }
+          data: {
+            title: 'New Post',
+            description: 'New post description',
+            date: new Date('2023-06-15'),
+            author: 'Test Author'
+          }
         });
         const rssContent = generateRSSFeed([newPost, oldPost]);
 
