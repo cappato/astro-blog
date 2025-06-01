@@ -48,6 +48,8 @@ src/features/schema/
 ├── engine.ts               # Schema generation logic
 ├── AutoSchema.astro        # Main component
 ├── index.ts                # Public API exports
+├── scripts/
+│   └── validate-schemas.js # Production validation script
 ├── __tests__/
 │   └── schema.test.ts      # Test suite
 └── README.md               # This file
@@ -104,12 +106,41 @@ tags: ["tag1", "tag2"]         # → keywords
 Your content here...
 ```
 
-## 🧪 Testing
+## 🧪 Testing & Validation
 
+### Unit Tests
 Run the test suite:
 
 ```bash
 npm test -- schema.test.ts
+npm run test:schemas              # Run schema-specific tests
+```
+
+### Production Validation
+Validate schemas in production:
+
+```bash
+npm run validate:schemas          # Check production schemas
+npm run validate:schemas:dev      # Check development schemas
+npm run validate:schemas:auto     # Auto-discover URLs from sitemap
+npm run test:schemas:full         # Run tests + validation
+```
+
+### Custom Validation
+Check specific URLs:
+
+```bash
+npm run validate:schemas -- --url=https://yoursite.com/specific-page
+```
+
+### CI/CD Integration
+Add to your GitHub Actions or CI pipeline:
+
+```yaml
+- name: Validate Schemas
+  run: |
+    npm run build
+    npm run validate:schemas:dev
 ```
 
 ## 📦 Reusing in Other Projects

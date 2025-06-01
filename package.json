@@ -12,7 +12,11 @@
     "test": "vitest",
     "test:ui": "vitest --ui",
     "test:run": "vitest run",
-    "test:schemas": "npm run test -- schema.test.ts"
+    "test:schemas": "npm run test -- schema.test.ts",
+    "validate:schemas": "node src/features/schema/scripts/validate-schemas.js",
+    "validate:schemas:dev": "npm run validate:schemas -- --dev",
+    "validate:schemas:auto": "npm run validate:schemas -- --auto",
+    "test:schemas:full": "npm run test:schemas && npm run validate:schemas:dev"
   },
   "dependencies": {
     "astro": "^5.8.0"

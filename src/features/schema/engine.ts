@@ -72,7 +72,7 @@ function generateOrganizationSchema() {
 /**
  * Generate WebSite schema for home page
  */
-function generateHomeSchema() {
+export function getHomeSchema() {
   return {
     "@context": "https://schema.org",
     "@type": "WebSite",
@@ -87,7 +87,7 @@ function generateHomeSchema() {
 /**
  * Generate Blog schema for blog index
  */
-function generateBlogIndexSchema() {
+export function getBlogIndexSchema() {
   return {
     "@context": "https://schema.org",
     "@type": "Blog",
@@ -102,8 +102,9 @@ function generateBlogIndexSchema() {
 /**
  * Generate BlogPosting schema for individual posts
  */
-function generateBlogPostSchema(post: CollectionEntry<'blog'>, postUrl: string) {
-  const { title, description, date, updatedDate, author, image, tags } = post.data;
+export function getBlogPostSchema(post: CollectionEntry<'blog'>, postUrl: string) {
+  const { title, description, date, author, image, tags } = post.data;
+  const updatedDate = (post.data as any).updatedDate; // Optional field
   
   // Calculate word count automatically
   const wordCount = post.body
@@ -112,8 +113,8 @@ function generateBlogPostSchema(post: CollectionEntry<'blog'>, postUrl: string) 
     .filter(word => word.length > 0).length;
 
   // Use post image if available, fallback to default
-  const postImage = image 
-    ? toAbsoluteUrl(image)
+  const postImage = image
+    ? toAbsoluteUrl(typeof image === 'string' ? image : image.url)
     : toAbsoluteUrl(SCHEMA_CONFIG.defaults.image);
 
   return {
@@ -150,17 +151,17 @@ export function generateSchema(context: SchemaContext) {
   
   switch (pageType) {
     case 'home':
-      return [generateHomeSchema()];
-      
+      return [getHomeSchema()];
+
     case 'blog-index':
-      return [generateBlogIndexSchema()];
-      
+      return [getBlogIndexSchema()];
+
     case 'blog-post':
       if (!context.post) {
         console.warn('Schema: blog-post type requires post data');
         return [];
       }
-      return [generateBlogPostSchema(context.post, context.url)];
+      return [getBlogPostSchema(context.post, context.url)];
       
     default:
       console.warn(`Schema: Unknown page type: ${pageType}`);

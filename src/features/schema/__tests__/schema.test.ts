@@ -8,6 +8,9 @@ import { generateSchema, detectPageType, toJsonLd } from '../engine.ts';
 import { SCHEMA_CONFIG } from '../config.ts';
 import type { SchemaContext } from '../engine.ts';
 
+// Import individual schema generators for validation tests
+import { getHomeSchema, getBlogIndexSchema, getBlogPostSchema } from '../engine.ts';
+
 // Mock CollectionEntry type for testing
 type MockCollectionEntry = {
   id: string;
@@ -174,6 +177,47 @@ describe('Schema.org Feature', () => {
       expect(SCHEMA_CONFIG.site.url).toMatch(/^https?:\/\//);
       expect(SCHEMA_CONFIG.site.language).toBe('es');
       expect(SCHEMA_CONFIG.defaults.image).toBeDefined();
+    });
+  });
+
+  describe('Schema Validation Integration', () => {
+    it('should generate schemas that pass validation rules', () => {
+      const homeSchema = getHomeSchema();
+      const blogSchema = getBlogIndexSchema();
+      const mockPost = createMockPost();
+      const postSchema = getBlogPostSchema(mockPost, 'https://cappato.dev/blog/test-post');
+
+      // Test that all schemas have required fields
+      [homeSchema, blogSchema, postSchema].forEach(schema => {
+        expect(schema['@context']).toBe('https://schema.org');
+        expect(schema['@type']).toBeDefined();
+
+        // URLs should be absolute
+        if (schema.url) {
+          expect(schema.url).toMatch(/^https?:\/\//);
+        }
+        if (schema.image) {
+          expect(schema.image).toMatch(/^https?:\/\//);
+        }
+      });
+    });
+
+    it('should generate valid JSON-LD that can be validated', () => {
+      const schema = getHomeSchema();
+      const jsonLd = toJsonLd([schema]); // Wrap in array for toJsonLd
+
+      // Should be valid JSON
+      expect(() => JSON.parse(jsonLd)).not.toThrow();
+
+      // Should have proper structure
+      const parsed = JSON.parse(jsonLd);
+      expect(Array.isArray(parsed)).toBe(true);
+
+      // Each schema should be valid
+      parsed.forEach((schema: any) => {
+        expect(schema['@context']).toBe('https://schema.org');
+        expect(schema['@type']).toBeDefined();
+      });
     });
   });
 });
