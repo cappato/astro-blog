@@ -370,6 +370,100 @@ export const AI_METADATA_CONFIG = {
   }
 } as const;
 
+/** Schema.org System Configuration */
+export const SCHEMA_CONFIG = {
+  /** Site information for schemas */
+  site: {
+    name: SITE_INFO.title,
+    url: SITE_INFO.url,
+    description: SITE_INFO.description,
+    author: SITE_INFO.author.name,
+    language: 'es',
+    type: 'WebSite'
+  },
+
+  /** Social media profiles */
+  social: {
+    github: SOCIAL_LINKS.github.username,
+    linkedin: SOCIAL_LINKS.linkedin.username,
+    twitter: SOCIAL_LINKS.twitter.username
+  },
+
+  /** Default images and assets */
+  defaults: {
+    image: '/images/og-default.webp',
+    logo: '/images/logo.webp',
+    profileImage: '/images/profile.webp',
+    fallbackImage: '/images/fallback.webp'
+  },
+
+  /** URL paths for auto-detection */
+  paths: {
+    home: '/',
+    blog: '/blog',
+    portfolio: '/portfolio',
+    projects: '/projects',
+    courses: '/courses',
+    events: '/events',
+    about: '/about'
+  },
+
+  /** Schema.org content type mappings */
+  contentTypes: {
+    website: 'WebSite',
+    blog: 'Blog',
+    'blog-post': 'BlogPosting',
+    'blog-index': 'Blog',
+    portfolio: 'CreativeWork',
+    project: 'SoftwareApplication',
+    course: 'Course',
+    event: 'Event',
+    product: 'Product',
+    organization: 'Organization',
+    person: 'Person',
+    article: 'Article'
+  },
+
+  /** Schema.org action types */
+  actionTypes: {
+    read: 'ReadAction',
+    view: 'ViewAction',
+    search: 'SearchAction',
+    download: 'DownloadAction',
+    subscribe: 'SubscribeAction'
+  },
+
+  /** Required fields for each schema type */
+  requiredFields: {
+    'WebSite': ['name', 'url', 'description'],
+    'Blog': ['name', 'url', 'description'],
+    'BlogPosting': ['headline', 'description', 'datePublished', 'author'],
+    'CreativeWork': ['name', 'description', 'author'],
+    'SoftwareApplication': ['name', 'description', 'applicationCategory'],
+    'Course': ['name', 'description', 'provider'],
+    'Event': ['name', 'description', 'startDate'],
+    'Product': ['name', 'description', 'brand'],
+    'Organization': ['name', 'url'],
+    'Person': ['name'],
+    'Article': ['headline', 'description', 'datePublished', 'author']
+  },
+
+  /** Auto-detection patterns */
+  autoDetection: {
+    patterns: {
+      'home': ['^/$', '^https?://[^/]+/$'],
+      'blog-post': ['/blog/', '/posts/'],
+      'blog-index': ['/blog$', '/posts$'],
+      'portfolio': ['/portfolio/', '/work/'],
+      'project': ['/projects/', '/project/'],
+      'course': ['/courses/', '/course/'],
+      'event': ['/events/', '/event/'],
+      'about': ['/about', '/bio', '/profile']
+    },
+    priority: ['blog-post', 'home', 'portfolio', 'project', 'course', 'event', 'blog-index', 'about', 'website']
+  }
+} as const;
+
 /** Configuración de performance */
 export const PERFORMANCE_CONFIG = {
   /** Configuración de imágenes */

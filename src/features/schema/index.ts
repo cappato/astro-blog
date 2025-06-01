@@ -26,20 +26,67 @@
 export { default as AutoSchema } from './AutoSchema.astro';
 
 // Engine exports for advanced usage
-export { generateSchema, toJsonLd, detectPageType } from './engine.ts';
+export {
+  generateSchema,
+  generateValidatedSchema,
+  toJsonLd,
+  detectPageType,
+  validateSchema,
+  getHomeSchema,
+  getBlogIndexSchema,
+  getBlogPostSchema,
+  getPortfolioSchema,
+  getProjectSchema,
+  getCourseSchema,
+  getEventSchema,
+  getProductSchema,
+  getOrganizationSchema,
+  getPersonSchema,
+  getArticleSchema
+} from './engine.ts';
 export type { SchemaContext } from './engine.ts';
 
 // Configuration exports for customization
-export { SCHEMA_CONFIG, SCHEMA_MAPPINGS } from './config.ts';
+export { SCHEMA_CONFIG, DEFAULT_SCHEMA_CONFIG, SCHEMA_MAPPINGS } from './config.ts';
 export type { SchemaConfig, PageType } from './config.ts';
 
+// Type exports for TypeScript users
+export type * from './types.ts';
+
+// Utility exports for advanced usage
+export * from './utils.ts';
+
 /**
- * Feature metadata
+ * Enhanced feature metadata
  */
 export const SCHEMA_FEATURE = {
-  name: 'Schema.org Auto-Generator',
-  version: '1.0.0',
-  description: 'Automatic Schema.org structured data generation for Astro',
+  name: 'Schema.org Auto-Generator Enhanced',
+  version: '2.0.0',
+  description: 'Enhanced automatic Schema.org structured data generation with expanded content types, intelligent auto-detection, and validation',
   author: 'Matías Cappato',
-  reusable: true
+  reusable: true,
+  plugAndPlay: true,
+  selfContained: true,
+  features: [
+    'Intelligent auto-detection',
+    'Expanded content types (12+ types)',
+    'Automatic validation',
+    'Self-contained configuration',
+    'Error handling with fallbacks',
+    'TypeScript type safety',
+    'Plug & play portability',
+    'Utility functions included'
+  ],
+  supportedTypes: [
+    'WebSite', 'Blog', 'BlogPosting', 'CreativeWork',
+    'SoftwareApplication', 'Course', 'Event', 'Product',
+    'Organization', 'Person', 'Article'
+  ],
+  exports: {
+    components: ['AutoSchema'],
+    functions: ['generateSchema', 'detectPageType', 'validateSchema'],
+    types: ['PersonSchema', 'WebSiteSchema', 'BlogPostingSchema'],
+    utilities: ['ensureAbsoluteUrl', 'validateSchemaFields', 'formatDateToISO'],
+    configuration: ['SCHEMA_CONFIG', 'DEFAULT_SCHEMA_CONFIG']
+  }
 } as const;

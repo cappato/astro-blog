@@ -60,11 +60,21 @@ describe('Schema.org Feature', () => {
 
     it('should detect blog post page', () => {
       const mockPost = createMockPost();
-      const context: SchemaContext = { 
+      const context: SchemaContext = {
         url: 'https://cappato.dev/blog/test-post',
         post: mockPost
       };
       expect(detectPageType(context)).toBe('blog-post');
+    });
+
+    it('should fallback to website for unknown URLs', () => {
+      const context: SchemaContext = { url: 'https://cappato.dev/noticias/' };
+      expect(detectPageType(context)).toBe('website');
+    });
+
+    it('should fallback to website for unrecognized paths', () => {
+      const context: SchemaContext = { url: 'https://cappato.dev/productos/categoria/' };
+      expect(detectPageType(context)).toBe('website');
     });
   });
 
