@@ -1,5 +1,6 @@
 import { getCollection } from 'astro:content';
-import { generateRSSFeed, shouldIncludePost } from '../utils/rss.ts';
+import { generateRSSFeed } from '../utils/rss.ts';
+import { shouldIncludePost } from '../utils/shared/post-filters.ts';
 
 export async function GET() {
   const blogEntries = await getCollection('blog', shouldIncludePost);

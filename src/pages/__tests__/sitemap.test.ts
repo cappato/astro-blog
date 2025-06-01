@@ -22,7 +22,8 @@ type CollectionEntry<T extends string> = {
 };
 
 // Importar las utilidades que podemos testear
-import { generateSitemap, shouldIncludePost } from '../../utils/sitemap.ts';
+import { generateSitemap } from '../../utils/sitemap.ts';
+import { shouldIncludePost } from '../../utils/shared/post-filters.ts';
 
 // Constantes de test
 const SITEMAP_CONSTANTS = {
@@ -130,7 +131,10 @@ describe('generateSitemap function', () => {
       const mockPost = createMockPost({
         slug: 'my-test-post',
         data: {
+          title: 'Test Post with Custom Slug',
+          description: 'Test description',
           date: testDate,
+          author: 'Test Author',
           slug: 'custom-slug'
         }
       });
@@ -147,8 +151,11 @@ describe('generateSitemap function', () => {
       const mockPost = createMockPost({
         slug: 'fallback-slug',
         data: {
-          slug: undefined,
-          date: new Date('2023-06-15')
+          title: 'Test Post with Fallback Slug',
+          description: 'Test description',
+          date: new Date('2023-06-15'),
+          author: 'Test Author',
+          slug: undefined
         }
       });
       const xmlContent = generateSitemap([mockPost]);
@@ -158,9 +165,36 @@ describe('generateSitemap function', () => {
 
     it('should handle multiple posts correctly', () => {
       const mockPosts = [
-        createMockPost({ slug: 'post-1', data: { slug: 'first-post', date: new Date('2023-01-01') } }),
-        createMockPost({ slug: 'post-2', data: { slug: 'second-post', date: new Date('2023-02-01') } }),
-        createMockPost({ slug: 'post-3', data: { slug: 'third-post', date: new Date('2023-03-01') } })
+        createMockPost({
+          slug: 'post-1',
+          data: {
+            title: 'First Post',
+            description: 'First post description',
+            slug: 'first-post',
+            date: new Date('2023-01-01'),
+            author: 'Test Author'
+          }
+        }),
+        createMockPost({
+          slug: 'post-2',
+          data: {
+            title: 'Second Post',
+            description: 'Second post description',
+            slug: 'second-post',
+            date: new Date('2023-02-01'),
+            author: 'Test Author'
+          }
+        }),
+        createMockPost({
+          slug: 'post-3',
+          data: {
+            title: 'Third Post',
+            description: 'Third post description',
+            slug: 'third-post',
+            date: new Date('2023-03-01'),
+            author: 'Test Author'
+          }
+        })
       ];
       const xmlContent = generateSitemap(mockPosts);
 
@@ -178,7 +212,12 @@ describe('generateSitemap function', () => {
 
       for (const testCase of testCases) {
         const mockPost = createMockPost({
-          data: { date: testCase.input }
+          data: {
+            title: 'Test Post with Date',
+            description: 'Test description',
+            date: testCase.input,
+            author: 'Test Author'
+          }
         });
         const xmlContent = generateSitemap([mockPost]);
 
@@ -200,8 +239,11 @@ describe('generateSitemap function', () => {
     it('should handle posts with missing optional fields', () => {
       const mockPost = createMockPost({
         data: {
+          title: 'Test Post with Missing Optional Fields',
+          description: 'Test description',
           slug: undefined, // Test fallback to post.slug
-          date: new Date('2023-06-15')
+          date: new Date('2023-06-15'),
+          author: 'Test Author'
         }
       });
       const xmlContent = generateSitemap([mockPost]);

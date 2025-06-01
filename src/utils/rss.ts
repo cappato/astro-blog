@@ -5,6 +5,7 @@
 
 import type { CollectionEntry } from 'astro:content';
 import { CONFIG } from '../config/index.ts';
+import { shouldIncludePost } from './shared/post-filters.ts';
 
 /**
  * RSS Feed configuration constants
@@ -287,13 +288,5 @@ function escapeXML(text: string | undefined): string {
     .replace(/[\x00-\x08\x0B\x0C\x0E-\x1F\x7F]/g, ''); // Remove control characters
 }
 
-/**
- * Filters posts based on environment (production vs development)
- * Reuses the same logic as sitemap generation
- * @param post Blog post to evaluate
- * @returns true if post should be included in RSS feed
- */
-export function shouldIncludePost(post: CollectionEntry<'blog'>): boolean {
-  // In production, exclude drafts. In development, include all posts
-  return import.meta.env.PROD ? !post.data.draft : true;
-}
+// shouldIncludePost is now imported from shared/post-filters.ts
+// This eliminates duplication between RSS and sitemap systems

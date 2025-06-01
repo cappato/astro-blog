@@ -22,7 +22,8 @@ type CollectionEntry<T extends string> = {
 };
 
 // Importar las utilidades que podemos testear
-import { generateRSSFeed, shouldIncludePost } from '../rss.ts';
+import { generateRSSFeed } from '../rss.ts';
+import { shouldIncludePost } from '../shared/post-filters.ts';
 
 // Constantes de test
 const RSS_CONSTANTS = {
