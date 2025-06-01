@@ -1,104 +1,23 @@
-# Meta Tags Feature
+# Meta Tags
 
-## 🚀 **Resumen Ejecutivo**
-Sistema unificado de gestión de meta tags que elimina duplicación entre componentes SEO, centraliza configuración de Open Graph y Twitter Cards, y proporciona una interfaz consistente para todos los tipos de páginas. Reemplaza la duplicación entre SEOHead y SocialHead con un componente único y robusto.
+## Purpose
+Unified meta tags management system that eliminates duplication between SEO components, centralizes Open Graph and Twitter Cards configuration, and provides consistent interface for all page types.
 
-**Arquitectura:** Unified Component + Centralized Configuration + Legacy Compatibility
+## Architecture
+Single unified component that replaces SEOHead and SocialHead duplication with centralized META_TAGS_CONFIG.
 
-```mermaid
-flowchart LR
-    A[MetaTags.astro] --> B[Basic SEO Meta]
-    A --> C[Open Graph Meta]
-    A --> D[Twitter Cards]
-    A --> E[Article Meta]
-    
-    F[META_TAGS_CONFIG] --> A
-    F --> G[Image Formats]
-    F --> H[Default Values]
-    F --> I[Social Config]
-    
-    J[MainLayout] --> A
-    K[PostLayout] --> A
-    L[BaseLayout] --> A
-    M[Blog Pages] --> A
-    
-    N[Legacy SEO_DEFAULTS] --> F
-    O[Backward Compatibility] --> N
-```
+## Files
+- `src/components/seo/MetaTags.astro` - Unified meta tags component
+- `src/config/site.ts` - META_TAGS_CONFIG centralized configuration
+- `src/layouts/MainLayout.astro` - Home page integration
+- `src/layouts/PostLayout.astro` - Blog post integration
+- `src/components/layout/BaseLayout.astro` - Generic layout integration
+- `src/pages/blog/index.astro` - Blog index integration
+- `src/pages/blog/tag/[tag].astro` - Tag pages integration
 
-## 🧠 **Core Logic**
+## Usage
 
-### **1. Unified Meta Tags Generation**
-```typescript
-// Single component handles all meta tag types
-interface Props {
-  title: string;
-  description: string;
-  image?: { url: string; alt: string; width?: number; height?: number; };
-  type?: 'website' | 'article';
-  keywords?: string[];
-  publishedDate?: Date;
-  modifiedDate?: Date;
-  author?: string;
-  canonicalUrl?: string;
-  twitterUsername?: string;
-  postId?: string;
-}
-
-// Generates all meta tags in one place
-const canonical = canonicalUrl 
-  ? `${siteUrl}${canonicalUrl}` 
-  : Astro.url.href.replace('matiascappato.com', 'cappato.dev');
-
-const imageConfig = image || defaultImageConfig;
-const imageUrl = imageConfig.url.startsWith('http') 
-  ? imageConfig.url 
-  : new URL(imageConfig.url, siteUrl).toString();
-```
-
-### **2. Centralized Configuration System**
-```typescript
-// META_TAGS_CONFIG in src/config/site.ts
-export const META_TAGS_CONFIG = {
-  defaultImage: '/images/og-default.webp',
-  defaultImageAlt: 'Matías Cappato - Desarrollador Web',
-  defaultKeywords: ['Matías Cappato', 'Desarrollador Web', 'Full Stack', ...],
-  
-  twitter: {
-    card: 'summary_large_image',
-    creator: SOCIAL_LINKS.twitter.username
-  },
-  
-  openGraph: {
-    type: 'website',
-    siteName: SITE_INFO.title,
-    locale: 'es_ES'
-  },
-  
-  imageFormats: {
-    webp: { extension: '.webp', mimeType: 'image/webp' },
-    jpeg: { extension: '-og-jpg.jpeg', mimeType: 'image/jpeg' }
-  }
-} as const;
-```
-
-### **3. Multiple Image Format Support**
-```typescript
-// Automatic WebP + JPEG fallback generation
-const jpegImageUrl = imageUrl.includes('-og.webp') 
-  ? imageUrl.replace('-og.webp', META_TAGS_CONFIG.imageFormats.jpeg.extension)
-  : imageUrl;
-
-// Both formats in Open Graph
-<meta property="og:image" content={imageUrl} />
-<meta property="og:image:type" content="image/webp" />
-<meta property="og:image" content={jpegImageUrl} />
-<meta property="og:image:type" content="image/jpeg" />
-```
-
-## 📌 **Usage**
-
-### **Home Page (MainLayout.astro)**
+### Home Page
 ```astro
 <MetaTags
   title={title}
@@ -111,7 +30,7 @@ const jpegImageUrl = imageUrl.includes('-og.webp')
 />
 ```
 
-### **Blog Posts (PostLayout.astro)**
+### Blog Posts
 ```astro
 <MetaTags
   title={title}
@@ -125,7 +44,7 @@ const jpegImageUrl = imageUrl.includes('-og.webp')
 />
 ```
 
-### **Blog Index (blog/index.astro)**
+### Blog Index
 ```astro
 <MetaTags
   title={title}
@@ -136,7 +55,7 @@ const jpegImageUrl = imageUrl.includes('-og.webp')
 />
 ```
 
-### **Tag Pages (blog/tag/[tag].astro)**
+### Tag Pages
 ```astro
 <MetaTags
   title={title}
@@ -147,17 +66,15 @@ const jpegImageUrl = imageUrl.includes('-og.webp')
 />
 ```
 
-## ⚙️ **Configuración**
+## Configuration
 
-### **Meta Tags Configuration** (`src/config/site.ts`)
+### META_TAGS_CONFIG
 ```typescript
 export const META_TAGS_CONFIG = {
-  // Default fallbacks
   defaultImage: '/images/og-default.webp',
   defaultImageAlt: 'Matías Cappato - Desarrollador Web',
-  defaultKeywords: ['Matías Cappato', 'Desarrollador Web', ...],
+  defaultKeywords: ['Matías Cappato', 'Desarrollador Web', 'Full Stack', ...],
   
-  // Social media configuration
   twitter: {
     card: 'summary_large_image',
     creator: '@matiascappato'
@@ -169,17 +86,32 @@ export const META_TAGS_CONFIG = {
     locale: 'es_ES'
   },
   
-  // Image format handling
   imageFormats: {
     webp: { extension: '.webp', mimeType: 'image/webp' },
     jpeg: { extension: '-og-jpg.jpeg', mimeType: 'image/jpeg' }
   }
-};
+} as const;
 ```
 
-### **Legacy Compatibility**
+### Props Interface
 ```typescript
-// Maintains backward compatibility
+interface Props {
+  title: string;
+  description: string;
+  image?: { url: string; alt: string; width?: number; height?: number; };
+  type?: 'website' | 'article';
+  keywords?: string[];
+  publishedDate?: Date;
+  modifiedDate?: Date;
+  author?: string;
+  canonicalUrl?: string;
+  twitterUsername?: string;
+  postId?: string;
+}
+```
+
+### Legacy Compatibility
+```typescript
 export const SEO_DEFAULTS = {
   defaultImage: META_TAGS_CONFIG.defaultImage,
   defaultImageAlt: META_TAGS_CONFIG.defaultImageAlt,
@@ -190,30 +122,61 @@ export const SEO_DEFAULTS = {
 } as const;
 ```
 
-## 🛠️ **Extensión**
+## Generated Output
 
-### **Adding New Meta Tag Types**
-1. Extend the `Props` interface in `MetaTags.astro`
-2. Add new meta tag generation logic
-3. Update configuration in `META_TAGS_CONFIG` if needed
+### Basic SEO Meta Tags
+```html
+<title>Page Title</title>
+<meta name="description" content="Page description" />
+<meta name="keywords" content="keyword1, keyword2, keyword3" />
+<meta name="author" content="Matías Cappato" />
+<link rel="canonical" href="https://cappato.dev/page" />
+```
 
-### **Custom Image Formats**
-1. Add new format to `META_TAGS_CONFIG.imageFormats`
-2. Update image URL generation logic
-3. Add corresponding meta tags with proper MIME types
+### Open Graph Meta Tags
+```html
+<meta property="og:type" content="website" />
+<meta property="og:url" content="https://cappato.dev/page" />
+<meta property="og:title" content="Page Title" />
+<meta property="og:description" content="Page description" />
+<meta property="og:site_name" content="Matías Cappato" />
+<meta property="og:locale" content="es_ES" />
+<meta property="og:image" content="https://cappato.dev/images/og-default.webp" />
+<meta property="og:image:type" content="image/webp" />
+<meta property="og:image:alt" content="Matías Cappato - Desarrollador Web" />
+<meta property="og:image" content="https://cappato.dev/images/og-default-og-jpg.jpeg" />
+<meta property="og:image:type" content="image/jpeg" />
+```
 
-### **Archivos Clave**
-- `src/components/seo/MetaTags.astro` - Unified meta tags component
-- `src/config/site.ts` - Centralized configuration with META_TAGS_CONFIG
-- `src/layouts/MainLayout.astro` - Home page integration
-- `src/layouts/PostLayout.astro` - Blog post integration
-- `src/components/layout/BaseLayout.astro` - Generic layout integration
-- `src/pages/blog/index.astro` - Blog index integration
-- `src/pages/blog/tag/[tag].astro` - Tag pages integration
+### Twitter Cards
+```html
+<meta name="twitter:card" content="summary_large_image" />
+<meta name="twitter:url" content="https://cappato.dev/page" />
+<meta name="twitter:title" content="Page Title" />
+<meta name="twitter:description" content="Page description" />
+<meta name="twitter:image" content="https://cappato.dev/images/og-default.webp" />
+<meta name="twitter:image:alt" content="Matías Cappato - Desarrollador Web" />
+<meta name="twitter:creator" content="@matiascappato" />
+```
 
-## 🔒 **Mejoras de Seguridad y Validación (v2.0.0)**
+### Article-specific Meta Tags
+```html
+<meta property="article:published_time" content="2024-01-01T00:00:00.000Z" />
+<meta property="article:modified_time" content="2024-01-01T00:00:00.000Z" />
+<meta property="article:author" content="Matías Cappato" />
+```
 
-### **URL Canonicalization**
+## Features
+
+### Multiple Image Format Support
+```typescript
+// Automatic WebP + JPEG fallback generation
+const jpegImageUrl = imageUrl.includes('-og.webp') 
+  ? imageUrl.replace('-og.webp', META_TAGS_CONFIG.imageFormats.jpeg.extension)
+  : imageUrl;
+```
+
+### URL Canonicalization
 ```typescript
 // Automatic domain correction and canonical URL generation
 const canonical = canonicalUrl 
@@ -221,7 +184,7 @@ const canonical = canonicalUrl
   : Astro.url.href.replace('matiascappato.com', 'cappato.dev');
 ```
 
-### **Image URL Validation**
+### Image URL Validation
 ```typescript
 // Secure image URL handling
 const imageUrl = imageConfig.url.startsWith('http') 
@@ -229,59 +192,28 @@ const imageUrl = imageConfig.url.startsWith('http')
   : new URL(imageConfig.url, siteUrl).toString();
 ```
 
-### **Date Validation**
-```typescript
-// Safe date handling with validation
-const pubDate = publishedDate instanceof Date ? publishedDate : undefined;
-const modDate = modifiedDate instanceof Date ? modifiedDate : undefined;
+## Extension
 
-{pubDate && <meta property="article:published_time" content={pubDate.toISOString()} />}
-{modDate && <meta property="article:modified_time" content={modDate.toISOString()} />}
-```
+### Adding New Meta Tag Types
+1. Extend the `Props` interface in `MetaTags.astro`
+2. Add new meta tag generation logic
+3. Update configuration in `META_TAGS_CONFIG` if needed
 
-## 🤖 **AI Context Block**
+### Custom Image Formats
+1. Add new format to `META_TAGS_CONFIG.imageFormats`
+2. Update image URL generation logic
+3. Add corresponding meta tags with proper MIME types
 
+## AI Context
 ```yaml
 feature_type: "meta_tags"
+purpose: "seo_social_media_optimization"
 input_sources: ["page_props", "site_config", "image_assets"]
 output_formats: ["html_meta_tags", "open_graph", "twitter_cards"]
-validation_method: "vitest_tests"
-error_patterns: ["missing_required_props", "invalid_image_urls", "malformed_dates"]
-dependencies: ["site_config", "social_links", "image_optimization"]
-performance_impact: "minimal"
-seo_compliance: "open_graph_twitter_cards"
-test_coverage: "219_total_tests"
+architecture: "unified_component_centralized_config"
+eliminated_duplication: "SEOHead_SocialHead_merge"
 security_features: ["url_canonicalization", "image_url_validation", "date_validation"]
-refactor_version: "v2.0.0"
-eliminated_duplication: ["SEOHead_SocialHead_merge"]
-centralized_config: ["META_TAGS_CONFIG"]
-backward_compatibility: ["SEO_DEFAULTS_legacy"]
+backward_compatibility: "SEO_DEFAULTS_legacy"
+dependencies: ["site_config", "social_links", "image_optimization"]
+key_files: ["MetaTags.astro", "site.ts", "MainLayout.astro", "PostLayout.astro"]
 ```
-
-## ❓ **FAQ**
-
-**Q: ¿Por qué unificar SEOHead y SocialHead en un solo componente?**  
-A: Eliminaba duplicación masiva de Open Graph y Twitter Cards, centralizaba configuración y simplificaba mantenimiento.
-
-**Q: ¿Se mantiene compatibilidad con código existente?**  
-A: Sí. SEO_DEFAULTS sigue exportándose para compatibilidad, pero apunta a META_TAGS_CONFIG.
-
-**Q: ¿Cómo maneja múltiples formatos de imagen?**  
-A: Genera automáticamente WebP (primario) y JPEG (fallback) para máxima compatibilidad social.
-
-**Q: ¿Qué pasa si no se proporciona una imagen?**  
-A: Usa automáticamente defaultImage y defaultImageAlt de META_TAGS_CONFIG.
-
----
-
-**Commits Relacionados:**
-- `[PENDING]` - refactor: unified Meta Tags System v2.0.0
-
-**Status:** ✅ Production Ready (Refactored v2.0.0)  
-**Test Coverage:** 100% (219/219 total tests passing)  
-**Performance Impact:** Minimal (unified component reduces duplication)  
-**Code Quality:** Enterprise-grade with centralized configuration  
-**Security:** URL canonicalization + Image validation + Date validation  
-**Backward Compatibility:** ✅ SEO_DEFAULTS legacy export maintained  
-**Duplication Eliminated:** ✅ SEOHead + SocialHead merged into MetaTags  
-**Audit Ready:** ✅ Preparado para auditoría feroz
