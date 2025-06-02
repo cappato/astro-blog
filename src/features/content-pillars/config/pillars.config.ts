@@ -215,12 +215,24 @@ export function getPillarById(id: string): ContentPillar | undefined {
  * Utilidad para detectar pilar de un post basado en sus tags
  */
 export function detectPostPillar(tags: string[]): string | undefined {
-  for (const tag of tags) {
-    const pillarId = TAG_TO_PILLAR_MAPPING[tag];
-    if (pillarId) {
-      return pillarId;
+  // Orden de prioridad para pilares (más específico primero)
+  const pillarPriority = [
+    'typescript-architecture',  // Más específico
+    'automation-devops',
+    'seo-optimization',
+    'astro-performance'         // Más general
+  ];
+
+  // Buscar por orden de prioridad
+  for (const priorityPillar of pillarPriority) {
+    for (const tag of tags) {
+      const pillarId = TAG_TO_PILLAR_MAPPING[tag];
+      if (pillarId === priorityPillar) {
+        return pillarId;
+      }
     }
   }
+
   return undefined;
 }
 
