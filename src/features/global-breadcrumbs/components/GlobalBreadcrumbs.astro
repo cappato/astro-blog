@@ -1,189 +1,71 @@
 ---
 /**
- * Global Breadcrumbs Feature - Global Breadcrumbs Component
- * 
- * Componente de breadcrumbs modular y global para todo el sitio
- * Auto-detecta la ruta actual y genera breadcrumbs apropiados
+ * Global Breadcrumbs - Ultra Simplified
  */
 
-import type { BreadcrumbItem, BreadcrumbConfig } from '../config/breadcrumbs.config';
-import { 
-  generateBreadcrumbsFromConfig, 
-  DEFAULT_BREADCRUMB_CONFIG 
-} from '../config/breadcrumbs.config';
+const pathname = Astro.url.pathname;
+const breadcrumbs = [];
 
-interface Props {
-  customTitle?: string;
-  customBreadcrumbs?: BreadcrumbItem[];
-  config?: Partial<BreadcrumbConfig>;
-  className?: string;
-  variant?: 'default' | 'minimal' | 'compact';
+// Home
+if (pathname !== '/') {
+  breadcrumbs.push({ label: 'Inicio', href: '/', icon: '🏠' });
 }
 
-const {
-  customTitle,
-  customBreadcrumbs,
-  config: customConfig,
-  className = '',
-  variant = 'default'
-} = Astro.props;
-
-// Configuración final
-const config = { ...DEFAULT_BREADCRUMB_CONFIG, ...customConfig };
-
-// Generar breadcrumbs de forma simple y directa
-const breadcrumbs = customBreadcrumbs || generateSimpleBreadcrumbs(Astro.url.pathname, customTitle);
-
-function generateSimpleBreadcrumbs(pathname: string, customTitle?: string) {
-  const breadcrumbs = [];
-
-  // Siempre agregar Home si no estamos en home
-  if (pathname !== '/') {
-    breadcrumbs.push({
-      label: 'Inicio',
-      href: '/',
-      icon: '🏠'
-    });
+// Blog routes
+if (pathname.startsWith('/blog')) {
+  if (pathname !== '/blog') {
+    breadcrumbs.push({ label: 'Blog', href: '/blog', icon: '📝' });
   }
 
-  // Rutas específicas
-  if (pathname.startsWith('/blog')) {
-    if (pathname !== '/blog') {
-      breadcrumbs.push({
-        label: 'Blog',
-        href: '/blog',
-        icon: '📝'
-      });
-    }
-
-    if (pathname === '/blog/pillars') {
-      breadcrumbs.push({
-        label: 'Pilares de Contenido',
-        current: true,
-        icon: '📚'
-      });
-    } else if (pathname.startsWith('/blog/tag/')) {
-      const tagName = pathname.split('/').pop();
-      breadcrumbs.push({
-        label: `#${tagName}`,
-        current: true,
-        icon: '🏷️'
-      });
-    } else if (pathname.startsWith('/blog/') && pathname !== '/blog') {
-      breadcrumbs.push({
-        label: customTitle || 'Artículo',
-        current: true,
-        icon: '📄'
-      });
-    } else if (pathname === '/blog') {
-      breadcrumbs.push({
-        label: 'Blog',
-        current: true,
-        icon: '📝'
-      });
-    }
+  if (pathname === '/blog/pillars') {
+    breadcrumbs.push({ label: 'Pilares de Contenido', current: true, icon: '📚' });
+  } else if (pathname.startsWith('/blog/tag/')) {
+    const tagName = pathname.split('/').pop();
+    breadcrumbs.push({ label: `#${tagName}`, current: true, icon: '🏷️' });
+  } else if (pathname.startsWith('/blog/') && pathname !== '/blog') {
+    breadcrumbs.push({ label: 'Artículo', current: true, icon: '📄' });
+  } else if (pathname === '/blog') {
+    breadcrumbs.push({ label: 'Blog', current: true, icon: '📝' });
   }
-
-  // Si estamos en home, mostrar solo home
-  if (pathname === '/') {
-    breadcrumbs.push({
-      label: 'Inicio',
-      current: true,
-      icon: '🏠'
-    });
-  }
-
-  return breadcrumbs;
 }
 
-// Generar clases CSS
-const containerClasses = [
-  'global-breadcrumbs',
-  `global-breadcrumbs--${variant}`,
-  `global-breadcrumbs--${config.separator}`,
-  className
-].filter(Boolean).join(' ');
+// Home page
+if (pathname === '/') {
+  breadcrumbs.push({ label: 'Inicio', current: true, icon: '🏠' });
+}
 
-// Generar structured data para SEO
-const structuredData = {
-  "@context": "https://schema.org",
-  "@type": "BreadcrumbList",
-  "itemListElement": breadcrumbs
-    .filter(item => item.href || item.current)
-    .map((item, index) => ({
-      "@type": "ListItem",
-      "position": index + 1,
-      "name": item.label,
-      ...(item.href && { "item": `${Astro.site?.href || 'https://cappato.dev'}${item.href}` })
-    }))
-};
+
 ---
 
+<!-- Simple Breadcrumbs -->
 {breadcrumbs.length > 0 && (
-  <>
-    <!-- Structured Data para SEO -->
-    <script type="application/ld+json" set:html={JSON.stringify(structuredData)} is:inline />
+  <nav class="global-breadcrumbs" aria-label="Breadcrumb navigation">
+    <ol class="global-breadcrumbs__list">
+      {breadcrumbs.map((item, index) => (
+        <li class="global-breadcrumbs__item">
+          {item.current ? (
+            <span class="global-breadcrumbs__current" aria-current="page">
+              <span class="global-breadcrumbs__icon">{item.icon}</span>
+              <span class="global-breadcrumbs__text">{item.label}</span>
+            </span>
+          ) : (
+            <a href={item.href} class="global-breadcrumbs__link">
+              <span class="global-breadcrumbs__icon">{item.icon}</span>
+              <span class="global-breadcrumbs__text">{item.label}</span>
+            </a>
+          )}
 
-    <!-- Breadcrumbs Navigation -->
-    <nav 
-      class={containerClasses}
-      aria-label="Breadcrumb navigation"
-      role="navigation"
-    >
-      <ol class="global-breadcrumbs__list">
-        {breadcrumbs.map((item, index) => (
-          <li class="global-breadcrumbs__item">
-            {item.current ? (
-              <span 
-                class="global-breadcrumbs__current"
-                aria-current="page"
-              >
-                {config.showIcons && item.icon && (
-                  <span class="global-breadcrumbs__icon" aria-hidden="true">
-                    {item.icon}
-                  </span>
-                )}
-                <span class="global-breadcrumbs__text">{item.label}</span>
-              </span>
-            ) : item.href ? (
-              <a 
-                href={item.href}
-                class="global-breadcrumbs__link"
-              >
-                {config.showIcons && item.icon && (
-                  <span class="global-breadcrumbs__icon" aria-hidden="true">
-                    {item.icon}
-                  </span>
-                )}
-                <span class="global-breadcrumbs__text">{item.label}</span>
-              </a>
-            ) : (
-              <span class="global-breadcrumbs__ellipsis">
-                {item.label}
-              </span>
-            )}
-            
-            {index < breadcrumbs.length - 1 && (
-              <span class="global-breadcrumbs__separator" aria-hidden="true">
-                {config.separator === 'arrow' && '→'}
-                {config.separator === 'slash' && '/'}
-                {config.separator === 'chevron' && (
-                  <svg 
-                    width="16" 
-                    height="16" 
-                    viewBox="0 0 16 16"
-                    fill="currentColor"
-                  >
-                    <path d="M6 4l4 4-4 4" stroke="currentColor" stroke-width="2" fill="none"/>
-                  </svg>
-                )}
-              </span>
-            )}
-          </li>
-        ))}
-      </ol>
-    </nav>
-  </>
+          {index < breadcrumbs.length - 1 && (
+            <span class="global-breadcrumbs__separator">
+              <svg width="16" height="16" viewBox="0 0 16 16" fill="currentColor">
+                <path d="M6 4l4 4-4 4" stroke="currentColor" stroke-width="2" fill="none"/>
+              </svg>
+            </span>
+          )}
+        </li>
+      ))}
+    </ol>
+  </nav>
 )}
 
 <style>
