@@ -276,7 +276,7 @@ export function validatePillar(pillar: Partial<ContentPillar>): {
   if (!pillar.id) errors.push('ID is required');
   if (!pillar.title) errors.push('Title is required');
   if (!pillar.description) errors.push('Description is required');
-  if (!pillar.color?.primary) errors.push('Primary color is required');
+  if (!pillar.image?.src) errors.push('Image source is required');
   if (!pillar.icon) errors.push('Icon is required');
   if (!pillar.emoji) errors.push('Emoji is required');
 
@@ -285,8 +285,8 @@ export function validatePillar(pillar: Partial<ContentPillar>): {
     errors.push('ID must contain only lowercase letters, numbers, and hyphens');
   }
 
-  if (pillar.color?.primary && !/^#[0-9A-Fa-f]{6}$/.test(pillar.color.primary)) {
-    errors.push('Primary color must be a valid hex color');
+  if (pillar.image?.src && !pillar.image.src.startsWith('/') && !pillar.image.src.startsWith('http')) {
+    errors.push('Image source must be a valid path or URL');
   }
 
   // Warnings

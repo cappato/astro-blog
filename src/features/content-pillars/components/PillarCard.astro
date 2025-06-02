@@ -2,7 +2,7 @@
 /**
  * Content Pillars Feature - Pillar Card Component
  *
- * Tarjeta individual para mostrar un pilar de contenido usando el componente Card estándar
+ * Tarjeta individual para mostrar un pilar de contenido con diseño limpio y profesional
  */
 
 import type { PillarCardProps } from '../types/pillars.types';
@@ -24,75 +24,71 @@ const {
 const pillarUrl = generatePillarUrl(pillar.id);
 ---
 
-<!-- Pillar Card usando componente Card estándar -->
-<Card variant="default" className={className}>
+<!-- Pillar Card con diseño limpio y profesional -->
+<Card variant="default" className={`group hover:shadow-lg transition-all duration-300 ${className}`}>
   <a
     href={pillarUrl}
-    class="block h-full p-0 no-underline text-inherit hover:text-inherit"
+    class="block h-full no-underline text-inherit hover:text-inherit"
     aria-label={`Explorar artículos sobre ${pillar.title}`}
   >
-    <div class="flex flex-col h-full p-6">
-      <!-- Header -->
-      <div class="flex items-start gap-4 mb-4">
-        {showIcon && (
-          <div
-            class="flex-shrink-0 w-12 h-12 rounded-xl flex items-center justify-center text-2xl"
-            style={`background-color: ${pillar.color.background}; color: ${pillar.color.primary};`}
-          >
-            {pillar.emoji}
-          </div>
+    <!-- Imagen del pilar -->
+    <div class="relative overflow-hidden rounded-t-lg">
+      <img
+        src={pillar.image.src}
+        alt={pillar.image.alt}
+        class="w-full h-48 object-cover transition-transform duration-300 group-hover:scale-105"
+        loading="lazy"
+      />
+      <!-- Overlay con emoji -->
+      <div class="absolute top-4 right-4 w-12 h-12 bg-white/90 dark:bg-gray-800/90 rounded-full flex items-center justify-center text-2xl backdrop-blur-sm">
+        {pillar.emoji}
+      </div>
+    </div>
+
+    <!-- Contenido de la card -->
+    <div class="p-6">
+      <!-- Título centrado -->
+      <div class="text-center mb-4">
+        <h3 class="text-xl font-bold text-foreground mb-2 leading-tight">
+          {pillar.title}
+        </h3>
+
+        {showPostCount && postCount > 0 && (
+          <span class="inline-flex items-center px-3 py-1 rounded-full text-sm font-medium bg-primary/10 text-primary">
+            {postCount} {postCount === 1 ? 'artículo' : 'artículos'}
+          </span>
         )}
-
-        <div class="flex-1 min-w-0">
-          <h3 class="text-xl font-bold text-foreground mb-1 leading-tight line-clamp-2">
-            {pillar.title}
-          </h3>
-
-          {showPostCount && postCount > 0 && (
-            <span
-              class="text-sm font-medium"
-              style={`color: ${pillar.color.primary};`}
-            >
-              {postCount} {postCount === 1 ? 'artículo' : 'artículos'}
-            </span>
-          )}
-        </div>
       </div>
 
-      <!-- Content -->
+      <!-- Descripción -->
       {showDescription && variant !== 'compact' && (
-        <div class="flex-1 mb-4">
-          <p class="text-muted leading-relaxed text-sm line-clamp-3">
+        <div class="mb-6">
+          <p class="text-muted leading-relaxed text-sm text-center line-clamp-3">
             {pillar.description}
           </p>
         </div>
       )}
 
-      <!-- Footer -->
-      <div class="mt-auto">
-        {variant === 'featured' && pillar.tags && pillar.tags.length > 0 && (
-          <div class="flex flex-wrap gap-2 mb-4">
-            {pillar.tags.slice(0, 3).map(tag => (
-              <span
-                class="px-2 py-1 rounded-md text-xs font-medium"
-                style={`background-color: ${pillar.color.background}; color: ${pillar.color.primary};`}
-              >
-                #{tag}
-              </span>
-            ))}
-            {pillar.tags.length > 3 && (
-              <span class="px-2 py-1 rounded-md text-xs font-medium bg-card text-muted">
-                +{pillar.tags.length - 3}
-              </span>
-            )}
-          </div>
-        )}
+      <!-- Tags (solo en variant featured) -->
+      {variant === 'featured' && pillar.tags && pillar.tags.length > 0 && (
+        <div class="flex flex-wrap gap-2 justify-center mb-6">
+          {pillar.tags.slice(0, 3).map(tag => (
+            <span class="px-2 py-1 rounded-md text-xs font-medium bg-secondary/20 text-secondary">
+              #{tag}
+            </span>
+          ))}
+          {pillar.tags.length > 3 && (
+            <span class="px-2 py-1 rounded-md text-xs font-medium bg-muted/20 text-muted">
+              +{pillar.tags.length - 3}
+            </span>
+          )}
+        </div>
+      )}
 
-        <div
-          class="flex items-center justify-between font-medium text-sm"
-          style={`color: ${pillar.color.primary};`}
-        >
-          <span>Explorar artículos</span>
+      <!-- Call to action centrado -->
+      <div class="text-center">
+        <span class="inline-flex items-center gap-2 text-primary font-medium text-sm group-hover:gap-3 transition-all duration-300">
+          Explorar artículos
           <svg
             class="w-4 h-4 transition-transform duration-300 group-hover:translate-x-1"
             viewBox="0 0 16 16"
@@ -105,7 +101,7 @@ const pillarUrl = generatePillarUrl(pillar.id);
               fill="none"
             />
           </svg>
-        </div>
+        </span>
       </div>
     </div>
   </a>

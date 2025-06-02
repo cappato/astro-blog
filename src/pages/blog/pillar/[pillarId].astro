@@ -113,10 +113,7 @@ const customTitle = pillar.title;
     <!-- Pillar Header -->
     <header class="mb-12">
       <div class="flex items-center gap-4 mb-6">
-        <div 
-          class="w-16 h-16 rounded-2xl flex items-center justify-center text-2xl"
-          style={`background: ${pillar.color.background}; color: ${pillar.color.primary};`}
-        >
+        <div class="w-16 h-16 rounded-2xl flex items-center justify-center text-2xl bg-primary/10 text-primary">
           {pillar.emoji}
         </div>
         <div>
@@ -201,10 +198,7 @@ const customTitle = pillar.title;
               href={`/blog/pillar/${relatedPillar.id}`}
               class="flex items-center gap-3 p-4 rounded-lg border border-border hover:border-primary transition-colors group"
             >
-              <div 
-                class="w-10 h-10 rounded-lg flex items-center justify-center text-lg"
-                style={`background: ${relatedPillar.color.background}; color: ${relatedPillar.color.primary};`}
-              >
+              <div class="w-10 h-10 rounded-lg flex items-center justify-center text-lg bg-secondary/10 text-secondary">
                 {relatedPillar.emoji}
               </div>
               <div>

@@ -13,7 +13,10 @@ export interface ContentPillar {
   id: string;
   title: string;
   description: string;
-  color: PillarColor;
+  image: {
+    src: string;
+    alt: string;
+  };
   icon: string;
   emoji: string;
   keywords: string[];

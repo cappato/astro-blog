@@ -9,10 +9,9 @@ export interface ContentPillar {
   id: string;
   title: string;
   description: string;
-  color: {
-    primary: string;
-    secondary: string;
-    background: string;
+  image: {
+    src: string;
+    alt: string;
   };
   icon: string;
   emoji: string;
@@ -35,10 +34,9 @@ export const CONTENT_PILLARS: Record<string, ContentPillar> = {
     id: 'astro-performance',
     title: 'Astro & Performance',
     description: 'Desarrollo moderno con Astro, optimización de performance y arquitecturas escalables para la web del futuro.',
-    color: {
-      primary: '#FF5D01',
-      secondary: '#FF8533',
-      background: 'rgba(255, 93, 1, 0.1)'
+    image: {
+      src: '/images/blog/darkmode-cover.webp',
+      alt: 'Astro y optimización de performance'
     },
     icon: 'rocket',
     emoji: '🚀',
@@ -57,10 +55,9 @@ export const CONTENT_PILLARS: Record<string, ContentPillar> = {
     id: 'typescript-architecture',
     title: 'TypeScript & Architecture',
     description: 'TypeScript avanzado, patrones de diseño, arquitecturas escalables y mejores prácticas para proyectos enterprise.',
-    color: {
-      primary: '#3178C6',
-      secondary: '#5B9BD5',
-      background: 'rgba(49, 120, 198, 0.1)'
+    image: {
+      src: '/images/blog/architecture-cover.webp',
+      alt: 'TypeScript y arquitectura de software'
     },
     icon: 'code',
     emoji: '🏗️',
@@ -79,10 +76,9 @@ export const CONTENT_PILLARS: Record<string, ContentPillar> = {
     id: 'automation-devops',
     title: 'Automation & DevOps',
     description: 'Automatización de procesos, testing, CI/CD, deployment y herramientas DevOps para equipos de desarrollo.',
-    color: {
-      primary: '#00D8FF',
-      secondary: '#33E0FF',
-      background: 'rgba(0, 216, 255, 0.1)'
+    image: {
+      src: '/images/blog/testing-cover.webp',
+      alt: 'Automatización y DevOps'
     },
     icon: 'cog',
     emoji: '⚙️',
@@ -101,10 +97,9 @@ export const CONTENT_PILLARS: Record<string, ContentPillar> = {
     id: 'seo-optimization',
     title: 'SEO & Optimization',
     description: 'SEO técnico, optimización automática, Schema.org, meta tags y estrategias para mejorar el ranking.',
-    color: {
-      primary: '#34A853',
-      secondary: '#5CBF73',
-      background: 'rgba(52, 168, 83, 0.1)'
+    image: {
+      src: '/images/blog/seo-cover.webp',
+      alt: 'SEO y optimización web'
     },
     icon: 'search',
     emoji: '🔍',
