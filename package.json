@@ -26,6 +26,8 @@
     "test:seo:schema": "vitest run src/__tests__/seo/schema.test.ts",
     "test:seo:performance": "vitest run src/__tests__/seo/performance.test.ts",
     "generate:images": "node scripts/generate-blog-images.js",
+    "generate:images:optimized": "node scripts/generate-blog-images-optimized.js",
+    "generate:images:simple": "node scripts/generate-blog-images-optimized.js -- --simple",
     "test:schemas": "npm run test -- schema.test.ts",
     "validate:schemas": "node src/features/schema/scripts/validate-schemas.js",
     "validate:schemas:dev": "npm run validate:schemas -- --dev",
