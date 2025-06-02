@@ -1,0 +1,348 @@
+---
+/**
+ * Related Articles Feature - Related Articles Component
+ * 
+ * Componente principal para mostrar artículos relacionados
+ * Utiliza el motor de similitud para encontrar contenido relevante
+ */
+
+import type { RelatedArticlesProps } from '../types/related.types';
+import { getCollection } from 'astro:content';
+import { similarityEngine } from '../utils/similarity-engine';
+import { DEFAULT_RELATED_CONFIG, getConfigForPostType, detectPostType } from '../config/related.config';
+import RelatedArticleCard from './RelatedArticleCard.astro';
+
+interface Props extends RelatedArticlesProps {}
+
+const {
+  currentPost,
+  maxArticles,
+  variant = 'grid',
+  cardStyle = 'standard',
+  showReadingTime = true,
+  showPublishDate = true,
+  showTags = true,
+  showExcerpt = true,
+  showThumbnail = true,
+  className = '',
+  title = 'Artículos Relacionados',
+  customConfig
+} = Astro.props;
+
+// Obtener todos los posts
+const allPosts = await getCollection('blog');
+
+// Detectar tipo de post y obtener configuración apropiada
+const postType = detectPostType(currentPost.data.tags || []);
+let config = getConfigForPostType(postType);
+
+// Aplicar configuración personalizada si se proporciona
+if (customConfig) {
+  config = {
+    ...config,
+    ...customConfig,
+    algorithm: { ...config.algorithm, ...customConfig.algorithm },
+    display: { ...config.display, ...customConfig.display },
+    layout: { ...config.layout, ...customConfig.layout }
+  };
+}
+
+// Sobrescribir maxArticles si se proporciona
+if (maxArticles) {
+  config.display.maxArticles = maxArticles;
+}
+
+// Encontrar artículos relacionados
+const relatedResult = await similarityEngine.findRelatedArticles(
+  currentPost,
+  allPosts,
+  config
+);
+
+const relatedArticles = relatedResult.articles;
+
+// Generar clases CSS
+const containerClasses = [
+  'related-articles',
+  `related-articles--${variant}`,
+  `related-articles--${cardStyle}`,
+  className
+].filter(Boolean).join(' ');
+
+// Estilos CSS dinámicos para columnas
+const gridStyles = {
+  '--related-columns-desktop': config.layout.columns.desktop.toString(),
+  '--related-columns-tablet': config.layout.columns.tablet.toString(),
+  '--related-columns-mobile': config.layout.columns.mobile.toString()
+};
+---
+
+{relatedArticles.length > 0 && (
+  <section 
+    class={containerClasses}
+    style={gridStyles}
+    aria-label="Artículos relacionados"
+  >
+    <!-- Header -->
+    <header class="related-articles__header">
+      <h2 class="related-articles__title">
+        {title}
+      </h2>
+      <p class="related-articles__subtitle">
+        Contenido que podría interesarte basado en este artículo
+      </p>
+    </header>
+
+    <!-- Articles Grid/List -->
+    <div class="related-articles__container">
+      {relatedArticles.map((relatedArticle, index) => (
+        <RelatedArticleCard
+          article={relatedArticle}
+          variant={cardStyle}
+          showReadingTime={showReadingTime}
+          showPublishDate={showPublishDate}
+          showTags={showTags}
+          showExcerpt={showExcerpt}
+          showThumbnail={showThumbnail}
+          showSimilarityScore={false}
+          className="related-articles__item"
+        />
+      ))}
+    </div>
+
+    <!-- Debug info (solo en desarrollo) -->
+    {import.meta.env.DEV && (
+      <details class="related-articles__debug">
+        <summary>Debug Info (solo en desarrollo)</summary>
+        <div class="related-articles__debug-content">
+          <p><strong>Algoritmo:</strong> {relatedResult.algorithmUsed}</p>
+          <p><strong>Tiempo de ejecución:</strong> {relatedResult.executionTime.toFixed(2)}ms</p>
+          <p><strong>Candidatos totales:</strong> {relatedResult.totalCandidates}</p>
+          <p><strong>Cache hit:</strong> {relatedResult.cacheHit ? 'Sí' : 'No'}</p>
+          <p><strong>Tipo de post detectado:</strong> {postType}</p>
+        </div>
+      </details>
+    )}
+  </section>
+)}
+
+<style>
+  .related-articles {
+    margin: 3rem 0;
+    padding: 2rem 0;
+    border-top: 1px solid var(--color-border);
+  }
+  
+  .related-articles__header {
+    text-align: center;
+    margin-bottom: 2rem;
+  }
+  
+  .related-articles__title {
+    font-size: 1.875rem;
+    font-weight: 700;
+    color: var(--color-text-primary);
+    margin: 0 0 0.5rem 0;
+    line-height: 1.3;
+  }
+  
+  .related-articles__subtitle {
+    color: var(--color-text-secondary);
+    font-size: 1rem;
+    margin: 0;
+    max-width: 600px;
+    margin-left: auto;
+    margin-right: auto;
+    line-height: 1.5;
+  }
+  
+  /* Grid Layout */
+  .related-articles--grid .related-articles__container {
+    display: grid;
+    grid-template-columns: repeat(var(--related-columns-desktop), 1fr);
+    gap: 2rem;
+  }
+  
+  /* List Layout */
+  .related-articles--list .related-articles__container {
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+  }
+  
+  /* Carousel Layout */
+  .related-articles--carousel .related-articles__container {
+    display: flex;
+    gap: 1.5rem;
+    overflow-x: auto;
+    scroll-snap-type: x mandatory;
+    padding-bottom: 1rem;
+  }
+  
+  .related-articles--carousel .related-articles__item {
+    flex: 0 0 300px;
+    scroll-snap-align: start;
+  }
+  
+  /* Card Style Variants */
+  .related-articles--minimal .related-articles__container {
+    gap: 1rem;
+  }
+  
+  .related-articles--detailed .related-articles__container {
+    gap: 2.5rem;
+  }
+  
+  /* Debug Info */
+  .related-articles__debug {
+    margin-top: 2rem;
+    padding: 1rem;
+    background: var(--color-surface-secondary);
+    border: 1px solid var(--color-border);
+    border-radius: 8px;
+    font-size: 0.875rem;
+  }
+  
+  .related-articles__debug summary {
+    cursor: pointer;
+    font-weight: 600;
+    color: var(--color-text-secondary);
+  }
+  
+  .related-articles__debug-content {
+    margin-top: 1rem;
+    color: var(--color-text-secondary);
+  }
+  
+  .related-articles__debug-content p {
+    margin: 0.5rem 0;
+  }
+  
+  /* Responsive Design */
+  @media (max-width: 1024px) {
+    .related-articles--grid .related-articles__container {
+      grid-template-columns: repeat(var(--related-columns-tablet), 1fr);
+      gap: 1.5rem;
+    }
+  }
+  
+  @media (max-width: 640px) {
+    .related-articles {
+      margin: 2rem 0;
+      padding: 1.5rem 0;
+    }
+    
+    .related-articles__header {
+      margin-bottom: 1.5rem;
+    }
+    
+    .related-articles__title {
+      font-size: 1.5rem;
+    }
+    
+    .related-articles__subtitle {
+      font-size: 0.875rem;
+    }
+    
+    .related-articles--grid .related-articles__container {
+      grid-template-columns: repeat(var(--related-columns-mobile), 1fr);
+      gap: 1rem;
+    }
+    
+    .related-articles--list .related-articles__container {
+      gap: 1rem;
+    }
+    
+    .related-articles--carousel .related-articles__item {
+      flex: 0 0 280px;
+    }
+  }
+  
+  /* Dark Mode */
+  :global(.dark) .related-articles {
+    border-top-color: var(--color-border-dark);
+  }
+  
+  :global(.dark) .related-articles__debug {
+    background: var(--color-surface-secondary-dark);
+    border-color: var(--color-border-dark);
+  }
+  
+  /* High Contrast Mode */
+  @media (prefers-contrast: high) {
+    .related-articles {
+      border-top-width: 2px;
+    }
+  }
+  
+  /* Print Styles */
+  @media print {
+    .related-articles__debug {
+      display: none;
+    }
+    
+    .related-articles--grid .related-articles__container,
+    .related-articles--carousel .related-articles__container {
+      display: block;
+    }
+    
+    .related-articles__item {
+      break-inside: avoid;
+      margin-bottom: 1rem;
+    }
+  }
+  
+  /* Scroll behavior for carousel */
+  .related-articles--carousel .related-articles__container {
+    scrollbar-width: thin;
+    scrollbar-color: var(--color-primary) var(--color-surface-secondary);
+  }
+  
+  .related-articles--carousel .related-articles__container::-webkit-scrollbar {
+    height: 8px;
+  }
+  
+  .related-articles--carousel .related-articles__container::-webkit-scrollbar-track {
+    background: var(--color-surface-secondary);
+    border-radius: 4px;
+  }
+  
+  .related-articles--carousel .related-articles__container::-webkit-scrollbar-thumb {
+    background: var(--color-primary);
+    border-radius: 4px;
+  }
+  
+  .related-articles--carousel .related-articles__container::-webkit-scrollbar-thumb:hover {
+    background: var(--color-primary-dark);
+  }
+  
+  /* Animation for items */
+  .related-articles__item {
+    animation: fadeInUp 0.6s ease-out;
+    animation-fill-mode: both;
+  }
+  
+  .related-articles__item:nth-child(1) { animation-delay: 0.1s; }
+  .related-articles__item:nth-child(2) { animation-delay: 0.2s; }
+  .related-articles__item:nth-child(3) { animation-delay: 0.3s; }
+  .related-articles__item:nth-child(4) { animation-delay: 0.4s; }
+  .related-articles__item:nth-child(5) { animation-delay: 0.5s; }
+  
+  @keyframes fadeInUp {
+    from {
+      opacity: 0;
+      transform: translateY(20px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+  
+  /* Disable animations for reduced motion */
+  @media (prefers-reduced-motion: reduce) {
+    .related-articles__item {
+      animation: none;
+    }
+  }
+</style>

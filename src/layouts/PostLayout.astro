@@ -15,6 +15,7 @@ import { getReadingTime, formatReadingTime } from '../features/reading-time';
 import { AIMetadata } from '../features/ai-metadata';
 import Breadcrumbs from '../features/blog-enhancements/components/Breadcrumbs.astro';
 import AuthorCard from '../features/blog-enhancements/components/AuthorCard.astro';
+import RelatedArticles from '../features/related-articles/components/RelatedArticles.astro';
 import { generatePostBreadcrumbs, detectPrimaryTag } from '../features/blog-enhancements/utils/breadcrumbs';
 
 import type { CollectionEntry } from 'astro:content';
@@ -82,6 +83,20 @@ const breadcrumbs = generatePostBreadcrumbs(
   tags || [],
   primaryTag
 );
+
+// Crear objeto currentPost para RelatedArticles
+const currentPost = {
+  slug: Astro.url.pathname.replace('/blog/', '').replace('/', ''),
+  data: {
+    title,
+    description,
+    date: new Date(date),
+    tags: tags || [],
+    image,
+    author
+  },
+  body: '' // No necesitamos el body completo para related articles
+} as any;
 ---
 
 <!DOCTYPE html>
@@ -208,6 +223,20 @@ const breadcrumbs = generatePostBreadcrumbs(
 
         <!-- Módulo de Autor -->
         <AuthorCard variant="full" showRelatedPosts={true} />
+
+        <!-- Artículos Relacionados -->
+        <RelatedArticles
+          currentPost={currentPost}
+          maxArticles={3}
+          variant="grid"
+          cardStyle="standard"
+          showReadingTime={true}
+          showPublishDate={true}
+          showTags={true}
+          showExcerpt={true}
+          showThumbnail={true}
+          title="Artículos Relacionados"
+        />
 
         <!-- Botones para compartir -->
         <div class="mt-8 pt-6 border-t border-border dark:border-border-dark">

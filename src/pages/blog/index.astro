@@ -17,6 +17,8 @@ import {
   getBlogSeoData,
   getTagUrl
 } from '../../utils/blogPost.ts';
+import { PillarGrid } from '../../features/content-pillars/components';
+import { getFeaturedPillars } from '../../features/content-pillars/config/pillars.config';
 
 // Get all blog posts
 const allPosts = await getCollection('blog');
@@ -32,6 +34,9 @@ const postCards = transformPostsToCardData(posts);
 
 // SEO metadata
 const { title, description } = getBlogSeoData();
+
+// Get featured pillars
+const featuredPillars = getFeaturedPillars();
 ---
 
 <!DOCTYPE html>
@@ -66,6 +71,32 @@ const { title, description } = getBlogSeoData();
             <h1 class="text-4xl font-bold mb-4 text-primary">Blog</h1>
             <p class="text-xl text-content max-w-2xl mx-auto">{description}</p>
         </header>
+
+        <!-- Featured Pillars Section -->
+        {featuredPillars.length > 0 && (
+            <section class="mb-12">
+                <div class="flex items-center justify-between mb-6">
+                    <h2 class="text-2xl font-bold text-content">🎯 Pilares de Contenido</h2>
+                    <a
+                        href="/blog/pillars"
+                        class="text-primary hover:text-primary-dark font-medium text-sm flex items-center gap-1 transition-colors"
+                    >
+                        Ver todos
+                        <svg width="16" height="16" viewBox="0 0 16 16" fill="currentColor">
+                            <path d="M6 4l4 4-4 4" stroke="currentColor" stroke-width="2" fill="none"/>
+                        </svg>
+                    </a>
+                </div>
+
+                <PillarGrid
+                    pillars={featuredPillars}
+                    variant="compact"
+                    columns={{ desktop: 3, tablet: 2, mobile: 1 }}
+                    showStats={true}
+                    className="mb-8"
+                />
+            </section>
+        )}
 
         <!-- Tag filter section -->
         <section class="mb-12">

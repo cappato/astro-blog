@@ -1,0 +1,194 @@
+---
+/**
+ * Página de Pilares de Contenido
+ * 
+ * Muestra todos los pilares de contenido organizados y con estadísticas
+ */
+
+import MainLayout from '../../layouts/MainLayout.astro';
+import { PillarGrid } from '../../features/content-pillars/components';
+import { getFeaturedPillars, getAllPillars } from '../../features/content-pillars/config/pillars.config';
+import Breadcrumbs from '../../features/blog-enhancements/components/Breadcrumbs.astro';
+
+// Obtener pilares
+const featuredPillars = getFeaturedPillars();
+const allPillars = getAllPillars();
+
+// Breadcrumbs
+const breadcrumbs = [
+  { label: 'Inicio', href: '/' },
+  { label: 'Blog', href: '/blog' },
+  { label: 'Pilares de Contenido', current: true }
+];
+
+// SEO metadata
+const seoData = {
+  title: 'Pilares de Contenido - Organización Temática del Blog',
+  description: 'Explora los pilares de contenido del blog: Astro & Performance, TypeScript & Architecture, Automation & DevOps, y SEO & Optimization.',
+  keywords: ['pilares contenido', 'blog organización', 'astro', 'typescript', 'devops', 'seo'],
+  type: 'website' as const
+};
+---
+
+<MainLayout {...seoData}>
+  <!-- Breadcrumbs -->
+  <div class="container mx-auto px-4 pt-4">
+    <Breadcrumbs items={breadcrumbs} />
+  </div>
+
+  <!-- Hero Section -->
+  <section class="container mx-auto px-4 py-8">
+    <div class="text-center max-w-4xl mx-auto">
+      <h1 class="text-4xl md:text-5xl font-bold text-primary mb-6">
+        Pilares de Contenido
+      </h1>
+      <p class="text-xl text-muted leading-relaxed mb-8">
+        Explora el contenido del blog organizado por temáticas estratégicas. 
+        Cada pilar representa un área de especialización con artículos profundos 
+        y recursos valiosos para desarrolladores.
+      </p>
+    </div>
+  </section>
+
+  <!-- Featured Pillars -->
+  {featuredPillars.length > 0 && (
+    <section class="container mx-auto px-4 py-8">
+      <div class="mb-8">
+        <h2 class="text-3xl font-bold text-primary mb-4">
+          🌟 Pilares Destacados
+        </h2>
+        <p class="text-muted text-lg">
+          Los pilares principales que definen la identidad y especialización del blog.
+        </p>
+      </div>
+      
+      <PillarGrid 
+        pillars={featuredPillars}
+        variant="featured"
+        columns={{ desktop: 3, tablet: 2, mobile: 1 }}
+        showStats={true}
+        className="featured-pillars"
+      />
+    </section>
+  )}
+
+  <!-- All Pillars -->
+  <section class="container mx-auto px-4 py-8">
+    <div class="mb-8">
+      <h2 class="text-3xl font-bold text-primary mb-4">
+        📚 Todos los Pilares
+      </h2>
+      <p class="text-muted text-lg">
+        Explora todas las temáticas disponibles y encuentra el contenido que más te interese.
+      </p>
+    </div>
+    
+    <PillarGrid 
+      pillars={allPillars}
+      variant="default"
+      columns={{ desktop: 3, tablet: 2, mobile: 1 }}
+      showStats={true}
+      className="all-pillars"
+    />
+  </section>
+
+  <!-- CTA Section -->
+  <section class="container mx-auto px-4 py-12">
+    <div class="bg-surface border border-border rounded-2xl p-8 text-center max-w-4xl mx-auto">
+      <h2 class="text-2xl font-bold text-primary mb-4">
+        ¿Buscas algo específico?
+      </h2>
+      <p class="text-muted text-lg mb-6">
+        Navega por todos los artículos del blog o busca por tags específicos 
+        para encontrar exactamente lo que necesitas.
+      </p>
+      <div class="flex flex-col sm:flex-row gap-4 justify-center">
+        <a 
+          href="/blog" 
+          class="btn btn-primary"
+        >
+          Ver Todos los Artículos
+        </a>
+        <a 
+          href="/blog/tags" 
+          class="btn btn-secondary"
+        >
+          Explorar por Tags
+        </a>
+      </div>
+    </div>
+  </section>
+</MainLayout>
+
+<style>
+  /* Estilos específicos para la página de pilares */
+  .featured-pillars {
+    margin-bottom: 4rem;
+  }
+  
+  .all-pillars {
+    margin-bottom: 2rem;
+  }
+  
+  /* Botones CTA */
+  .btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    padding: 0.75rem 2rem;
+    border-radius: 8px;
+    font-weight: 600;
+    text-decoration: none;
+    transition: all 0.2s ease;
+    border: 2px solid transparent;
+  }
+  
+  .btn-primary {
+    background: var(--color-primary);
+    color: white;
+  }
+  
+  .btn-primary:hover {
+    background: var(--color-primary-dark);
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px var(--color-primary-alpha);
+  }
+  
+  .btn-secondary {
+    background: transparent;
+    color: var(--color-primary);
+    border-color: var(--color-primary);
+  }
+  
+  .btn-secondary:hover {
+    background: var(--color-primary);
+    color: white;
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px var(--color-primary-alpha);
+  }
+  
+  /* Dark mode */
+  :global(.dark) .btn-secondary {
+    border-color: var(--color-primary);
+    color: var(--color-primary);
+  }
+  
+  /* Mobile responsive */
+  @media (max-width: 640px) {
+    .btn {
+      padding: 0.625rem 1.5rem;
+      font-size: 0.875rem;
+    }
+  }
+  
+  /* Reduced motion */
+  @media (prefers-reduced-motion: reduce) {
+    .btn {
+      transition: none;
+    }
+    
+    .btn:hover {
+      transform: none;
+    }
+  }
+</style>

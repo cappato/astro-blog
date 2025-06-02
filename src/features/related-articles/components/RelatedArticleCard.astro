@@ -1,0 +1,500 @@
+---
+/**
+ * Related Articles Feature - Related Article Card Component
+ * 
+ * Tarjeta individual para mostrar un artículo relacionado
+ * Soporta múltiples variantes y configuraciones
+ */
+
+import type { RelatedArticleCardProps } from '../types/related.types';
+import { getReadingTime, formatReadingTime } from '../../reading-time';
+
+interface Props extends RelatedArticleCardProps {}
+
+const {
+  article,
+  variant = 'standard',
+  showReadingTime = true,
+  showPublishDate = true,
+  showTags = true,
+  showExcerpt = true,
+  showThumbnail = true,
+  showSimilarityScore = false,
+  className = ''
+} = Astro.props;
+
+const { post, similarityScore, matchedTags, reasons } = article;
+const { title, description, date, tags, image } = post.data;
+
+// Calcular tiempo de lectura
+const readingTime = getReadingTime(post.body || '');
+const formattedReadingTime = formatReadingTime(readingTime);
+
+// Formatear fecha
+const formattedDate = new Intl.DateTimeFormat('es-ES', {
+  year: 'numeric',
+  month: 'long',
+  day: 'numeric'
+}).format(new Date(date));
+
+// URL del post
+const postUrl = `/blog/${post.slug}`;
+
+// Generar clases CSS
+const cardClasses = [
+  'related-card',
+  `related-card--${variant}`,
+  className
+].filter(Boolean).join(' ');
+
+// Imagen por defecto si no hay imagen
+const cardImage = image || '/images/blog/default-post.webp';
+
+// Extracto del post (primeros 150 caracteres de la descripción)
+const excerpt = description && description.length > 150 
+  ? description.substring(0, 150) + '...'
+  : description;
+
+// Tags a mostrar (máximo 3)
+const displayTags = tags ? tags.slice(0, 3) : [];
+---
+
+<!-- Related Article Card -->
+<article class={cardClasses}>
+  <a 
+    href={postUrl}
+    class="related-card__link"
+    aria-label={`Leer artículo: ${title}`}
+  >
+    <!-- Thumbnail -->
+    {showThumbnail && (
+      <div class="related-card__thumbnail">
+        <img 
+          src={cardImage}
+          alt={title}
+          class="related-card__image"
+          loading="lazy"
+          width="300"
+          height="200"
+        />
+        
+        {showSimilarityScore && import.meta.env.DEV && (
+          <div class="related-card__similarity-badge">
+            {Math.round(similarityScore * 100)}%
+          </div>
+        )}
+      </div>
+    )}
+
+    <!-- Content -->
+    <div class="related-card__content">
+      <!-- Header -->
+      <header class="related-card__header">
+        <h3 class="related-card__title">
+          {title}
+        </h3>
+        
+        <!-- Meta info -->
+        <div class="related-card__meta">
+          {showPublishDate && (
+            <time 
+              class="related-card__date"
+              datetime={date.toISOString()}
+            >
+              {formattedDate}
+            </time>
+          )}
+          
+          {showReadingTime && (
+            <span class="related-card__reading-time">
+              {formattedReadingTime}
+            </span>
+          )}
+        </div>
+      </header>
+
+      <!-- Excerpt -->
+      {showExcerpt && excerpt && variant !== 'minimal' && (
+        <div class="related-card__excerpt">
+          <p>{excerpt}</p>
+        </div>
+      )}
+
+      <!-- Tags -->
+      {showTags && displayTags.length > 0 && (
+        <div class="related-card__tags">
+          {displayTags.map(tag => (
+            <span 
+              class={`related-card__tag ${matchedTags.includes(tag) ? 'related-card__tag--matched' : ''}`}
+            >
+              #{tag}
+            </span>
+          ))}
+          {tags && tags.length > 3 && (
+            <span class="related-card__tag-more">
+              +{tags.length - 3}
+            </span>
+          )}
+        </div>
+      )}
+
+      <!-- Relation reasons (solo en desarrollo) -->
+      {import.meta.env.DEV && reasons.length > 0 && (
+        <div class="related-card__reasons">
+          <details>
+            <summary>¿Por qué es relacionado?</summary>
+            <ul>
+              {reasons.map(reason => (
+                <li>
+                  <strong>{reason.type}:</strong> {reason.details} 
+                  <span class="score">({Math.round(reason.score * 100)}%)</span>
+                </li>
+              ))}
+            </ul>
+          </details>
+        </div>
+      )}
+    </div>
+
+    <!-- CTA -->
+    <footer class="related-card__footer">
+      <span class="related-card__cta">
+        Leer artículo
+        <svg 
+          class="related-card__cta-icon" 
+          width="16" 
+          height="16" 
+          viewBox="0 0 16 16"
+          aria-hidden="true"
+        >
+          <path 
+            d="M6 4l4 4-4 4" 
+            stroke="currentColor" 
+            stroke-width="2" 
+            fill="none"
+          />
+        </svg>
+      </span>
+    </footer>
+  </a>
+</article>
+
+<style>
+  .related-card {
+    background: var(--color-surface);
+    border: 1px solid var(--color-border);
+    border-radius: 12px;
+    overflow: hidden;
+    transition: all 0.3s ease;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+  }
+  
+  .related-card:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 8px 25px var(--color-shadow);
+    border-color: var(--color-primary-alpha);
+  }
+  
+  .related-card__link {
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+    text-decoration: none;
+    color: inherit;
+  }
+  
+  .related-card__link:focus {
+    outline: 2px solid var(--color-primary);
+    outline-offset: 2px;
+  }
+  
+  /* Thumbnail */
+  .related-card__thumbnail {
+    position: relative;
+    aspect-ratio: 16 / 9;
+    overflow: hidden;
+    background: var(--color-surface-secondary);
+  }
+  
+  .related-card__image {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: transform 0.3s ease;
+  }
+  
+  .related-card:hover .related-card__image {
+    transform: scale(1.05);
+  }
+  
+  .related-card__similarity-badge {
+    position: absolute;
+    top: 0.5rem;
+    right: 0.5rem;
+    background: var(--color-primary);
+    color: white;
+    padding: 0.25rem 0.5rem;
+    border-radius: 6px;
+    font-size: 0.75rem;
+    font-weight: 600;
+  }
+  
+  /* Content */
+  .related-card__content {
+    flex: 1;
+    padding: 1.5rem;
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+  }
+  
+  .related-card__header {
+    flex-shrink: 0;
+  }
+  
+  .related-card__title {
+    font-size: 1.125rem;
+    font-weight: 600;
+    color: var(--color-text-primary);
+    margin: 0 0 0.5rem 0;
+    line-height: 1.4;
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+  }
+  
+  .related-card__meta {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    font-size: 0.875rem;
+    color: var(--color-text-secondary);
+  }
+  
+  .related-card__date,
+  .related-card__reading-time {
+    display: flex;
+    align-items: center;
+    gap: 0.25rem;
+  }
+  
+  .related-card__date::before {
+    content: '📅';
+    font-size: 0.75rem;
+  }
+  
+  .related-card__reading-time::before {
+    content: '⏱️';
+    font-size: 0.75rem;
+  }
+  
+  /* Excerpt */
+  .related-card__excerpt {
+    flex: 1;
+  }
+  
+  .related-card__excerpt p {
+    color: var(--color-text-secondary);
+    line-height: 1.6;
+    margin: 0;
+    display: -webkit-box;
+    -webkit-line-clamp: 3;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+  }
+  
+  /* Tags */
+  .related-card__tags {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+    margin-top: auto;
+  }
+  
+  .related-card__tag {
+    background: var(--color-surface-secondary);
+    color: var(--color-text-secondary);
+    padding: 0.25rem 0.5rem;
+    border-radius: 6px;
+    font-size: 0.75rem;
+    font-weight: 500;
+    transition: all 0.2s ease;
+  }
+  
+  .related-card__tag--matched {
+    background: var(--color-primary-alpha);
+    color: var(--color-primary);
+    font-weight: 600;
+  }
+  
+  .related-card__tag-more {
+    background: var(--color-surface-secondary);
+    color: var(--color-text-tertiary);
+    padding: 0.25rem 0.5rem;
+    border-radius: 6px;
+    font-size: 0.75rem;
+    font-weight: 500;
+  }
+  
+  /* Reasons (desarrollo) */
+  .related-card__reasons {
+    margin-top: 0.5rem;
+    padding: 0.75rem;
+    background: var(--color-surface-secondary);
+    border-radius: 6px;
+    font-size: 0.75rem;
+  }
+  
+  .related-card__reasons summary {
+    cursor: pointer;
+    font-weight: 600;
+    color: var(--color-text-secondary);
+  }
+  
+  .related-card__reasons ul {
+    margin: 0.5rem 0 0 0;
+    padding-left: 1rem;
+    color: var(--color-text-secondary);
+  }
+  
+  .related-card__reasons .score {
+    color: var(--color-primary);
+    font-weight: 600;
+  }
+  
+  /* Footer */
+  .related-card__footer {
+    padding: 0 1.5rem 1.5rem;
+    margin-top: auto;
+  }
+  
+  .related-card__cta {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    color: var(--color-primary);
+    font-weight: 500;
+    font-size: 0.875rem;
+  }
+  
+  .related-card__cta-icon {
+    transition: transform 0.3s ease;
+  }
+  
+  .related-card:hover .related-card__cta-icon {
+    transform: translateX(4px);
+  }
+  
+  /* Variants */
+  .related-card--minimal .related-card__content {
+    padding: 1rem;
+    gap: 0.75rem;
+  }
+  
+  .related-card--minimal .related-card__title {
+    font-size: 1rem;
+    -webkit-line-clamp: 1;
+  }
+  
+  .related-card--minimal .related-card__footer {
+    padding: 0 1rem 1rem;
+  }
+  
+  .related-card--detailed .related-card__content {
+    padding: 2rem;
+    gap: 1.25rem;
+  }
+  
+  .related-card--detailed .related-card__title {
+    font-size: 1.25rem;
+  }
+  
+  .related-card--detailed .related-card__footer {
+    padding: 0 2rem 2rem;
+  }
+  
+  /* Dark mode */
+  :global(.dark) .related-card {
+    background: var(--color-surface-dark);
+    border-color: var(--color-border-dark);
+  }
+  
+  :global(.dark) .related-card__thumbnail {
+    background: var(--color-surface-secondary-dark);
+  }
+  
+  :global(.dark) .related-card__tag {
+    background: var(--color-surface-secondary-dark);
+  }
+  
+  :global(.dark) .related-card__tag-more {
+    background: var(--color-surface-secondary-dark);
+  }
+  
+  :global(.dark) .related-card__reasons {
+    background: var(--color-surface-secondary-dark);
+  }
+  
+  /* Mobile responsive */
+  @media (max-width: 640px) {
+    .related-card__content {
+      padding: 1rem;
+      gap: 0.75rem;
+    }
+    
+    .related-card__title {
+      font-size: 1rem;
+    }
+    
+    .related-card__meta {
+      gap: 0.75rem;
+      font-size: 0.8125rem;
+    }
+    
+    .related-card__footer {
+      padding: 0 1rem 1rem;
+    }
+  }
+  
+  /* High contrast mode */
+  @media (prefers-contrast: high) {
+    .related-card {
+      border-width: 2px;
+    }
+    
+    .related-card__tag--matched {
+      border: 1px solid var(--color-primary);
+    }
+  }
+  
+  /* Reduced motion */
+  @media (prefers-reduced-motion: reduce) {
+    .related-card,
+    .related-card__image,
+    .related-card__cta-icon {
+      transition: none;
+    }
+    
+    .related-card:hover {
+      transform: none;
+    }
+    
+    .related-card:hover .related-card__image {
+      transform: none;
+    }
+  }
+  
+  /* Print styles */
+  @media print {
+    .related-card__reasons {
+      display: none;
+    }
+    
+    .related-card__similarity-badge {
+      display: none;
+    }
+  }
+</style>

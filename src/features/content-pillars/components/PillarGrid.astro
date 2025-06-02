@@ -1,0 +1,277 @@
+---
+/**
+ * Content Pillars Feature - Pillar Grid Component
+ * 
+ * Grid responsivo para mostrar múltiples pilares de contenido
+ * Soporta diferentes layouts y configuraciones
+ */
+
+import type { PillarGridProps } from '../types/pillars.types';
+import PillarCard from './PillarCard.astro';
+import { groupPostsByPillars } from '../utils/pillar-manager';
+import { getCollection } from 'astro:content';
+
+interface Props extends PillarGridProps {}
+
+const {
+  pillars,
+  variant = 'default',
+  columns = {
+    desktop: 3,
+    tablet: 2,
+    mobile: 1
+  },
+  showStats = true,
+  className = ''
+} = Astro.props;
+
+// Obtener posts para calcular estadísticas si es necesario
+let postsByPillar = {};
+if (showStats) {
+  try {
+    const allPosts = await getCollection('blog');
+    postsByPillar = groupPostsByPillars(allPosts);
+  } catch (error) {
+    console.warn('Could not load posts for pillar stats:', error);
+  }
+}
+
+// Generar clases CSS para el grid
+const gridClasses = [
+  'pillar-grid',
+  `pillar-grid--${variant}`,
+  className
+].filter(Boolean).join(' ');
+
+// Estilos CSS dinámicos para columnas
+const gridStyles = {
+  '--grid-columns-desktop': columns.desktop?.toString() || '3',
+  '--grid-columns-tablet': columns.tablet?.toString() || '2',
+  '--grid-columns-mobile': columns.mobile?.toString() || '1'
+};
+---
+
+<!-- Pillar Grid -->
+<section 
+  class={gridClasses}
+  style={gridStyles}
+  aria-label="Pilares de contenido"
+>
+  {pillars.length === 0 ? (
+    <!-- Empty state -->
+    <div class="pillar-grid__empty">
+      <div class="pillar-grid__empty-icon">
+        📚
+      </div>
+      <h3 class="pillar-grid__empty-title">
+        No hay pilares disponibles
+      </h3>
+      <p class="pillar-grid__empty-description">
+        Los pilares de contenido aparecerán aquí cuando estén configurados.
+      </p>
+    </div>
+  ) : (
+    <!-- Grid de pilares -->
+    <div class="pillar-grid__container">
+      {pillars.map(pillar => {
+        const postCount = showStats && postsByPillar[pillar.id] 
+          ? postsByPillar[pillar.id].posts.length 
+          : 0;
+        
+        return (
+          <PillarCard
+            pillar={pillar}
+            postCount={postCount}
+            variant={variant}
+            showDescription={variant !== 'compact'}
+            showPostCount={showStats}
+            showIcon={true}
+            className="pillar-grid__item"
+          />
+        );
+      })}
+    </div>
+  )}
+</section>
+
+<style>
+  .pillar-grid {
+    width: 100%;
+    margin: 2rem 0;
+  }
+  
+  .pillar-grid__container {
+    display: grid;
+    grid-template-columns: repeat(var(--grid-columns-desktop), 1fr);
+    gap: 2rem;
+    width: 100%;
+  }
+  
+  .pillar-grid__item {
+    height: 100%;
+  }
+  
+  /* Empty state */
+  .pillar-grid__empty {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    padding: 4rem 2rem;
+    background: var(--color-surface);
+    border: 2px dashed var(--color-border);
+    border-radius: 12px;
+    min-height: 300px;
+  }
+  
+  .pillar-grid__empty-icon {
+    font-size: 4rem;
+    margin-bottom: 1rem;
+    opacity: 0.6;
+  }
+  
+  .pillar-grid__empty-title {
+    font-size: 1.5rem;
+    font-weight: 600;
+    color: var(--color-text-primary);
+    margin: 0 0 0.5rem 0;
+  }
+  
+  .pillar-grid__empty-description {
+    color: var(--color-text-secondary);
+    margin: 0;
+    max-width: 400px;
+    line-height: 1.6;
+  }
+  
+  /* Variants */
+  .pillar-grid--compact .pillar-grid__container {
+    gap: 1rem;
+  }
+  
+  .pillar-grid--featured .pillar-grid__container {
+    gap: 2.5rem;
+  }
+  
+  /* Responsive design */
+  @media (max-width: 1024px) {
+    .pillar-grid__container {
+      grid-template-columns: repeat(var(--grid-columns-tablet), 1fr);
+      gap: 1.5rem;
+    }
+  }
+  
+  @media (max-width: 640px) {
+    .pillar-grid {
+      margin: 1.5rem 0;
+    }
+    
+    .pillar-grid__container {
+      grid-template-columns: repeat(var(--grid-columns-mobile), 1fr);
+      gap: 1rem;
+    }
+    
+    .pillar-grid__empty {
+      padding: 3rem 1.5rem;
+      min-height: 250px;
+    }
+    
+    .pillar-grid__empty-icon {
+      font-size: 3rem;
+    }
+    
+    .pillar-grid__empty-title {
+      font-size: 1.25rem;
+    }
+    
+    .pillar-grid__empty-description {
+      font-size: 0.875rem;
+    }
+  }
+  
+  /* Dark mode */
+  :global(.dark) .pillar-grid__empty {
+    background: var(--color-surface-dark);
+    border-color: var(--color-border-dark);
+  }
+  
+  /* High contrast mode */
+  @media (prefers-contrast: high) {
+    .pillar-grid__empty {
+      border-width: 3px;
+    }
+  }
+  
+  /* Print styles */
+  @media print {
+    .pillar-grid__container {
+      grid-template-columns: 1fr;
+      gap: 1rem;
+    }
+    
+    .pillar-grid__empty {
+      display: none;
+    }
+  }
+  
+  /* Auto-fit columns for very wide screens */
+  @media (min-width: 1400px) {
+    .pillar-grid__container {
+      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+      max-width: 1200px;
+      margin: 0 auto;
+    }
+  }
+  
+  /* Animation for grid items */
+  .pillar-grid__item {
+    animation: fadeInUp 0.6s ease-out;
+    animation-fill-mode: both;
+  }
+  
+  .pillar-grid__item:nth-child(1) { animation-delay: 0.1s; }
+  .pillar-grid__item:nth-child(2) { animation-delay: 0.2s; }
+  .pillar-grid__item:nth-child(3) { animation-delay: 0.3s; }
+  .pillar-grid__item:nth-child(4) { animation-delay: 0.4s; }
+  .pillar-grid__item:nth-child(5) { animation-delay: 0.5s; }
+  .pillar-grid__item:nth-child(6) { animation-delay: 0.6s; }
+  
+  @keyframes fadeInUp {
+    from {
+      opacity: 0;
+      transform: translateY(30px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+  
+  /* Disable animations for reduced motion */
+  @media (prefers-reduced-motion: reduce) {
+    .pillar-grid__item {
+      animation: none;
+    }
+  }
+  
+  /* Focus management for keyboard navigation */
+  .pillar-grid__container:focus-within .pillar-grid__item:not(:focus-within) {
+    opacity: 0.7;
+    transition: opacity 0.3s ease;
+  }
+  
+  /* Hover effects for the entire grid */
+  .pillar-grid__container:hover .pillar-grid__item:not(:hover) {
+    opacity: 0.8;
+    transition: opacity 0.3s ease;
+  }
+  
+  @media (prefers-reduced-motion: reduce) {
+    .pillar-grid__container:focus-within .pillar-grid__item:not(:focus-within),
+    .pillar-grid__container:hover .pillar-grid__item:not(:hover) {
+      opacity: 1;
+      transition: none;
+    }
+  }
+</style>
