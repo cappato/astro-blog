@@ -1,0 +1,144 @@
+---
+/**
+ * MetaTags Component - Modular Meta Tags Generation
+ * Enhanced version using the modular meta tags engine
+ * Maintains backward compatibility with original API
+ * 
+ * @example
+ * ```astro
+ * ---
+ * import { MetaTags } from '@features/meta-tags/components';
+ * ---
+ * <head>
+ *   <MetaTags
+ *     title="Page Title"
+ *     description="Page description"
+ *     type="website"
+ *   />
+ * </head>
+ * ```
+ */
+
+import { generateMetaTags } from '../engine/generator';
+import { SITE_INFO } from '../../../config/site';
+import type { MetaTagProps } from '../engine/types';
+
+interface Props extends MetaTagProps {
+  /** Page title */
+  title: string;
+  /** Page description */
+  description: string;
+  /** Page image */
+  image?: {
+    url: string;
+    alt: string;
+    width?: number;
+    height?: number;
+  };
+  /** Page type */
+  type?: 'website' | 'article';
+  /** Page keywords */
+  keywords?: string[];
+  /** Published date */
+  publishedDate?: Date;
+  /** Modified date */
+  modifiedDate?: Date;
+  /** Author name */
+  author?: string;
+  /** Canonical URL */
+  canonicalUrl?: string;
+  /** Twitter username */
+  twitterUsername?: string;
+  /** Post ID for articles */
+  postId?: string;
+}
+
+const {
+  title,
+  description,
+  image,
+  type = 'website',
+  keywords,
+  publishedDate,
+  modifiedDate,
+  author,
+  canonicalUrl,
+  twitterUsername,
+  postId
+} = Astro.props;
+
+// Prepare props for the meta tag generator
+const metaProps: MetaTagProps = {
+  title,
+  description,
+  image,
+  type,
+  keywords,
+  publishedDate,
+  modifiedDate,
+  author,
+  canonicalUrl: canonicalUrl || Astro.url.pathname,
+  twitterUsername,
+  postId
+};
+
+// Generate meta tags using the modular engine
+const siteUrl = SITE_INFO.url;
+const result = generateMetaTags(metaProps, siteUrl);
+
+// Extract generated tags
+const { metaTags, linkTags, warnings } = result;
+
+// Log warnings in development
+if (import.meta.env.DEV && warnings.length > 0) {
+  console.warn('Meta Tags Warnings:', warnings);
+}
+---
+
+<!-- Generated Meta Tags -->
+{metaTags.map(tag => {
+  if (tag.property) {
+    // Open Graph and other property-based tags
+    return <meta property={tag.property} content={tag.content} />;
+  } else if (tag.name) {
+    // Standard name-based meta tags
+    return <meta name={tag.name} content={tag.content} />;
+  }
+  return null;
+})}
+
+<!-- Generated Link Tags -->
+{linkTags.map(link => (
+  <link rel={link.rel} href={link.href} type={link.type} />
+))}
+
+<!-- 
+  MODULAR META TAGS SYSTEM
+  
+  This component uses the modular meta tags engine which provides:
+  - ✅ Framework-agnostic generation logic
+  - ✅ Comprehensive validation
+  - ✅ SEO optimization
+  - ✅ Open Graph and Twitter Cards
+  - ✅ Article-specific tags
+  - ✅ Image format handling (WebP + JPEG)
+  - ✅ URL canonicalization
+  - ✅ Date validation
+  - ✅ TypeScript support
+  
+  Generated tags include:
+  - Basic SEO meta tags (title, description, keywords, author)
+  - Open Graph tags for social media sharing
+  - Twitter Card tags for Twitter sharing
+  - Article-specific tags (published_time, modified_time, author)
+  - Technical tags (robots, viewport)
+  - Canonical link
+  - AI metadata link
+  
+  The engine automatically:
+  - Validates URLs and corrects domain issues
+  - Generates multiple image formats (WebP primary, JPEG fallback)
+  - Handles date validation and formatting
+  - Provides fallbacks for missing data
+  - Warns about potential SEO issues in development
+-->

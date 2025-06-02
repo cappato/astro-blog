@@ -1,5 +1,5 @@
 ---
-import MetaTags from '../seo/MetaTags.astro';
+import { MetaTags } from '../../features/meta-tags/components';
 import CommonScripts from './CommonScripts.astro';
 
 interface Props {
@@ -27,7 +27,7 @@ const {
   <MetaTags
     title={title}
     description={description}
-    image={image ? { url: image, alt: imageAlt } : undefined}
+    image={image ? { url: image, alt: imageAlt || '' } : undefined}
     type={type}
     keywords={keywords}
   />
