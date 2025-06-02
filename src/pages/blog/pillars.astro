@@ -10,6 +10,7 @@ import { PillarGrid } from '../../features/content-pillars/components';
 import { getFeaturedPillars, getAllPillars } from '../../features/content-pillars/config/pillars.config';
 import ContentContainer from '../../components/layout/ContentContainer.astro';
 import ContentWidth from '../../components/layout/ContentWidth.astro';
+import Card from '../../components/ui/Card.astro';
 
 // Obtener pilares
 const featuredPillars = getFeaturedPillars();
@@ -90,7 +91,7 @@ const seoData = {
   <!-- CTA Section -->
   <ContentContainer as="section" className="py-12">
     <ContentWidth width="standard">
-      <div class="bg-surface border border-border rounded-2xl p-8 text-center">
+      <Card variant="default" className="text-center p-8">
         <h2 class="text-2xl font-bold text-primary mb-4">
           ¿Buscas algo específico?
         </h2>
@@ -112,7 +113,7 @@ const seoData = {
             Explorar por Tags
           </a>
         </div>
-      </div>
+      </Card>
     </ContentWidth>
   </ContentContainer>
 </MainLayout>
