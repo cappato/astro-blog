@@ -311,20 +311,13 @@ export function validatePillar(pillar: Partial<ContentPillar>): {
 
 /**
  * Generar URL para página de pilar
- * Los pilares redirigen a la página principal de tags del pilar
+ * Ahora genera URLs correctas para páginas dedicadas de pilares
  */
 export function generatePillarUrl(pillarId: string): string {
-  // Mapear pilares a sus tags principales
-  const pillarToTagMapping: Record<string, string> = {
-    'astro-performance': 'astro',
-    'typescript-architecture': 'typescript',
-    'automation-devops': 'automation',
-    'seo-optimization': 'seo'
-  };
-
-  const mainTag = pillarToTagMapping[pillarId];
-  if (mainTag) {
-    return `/blog/tag/${mainTag}`;
+  // Verificar que el pilar existe
+  const pillar = getPillarById(pillarId);
+  if (pillar) {
+    return `/blog/pillar/${pillarId}`;
   }
 
   // Fallback a la página de pilares

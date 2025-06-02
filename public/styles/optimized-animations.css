@@ -1,0 +1,310 @@
+/**
+ * Performance Optimization Feature - Optimized Animations
+ * 
+ * CSS optimizado para animaciones de alto rendimiento
+ * Usa propiedades que no causan reflow/repaint
+ */
+
+/* ==========================================================================
+   ANIMACIONES OPTIMIZADAS
+   ========================================================================== */
+
+/* Usar transform y opacity en lugar de propiedades que causan layout */
+.optimized-hover {
+  transition: transform 0.2s ease, opacity 0.2s ease;
+  will-change: transform, opacity;
+}
+
+.optimized-hover:hover {
+  transform: translateY(-2px) scale(1.02);
+}
+
+/* Animaciones de entrada optimizadas */
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes fadeInScale {
+  from {
+    opacity: 0;
+    transform: scale(0.95);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+@keyframes slideInRight {
+  from {
+    opacity: 0;
+    transform: translateX(30px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+/* Clases de animación optimizadas */
+.animate-fade-in-up {
+  animation: fadeInUp 0.4s ease-out;
+}
+
+.animate-fade-in-scale {
+  animation: fadeInScale 0.3s ease-out;
+}
+
+.animate-slide-in-right {
+  animation: slideInRight 0.3s ease-out;
+}
+
+/* Animaciones con will-change para mejor performance */
+.will-animate {
+  will-change: transform, opacity;
+}
+
+.will-animate-complete {
+  will-change: auto;
+}
+
+/* ==========================================================================
+   OPTIMIZACIONES ESPECÍFICAS PARA COMPONENTES
+   ========================================================================== */
+
+/* Cards optimizadas */
+.optimized-card {
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+  will-change: transform, box-shadow;
+}
+
+.optimized-card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.1);
+}
+
+/* Botones optimizados */
+.optimized-button {
+  transition: transform 0.15s ease, background-color 0.15s ease;
+  will-change: transform, background-color;
+}
+
+.optimized-button:hover {
+  transform: translateY(-1px);
+}
+
+.optimized-button:active {
+  transform: translateY(0);
+}
+
+/* Imágenes optimizadas */
+.optimized-image {
+  transition: transform 0.3s ease, filter 0.3s ease;
+  will-change: transform, filter;
+}
+
+.optimized-image:hover {
+  transform: scale(1.05);
+}
+
+/* Links optimizados */
+.optimized-link {
+  transition: color 0.15s ease, transform 0.15s ease;
+  will-change: color, transform;
+}
+
+.optimized-link:hover {
+  transform: translateX(2px);
+}
+
+/* ==========================================================================
+   LOADING STATES OPTIMIZADOS
+   ========================================================================== */
+
+/* Spinner optimizado */
+@keyframes spin-optimized {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+.optimized-spinner {
+  animation: spin-optimized 1s linear infinite;
+  will-change: transform;
+}
+
+/* Skeleton loading optimizado */
+@keyframes skeleton-loading {
+  0% {
+    background-position: -200px 0;
+  }
+  100% {
+    background-position: calc(200px + 100%) 0;
+  }
+}
+
+.optimized-skeleton {
+  background: linear-gradient(90deg, #f0f0f0 25%, #e0e0e0 50%, #f0f0f0 75%);
+  background-size: 200px 100%;
+  animation: skeleton-loading 1.5s infinite;
+  will-change: background-position;
+}
+
+/* Pulse optimizado */
+@keyframes pulse-optimized {
+  0%, 100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.5;
+  }
+}
+
+.optimized-pulse {
+  animation: pulse-optimized 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+  will-change: opacity;
+}
+
+/* ==========================================================================
+   OPTIMIZACIONES PARA SCROLL
+   ========================================================================== */
+
+/* Smooth scroll optimizado */
+.optimized-scroll {
+  scroll-behavior: smooth;
+}
+
+/* Parallax optimizado (usar transform3d para GPU) */
+.optimized-parallax {
+  transform: translate3d(0, 0, 0);
+  will-change: transform;
+}
+
+/* ==========================================================================
+   MEDIA QUERIES PARA PERFORMANCE
+   ========================================================================== */
+
+/* Reducir animaciones en dispositivos de bajo rendimiento */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+  
+  .optimized-hover:hover {
+    transform: none;
+  }
+}
+
+/* Optimizaciones para dispositivos móviles */
+@media (max-width: 768px) {
+  /* Reducir complejidad de animaciones en móvil */
+  .optimized-card:hover {
+    transform: none;
+    box-shadow: none;
+  }
+  
+  .optimized-image:hover {
+    transform: none;
+  }
+  
+  /* Desactivar will-change en móvil para ahorrar memoria */
+  .will-animate {
+    will-change: auto;
+  }
+}
+
+/* Optimizaciones para pantallas de alta densidad */
+@media (-webkit-min-device-pixel-ratio: 2), (min-resolution: 192dpi) {
+  /* Ajustar animaciones para pantallas retina */
+  .optimized-hover:hover {
+    transform: translateY(-1px) scale(1.01);
+  }
+}
+
+/* ==========================================================================
+   UTILIDADES DE PERFORMANCE
+   ========================================================================== */
+
+/* Forzar aceleración por hardware */
+.gpu-accelerated {
+  transform: translate3d(0, 0, 0);
+  backface-visibility: hidden;
+  perspective: 1000px;
+}
+
+/* Optimizar rendering de texto */
+.optimized-text {
+  text-rendering: optimizeSpeed;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+/* Optimizar imágenes */
+.optimized-image-rendering {
+  image-rendering: -webkit-optimize-contrast;
+  image-rendering: crisp-edges;
+}
+
+/* Contener layout shifts */
+.layout-contained {
+  contain: layout style paint;
+}
+
+/* Contener solo estilos */
+.style-contained {
+  contain: style;
+}
+
+/* ==========================================================================
+   DARK MODE OPTIMIZATIONS
+   ========================================================================== */
+
+/* Transiciones optimizadas para dark mode */
+:global(.dark) .optimized-skeleton {
+  background: linear-gradient(90deg, #2a2a2a 25%, #1a1a1a 50%, #2a2a2a 75%);
+}
+
+/* ==========================================================================
+   PRINT OPTIMIZATIONS
+   ========================================================================== */
+
+@media print {
+  /* Desactivar todas las animaciones para impresión */
+  *,
+  *::before,
+  *::after {
+    animation: none !important;
+    transition: none !important;
+    will-change: auto !important;
+  }
+}
+
+/* ==========================================================================
+   DEBUGGING (solo en desarrollo)
+   ========================================================================== */
+
+/* Mostrar elementos que causan layout shifts */
+@media screen and (min-width: 1px) {
+  .debug-layout * {
+    outline: 1px solid red;
+  }
+  
+  .debug-layout *:hover {
+    background: rgba(255, 0, 0, 0.1);
+  }
+}

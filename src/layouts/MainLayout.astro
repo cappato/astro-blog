@@ -12,6 +12,7 @@ interface Props {
     keywords?: string[];
     publishedDate?: string;
     modifiedDate?: string;
+    customTitle?: string;
 }
 
 const {
@@ -22,7 +23,8 @@ const {
     type = 'website',
     keywords = [],
     publishedDate,
-    modifiedDate
+    modifiedDate,
+    customTitle
 } = Astro.props;
 
 // Convertir fechas a objetos Date si son strings
@@ -40,6 +42,7 @@ const modDate = modifiedDate ? new Date(modifiedDate) : undefined;
   keywords={keywords}
   publishedDate={publishedDate}
   modifiedDate={modifiedDate}
+  customTitle={customTitle}
 >
   <HomeNavbar slot="header" />
   <slot />

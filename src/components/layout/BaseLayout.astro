@@ -8,7 +8,7 @@ import CommonScripts from './CommonScripts.astro';
 import Favicons from '../seo/Favicons.astro';
 import GlobalBreadcrumbs from '../../features/global-breadcrumbs/components/GlobalBreadcrumbs.astro';
 import DeferredScripts from '../../features/performance-optimization/components/DeferredScripts.astro';
-import PerformanceMonitor from '../../features/performance-optimization/components/PerformanceMonitor.astro';
+// import PerformanceMonitor from '../../features/performance-optimization/components/PerformanceMonitor.astro';
 
 interface Props {
   title: string;
@@ -84,8 +84,8 @@ const currentUrl = Astro.url.pathname;
     deferAnalytics={true}
   />
 
-  <!-- Optimized Animations CSS -->
-  <link rel="stylesheet" href="/src/features/performance-optimization/styles/optimized-animations.css">
+  <!-- Optimized Animations CSS - Import directo -->
+  <link rel="stylesheet" href="/styles/optimized-animations.css">
 
   <!-- Slot para estilos adicionales específicos de página -->
   <slot name="head" />
@@ -102,7 +102,7 @@ const currentUrl = Astro.url.pathname;
 
   <!-- Global Breadcrumbs - EN TODAS LAS PÁGINAS -->
   <div class="container mx-auto px-4">
-    <GlobalBreadcrumbs variant="default" customTitle={customTitle} />
+    <GlobalBreadcrumbs customTitle={customTitle} />
   </div>
 
   <main id="main-content" class="flex-grow">
@@ -113,11 +113,11 @@ const currentUrl = Astro.url.pathname;
     <slot name="footer" />
   </footer>
 
-  <!-- Performance Monitor (solo en desarrollo) -->
-  <PerformanceMonitor
-    enabled={import.meta.env.DEV}
-    showMetrics={true}
-    logToConsole={true}
-  />
+  <!-- Performance Monitor (comentado para testing limpio) -->
+  <!-- <PerformanceMonitor
+    enabled={false}
+    showMetrics={false}
+    logToConsole={false}
+  /> -->
 </body>
 </html>
