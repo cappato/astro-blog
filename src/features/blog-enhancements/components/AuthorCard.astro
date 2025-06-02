@@ -1,178 +1,224 @@
 ---
 /**
- * Blog Enhancement Feature - Author Card Component
- * 
- * Módulo de autor con foto, bio, links sociales y artículos relacionados
- * Incluye structured data para SEO
+ * Blog Enhancement Feature - Author Card Component (Enhanced)
+ *
+ * Módulo de autor mejorado con múltiples variantes y configuración avanzada
+ * Soporta biografías cortas/extendidas, diferentes layouts y tamaños de imagen
  */
 
-interface Props {
-  variant?: 'full' | 'compact' | 'inline';
-  showRelatedPosts?: boolean;
-  className?: string;
-}
+import type { AuthorCardProps } from '../types/author.types';
+import {
+  AUTHOR_PROFILE,
+  getAuthorVariantConfig,
+  getAuthorBio,
+  getAuthorSocialLinks,
+  generateAuthorStructuredData
+} from '../config/author.config';
 
-const { 
-  variant = 'full', 
-  showRelatedPosts = true, 
-  className = '' 
+interface Props extends AuthorCardProps {}
+
+const {
+  variant = 'full',
+  className = '',
+  showBio,
+  showStats,
+  showAchievements,
+  showSkills,
+  showSocial,
+  maxSocialLinks,
+  layout,
+  imageSize,
+  customConfig
 } = Astro.props;
 
-// Configuración del autor (esto podría venir de un config file)
-const author = {
-  name: "Matías Sebastián Cappato",
-  title: "Full Stack Developer & Tech Lead",
-  bio: "Desarrollador Full Stack especializado en TypeScript, React y arquitecturas escalables. Apasionado por la automatización, performance web y las mejores prácticas de desarrollo.",
-  avatar: "/images/author/profile.webp",
-  location: "Argentina",
-  experience: "8+ años",
-  specialties: ["TypeScript", "React", "Node.js", "Astro", "Performance"],
-  social: {
-    github: "https://github.com/cappato",
-    linkedin: "https://www.linkedin.com/in/matiascappato/",
-    twitter: "https://twitter.com/matiascappato",
-    email: "matias@cappato.dev"
-  },
-  website: "https://cappato.dev",
-  stats: {
-    articles: 25,
-    projects: 50,
-    experience: "8+ años"
-  }
+// Obtener configuración de la variante
+const variantConfig = getAuthorVariantConfig(variant);
+
+// Aplicar configuración personalizada si se proporciona
+const finalConfig = customConfig ? { ...variantConfig, ...customConfig } : variantConfig;
+
+// Resolver configuración final
+const resolvedConfig = {
+  showBio: showBio !== undefined ? showBio : finalConfig.showBio,
+  showStats: showStats !== undefined ? showStats : finalConfig.showStats,
+  showAchievements: showAchievements !== undefined ? showAchievements : finalConfig.showAchievements,
+  showSkills: showSkills !== undefined ? showSkills : finalConfig.showSkills,
+  showSocial: showSocial !== undefined ? showSocial : finalConfig.showSocial,
+  maxSocialLinks: maxSocialLinks !== undefined ? maxSocialLinks : finalConfig.maxSocialLinks,
+  layout: layout || finalConfig.layout,
+  imageSize: imageSize || finalConfig.imageSize
 };
 
+// Obtener datos del autor
+const author = AUTHOR_PROFILE;
+const bioText = resolvedConfig.showBio ? getAuthorBio(resolvedConfig.showBio) : '';
+const socialLinks = resolvedConfig.showSocial ? getAuthorSocialLinks(resolvedConfig.maxSocialLinks) : {};
+
 // Structured data para SEO
-const structuredData = {
-  "@context": "https://schema.org",
-  "@type": "Person",
-  "name": author.name,
-  "jobTitle": author.title,
-  "description": author.bio,
-  "image": `https://cappato.dev${author.avatar}`,
-  "url": author.website,
-  "sameAs": Object.values(author.social),
-  "knowsAbout": author.specialties,
-  "worksFor": {
-    "@type": "Organization",
-    "name": "Freelance"
-  }
-};
+const structuredData = generateAuthorStructuredData();
 ---
 
 <!-- Structured Data para SEO -->
 <script type="application/ld+json" set:html={JSON.stringify(structuredData)} />
 
 <!-- Author Card -->
-<div class={`author-card author-card--${variant} ${className}`}>
-  
+<div class={`author-card author-card--${variant} author-card--${resolvedConfig.layout} author-card--${resolvedConfig.imageSize} ${className}`}>
+
   {variant === 'inline' ? (
     <!-- Inline variant (para bylines) -->
     <div class="author-card__inline">
-      <img 
-        src={author.avatar} 
-        alt={`Foto de ${author.name}`}
-        class="author-card__avatar author-card__avatar--small"
-        width="32"
-        height="32"
-        loading="lazy"
-      />
+      <div class="author-card__avatar-container author-card__avatar-container--tiny">
+        <img
+          src={author.images.avatar}
+          alt={`Foto de ${author.personal.name}`}
+          class="author-card__avatar"
+          width="32"
+          height="32"
+          loading="lazy"
+        />
+      </div>
       <div class="author-card__inline-info">
-        <span class="author-card__name">{author.name}</span>
-        <span class="author-card__title">{author.title}</span>
+        <span class="author-card__name">{author.personal.name}</span>
+        <span class="author-card__title">{author.personal.title}</span>
       </div>
     </div>
   ) : (
     <!-- Full/Compact variants -->
     <div class="author-card__main">
       <div class="author-card__header">
-        <img 
-          src={author.avatar} 
-          alt={`Foto de ${author.name}`}
-          class="author-card__avatar"
-          width={variant === 'compact' ? "64" : "80"}
-          height={variant === 'compact' ? "64" : "80"}
-          loading="lazy"
-        />
-        
+        <div class={`author-card__avatar-container author-card__avatar-container--${resolvedConfig.imageSize}`}>
+          <img
+            src={author.images.avatar}
+            alt={`Foto de ${author.personal.name}`}
+            class="author-card__avatar"
+            loading="lazy"
+          />
+        </div>
+
         <div class="author-card__info">
-          <h3 class="author-card__name">{author.name}</h3>
-          <p class="author-card__title">{author.title}</p>
-          
-          {variant === 'full' && (
+          <h3 class="author-card__name">{author.personal.name}</h3>
+          <p class="author-card__title">{author.personal.title}</p>
+
+          {resolvedConfig.layout === 'vertical' && author.personal.tagline && (
+            <p class="author-card__tagline">{author.personal.tagline}</p>
+          )}
+
+          {(variant === 'full' || variant === 'standard') && (
             <div class="author-card__meta">
-              <span class="author-card__location">📍 {author.location}</span>
-              <span class="author-card__experience">💼 {author.experience}</span>
+              <span class="author-card__location">📍 {author.personal.location}</span>
+              <span class="author-card__experience">💼 {author.experience.years} experiencia</span>
             </div>
           )}
         </div>
       </div>
       
-      {variant === 'full' && (
+      <!-- Content Section -->
+      {resolvedConfig.showBio && bioText && (
         <div class="author-card__content">
-          <p class="author-card__bio">{author.bio}</p>
-          
-          <div class="author-card__specialties">
-            <h4 class="author-card__specialties-title">Especialidades:</h4>
-            <div class="author-card__tags">
-              {author.specialties.map(specialty => (
-                <span class="author-card__tag">{specialty}</span>
-              ))}
-            </div>
+          <p class="author-card__bio">{bioText}</p>
+        </div>
+      )}
+
+      <!-- Skills/Specialties -->
+      {resolvedConfig.showSkills && (
+        <div class="author-card__specialties">
+          <h4 class="author-card__specialties-title">Especialidades:</h4>
+          <div class="author-card__tags">
+            {author.experience.specialties.map(specialty => (
+              <span class="author-card__tag">{specialty}</span>
+            ))}
           </div>
-          
-          <div class="author-card__stats">
-            <div class="author-card__stat">
-              <span class="author-card__stat-number">{author.stats.articles}</span>
-              <span class="author-card__stat-label">Artículos</span>
-            </div>
-            <div class="author-card__stat">
-              <span class="author-card__stat-number">{author.stats.projects}</span>
-              <span class="author-card__stat-label">Proyectos</span>
-            </div>
-            <div class="author-card__stat">
-              <span class="author-card__stat-number">{author.stats.experience}</span>
-              <span class="author-card__stat-label">Experiencia</span>
-            </div>
+        </div>
+      )}
+
+      <!-- Achievements -->
+      {resolvedConfig.showAchievements && variant === 'full' && (
+        <div class="author-card__achievements">
+          <h4 class="author-card__achievements-title">Logros destacados:</h4>
+          <ul class="author-card__achievements-list">
+            {author.experience.achievements.slice(0, 3).map(achievement => (
+              <li class="author-card__achievement">{achievement}</li>
+            ))}
+          </ul>
+        </div>
+      )}
+
+      <!-- Stats -->
+      {resolvedConfig.showStats && (
+        <div class="author-card__stats">
+          <div class="author-card__stat">
+            <span class="author-card__stat-number">{author.stats.articles}</span>
+            <span class="author-card__stat-label">Artículos</span>
+          </div>
+          <div class="author-card__stat">
+            <span class="author-card__stat-number">{author.stats.projects}</span>
+            <span class="author-card__stat-label">Proyectos</span>
+          </div>
+          <div class="author-card__stat">
+            <span class="author-card__stat-number">{author.stats.experience}</span>
+            <span class="author-card__stat-label">Experiencia</span>
           </div>
         </div>
       )}
       
       <!-- Social Links -->
-      <div class="author-card__social">
-        <a 
-          href={author.social.github}
-          target="_blank"
-          rel="noopener noreferrer"
-          class="author-card__social-link"
-          aria-label="GitHub de Matías Cappato"
-        >
-          <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
-            <path d="M12 0c-6.626 0-12 5.373-12 12 0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23.957-.266 1.983-.399 3.003-.404 1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576 4.765-1.589 8.199-6.086 8.199-11.386 0-6.627-5.373-12-12-12z"/>
-          </svg>
-        </a>
-        
-        <a 
-          href={author.social.linkedin}
-          target="_blank"
-          rel="noopener noreferrer"
-          class="author-card__social-link"
-          aria-label="LinkedIn de Matías Cappato"
-        >
-          <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
-            <path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433c-1.144 0-2.063-.926-2.063-2.065 0-1.138.92-2.063 2.063-2.063 1.14 0 2.064.925 2.064 2.063 0 1.139-.925 2.065-2.064 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z"/>
-          </svg>
-        </a>
-        
-        <a 
-          href={`mailto:${author.social.email.replace('mailto:', '')}`}
-          class="author-card__social-link"
-          aria-label="Email de Matías Cappato"
-        >
-          <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
-            <path d="M24 5.457v13.909c0 .904-.732 1.636-1.636 1.636h-3.819V11.73L12 16.64l-6.545-4.91v9.273H1.636A1.636 1.636 0 0 1 0 19.366V5.457c0-.904.732-1.636 1.636-1.636h1.82L12 11.64l8.545-7.819h1.82c.904 0 1.636.732 1.636 1.636z"/>
-          </svg>
-        </a>
-      </div>
+      {resolvedConfig.showSocial && Object.keys(socialLinks).length > 0 && (
+        <div class="author-card__social">
+          {socialLinks.github && (
+            <a
+              href={socialLinks.github}
+              target="_blank"
+              rel="noopener noreferrer"
+              class="author-card__social-link"
+              aria-label={`GitHub de ${author.personal.firstName}`}
+            >
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
+                <path d="M12 0c-6.626 0-12 5.373-12 12 0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23.957-.266 1.983-.399 3.003-.404 1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576 4.765-1.589 8.199-6.086 8.199-11.386 0-6.627-5.373-12-12-12z"/>
+              </svg>
+            </a>
+          )}
+
+          {socialLinks.linkedin && (
+            <a
+              href={socialLinks.linkedin}
+              target="_blank"
+              rel="noopener noreferrer"
+              class="author-card__social-link"
+              aria-label={`LinkedIn de ${author.personal.firstName}`}
+            >
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
+                <path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433c-1.144 0-2.063-.926-2.063-2.065 0-1.138.92-2.063 2.063-2.063 1.14 0 2.064.925 2.064 2.063 0 1.139-.925 2.065-2.064 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z"/>
+              </svg>
+            </a>
+          )}
+
+          {socialLinks.email && (
+            <a
+              href={`mailto:${socialLinks.email}`}
+              class="author-card__social-link"
+              aria-label={`Email de ${author.personal.firstName}`}
+            >
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
+                <path d="M24 5.457v13.909c0 .904-.732 1.636-1.636 1.636h-3.819V11.73L12 16.64l-6.545-4.91v9.273H1.636A1.636 1.636 0 0 1 0 19.366V5.457c0-.904.732-1.636 1.636-1.636h1.82L12 11.64l8.545-7.819h1.82c.904 0 1.636.732 1.636 1.636z"/>
+              </svg>
+            </a>
+          )}
+
+          {socialLinks.website && (
+            <a
+              href={socialLinks.website}
+              target="_blank"
+              rel="noopener noreferrer"
+              class="author-card__social-link"
+              aria-label={`Sitio web de ${author.personal.firstName}`}
+            >
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
+                <path d="M12 0C5.374 0 0 5.373 0 12s5.374 12 12 12 12-5.373 12-12S18.626 0 12 0zm5.568 13.8h-3.924c-.2 1.96-.9 3.46-1.644 3.46-.744 0-1.444-1.5-1.644-3.46H6.432c.2 1.96.9 3.46 1.644 3.46.744 0 1.444-1.5 1.644-3.46zm0-3.6c-.2-1.96-.9-3.46-1.644-3.46-.744 0-1.444 1.5-1.644 3.46h3.924c-.2-1.96-.9-3.46-1.644-3.46z"/>
+              </svg>
+            </a>
+          )}
+        </div>
+      )}
     </div>
   )}
 </div>
@@ -229,17 +275,50 @@ const structuredData = {
     margin: 1.5rem 0;
   }
   
-  /* Avatar */
-  .author-card__avatar {
+  /* Avatar Container - Fixed aspect ratio */
+  .author-card__avatar-container {
+    position: relative;
     border-radius: 50%;
-    object-fit: cover;
+    overflow: hidden;
     border: 3px solid var(--color-border);
+    flex-shrink: 0;
+    background: var(--color-surface-secondary);
   }
-  
-  .author-card__avatar--small {
+
+  .author-card__avatar-container--tiny {
     width: 32px;
     height: 32px;
     border-width: 2px;
+  }
+
+  .author-card__avatar-container--small {
+    width: 48px;
+    height: 48px;
+    border-width: 2px;
+  }
+
+  .author-card__avatar-container--medium {
+    width: 64px;
+    height: 64px;
+    border-width: 3px;
+  }
+
+  .author-card__avatar-container--large {
+    width: 80px;
+    height: 80px;
+    border-width: 3px;
+  }
+
+  .author-card__avatar {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    object-position: center;
+    transition: transform 0.3s ease;
+  }
+
+  .author-card:hover .author-card__avatar {
+    transform: scale(1.05);
   }
   
   /* Header */
@@ -265,14 +344,23 @@ const structuredData = {
     font-size: 0.875rem;
     color: var(--color-primary);
     font-weight: 500;
-    margin: 0 0 0.5rem 0;
+    margin: 0 0 0.25rem 0;
   }
-  
+
+  .author-card__tagline {
+    font-size: 0.8125rem;
+    color: var(--color-text-secondary);
+    font-style: italic;
+    margin: 0 0 0.5rem 0;
+    line-height: 1.4;
+  }
+
   .author-card__meta {
     display: flex;
     gap: 1rem;
     font-size: 0.8125rem;
     color: var(--color-text-secondary);
+    flex-wrap: wrap;
   }
   
   /* Content */
@@ -306,6 +394,50 @@ const structuredData = {
     border-radius: 6px;
     font-size: 0.75rem;
     font-weight: 500;
+    transition: all 0.2s ease;
+  }
+
+  .author-card__tag:hover {
+    background: var(--color-primary);
+    color: white;
+    transform: translateY(-1px);
+  }
+
+  /* Achievements */
+  .author-card__achievements {
+    margin-bottom: 1rem;
+  }
+
+  .author-card__achievements-title {
+    font-size: 0.875rem;
+    font-weight: 600;
+    color: var(--color-text-primary);
+    margin: 0 0 0.5rem 0;
+  }
+
+  .author-card__achievements-list {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 0.375rem;
+  }
+
+  .author-card__achievement {
+    font-size: 0.8125rem;
+    color: var(--color-text-secondary);
+    line-height: 1.4;
+    position: relative;
+    padding-left: 1rem;
+  }
+
+  .author-card__achievement::before {
+    content: '✓';
+    position: absolute;
+    left: 0;
+    color: var(--color-primary);
+    font-weight: 600;
   }
   
   /* Stats */
@@ -381,28 +513,79 @@ const structuredData = {
     border-color: var(--color-border-dark);
   }
   
+  /* Layout Variants */
+  .author-card--horizontal .author-card__header {
+    align-items: center;
+    gap: 1rem;
+  }
+
+  .author-card--horizontal .author-card__info {
+    flex: 1;
+  }
+
+  .author-card--vertical .author-card__header {
+    flex-direction: column;
+    text-align: center;
+    align-items: center;
+    gap: 1rem;
+  }
+
+  .author-card--vertical .author-card__info {
+    text-align: center;
+  }
+
+  /* Size Variants */
+  .author-card--compact {
+    padding: 1rem;
+    margin: 1rem 0;
+  }
+
+  .author-card--compact .author-card__header {
+    margin-bottom: 0.75rem;
+  }
+
+  .author-card--standard {
+    padding: 1.5rem;
+    margin: 1.5rem 0;
+  }
+
+  .author-card--full {
+    padding: 2rem;
+    margin: 2rem 0;
+  }
+
   /* Mobile responsive */
   @media (max-width: 640px) {
     .author-card {
       padding: 1rem;
     }
-    
+
     .author-card__header {
       flex-direction: column;
       text-align: center;
       gap: 0.75rem;
     }
-    
+
     .author-card__meta {
       justify-content: center;
     }
-    
+
     .author-card__stats {
       gap: 1rem;
     }
-    
+
     .author-card__social {
       justify-content: center;
+    }
+
+    /* Force horizontal layout on mobile for compact variant */
+    .author-card--compact.author-card--horizontal .author-card__header {
+      flex-direction: row;
+      text-align: left;
+    }
+
+    .author-card--compact.author-card--horizontal .author-card__info {
+      text-align: left;
     }
   }
 </style>

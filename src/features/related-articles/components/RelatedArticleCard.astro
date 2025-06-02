@@ -47,8 +47,8 @@ const cardClasses = [
   className
 ].filter(Boolean).join(' ');
 
-// Imagen por defecto si no hay imagen
-const cardImage = image || '/images/blog/default-post.webp';
+// Imagen del post o placeholder
+const cardImage = image?.url || image || '/images/blog/seo-cover.webp';
 
 // Extracto del post (primeros 150 caracteres de la descripción)
 const excerpt = description && description.length > 150 

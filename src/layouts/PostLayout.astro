@@ -13,10 +13,8 @@ import Footer from '../components/layout/footer/Footer.astro';
 import TagList from '../components/blog/TagList.astro';
 import { getReadingTime, formatReadingTime } from '../features/reading-time';
 import { AIMetadata } from '../features/ai-metadata';
-import Breadcrumbs from '../features/blog-enhancements/components/Breadcrumbs.astro';
 import AuthorCard from '../features/blog-enhancements/components/AuthorCard.astro';
 import RelatedArticles from '../features/related-articles/components/RelatedArticles.astro';
-import { generatePostBreadcrumbs, detectPrimaryTag } from '../features/blog-enhancements/utils/breadcrumbs';
 
 import type { CollectionEntry } from 'astro:content';
 
@@ -75,14 +73,7 @@ const readingTimeText = formatReadingTime(readingTime);
 // URL actual para compartir
 const currentUrl = Astro.url.href;
 
-// Generar breadcrumbs automáticamente
-const primaryTag = detectPrimaryTag(tags || []);
-const breadcrumbs = generatePostBreadcrumbs(
-  Astro.url.pathname,
-  title,
-  tags || [],
-  primaryTag
-);
+
 
 // Crear objeto currentPost para RelatedArticles
 const currentPost = {
@@ -151,15 +142,37 @@ const currentPost = {
   <link rel="stylesheet" href="/styles/blog.css">
   <style>
     @import '../features/blog-enhancements/styles/blog-enhancements.css';
+
+    /* Estilos específicos para las variantes del autor en posts */
+    .author-byline {
+      background: var(--color-surface-secondary);
+      border: 1px solid var(--color-border);
+      border-radius: 8px;
+      padding: 1rem;
+      margin: 0;
+    }
+
+    .author-extended {
+      margin-top: 3rem;
+      padding-top: 2rem;
+      border-top: 2px solid var(--color-border);
+    }
+
+    /* Dark mode */
+    :global(.dark) .author-byline {
+      background: var(--color-surface-secondary-dark);
+      border-color: var(--color-border-dark);
+    }
+
+    :global(.dark) .author-extended {
+      border-top-color: var(--color-border-dark);
+    }
   </style>
 </head>
 <body class="font-sans transition-theme">
   <BlogNavbar currentPath={Astro.url.pathname} />
 
-  <!-- Breadcrumbs Navigation -->
-  <div class="container mx-auto px-4 pt-4">
-    <Breadcrumbs items={breadcrumbs} />
-  </div>
+
 
   <main id="main-content" class="container mx-auto px-4 py-4">
     <!-- Contenido del artículo -->
@@ -195,10 +208,23 @@ const currentPost = {
         <!-- Metadatos del post -->
         <div class="mb-6 border-b divider pb-4">
           <h1 class="text-3xl font-bold text-primary mb-3">{title}</h1>
+
+          <!-- Autor compacto al inicio del artículo -->
+          <div class="mb-4">
+            <AuthorCard
+              variant="compact"
+              layout="horizontal"
+              showBio="short"
+              showStats={false}
+              showAchievements={false}
+              showSkills={false}
+              showSocial={true}
+              maxSocialLinks={3}
+              className="author-byline"
+            />
+          </div>
+
           <div class="flex flex-wrap items-center text-sm text-muted mb-3">
-            <span class="mr-4 flex items-center">
-              <i class="fas fa-user mr-1"></i> {author}
-            </span>
             <span class="mr-4 flex items-center">
               <i class="fas fa-calendar mr-1"></i> {formattedDate}
             </span>
@@ -221,8 +247,18 @@ const currentPost = {
           <slot />
         </div>
 
-        <!-- Módulo de Autor -->
-        <AuthorCard variant="full" showRelatedPosts={true} />
+        <!-- Módulo de Autor Extendido -->
+        <AuthorCard
+          variant="full"
+          layout="vertical"
+          showBio="extended"
+          showStats={true}
+          showAchievements={true}
+          showSkills={true}
+          showSocial={true}
+          maxSocialLinks={6}
+          className="author-extended"
+        />
 
         <!-- Artículos Relacionados -->
         <RelatedArticles

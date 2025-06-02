@@ -8,6 +8,7 @@ import { MetaTags } from '../features/meta-tags/components';
 import { AIMetadata } from '../features/ai-metadata';
 import { AutoSchema } from '../features/schema';
 import { ThemeScript } from '../features/dark-light-mode/components';
+import GlobalBreadcrumbs from '../features/global-breadcrumbs/components/GlobalBreadcrumbs.astro';
 
 interface Props {
     title: string;
@@ -74,6 +75,12 @@ const currentUrl = Astro.url.pathname;
 </head>
 <body class="font-sans overflow-x-hidden transition-theme">
     <HomeNavbar />
+
+    <!-- Global Breadcrumbs -->
+    <div class="container mx-auto px-4">
+        <GlobalBreadcrumbs variant="default" />
+    </div>
+
     <slot />
     <Footer />
 </body>
