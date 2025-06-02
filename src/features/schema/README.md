@@ -1,181 +1,152 @@
-# Schema.org Feature
+# Schema
 
-Automatic Schema.org structured data generation for Astro projects with zero configuration.
+## Purpose
+Automatic Schema.org structured data generation for SEO optimization. Intelligently detects page types and generates appropriate JSON-LD markup with validation and error handling.
 
-## 🚀 Quick Start
+## Architecture
+- **Auto-detection**: URL pattern matching with priority system
+- **Content types**: 12+ supported schema types (WebSite, Blog, BlogPosting, CreativeWork, etc.)
+- **Validation**: Required field checking with graceful fallbacks
+- **Configuration**: Centralized in SCHEMA_CONFIG with intelligent site integration
 
-### Basic Usage
+## Files
+- `src/features/schema/AutoSchema.astro` - Main component with auto-detection
+- `src/features/schema/engine.ts` - Schema generation logic and validation
+- `src/features/schema/config.ts` - Feature configuration with fallbacks
+- `src/features/schema/types.ts` - TypeScript interfaces for all schemas
+- `src/features/schema/utils.ts` - Internal utilities (URL handling, validation)
+- `src/features/schema/index.ts` - Public API exports
+- `src/features/schema/__tests__/schema.test.ts` - Comprehensive test suite (15 tests)
+- `src/features/schema/scripts/validate-schemas.js` - Production validation script
+- `src/features/schema/README.md` - Feature-specific documentation
+- `src/config/site.ts` - SCHEMA_CONFIG centralized configuration
 
+## Usage
+
+### Basic (Auto-detection)
 ```astro
 ---
 import { AutoSchema } from '../features/schema';
 ---
-
 <head>
-  <!-- Other head content -->
   <AutoSchema />
 </head>
 ```
 
-### For Blog Posts
-
+### Blog Posts
 ```astro
 ---
 import { AutoSchema } from '../features/schema';
 const { entry } = Astro.props;
 ---
-
 <head>
-  <!-- Other head content -->
   <AutoSchema post={entry} />
 </head>
 ```
 
-## 📋 Features
-
-- **🔄 Automatic Detection**: Detects page type from URL and context
-- **📝 Zero Config**: Works out of the box with sensible defaults
-- **🎯 Frontmatter Integration**: Extracts data automatically from `.md` files
-- **🌐 Absolute URLs**: Ensures all URLs are absolute for SEO
-- **🧪 Well Tested**: Comprehensive test coverage
-- **📦 Reusable**: Easy to copy to other Astro projects
-
-## 🏗️ Architecture
-
-```
-src/features/schema/
-├── config.ts              # Site configuration and mappings
-├── engine.ts               # Schema generation logic
-├── AutoSchema.astro        # Main component
-├── index.ts                # Public API exports
-├── scripts/
-│   └── validate-schemas.js # Production validation script
-├── __tests__/
-│   └── schema.test.ts      # Test suite
-└── README.md               # This file
+### Explicit Type
+```astro
+---
+import { AutoSchema } from '../features/schema';
+---
+<head>
+  <AutoSchema type="portfolio" />
+</head>
 ```
 
-## 📊 Generated Schemas
+### Advanced Usage
+```astro
+---
+import { generateValidatedSchema, toJsonLd } from '../features/schema';
 
-| Page Type | Schema Type | Auto-Detection |
-|-----------|-------------|----------------|
-| Home (`/`) | WebSite | ✅ URL-based |
-| Blog Index (`/blog`) | Blog | ✅ URL-based |
-| Blog Post (`/blog/[slug]`) | BlogPosting | ✅ Post data |
+const schemas = generateValidatedSchema({
+  url: Astro.url.href,
+  post: entry,
+  pageType: 'blog-post'
+});
+---
+<script type="application/ld+json" is:inline set:html={toJsonLd(schemas)}></script>
+```
 
-## 🔧 Configuration
+## Configuration
 
-Edit `config.ts` to customize for your site:
-
+### Supported Types
 ```typescript
-export const SCHEMA_CONFIG = {
-  site: {
-    name: "Your Site Name",
-    url: "https://yoursite.com",
-    description: "Your site description",
-    author: "Your Name",
-    language: "en" // or "es", "fr", etc.
-  },
-  social: {
-    github: "yourusername",
-    linkedin: "yourprofile",
-    twitter: "@yourusername"
-  },
-  defaults: {
-    image: "/images/og-default.webp",
-    logo: "/images/logo.webp",
-    profileImage: "/images/profile.webp"
-  }
+const contentTypes = {
+  website: 'WebSite',           // Home pages
+  blog: 'Blog',                 // Blog index
+  'blog-post': 'BlogPosting',   // Individual posts
+  portfolio: 'CreativeWork',    // Portfolio items
+  project: 'SoftwareApplication', // Software projects
+  course: 'Course',             // Educational content
+  event: 'Event',               // Events/workshops
+  product: 'Product',           // Products/services
+  organization: 'Organization', // Company pages
+  person: 'Person',             // About/profile pages
+  article: 'Article'            // General articles
 };
 ```
 
-## 📝 Blog Post Frontmatter
-
-The feature automatically extracts data from your blog post frontmatter:
-
-```markdown
----
-title: "My Blog Post"           # → headline
-description: "Post description" # → description  
-date: 2025-01-15               # → datePublished
-author: "Author Name"          # → author.name
-image: "/images/post.webp"     # → image (absolute URL)
-tags: ["tag1", "tag2"]         # → keywords
----
-
-Your content here...
+### Auto-detection Patterns
+```typescript
+const patterns = {
+  'home': ['^/$', '^https?://[^/]+/$'],
+  'blog-post': ['/blog/', '/posts/'],
+  'blog-index': ['/blog$', '/posts$'],
+  'portfolio': ['/portfolio/', '/work/'],
+  'project': ['/projects/', '/project/'],
+  'course': ['/courses/', '/course/'],
+  'event': ['/events/', '/event/'],
+  'about': ['/about', '/bio', '/profile']
+};
 ```
 
-## 🧪 Testing & Validation
-
-### Unit Tests
-Run the test suite:
-
-```bash
-npm test -- schema.test.ts
-npm run test:schemas              # Run schema-specific tests
+### Priority Order
+```typescript
+const priority = [
+  'blog-post',    // Highest (has post data)
+  'home',         // Home page patterns
+  'portfolio',    // Portfolio patterns
+  'project',      // Project patterns
+  'course',       // Course patterns
+  'event',        // Event patterns
+  'blog-index',   // Blog index patterns
+  'about',        // About page patterns
+  'website'       // Default fallback
+];
 ```
 
-### Production Validation
-Validate schemas in production:
+## Extension
 
-```bash
-npm run validate:schemas          # Check production schemas
-npm run validate:schemas:dev      # Check development schemas
-npm run validate:schemas:auto     # Auto-discover URLs from sitemap
-npm run test:schemas:full         # Run tests + validation
+### Adding New Types
+1. Add to `SCHEMA_CONFIG.contentTypes`
+2. Define required fields in `SCHEMA_CONFIG.requiredFields`
+3. Add detection pattern to `SCHEMA_CONFIG.autoDetection.patterns`
+4. Create generator function in `engine.ts`
+5. Add case to `generateSchema()` switch
+
+### Custom Patterns
+```typescript
+autoDetection: {
+  patterns: {
+    'custom-type': ['/custom/', '/special/'],
+    'landing-page': ['/landing/', '/lp/']
+  },
+  priority: ['blog-post', 'custom-type', 'landing-page', 'home', ...]
+}
 ```
 
-### Custom Validation
-Check specific URLs:
-
-```bash
-npm run validate:schemas -- --url=https://yoursite.com/specific-page
-```
-
-### CI/CD Integration
-Add to your GitHub Actions or CI pipeline:
-
+## AI Context
 ```yaml
-- name: Validate Schemas
-  run: |
-    npm run build
-    npm run validate:schemas:dev
+feature_type: "schema_generation"
+purpose: "seo_structured_data"
+input_sources: ["url_patterns", "post_data", "page_context"]
+output_format: "json_ld"
+content_types: ["website", "blog", "blog_post", "portfolio", "project", "course", "event", "product", "organization", "person", "article"]
+architecture: "auto_detection_with_validation"
+configuration: "centralized_with_fallbacks"
+validation: "required_fields_automatic"
+error_handling: "graceful_degradation"
+dependencies: ["astro_content_collections", "typescript"]
+key_files: ["AutoSchema.astro", "engine.ts", "config.ts", "types.ts", "utils.ts"]
 ```
-
-## 📦 Reusing in Other Projects
-
-1. Copy the entire `features/schema/` folder
-2. Update `config.ts` with your site details
-3. Import and use `AutoSchema` in your layouts
-
-```astro
----
-import { AutoSchema } from './features/schema';
----
-<AutoSchema />
-```
-
-## 🔍 Debugging
-
-In development mode, the component logs helpful information:
-
-- Schema generation success/failure
-- Number of schemas generated per page
-- Warnings for missing data
-
-Check your browser console for debug information.
-
-## 📈 SEO Benefits
-
-- **Rich Snippets**: Better search result presentation
-- **Knowledge Panels**: Enhanced Google understanding
-- **Social Sharing**: Improved link previews
-- **Voice Search**: Better voice assistant compatibility
-
-## 🤝 Contributing
-
-1. Add new schema types in `engine.ts`
-2. Update `config.ts` mappings
-3. Add tests in `__tests__/schema.test.ts`
-4. Update this README

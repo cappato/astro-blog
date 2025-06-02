@@ -1,24 +1,25 @@
-# RSS Feed Feature
+# RSS Feed
 
 ## Purpose
-Framework-agnostic RSS 2.0 feed generation engine with comprehensive validation, error handling, and HTTP endpoint support. Provides complete RSS feed capabilities that can be used in any JavaScript/TypeScript project.
+Framework-agnostic RSS 2.0 feed generation engine with comprehensive validation, error handling, and HTTP endpoint support. Provides complete RSS feed capabilities that can be used in any JavaScript/TypeScript project. Achieves RSS 2.0 standards compliance with Atom namespace support.
 
 ## Architecture
-Pure TypeScript/JavaScript engine with plug & play portability. Completely framework-agnostic - works with any JavaScript project. Self-contained feature with comprehensive testing and standards compliance.
+Modular TypeScript feature with plug & play portability. Completely framework-agnostic - works with any JavaScript project. Self-contained feature with comprehensive testing and standards compliance.
 
 ## Files
-- `index.ts` - Public API exports and feature metadata
-- `engine/` - Core RSS generation engine with TypeScript classes
-  - `types.ts` - Complete TypeScript type definitions
-  - `constants.ts` - RSS configuration constants and error codes
-  - `rss-generator.ts` - Main RSS 2.0 generation engine
-  - `utils.ts` - Utility functions for validation and processing
-- `endpoints/` - HTTP endpoint handling
-  - `rss-endpoint.ts` - Framework-agnostic endpoint handler
-- `__tests__/rss-feed.test.ts` - Comprehensive test suite (50+ tests)
-- `README.md` - Feature documentation
-
-**Note**: This is a pure TypeScript/JavaScript engine. No framework-specific components included for maximum portability. All files are self-contained within the feature directory.
+- `src/features/rss-feed/` - Complete modular feature
+  - `index.ts` - Public API exports and feature metadata
+  - `engine/` - Core RSS generation engine with TypeScript classes
+    - `types.ts` - Complete TypeScript type definitions
+    - `constants.ts` - RSS configuration constants and error codes
+    - `rss-generator.ts` - Main RSS 2.0 generation engine
+    - `utils.ts` - Utility functions for validation and processing
+  - `endpoints/` - HTTP endpoint handling
+    - `rss-endpoint.ts` - Framework-agnostic endpoint handler
+  - `__tests__/rss-feed.test.ts` - Comprehensive test suite (30 tests)
+  - `README.md` - Feature documentation
+- `src/pages/rss.xml.ts` - RSS endpoint using legacy system
+- `src/pages/rss-new.xml.ts` - RSS endpoint using modular feature (demo)
 
 ## Usage
 
@@ -73,7 +74,7 @@ import { CONFIG } from '../config';
 export async function GET() {
   const posts = await getCollection('blog');
   const response = quickHandleRSSRequest(posts, CONFIG);
-  
+
   return new Response(response.body, {
     headers: response.headers,
     status: response.status
@@ -83,170 +84,179 @@ export async function GET() {
 
 ## Configuration
 
-### RSS Configuration Interface
+### RSS Configuration
 ```typescript
-interface RSSConfig {
-  site: {
-    url: string;           // Site URL (required)
-    title: string;         // Site title (required)
-    description: string;   // Site description (required)
-    author: string;        // Author name (required)
-    language: string;      // Language code (e.g., 'en-US')
-  };
-  feed: {
-    version: string;       // RSS version (default: '2.0')
-    ttl: number;          // Time to live in minutes (default: 60)
-    path: string;         // Feed path (default: '/rss.xml')
-    maxItems?: number;    // Max items in feed (default: 50)
-  };
-  content: {
-    maxExcerptLength: number;  // Max excerpt length (default: 500)
-    minExcerptLength: number;  // Min excerpt length (default: 50)
-    defaultCategory: string;   // Default category (default: 'Blog')
-  };
+export const BLOG_CONFIG = {
+  excerptLength: 160,
+  rss: {
+    enabled: true,
+    title: `${SITE_INFO.title} - Blog`,
+    description: 'Últimos artículos sobre desarrollo web y tecnología',
+    feedUrl: `${SITE_INFO.url}/rss.xml`
+  }
+} as const;
+
+const RSS_CONFIG = {
+  FEED_PATH: '/rss.xml',
+  TTL: 60, // minutes
+  GENERATOR: `Astro v${process.env.npm_package_dependencies_astro || '5.8.0'}`,
+  LANGUAGE: 'es'
+} as const;
+```
+
+### Post Filtering
+```typescript
+// Environment-aware filtering (same as sitemap)
+export function shouldIncludePost(post: CollectionEntry<'blog'>): boolean {
+  return import.meta.env.PROD ? !post.data.draft : true;
 }
 ```
 
-### Generation Options
+## RSS Generation
+
+### Main Generation Pipeline
 ```typescript
-interface RSSGenerationOptions {
-  postFilter?: (post: BlogPost) => boolean;  // Custom post filter
-  maxItems?: number;                         // Override max items
-  includeFullContent?: boolean;              // Include full content
-  category?: string;                         // Custom category
+export function generateRSSFeed(posts: CollectionEntry<'blog'>[]): string {
+  const buildDate = new Date().toUTCString();
+  const lastBuildDate = posts.length > 0 ? new Date(posts[0].data.date).toUTCString() : buildDate;
+  
+  return `<?xml version="1.0" encoding="UTF-8"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>${escapeXML(BLOG_CONFIG.rss.title)}</title>
+    <description>${escapeXML(BLOG_CONFIG.rss.description)}</description>
+    <link>${SITE_INFO.url}</link>
+    <language>${RSS_CONFIG.LANGUAGE}</language>
+    <lastBuildDate>${lastBuildDate}</lastBuildDate>
+    <ttl>${RSS_CONFIG.TTL}</ttl>
+    <generator>${RSS_CONFIG.GENERATOR}</generator>
+    <atom:link href="${BLOG_CONFIG.rss.feedUrl}" rel="self" type="application/rss+xml" />
+    
+    ${posts.map(post => generateRSSItem(post)).join('\n')}
+  </channel>
+</rss>`;
+}
+```
+
+### RSS Item Generation
+```typescript
+export function generateRSSItem(post: CollectionEntry<'blog'>): string {
+  const postUrl = `${SITE_INFO.url}/blog/${post.slug}`;
+  const pubDate = new Date(post.data.date).toUTCString();
+  const description = post.data.description || generateExcerpt(post.body);
+  
+  return `    <item>
+      <title>${escapeXML(post.data.title)}</title>
+      <description>${escapeXML(description)}</description>
+      <link>${postUrl}</link>
+      <guid isPermaLink="true">${postUrl}</guid>
+      <pubDate>${pubDate}</pubDate>
+      <author>${escapeXML(SITE_INFO.author.email)} (${escapeXML(SITE_INFO.author.name)})</author>
+      <category>${escapeXML(post.data.tags?.[0] || 'General')}</category>
+    </item>`;
+}
+```
+
+### Automatic Excerpt Generation
+```typescript
+function generateExcerpt(content: string): string {
+  const plainText = content
+    .replace(/^---[\s\S]*?---/, '') // Remove frontmatter
+    .replace(/#{1,6}\s+/g, '') // Headers
+    .replace(/\*\*(.*?)\*\*/g, '$1') // Bold
+    .replace(/\*(.*?)\*/g, '$1') // Italic
+    .replace(/`(.*?)`/g, '$1') // Inline code
+    .replace(/\[(.*?)\]\(.*?\)/g, '$1') // Links
+    .replace(/!\[.*?\]\(.*?\)/g, '') // Images
+    .replace(/\n+/g, ' ') // Multiple newlines to space
+    .trim();
+  
+  return plainText.length <= BLOG_CONFIG.excerptLength 
+    ? plainText 
+    : plainText.slice(0, BLOG_CONFIG.excerptLength - 3) + '...';
+}
+```
+
+### XML Security
+```typescript
+function escapeXML(text: string | undefined): string {
+  if (!text) return '';
+  
+  return text
+    .replace(/&/g, '&amp;')     // Must be first
+    .replace(/</g, '&lt;')
+    .replace(/>/g, '&gt;')
+    .replace(/"/g, '&quot;')
+    .replace(/'/g, '&#39;')
+    .replace(/[\x00-\x08\x0B\x0C\x0E-\x1F\x7F]/g, ''); // Control chars
 }
 ```
 
 ## Generated Output
 
-### RSS 2.0 XML Structure
+### RSS Feed Structure
 ```xml
 <?xml version="1.0" encoding="UTF-8"?>
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
-    <title>Site Title</title>
-    <description>Site Description</description>
-    <link>https://example.com</link>
-    <atom:link href="https://example.com/rss.xml" rel="self" type="application/rss+xml"/>
-    <language>en-US</language>
-    <managingEditor>Author Name</managingEditor>
-    <webMaster>Author Name</webMaster>
-    <lastBuildDate>Wed, 01 Jan 2024 12:00:00 GMT</lastBuildDate>
-    <pubDate>Wed, 01 Jan 2024 12:00:00 GMT</pubDate>
+    <title>Matías Cappato - Blog</title>
+    <description>Últimos artículos sobre desarrollo web y tecnología</description>
+    <link>https://cappato.dev</link>
+    <language>es</language>
+    <lastBuildDate>Mon, 01 Jan 2024 00:00:00 GMT</lastBuildDate>
     <ttl>60</ttl>
-    <generator>Astro RSS Feed Generator</generator>
-    <docs>https://www.rssboard.org/rss-specification</docs>
-
+    <generator>Astro v5.8.0</generator>
+    <atom:link href="https://cappato.dev/rss.xml" rel="self" type="application/rss+xml" />
+    
     <item>
-      <title>Post Title</title>
-      <description>Post description or excerpt</description>
-      <link>https://example.com/blog/post-slug</link>
-      <guid isPermaLink="true">https://example.com/blog/post-slug</guid>
-      <pubDate>Wed, 01 Jan 2024 12:00:00 GMT</pubDate>
-      <author>Author Name</author>
-      <category>Blog</category>
+      <title>My Blog Post</title>
+      <description>Post description or auto-generated excerpt...</description>
+      <link>https://cappato.dev/blog/my-post</link>
+      <guid isPermaLink="true">https://cappato.dev/blog/my-post</guid>
+      <pubDate>Mon, 01 Jan 2024 00:00:00 GMT</pubDate>
+      <author>matias@cappato.dev (Matías Cappato)</author>
+      <category>Web Development</category>
     </item>
   </channel>
 </rss>
 ```
 
-## Engine Classes
+## Extension
 
-### Core Processing Classes
-Framework-agnostic TypeScript classes for RSS generation.
+### Adding Custom Fields
+1. Extend `generateRSSItem()` function in `src/utils/rss.ts`
+2. Add new XML elements (categories, enclosures, etc.)
+3. Update tests in `src/utils/__tests__/rss.test.ts`
 
-### RSSGenerator
-Main RSS generation engine with validation and error handling.
+### Multiple Feed Types
+1. Create new endpoint: `src/pages/atom.xml.ts`
+2. Implement `generateAtomFeed()` utility
+3. Add autodiscovery links for both formats
 
-**Methods:**
-- `generateFeed(posts, options)` - Generate complete RSS feed
-- `updateConfig(config)` - Update RSS configuration
-- `getConfig()` - Get current configuration
-
-### RSSEndpointHandler
-HTTP endpoint handler for RSS requests.
-
-**Methods:**
-- `handleRequest(posts, options)` - Handle RSS HTTP request
-- `updateConfig(config)` - Update configuration
-- `getConfig()` - Get current configuration
-
-### Utility Functions
-- `escapeXML(text)` - Escape XML special characters
-- `validateRSSConfig(config)` - Validate RSS configuration
-- `validatePostData(post)` - Validate blog post data
-- `generateExcerpt(content, maxLength, minLength)` - Generate post excerpt
-- `shouldIncludePost(post)` - Filter posts by environment
-- `getValidPosts(posts, filter)` - Get valid, filtered posts
-
-## Error Handling
-
-### Validation Errors
-- Invalid site configuration
-- Missing required fields (title, date, URL)
-- Invalid URL format
-- Invalid date format
-
-### Generation Errors
-- Empty content handling
-- XML escaping failures
-- Post processing errors
-
-### HTTP Errors
-- 500 status for generation failures
-- Error XML response with details
-- Proper error logging
-
-## Testing
-
-### Test Coverage
-- **50+ comprehensive tests** covering all functionality
-- **Engine tests**: RSS generation, validation, utilities
-- **Endpoint tests**: HTTP handling, error responses
-- **Utility tests**: XML escaping, excerpt generation, post filtering
-- **Integration tests**: End-to-end RSS generation scenarios
-- **Framework-agnostic**: Pure TypeScript testing without UI dependencies
-
-### Running Tests
-```bash
-npm run test:run -- rss-feed
+### Custom Excerpt Logic
+```typescript
+// Custom excerpt generation
+function generateCustomExcerpt(post: CollectionEntry<'blog'>): string {
+  // Custom logic for specific post types
+  if (post.data.type === 'tutorial') {
+    return `Tutorial: ${post.data.description}`;
+  }
+  
+  return generateExcerpt(post.body);
+}
 ```
 
-### Test Results
+### Feed Validation
+```typescript
+// URL validation
+function validateSiteUrl(url: string): void {
+  try {
+    new URL(url);
+  } catch {
+    throw new Error(`Site URL is not valid: ${url}`);
+  }
+}
 ```
-✓ 50+ tests passing (100% success rate)
-✓ All engine classes tested
-✓ All utility functions validated
-✓ HTTP endpoint scenarios covered
-✓ Error handling scenarios verified
-```
-
-## Standards Compliance
-
-### RSS 2.0 Specification
-- Complete RSS 2.0 compliance
-- Atom namespace support
-- Proper XML structure and encoding
-- Valid RSS elements and attributes
-
-### Security Features
-- XML special character escaping
-- Control character removal
-- URL validation
-- Input sanitization
-
-## Performance Features
-
-### Optimization
-- Efficient post filtering
-- Lazy evaluation
-- Memory-conscious processing
-- Configurable limits
-
-### Caching
-- HTTP cache headers
-- Conditional generation
-- Build-time optimization
 
 ## AI Context
 ```yaml
@@ -259,9 +269,10 @@ architecture: "pure_typescript_engine_plug_and_play"
 framework_compatibility: "agnostic_works_with_any_javascript_project"
 validation: ["rss_config_validation", "post_data_validation", "xml_escaping"]
 standards_compliance: ["rss_2_0", "atom_namespace", "xml_1_0"]
-test_coverage: "50_plus_comprehensive_tests_framework_agnostic"
+test_coverage: "30_comprehensive_tests_framework_agnostic"
 dependencies: ["none_pure_typescript"]
-key_files: ["index.ts", "engine_directory", "endpoints_directory", "tests_directory"]
+key_files: ["src/features/rss-feed/index.ts", "engine_directory", "endpoints_directory", "tests_directory"]
 performance_features: ["efficient_filtering", "configurable_limits", "memory_conscious"]
 security_features: ["xml_escaping", "input_validation", "url_validation"]
+migration_status: "legacy_endpoint_maintained_for_backward_compatibility"
 ```

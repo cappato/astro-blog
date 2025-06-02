@@ -1,168 +1,113 @@
-# Image Optimization Feature
+# Image Optimization
 
 ## Purpose
-Framework-agnostic image optimization engine with multi-format support and CLI interface. Provides automated image processing with WebP, AVIF, JPEG formats, LQIP generation, and comprehensive validation. Achieves 89.4% average file size reduction while maintaining visual quality.
+Framework-agnostic image optimization engine that generates multiple formats (WebP, AVIF, JPEG), social media variants, thumbnails, and LQIP placeholders. Achieves 89.4% average file size reduction while maintaining visual quality. Pure TypeScript engine with CLI interface.
 
 ## Architecture
-Pure TypeScript/JavaScript engine with plug & play portability. Completely framework-agnostic - works with any JavaScript project (Node.js, React, Vue, Astro, etc.). Self-contained with CLI interface and comprehensive testing suite.
+Modular TypeScript feature with plug & play portability. Completely framework-agnostic - works with any JavaScript project. Self-contained with comprehensive testing and CLI interface.
 
 ## Files
-- `index.ts` - Public API exports and feature metadata
-- `engine/` - Core processing engine with TypeScript classes
-  - `types.ts` - Complete TypeScript type definitions
-  - `constants.ts` - Configuration constants and error codes
-  - `presets.ts` - Image optimization presets and validation
-  - `image-processor.ts` - Sharp-based image processing engine
-  - `file-utils.ts` - File system operations and utilities
-  - `logger.ts` - Comprehensive logging system with levels
-- `cli/optimize-images.ts` - Modular CLI interface
+- `src/features/image-optimization/` - Complete modular feature
+  - `index.ts` - Public API exports and feature metadata
+  - `engine/` - Core TypeScript processing engine
+    - `types.ts` - Complete TypeScript type definitions
+    - `constants.ts` - Configuration constants and error codes
+    - `presets.ts` - Image optimization presets and validation
+    - `image-processor.ts` - Sharp-based image processing engine
+    - `file-utils.ts` - File system operations and utilities
+    - `logger.ts` - Comprehensive logging system with levels
+  - `cli/optimize-images.ts` - Modular CLI interface
+  - `__tests__/image-optimization.test.ts` - Unified test suite (27 tests)
+  - `README.md` - Feature documentation
 - `scripts/optimize-images.js` - CLI wrapper for backward compatibility
-- `__tests__/image-optimization.test.ts` - Unified test suite (27 tests)
-- `README.md` - Feature documentation
-
-**Note**: This is a pure TypeScript/JavaScript engine. No framework-specific components included for maximum portability. All files are self-contained within the feature directory.
 
 ## Usage
 
-### Framework-Agnostic Engine
-This is a pure TypeScript/JavaScript image processing engine. Use it programmatically or via CLI - no framework dependencies.
-
-### Programmatic Usage
-```typescript
-import { ImageProcessor, optimizeImage } from '../features/image-optimization';
-
-// Using the convenience function
-const result = await optimizeImage(
-  '/source/image.jpg',
-  '/output/directory',
-  { preset: 'og', generateLQIP: true }
-);
-
-// Using the processor directly
-const processor = new ImageProcessor();
-const result = await processor.processImageWithPreset(
-  '/source/image.jpg',
-  '/output/directory',
-  'image.jpg',
-  'og'
-);
-```
-
-### CLI Usage (Backward Compatible)
+### CLI Commands (NPM Scripts)
 ```bash
 # Optimize all images from all posts
 npm run optimize-images
 
-# Optimize images from specific post
-npm run optimize-images -- --postId=my-post
+# Optimize images from a specific post
+npm run optimize-images -- --postId=bienvenida
 
-# Optimize specific file with preset
-npm run optimize-images -- --file=images/raw/post/image.jpg --preset=og
+# Force regeneration of all images
+npm run optimize-images -- --force
 
-# Force regeneration with debug output
-npm run optimize-images -- --force --debug --stats
+# Optimize a specific image with preset
+npm run optimize-images -- --file=images/raw/section/image.jpg --preset=og
 
-# Dry run to see what would be processed
-npm run optimize-images -- --dry-run
+# Debug mode with detailed information
+npm run optimize-images -- --debug
+
+# Combine options
+npm run optimize-images -- --postId=test --force --debug
 ```
 
-### Setup Function
-```typescript
-import { setupImageOptimization } from '../features/image-optimization';
+### Available Options
+| Option | Type | Description |
+|--------|------|-------------|
+| `--postId` | string | Process specific post directory |
+| `--force` | boolean | Force regeneration of existing images |
+| `--file` | string | Process single image file |
+| `--preset` | string | Preset to use with --file |
+| `--debug` | boolean | Enable detailed logging |
 
-const { processor, fileUtils, logger } = await setupImageOptimization({
-  logLevel: 'debug',
-  customPaths: {
-    rawDir: 'custom/raw',
-    publicDir: 'custom/public'
-  }
-});
-```
-
-## Engine Classes
-
-### Core Processing Classes
-Framework-agnostic TypeScript classes for image optimization.
-
-### ImageProcessor
-Core image processing engine using Sharp.
-
-**Methods:**
-- `processImageWithPreset(sourcePath, outputDir, fileName, presetName): Promise<ProcessingResult>`
-- `generateLQIP(sourcePath, outputDir, baseName): Promise<LQIPResult>`
-- `validateImage(imagePath): Promise<ImageValidationResult>`
-- `getImageMetadata(imagePath): Promise<ImageMetadata>`
-- `calculateOptimalDimensions(originalWidth, originalHeight, targetWidth, targetHeight?): DimensionResult`
-
-### FileUtils
-File system operations and directory management.
-
-**Methods:**
-- `ensureDirectories(): void`
-- `getPostDirectories(): string[]`
-- `getPostImages(postId): PostImages`
-- `needsProcessing(sourcePath, outputPath, force): boolean`
-- `createOutputDirectory(postId): string`
-- `resolveFilePath(filePath, cwd?): FileResolutionResult`
-
-### Logger
-Comprehensive logging system with levels and formatting.
-
-**Methods:**
-- `debug(message, ...args): void`
-- `info(message, ...args): void`
-- `warn(message, ...args): void`
-- `error(message, error?): void`
-- `progress(current, total, context?): void`
-- `finish(message): void`
-- `stats(stats): void`
-
-## Presets
-
-### Available Presets
-```typescript
-const presets = {
-  default: { width: 1200, height: null, format: 'webp', quality: 80 },
-  og: { width: 1200, height: 630, format: 'webp', quality: 80, fit: 'cover' },
-  'og-jpg': { width: 1200, height: 630, format: 'jpeg', quality: 80, fit: 'cover' },
-  thumb: { width: 600, height: 315, format: 'webp', quality: 80, fit: 'cover' },
-  wsp: { width: 1080, height: 1080, format: 'webp', quality: 80, fit: 'cover' },
-  avif: { width: 1200, height: null, format: 'avif', quality: 65, fit: 'inside' },
-  'og-avif': { width: 1200, height: 630, format: 'avif', quality: 65, fit: 'cover' },
-  lqip: { width: 20, height: null, format: 'webp', quality: 20, fit: 'inside' }
-};
-```
-
-### Custom Presets
-```typescript
-import { createCustomPreset, validatePreset } from '../features/image-optimization';
-
-const customPreset = createCustomPreset('my-preset', {
-  width: 800,
-  height: 600,
-  format: 'webp',
-  quality: 85,
-  fit: 'cover'
-});
-```
+### Processing Behavior
+- **Cover images** (`portada.jpg/png/webp`): Generate ALL presets (8 variants)
+- **Other images**: Generate only DEFAULT preset (1 variant)
+- **LQIP generation**: Automatic for cover images (base64 + file)
+- **Smart detection**: Skip processing if output is newer than source
 
 ## Configuration
 
-### Default Configuration
+### Available Presets
+| Preset | Dimensions | Format | Quality | Use Case |
+|--------|------------|--------|---------|----------|
+| `default` | 1200px width | WebP | 80% | General images |
+| `og` | 1200x630px | WebP | 80% | Open Graph (social media) |
+| `og-jpg` | 1200x630px | JPEG | 80% | Open Graph (compatibility) |
+| `thumb` | 600x315px | WebP | 80% | Thumbnails |
+| `wsp` | 1080x1080px | WebP | 80% | WhatsApp Stories |
+| `avif` | 1200px width | AVIF | 65% | Modern format |
+| `og-avif` | 1200x630px | AVIF | 65% | Modern Open Graph |
+| `lqip` | 20px width | WebP | 20% | Low Quality Placeholder |
+
+### Preset Configuration
 ```typescript
-export const IMAGE_OPTIMIZATION_CONFIG = {
-  defaultPreset: 'default',
-  minDimensions: { width: 100, height: 100 },
-  maxFileSize: 10 * 1024 * 1024, // 10MB
-  lqip: { width: 20, blur: 5, quality: 20 }
+export const PRESETS = {
+  default: {
+    width: 1200,
+    height: null,
+    format: 'webp',
+    quality: 80
+  },
+  og: {
+    width: 1200,
+    height: 630,
+    format: 'webp',
+    quality: 80,
+    fit: 'cover'
+  },
+  // ... more presets
 };
 ```
 
-### Project Paths
+### Image Configuration
 ```typescript
-export const PROJECT_PATHS = {
-  rawDir: 'images/raw',
-  publicDir: 'public/images'
+export const IMAGE_CONFIG = {
+  DEFAULT_PRESET: 'default',
+  MIN_DIMENSIONS: { width: 100, height: 100 },
+  MAX_FILE_SIZE: 10 * 1024 * 1024, // 10MB
+  LQIP: { width: 20, blur: 5, quality: 20 }
+};
+```
+
+### Path Configuration
+```typescript
+export const PATHS = {
+  RAW_DIR: 'images/raw',
+  PUBLIC_DIR: 'public/images'
 };
 ```
 
@@ -172,7 +117,7 @@ export const PROJECT_PATHS = {
 **Test case**: 6 images (6.2MB) → 14 optimized files (676KB)
 **Total reduction**: 89.4% (5.5MB saved)
 
-### File Structure
+### File Structure with Real Sizes
 ```
 public/images/test/
 ├── portada.webp              # 44KB  (from 2MB JPEG - 97.9% reduction)
@@ -191,121 +136,141 @@ public/images/test/
 └── profile.webp              # 92KB  (from 138KB JPEG - 33.3% reduction)
 ```
 
-## Features
+### Integration with Astro
+```astro
+---
+// src/components/media/OptimizedImage.astro
+const isPostImage = src.includes('/images/') && src.includes('/portada');
+const basePath = `/images/${postId}/portada`;
 
-### Multi-format Support
-- **WebP**: Modern format with excellent compression
-- **AVIF**: Next-generation format for modern browsers
-- **JPEG**: Fallback format for maximum compatibility
-- **PNG**: Lossless format when needed
+const avifSrc = `${basePath}${suffix}.avif`;
+const webpSrc = `${basePath}${suffix}.webp`;
+const lqipSrc = `${basePath}-lqip.webp`;
+---
 
-### Processing Features
-- **LQIP Generation**: Low Quality Image Placeholders for smooth loading
-- **Responsive Optimization**: Multiple sizes and formats
-- **Validation System**: Comprehensive image and preset validation
-- **Error Handling**: Graceful failure with detailed error messages
-- **Performance**: Concurrent processing with memory management
-
-### CLI Features
-- **Batch Processing**: Process all posts or specific posts
-- **Force Regeneration**: Override existing optimized images
-- **Debug Mode**: Detailed logging and processing information
-- **Dry Run**: Preview what would be processed
-- **Progress Tracking**: Real-time progress updates
-- **Statistics**: Detailed processing statistics
-
-## Testing
-
-### Test Coverage
-- **27 comprehensive tests** covering all functionality
-- **Engine tests**: Image processing, file utilities, logging
-- **Preset tests**: Validation, generation, custom presets
-- **CLI tests**: Argument parsing, processing workflows
-- **Integration tests**: End-to-end processing scenarios
-- **Framework-agnostic**: Pure TypeScript testing without UI dependencies
-
-### Running Tests
-```bash
-npm run test:run -- image-optimization
+<picture>
+  <source srcset={avifSrc} type="image/avif" />
+  <source srcset={webpSrc} type="image/webp" />
+  <img src={fallbackSrc} alt={alt} loading={loading} />
+</picture>
 ```
 
-### Test Results
-```
-✓ 27 tests passing (100% success rate)
-✓ All engine classes tested
-✓ All preset configurations validated
-✓ File processing workflows verified
-✓ Error handling scenarios covered
-```
+## Processing Pipeline
 
-## Error Handling
-
-### Validation Errors
+### Image Processing Flow
 ```typescript
-try {
-  const result = await processor.processImageWithPreset(sourcePath, outputDir, fileName, preset);
-  if (!result.success) {
-    console.error('Processing failed:', result.error);
+async function processImage(sourcePath, outputDir, fileName, presetName, force = false) {
+  // Validate preset exists and is valid
+  const preset = getPreset(presetName);
+  if (!preset || !validatePreset(preset)) {
+    return false;
   }
-} catch (error) {
-  console.error('Unexpected error:', error);
+
+  // Generate output filename using centralized function
+  const outputFileName = generateOutputFilename(baseName, presetName, preset.format);
+  
+  // Check if processing is needed
+  if (!needsProcessing(sourcePath, outputPath, force)) {
+    return true; // Skip if up to date
+  }
+
+  // Validate image before processing
+  const validation = await validateImage(sourcePath);
+  if (!validation.valid) {
+    return false;
+  }
+
+  // Process with Sharp
+  const result = await processImageWithPreset(sourcePath, outputDir, fileName, preset, presetName);
+  return result.success;
 }
 ```
 
-### Graceful Fallbacks
-- **Invalid images**: Detailed validation error messages
-- **Missing files**: File existence checks with clear errors
-- **Processing failures**: Graceful degradation with error logging
-- **Invalid presets**: Preset validation with helpful suggestions
-
-## Performance
-
-### Optimization Features
-- **Concurrent processing**: Multiple images processed simultaneously
-- **Memory management**: Sharp memory limits and cleanup
-- **File modification checking**: Skip unchanged files
-- **Progressive enhancement**: Component works without JavaScript
-
-### Caching Strategy
-- **File modification time**: Only process when source is newer
-- **Force flag**: Override caching when needed
-- **Incremental processing**: Process only what's needed
-
-## Migration Guide
-
-### From Legacy System
-```diff
-- import OptimizedImage from '../components/media/OptimizedImage.astro';
-+ import { OptimizedImage } from '../features/image-optimization';
-
-- import { processImageWithPreset } from '../scripts/lib/image-processor.js';
-+ import { processImageWithPreset } from '../features/image-optimization';
+### LQIP Generation
+```typescript
+export async function generateLQIP(sourcePath, outputDir, baseName) {
+  await sharp(sourcePath)
+    .resize(IMAGE_CONFIG.LQIP.width)
+    .blur(IMAGE_CONFIG.LQIP.blur)
+    .webp({ quality: IMAGE_CONFIG.LQIP.quality })
+    .toFile(lqipPath);
+    
+  // Generate base64 version for inline use
+  const base64 = lqipBuffer.toString('base64');
+  const dataUri = `data:image/webp;base64,${base64}`;
+}
 ```
 
-### CLI Compatibility
-All existing CLI commands continue to work unchanged:
-```bash
-npm run optimize-images              # ✅ Works
-npm run optimize-images -- --postId=test  # ✅ Works
-npm run optimize-images -- --force --debug  # ✅ Works
+## Validation System
+
+### Preset Validation
+```typescript
+export function validatePreset(preset) {
+  return !!(
+    preset.format &&
+    typeof preset.format === 'string' &&
+    (preset.width || preset.height) &&
+    preset.quality &&
+    typeof preset.quality === 'number' &&
+    preset.quality > 0 &&
+    preset.quality <= 100
+  );
+}
 ```
+
+### Image Validation
+```typescript
+export async function validateImage(imagePath) {
+  // File existence check
+  if (!fs.existsSync(imagePath)) return { valid: false, error: 'File not found' };
+  
+  // Metadata validation
+  const metadata = await getImageMetadata(imagePath);
+  if (!metadata.success) return { valid: false, error: metadata.error };
+  
+  // Dimension validation
+  if (metadata.width < IMAGE_CONFIG.MIN_DIMENSIONS.width) {
+    return { valid: false, error: 'Image too small' };
+  }
+  
+  // Format validation
+  const supportedFormats = ['jpeg', 'png', 'webp', 'gif', 'tiff', 'avif'];
+  if (!supportedFormats.includes(metadata.format)) {
+    return { valid: false, error: `Unsupported format: ${metadata.format}` };
+  }
+  
+  return { valid: true, metadata };
+}
+```
+
+## Extension
+
+### Adding New Presets
+1. Add preset configuration to `IMAGE_PRESETS` in `src/features/image-optimization/engine/presets.ts`
+2. Define width, height, format, quality, and fit parameters
+3. Update tests in `src/features/image-optimization/__tests__/image-optimization.test.ts`
+
+### Custom Format Support
+1. Extend `applyFormat()` function in `src/features/image-optimization/engine/image-processor.ts`
+2. Add format validation in `validatePreset()` function
+3. Update supported extensions in `SUPPORTED_EXTENSIONS` constant
 
 ## AI Context
 ```yaml
 feature_type: "image_optimization_engine"
-purpose: "framework_agnostic_image_processing_and_optimization"
+purpose: "framework_agnostic_image_processing_automation"
 input_sources: ["raw_images", "cli_commands", "preset_configuration"]
 output_formats: ["webp", "avif", "jpeg", "png", "lqip"]
 processing_engine: "sharp_with_typescript"
-architecture: "pure_typescript_engine_plug_and_play"
+architecture: "modular_typescript_feature_plug_and_play"
 framework_compatibility: "agnostic_works_with_any_javascript_project"
-validation: "comprehensive_image_and_preset_validation"
+validation: ["comprehensive_image_and_preset_validation", "typescript_type_safety"]
+performance_impact: "build_time_only"
 cli_interface: "yargs_based_with_backward_compatibility"
-testing: "27_comprehensive_tests_framework_agnostic"
-typescript_integration: "complete_type_safety"
-dependencies: ["sharp", "fs-extra", "yargs"]
-key_files: ["index.ts", "engine_directory", "cli_directory", "tests_directory"]
-performance_features: ["concurrent_processing", "memory_management", "caching"]
+test_coverage: "27_comprehensive_tests_framework_agnostic"
 real_world_performance: "89_4_percent_average_file_size_reduction"
 test_case_results: "6_2mb_to_676kb_with_14_optimized_variants"
+dependencies: ["sharp", "fs-extra", "yargs"]
+key_files: ["src/features/image-optimization/index.ts", "engine_directory", "cli_directory", "tests_directory"]
+migration_status: "legacy_cli_maintained_for_backward_compatibility"
 ```

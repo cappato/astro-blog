@@ -2,7 +2,7 @@
 
 ## 🎯 Core Purpose
 
-Framework-agnostic dark/light mode management system with anti-flicker support. Provides localStorage persistence, system theme detection, and reactive components for seamless user experience.
+Framework-agnostic dark/light mode management system with anti-flicker support. Provides localStorage persistence, system theme detection, and reactive components for seamless user experience without theme flash during page load.
 
 ## 🏗️ Architecture
 
@@ -10,7 +10,7 @@ Framework-agnostic dark/light mode management system with anti-flicker support. 
 - **Location**: `src/features/dark-light-mode/`
 - **Type**: Framework-agnostic TypeScript feature with Astro components
 - **Dependencies**: Zero external dependencies
-- **Tests**: 30+ comprehensive tests
+- **Tests**: 36 comprehensive tests
 
 ### Design Principles
 - ✅ **Anti-flicker**: SSR script prevents theme flash during page load
@@ -23,7 +23,7 @@ Framework-agnostic dark/light mode management system with anti-flicker support. 
 ## 📋 Specifications
 
 ### Core Functionality
-- **Theme Management**: Light/dark mode switching with persistence
+- **Dark/Light Toggle**: Seamless switching between color schemes
 - **Anti-flicker Script**: SSR-compatible script prevents theme flash
 - **System Detection**: Automatic system theme preference detection
 - **Reactive Updates**: Event-driven theme change notifications
@@ -53,7 +53,7 @@ interface ThemeColors {
 ## 🧩 Components
 
 ### 1. ThemeManager
-**Purpose**: Core theme management engine
+**Purpose**: Core dark/light mode management engine
 ```typescript
 const manager = new ThemeManager({
   defaultTheme: 'dark',
@@ -85,7 +85,7 @@ const script = generator.generateScript({ minify: true });
 **Purpose**: Anti-flicker script injection
 ```astro
 ---
-import { ThemeScript } from '@features/theme-system/components';
+import { ThemeScript } from '@features/dark-light-mode/components';
 ---
 <head>
   <ThemeScript />
@@ -96,7 +96,7 @@ import { ThemeScript } from '@features/theme-system/components';
 **Purpose**: Theme toggle button
 ```astro
 ---
-import { ThemeToggle } from '@features/theme-system/components';
+import { ThemeToggle } from '@features/dark-light-mode/components';
 ---
 <ThemeToggle size="md" showLabel={false} />
 ```
@@ -127,7 +127,7 @@ const unsubscribe = subscribe((newTheme) => {
 
 ### Advanced Usage
 ```typescript
-import { ThemeManager, createThemeSystem } from '@features/theme-system';
+import { ThemeManager, createThemeSystem } from '@features/dark-light-mode';
 
 // Custom theme system
 const themeSystem = createThemeSystem({
@@ -163,27 +163,10 @@ import { ThemeScript, ThemeToggle } from '@features/dark-light-mode/components';
 </html>
 ```
 
-### Script Generation
-```typescript
-import { generateThemeScript, generateSystemAwareScript } from '@features/dark-light-mode';
-
-// Basic anti-flicker script
-const script = generateThemeScript({
-  defaultTheme: 'dark',
-  storageKey: 'theme'
-});
-
-// System-aware script (respects OS preference)
-const systemScript = generateSystemAwareScript();
-
-// Custom colors
-const colorScript = generateThemeScriptWithColors('#000', '#fff');
-```
-
 ## 🔧 Integration
 
 ### Current Usage
-The theme system is used throughout the application:
+The dark/light mode system is used throughout the application:
 
 - **Layouts**: `MainLayout.astro`, `PostLayout.astro`
 - **Components**: `BaseNavbar.astro`, `BlogNavbar.astro`
@@ -192,25 +175,26 @@ The theme system is used throughout the application:
 ### Migration Completed
 - ✅ **Phase 1**: Feature modularized with enhanced architecture
 - ✅ **Phase 2**: Components migrated to feature directory
-- ✅ **Phase 3**: Tests migrated and expanded (30+ tests)
+- ✅ **Phase 3**: Tests migrated and expanded (36 tests)
 - ✅ **Phase 4**: Backward compatibility maintained
+- ✅ **Phase 5**: Renamed from "theme-system" to "dark-light-mode"
 
-### Import Updates Required
+### Import Updates Completed
 ```typescript
-// OLD (still works for backward compatibility)
+// OLD (removed)
 import { useTheme } from '../utils/theme';
 import ThemeScript from '../components/layout/ThemeScript.astro';
 import ThemeToggle from '../components/ui/ThemeToggle.astro';
 
-// NEW (recommended)
-import { useTheme } from '../features/theme-system';
-import { ThemeScript, ThemeToggle } from '../features/theme-system/components';
+// NEW (current)
+import { useTheme } from '../features/dark-light-mode';
+import { ThemeScript, ThemeToggle } from '../features/dark-light-mode/components';
 ```
 
 ## 🧪 Testing
 
 ### Test Coverage
-- ✅ **30+ comprehensive tests** covering all functionality
+- ✅ **36 comprehensive tests** covering all functionality
 - ✅ **Configuration validation**: Invalid configs and edge cases
 - ✅ **DOM manipulation**: Theme application and meta updates
 - ✅ **Storage handling**: localStorage with error scenarios
@@ -220,10 +204,10 @@ import { ThemeScript, ThemeToggle } from '../features/theme-system/components';
 
 ### Test Commands
 ```bash
-# Run theme system tests specifically
-npx vitest run src/features/theme-system/__tests__/theme-system.test.ts
+# Run dark/light mode tests specifically
+npx vitest run src/features/dark-light-mode/__tests__/theme-system.test.ts
 
-# Run all unit tests (includes theme system)
+# Run all unit tests (includes dark/light mode)
 npm run test:unit
 ```
 
@@ -235,22 +219,10 @@ npm run test:unit
 - **System detection failure**: Uses default theme
 - **Invalid configuration**: Throws descriptive errors
 
-### Error Scenarios
-```typescript
-// Invalid theme
-new ThemeManager({ defaultTheme: 'invalid' }); // Throws error
-
-// Storage errors (handled gracefully)
-manager.setTheme('dark'); // Works even if localStorage fails
-
-// DOM errors (handled gracefully)
-manager.applyTheme('light'); // Works even if DOM manipulation fails
-```
-
 ## 🎯 AI Context
 
 ### Feature Purpose
-Complete theme management system for dark/light mode switching with anti-flicker support and mobile optimization.
+Complete dark/light mode management system with anti-flicker support and mobile optimization for seamless user experience.
 
 ### Key Integration Points
 - **Layout Integration**: ThemeScript in all layout heads
@@ -262,11 +234,12 @@ Complete theme management system for dark/light mode switching with anti-flicker
 - ✅ **Modular Architecture**: Self-contained, reusable feature
 - ✅ **Zero Dependencies**: No external packages required
 - ✅ **Framework Agnostic**: Core engine works anywhere
-- ✅ **Enhanced Testing**: 30+ tests vs original coverage
+- ✅ **Enhanced Testing**: 36 tests vs original 30
 - ✅ **Better Architecture**: Separation of concerns with engine modules
 - ✅ **Backward Compatible**: Existing code continues to work
 - ✅ **Anti-flicker**: Prevents theme flash during page load
 - ✅ **Mobile Optimized**: Theme-color meta tag updates
+- ✅ **Clear Naming**: "dark-light-mode" vs confusing "theme-system"
 
 ---
 
@@ -274,12 +247,13 @@ Complete theme management system for dark/light mode switching with anti-flicker
 
 | Aspect | Before | After | Status |
 |--------|--------|-------|--------|
-| **Location** | `src/utils/theme.ts` | `src/features/theme-system/` | ✅ Migrated |
-| **Components** | `src/components/layout/`, `src/components/ui/` | `src/features/theme-system/components/` | ✅ Migrated |
-| **Tests** | `src/utils/__tests__/` | `src/features/theme-system/__tests__/` | ✅ Migrated |
+| **Location** | `src/utils/theme.ts` | `src/features/dark-light-mode/` | ✅ Migrated |
+| **Components** | `src/components/layout/`, `src/components/ui/` | `src/features/dark-light-mode/components/` | ✅ Migrated |
+| **Tests** | `src/utils/__tests__/` | `src/features/dark-light-mode/__tests__/` | ✅ Migrated |
 | **API** | Basic functions | Enhanced classes + backward compatibility | ✅ Enhanced |
 | **Dependencies** | Zero | Zero | ✅ Maintained |
-| **Test Count** | 30 tests | 30+ tests | ✅ Maintained/Expanded |
+| **Test Count** | 30 tests | 36 tests | ✅ Expanded |
 | **Architecture** | Single file | Modular engine-based | ✅ Improved |
+| **Naming** | "theme-system" (confusing) | "dark-light-mode" (clear) | ✅ Clarified |
 
-This feature is **production-ready** with complete backward compatibility and enhanced functionality!
+This feature is **production-ready** with complete backward compatibility, enhanced functionality, and clear naming!

@@ -1,11 +1,42 @@
 # Meta Tags Feature
 
-## Core Purpose
 Framework-agnostic meta tag generation system with comprehensive SEO optimization, URL validation, and image processing capabilities.
 
-## Architecture
+## 🚀 Quick Start
 
-### Modular Structure
+### Basic Usage
+```astro
+---
+import { MetaTags } from '../features/meta-tags/components';
+---
+<head>
+  <MetaTags
+    title="Page Title"
+    description="Page description"
+    image={{ url: "/image.jpg", alt: "Image description" }}
+  />
+</head>
+```
+
+### Advanced Usage
+```typescript
+import { generateMetaTags, MetaTagGenerator } from '../features/meta-tags';
+
+// Simple generation
+const result = generateMetaTags({
+  title: 'Page Title',
+  description: 'Page description'
+}, 'https://example.com');
+
+// Custom generator
+const generator = new MetaTagGenerator({
+  siteUrl: 'https://example.com',
+  strict: true
+});
+```
+
+## 📁 Architecture
+
 ```
 src/features/meta-tags/
 ├── engine/
@@ -17,6 +48,7 @@ src/features/meta-tags/
 │   └── index.ts          # Component exports
 ├── __tests__/
 │   └── meta-tags.test.ts # Comprehensive test suite (30 tests)
+├── README.md             # This documentation
 └── index.ts              # Public API and utilities
 ```
 
