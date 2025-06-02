@@ -1,18 +1,11 @@
 ---
-import Favicons from '../components/seo/Favicons.astro';
-import '../styles/global.css';
-import CommonScripts from '../components/layout/CommonScripts.astro';
-import { ThemeScript } from '../features/dark-light-mode/components';
-import { MetaTags } from '../features/meta-tags/components';
-import ImageVariants from '../components/media/ImageVariants.astro';
-import { AutoSchema } from '../features/schema';
-import { ShareButtons, ShareMessage, CopyToast } from '../features/social-share';
-
+import BaseLayout from '../components/layout/BaseLayout.astro';
 import BlogNavbar from '../components/layout/navbar/BlogNavbar.astro';
 import Footer from '../components/layout/footer/Footer.astro';
+import ImageVariants from '../components/media/ImageVariants.astro';
+import { ShareButtons, ShareMessage, CopyToast } from '../features/social-share';
 import TagList from '../components/blog/TagList.astro';
 import { getReadingTime, formatReadingTime } from '../features/reading-time';
-import { AIMetadata } from '../features/ai-metadata';
 import AuthorCard from '../features/blog-enhancements/components/AuthorCard.astro';
 import RelatedArticles from '../features/related-articles/components/RelatedArticles.astro';
 import OptimizedImage from '../features/performance-optimization/components/OptimizedImage.astro';
@@ -91,57 +84,19 @@ const currentPost = {
 } as any;
 ---
 
-<!DOCTYPE html>
-<html lang="es">
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>{title} | Matías Cappato</title>
-
-  <!-- Script anti-flicker (debe ir lo antes posible) -->
-  <ThemeScript />
-
-  <!-- Meta descripción mejorada y única para cada post -->
-  <meta name="description" content={description || `Artículo sobre ${title} por Matías Cappato. ${tags?.join(', ')}`} />
-
-  <!-- Favicons -->
-  <Favicons />
-
-  <!-- Unified meta tags component -->
-  <MetaTags
-    title={title}
-    description={description}
-    image={shareImage}
-    type="article"
-    publishedDate={date}
-    modifiedDate={date}
-    author={author}
-    postId={postId}
-  />
-
-  <!-- Schema.org JSON-LD para artículos - FULLY AUTOMATED -->
-  <AutoSchema post={entry} />
-
-  <!-- Metadatos específicos para IA -->
-  <AIMetadata
-    title={title}
-    description={description}
-    type="article"
-    url={currentUrl}
-    datePublished={date}
-    dateModified={date}
-    tags={tags || []}
-    author={author || "Matías Cappato"}
-  />
-
-  <!-- Añadir metadatos adicionales para SEO -->
-  {tags && <meta name="keywords" content={tags.join(', ')} />}
-  <meta name="author" content={author || "Matías Cappato"} />
-  <meta name="robots" content="index, follow" />
-
-  <CommonScripts />
-  <link rel="stylesheet" href="/styles/blog.css">
-  <style>
+<BaseLayout
+  title={`${title} | Matías Cappato`}
+  description={description}
+  image={shareImage.url}
+  imageAlt={shareImage.alt}
+  type="article"
+  keywords={tags}
+  publishedDate={date.toISOString()}
+  modifiedDate={date.toISOString()}
+  customTitle={title}
+>
+  <link rel="stylesheet" href="/styles/blog.css" slot="head">
+  <style slot="head">
     @import '../features/blog-enhancements/styles/blog-enhancements.css';
 
     /* Estilos específicos para las variantes del autor en posts */
@@ -169,9 +124,8 @@ const currentPost = {
       border-top-color: var(--color-border-dark);
     }
   </style>
-</head>
-<body class="font-sans transition-theme">
-  <BlogNavbar currentPath={Astro.url.pathname} />
+
+  <BlogNavbar currentPath={Astro.url.pathname} slot="header" />
 
 
 
@@ -304,12 +258,10 @@ const currentPost = {
     </article>
   </main>
 
-  <!-- Usar el mismo componente Footer que funciona en la home -->
-  <Footer />
+  <Footer slot="footer" />
 
   <!-- Componente de toast para notificaciones de copia -->
   <CopyToast />
-</body>
-</html>
+</BaseLayout>
 
 

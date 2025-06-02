@@ -1,13 +1,9 @@
 ---
-import '../../../styles/global.css';
+import BaseLayout from '../../../components/layout/BaseLayout.astro';
 import { getCollection } from 'astro:content';
 import TagButton from '../../../components/ui/TagButton.astro';
-import { MetaTags } from '../../../features/meta-tags/components';
 import BlogNavbar from '../../../components/layout/navbar/BlogNavbar.astro';
 import Footer from '../../../components/layout/footer/Footer.astro';
-import CommonScripts from '../../../components/layout/CommonScripts.astro';
-import Favicons from '../../../components/seo/Favicons.astro';
-import { ThemeScript } from '../../../features/dark-light-mode/components';
 import BlogPostCard from '../../../components/blog/BlogPostCard.astro';
 import {
   getAllTags,
@@ -46,28 +42,18 @@ const postCards = transformPostsToCardData(posts);
 const { title, description } = getTagSeoData(tag);
 ---
 
-<!DOCTYPE html>
-<html lang="es">
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>{title}</title>
+<BaseLayout
+  title={title}
+  description={description}
+  image="/images/blog-cover.webp"
+  imageAlt={`Artículos sobre ${tag} en el blog de Matías Cappato`}
+  type="website"
+  keywords={[tag, "blog", "desarrollo web", "programación"]}
+  customTitle={`#${tag}`}
+>
+  <link rel="stylesheet" href="/styles/blog.css" slot="head">
 
-  <!-- Script anti-flicker (debe ir lo antes posible) -->
-  <ThemeScript />
-  <MetaTags
-    title={title}
-    description={description}
-    image={{ url: "/images/blog-cover.webp", alt: `Artículos sobre ${tag} en el blog de Matías Cappato` }}
-    type="website"
-    keywords={[tag, "blog", "desarrollo web", "programación"]}
-  />
-  <Favicons />
-  <CommonScripts />
-  <link rel="stylesheet" href="/styles/blog.css">
-</head>
-<body class="font-sans transition-theme">
-  <BlogNavbar currentPath={`/blog/tag/${tag}`} />
+  <BlogNavbar currentPath={`/blog/tag/${tag}`} slot="header" />
 
   <main class="container mx-auto px-4 py-8">
     <!-- Mostrar la etiqueta actual con un tamaño más grande -->
@@ -93,8 +79,7 @@ const { title, description } = getTagSeoData(tag);
     )}
   </main>
 
-  <Footer />
-</body>
-</html>
+  <Footer slot="footer" />
+</BaseLayout>
 
 

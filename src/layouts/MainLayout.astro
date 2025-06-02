@@ -1,16 +1,7 @@
 ---
-import '../styles/global.css';
-import CommonScripts from '../components/layout/CommonScripts.astro';
-import Favicons from '../components/seo/Favicons.astro';
+import BaseLayout from '../components/layout/BaseLayout.astro';
 import HomeNavbar from '../components/layout/navbar/HomeNavbar.astro';
 import Footer from '../components/layout/footer/Footer.astro';
-import { MetaTags } from '../features/meta-tags/components';
-import { AIMetadata } from '../features/ai-metadata';
-import { AutoSchema } from '../features/schema';
-import { ThemeScript } from '../features/dark-light-mode/components';
-import GlobalBreadcrumbs from '../features/global-breadcrumbs/components/GlobalBreadcrumbs.astro';
-import DeferredScripts from '../features/performance-optimization/components/DeferredScripts.astro';
-import PerformanceMonitor from '../features/performance-optimization/components/PerformanceMonitor.astro';
 
 interface Props {
     title: string;
@@ -38,71 +29,22 @@ const {
 const pubDate = publishedDate ? new Date(publishedDate) : undefined;
 const modDate = modifiedDate ? new Date(modifiedDate) : undefined;
 
-const currentUrl = Astro.url.pathname;
 ---
 
-<!DOCTYPE html>
-<html lang="es">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>{title}</title>
-
-    <!-- Script anti-flicker (debe ir lo antes posible) -->
-    <ThemeScript />
-    <MetaTags
-        title={title}
-        description={description}
-        image={image ? { url: image, alt: imageAlt } : undefined}
-        type={type}
-        keywords={keywords}
-        publishedDate={pubDate}
-        modifiedDate={modDate}
-    />
-    <AIMetadata
-        title={title}
-        description={description}
-        type={type}
-        url={currentUrl}
-        datePublished={pubDate}
-        dateModified={modDate}
-        tags={keywords}
-    />
-    <Favicons />
-
-    <!-- Schema.org structured data - FULLY AUTOMATED -->
-    <AutoSchema />
-
-    <CommonScripts />
-
-    <!-- Performance Optimizations -->
-    <DeferredScripts
-        enableAnalytics={false}
-        deferAnalytics={true}
-    />
-
-    <!-- Optimized Animations CSS -->
-    <link rel="stylesheet" href="/src/features/performance-optimization/styles/optimized-animations.css">
-</head>
-<body class="font-sans overflow-x-hidden transition-theme">
-    <HomeNavbar />
-
-    <!-- Global Breadcrumbs -->
-    <div class="container mx-auto px-4">
-        <GlobalBreadcrumbs variant="default" />
-    </div>
-
-    <slot />
-    <Footer />
-
-    <!-- Performance Monitor (solo en desarrollo) -->
-    <PerformanceMonitor
-        enabled={import.meta.env.DEV}
-        showMetrics={true}
-        logToConsole={true}
-    />
-</body>
-</html>
+<BaseLayout
+  title={title}
+  description={description}
+  image={image}
+  imageAlt={imageAlt}
+  type={type}
+  keywords={keywords}
+  publishedDate={publishedDate}
+  modifiedDate={modifiedDate}
+>
+  <HomeNavbar slot="header" />
+  <slot />
+  <Footer slot="footer" />
+</BaseLayout>
 
 
 

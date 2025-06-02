@@ -1,51 +1,91 @@
 ---
+import '../../styles/global.css';
 import { MetaTags } from '../../features/meta-tags/components';
+import { AIMetadata } from '../../features/ai-metadata';
+import { AutoSchema } from '../../features/schema';
+import { ThemeScript } from '../../features/dark-light-mode/components';
 import CommonScripts from './CommonScripts.astro';
+import Favicons from '../seo/Favicons.astro';
+import GlobalBreadcrumbs from '../../features/global-breadcrumbs/components/GlobalBreadcrumbs.astro';
+import DeferredScripts from '../../features/performance-optimization/components/DeferredScripts.astro';
+import PerformanceMonitor from '../../features/performance-optimization/components/PerformanceMonitor.astro';
 
 interface Props {
   title: string;
-  description: string;
+  description?: string;
   image?: string;
   imageAlt?: string;
   type?: 'website' | 'article';
   keywords?: string[];
+  publishedDate?: string;
+  modifiedDate?: string;
+  customTitle?: string; // Para breadcrumbs
 }
 
 const {
   title,
-  description,
+  description = "Matías Cappato - Desarrollador web especializado en crear experiencias digitales modernas y accesibles.",
   image,
   imageAlt,
   type = 'website',
-  keywords
+  keywords = [],
+  publishedDate,
+  modifiedDate,
+  customTitle
 } = Astro.props;
+
+// Convertir fechas a objetos Date si son strings
+const pubDate = publishedDate ? new Date(publishedDate) : undefined;
+const modDate = modifiedDate ? new Date(modifiedDate) : undefined;
+
+const currentUrl = Astro.url.pathname;
 ---
 
 <!DOCTYPE html>
 <html lang="es">
 <head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>{title}</title>
+
+  <!-- Script anti-flicker (debe ir lo antes posible) -->
+  <ThemeScript />
+
   <MetaTags
     title={title}
     description={description}
     image={image ? { url: image, alt: imageAlt || '' } : undefined}
     type={type}
     keywords={keywords}
+    publishedDate={pubDate}
+    modifiedDate={modDate}
   />
+
+  <AIMetadata
+    title={title}
+    description={description}
+    type={type}
+    url={currentUrl}
+    datePublished={pubDate}
+    dateModified={modDate}
+    tags={keywords}
+  />
+
+  <Favicons />
+
+  <!-- Schema.org structured data - FULLY AUTOMATED -->
+  <AutoSchema />
+
   <CommonScripts />
 
-  <!-- Mejora: Precargar fuentes críticas -->
-  <link rel="preload" href="/fonts/main-font.woff2" as="font" type="font/woff2" crossorigin>
+  <!-- Performance Optimizations -->
+  <DeferredScripts
+    enableAnalytics={false}
+    deferAnalytics={true}
+  />
 
-  <!-- Mejora: Preconectar a dominios de terceros -->
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-
-  <!-- Mejora: Tema de color para móviles - Dinámico según tema -->
-  <meta name="theme-color" content="#111827" media="(prefers-color-scheme: dark)">
-  <meta name="theme-color" content="#f8fafc" media="(prefers-color-scheme: light)">
-
-  <!-- RSS Feed -->
-  <link rel="alternate" type="application/rss+xml" title="RSS Feed" href="/rss.xml">
+  <!-- Optimized Animations CSS -->
+  <link rel="stylesheet" href="/src/features/performance-optimization/styles/optimized-animations.css">
 
   <!-- Slot para estilos adicionales específicos de página -->
   <slot name="head" />
@@ -60,6 +100,11 @@ const {
     <slot name="header" />
   </header>
 
+  <!-- Global Breadcrumbs - EN TODAS LAS PÁGINAS -->
+  <div class="container mx-auto px-4">
+    <GlobalBreadcrumbs variant="default" customTitle={customTitle} />
+  </div>
+
   <main id="main-content" class="flex-grow">
     <slot />
   </main>
@@ -67,5 +112,12 @@ const {
   <footer>
     <slot name="footer" />
   </footer>
+
+  <!-- Performance Monitor (solo en desarrollo) -->
+  <PerformanceMonitor
+    enabled={import.meta.env.DEV}
+    showMetrics={true}
+    logToConsole={true}
+  />
 </body>
 </html>
