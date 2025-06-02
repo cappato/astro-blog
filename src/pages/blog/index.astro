@@ -2,6 +2,8 @@
 import BaseLayout from '../../components/layout/BaseLayout.astro';
 import BlogNavbar from '../../components/layout/navbar/BlogNavbar.astro';
 import Footer from '../../components/layout/footer/Footer.astro';
+import Card from '../../components/ui/Card.astro';
+import Icon from '../../components/ui/Icon.astro';
 import { getCollection } from 'astro:content';
 import BaseTag from '../../components/ui/BaseTag.astro';
 import BlogPostCard from '../../components/blog/BlogPostCard.astro';
@@ -46,53 +48,96 @@ const featuredPillars = getFeaturedPillars();
 
   <BlogNavbar currentPath="/blog" slot="header" />
 
-    <main class="container mx-auto px-4 py-8">
-        <header class="mb-12 text-center">
-            <h1 class="text-4xl font-bold mb-4 text-primary">Blog</h1>
-            <p class="text-xl text-content max-w-2xl mx-auto">{description}</p>
-        </header>
+    <!-- Hero Section -->
+    <section class="container mx-auto px-6 sm:px-4 py-10">
+        <Card className="max-w-4xl mx-auto text-center blog-hero" variant="default">
+            <div class="space-y-6">
+                <div class="flex items-center justify-center mb-4">
+                    <div class="w-16 h-16 bg-primary/10 rounded-full flex items-center justify-center mr-4 blog-section-icon">
+                        <Icon name="blog" size={32} />
+                    </div>
+                    <h1 class="text-3xl md:text-5xl font-bold text-primary">Blog</h1>
+                </div>
+                <p class="text-lg md:text-xl text-content max-w-3xl mx-auto leading-relaxed">
+                    {description}
+                </p>
+                <div class="flex flex-wrap justify-center gap-4 pt-4">
+                    <div class="flex items-center text-muted blog-stats">
+                        <Icon name="article" size={16} />
+                        <span class="ml-2 text-sm font-medium">{postCards.length} artículos</span>
+                    </div>
+                    <div class="flex items-center text-muted blog-stats">
+                        <Icon name="tag" size={16} />
+                        <span class="ml-2 text-sm font-medium">{allTags.length} temas</span>
+                    </div>
+                    <div class="flex items-center text-muted blog-stats">
+                        <Icon name="pillar" size={16} />
+                        <span class="ml-2 text-sm font-medium">{featuredPillars.length} pilares</span>
+                    </div>
+                </div>
+            </div>
+        </Card>
+    </section>
 
+    <main class="container mx-auto px-6 sm:px-4 pb-10">
         <!-- Featured Pillars Section -->
         {featuredPillars.length > 0 && (
             <section class="mb-12">
-                <div class="flex items-center justify-between mb-6">
-                    <h2 class="text-2xl font-bold text-content">🎯 Pilares de Contenido</h2>
-                    <a
-                        href="/blog/pillars"
-                        class="text-primary hover:text-primary-dark font-medium text-sm flex items-center gap-1 transition-colors"
-                    >
-                        Ver todos
-                        <svg width="16" height="16" viewBox="0 0 16 16" fill="currentColor">
-                            <path d="M6 4l4 4-4 4" stroke="currentColor" stroke-width="2" fill="none"/>
-                        </svg>
-                    </a>
-                </div>
+                <Card className="mb-8 blog-card" variant="default">
+                    <div class="flex items-center justify-between mb-6">
+                        <div class="flex items-center">
+                            <div class="w-8 h-8 bg-primary/10 rounded-lg flex items-center justify-center mr-3 blog-section-icon">
+                                <Icon name="target" size={20} />
+                            </div>
+                            <h2 class="text-2xl font-bold text-primary">Pilares de Contenido</h2>
+                        </div>
+                        <a
+                            href="/blog/pillars"
+                            class="text-primary hover:text-primary-300 font-medium text-sm flex items-center gap-2 transition-colors group"
+                        >
+                            Ver todos
+                            <Icon name="arrow-right" size={16} />
+                        </a>
+                    </div>
 
-                <PillarGrid
-                    pillars={featuredPillars}
-                    variant="compact"
-                    columns={{ desktop: 3, tablet: 2, mobile: 1 }}
-                    showStats={true}
-                    className="mb-8"
-                />
+                    <PillarGrid
+                        pillars={featuredPillars}
+                        variant="compact"
+                        columns={{ desktop: 3, tablet: 2, mobile: 1 }}
+                        showStats={true}
+                        className="mb-4"
+                    />
+                </Card>
             </section>
         )}
 
         <!-- Tag filter section -->
         <section class="mb-12">
-            <h2 class="text-2xl font-bold mb-4 text-content">Explorar por tema</h2>
-            <div class="flex flex-wrap gap-2">
-                {allTags.map(tag => (
-                    <BaseTag tag={tag} href={getTagUrl(tag)} />
-                ))}
-            </div>
+            <Card className="blog-card tag-container" variant="default">
+                <div class="flex items-center mb-6">
+                    <div class="w-8 h-8 bg-secondary/20 rounded-lg flex items-center justify-center mr-3 blog-section-icon">
+                        <Icon name="tag" size={20} />
+                    </div>
+                    <h2 class="text-2xl font-bold text-primary">Explorar por tema</h2>
+                </div>
+                <div class="flex flex-wrap gap-2">
+                    {allTags.map(tag => (
+                        <BaseTag tag={tag} href={getTagUrl(tag)} />
+                    ))}
+                </div>
+            </Card>
         </section>
 
         <!-- Posts list -->
         <section>
-            <h2 class="text-2xl font-bold mb-6 text-content">Artículos recientes</h2>
+            <div class="flex items-center mb-8">
+                <div class="w-8 h-8 bg-green-500/20 rounded-lg flex items-center justify-center mr-3 blog-section-icon">
+                    <Icon name="article" size={20} />
+                </div>
+                <h2 class="text-2xl font-bold text-primary">Artículos recientes</h2>
+            </div>
 
-            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
                 {postCards.map((postCard, index) => (
                     <BlogPostCard
                         post={postCard}
