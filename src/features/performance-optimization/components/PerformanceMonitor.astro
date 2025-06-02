@@ -38,22 +38,25 @@ const {
         </div>
         <div class="performance-monitor__content">
           <div class="performance-monitor__metrics">
-            <div class="metric" id="lcp-metric">
+            <div class="metric" id="lcp-metric" title="Largest Contentful Paint - Tiempo hasta que el elemento más grande se carga">
               <span class="metric__label">LCP:</span>
               <span class="metric__value">—</span>
             </div>
-            <div class="metric" id="fid-metric">
+            <div class="metric" id="fid-metric" title="First Input Delay - Tiempo de respuesta a la primera interacción (haz clic en algo)">
               <span class="metric__label">FID:</span>
               <span class="metric__value">—</span>
             </div>
-            <div class="metric" id="cls-metric">
+            <div class="metric" id="cls-metric" title="Cumulative Layout Shift - Estabilidad visual de la página">
               <span class="metric__label">CLS:</span>
               <span class="metric__value">—</span>
             </div>
-            <div class="metric" id="ttfb-metric">
+            <div class="metric" id="ttfb-metric" title="Time to First Byte - Tiempo de respuesta del servidor">
               <span class="metric__label">TTFB:</span>
               <span class="metric__value">—</span>
             </div>
+          </div>
+          <div class="performance-monitor__info">
+            <small>💡 En desarrollo local algunas métricas pueden aparecer como "—" debido a la velocidad de localhost</small>
           </div>
           <div class="performance-monitor__actions">
             <button id="refresh-metrics" class="btn-small">🔄 Refresh</button>
@@ -84,34 +87,72 @@ const {
 
         init() {
           console.log('🚀 Performance Monitor initialized');
-          
+          console.log('📊 PerformanceObserver support:', 'PerformanceObserver' in window);
+          console.log('📊 Navigation API support:', 'PerformanceNavigationTiming' in window);
+
+          // Medir métricas básicas primero
+          this.measureBasicMetrics();
+
           // Inicializar observadores
           if (this.options.trackLCP) this.observeLCP();
           if (this.options.trackFID) this.observeFID();
           if (this.options.trackCLS) this.observeCLS();
           if (this.options.trackTTFB) this.measureTTFB();
-          
+
           // Configurar UI si está disponible
           this.setupUI();
-          
+
           // Medir métricas adicionales
           this.measureAdditionalMetrics();
         }
 
+        measureBasicMetrics() {
+          // Medir métricas básicas que siempre funcionan
+          const navigation = performance.getEntriesByType('navigation')[0];
+          if (navigation) {
+            const ttfb = Math.round(navigation.responseStart - navigation.requestStart);
+            this.metrics.ttfb = ttfb;
+            this.updateUI('ttfb', `${ttfb}ms`);
+            this.logMetric('TTFB (basic)', ttfb, 'ms');
+          }
+
+          // Simular algunas métricas para testing en desarrollo
+          if (import.meta.env.DEV) {
+            setTimeout(() => {
+              if (!this.metrics.lcp) {
+                this.metrics.lcp = Math.round(performance.now());
+                this.updateUI('lcp', `${this.metrics.lcp}ms`);
+                this.logMetric('LCP (simulated)', this.metrics.lcp, 'ms');
+              }
+            }, 1000);
+          }
+        }
+
         observeLCP() {
-          if (!('PerformanceObserver' in window)) return;
-          
-          const observer = new PerformanceObserver((list) => {
-            const entries = list.getEntries();
-            const lastEntry = entries[entries.length - 1];
-            
-            this.metrics.lcp = Math.round(lastEntry.startTime);
-            this.updateUI('lcp', `${this.metrics.lcp}ms`);
-            this.logMetric('LCP', this.metrics.lcp, 'ms');
-          });
-          
-          observer.observe({ entryTypes: ['largest-contentful-paint'] });
-          this.observers.push(observer);
+          if (!('PerformanceObserver' in window)) {
+            console.warn('⚠️ PerformanceObserver not supported - LCP measurement disabled');
+            return;
+          }
+
+          try {
+            const observer = new PerformanceObserver((list) => {
+              const entries = list.getEntries();
+              const lastEntry = entries[entries.length - 1];
+
+              this.metrics.lcp = Math.round(lastEntry.startTime);
+              this.updateUI('lcp', `${this.metrics.lcp}ms`);
+              this.logMetric('LCP', this.metrics.lcp, 'ms');
+
+              console.log('🎯 LCP Element:', lastEntry.element);
+              console.log('🎯 LCP URL:', lastEntry.url);
+            });
+
+            observer.observe({ entryTypes: ['largest-contentful-paint'] });
+            this.observers.push(observer);
+            console.log('✅ LCP Observer initialized');
+          } catch (error) {
+            console.error('❌ Error initializing LCP observer:', error);
+          }
         }
 
         observeFID() {
@@ -378,8 +419,24 @@ const {
   
   .performance-monitor__metrics {
     display: grid;
+    grid-template-columns: repeat(2, 1fr);
     gap: 4px;
     margin-bottom: 8px;
+  }
+
+  .performance-monitor__info {
+    margin-bottom: 8px;
+    padding: 6px;
+    background: var(--color-surface-secondary, #f8f9fa);
+    border-radius: 4px;
+    border-left: 3px solid var(--color-primary, #3b82f6);
+  }
+
+  .performance-monitor__info small {
+    color: var(--color-text-secondary, #6b7280);
+    font-size: 10px;
+    line-height: 1.3;
+    display: block;
   }
   
   .metric {
