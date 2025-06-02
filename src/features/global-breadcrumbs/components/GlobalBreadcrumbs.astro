@@ -3,6 +3,11 @@
  * Global Breadcrumbs - Ultra Simplified
  */
 
+interface Props {
+  customTitle?: string;
+}
+
+const { customTitle } = Astro.props;
 const pathname = Astro.url.pathname;
 const breadcrumbs = [];
 
@@ -11,21 +16,25 @@ if (pathname !== '/') {
   breadcrumbs.push({ label: 'Inicio', href: '/', icon: '🏠' });
 }
 
-// Blog routes
+// Blog routes - LÓGICA CORREGIDA
 if (pathname.startsWith('/blog')) {
-  if (pathname !== '/blog') {
+  // Primero manejar casos específicos
+  if (pathname === '/blog') {
+    // Página principal del blog
+    breadcrumbs.push({ label: 'Blog', current: true, icon: '📝' });
+  } else if (pathname === '/blog/pillars') {
+    // Página de pilares
     breadcrumbs.push({ label: 'Blog', href: '/blog', icon: '📝' });
-  }
-
-  if (pathname === '/blog/pillars') {
     breadcrumbs.push({ label: 'Pilares de Contenido', current: true, icon: '📚' });
   } else if (pathname.startsWith('/blog/tag/')) {
+    // Páginas de tags
     const tagName = pathname.split('/').pop();
+    breadcrumbs.push({ label: 'Blog', href: '/blog', icon: '📝' });
     breadcrumbs.push({ label: `#${tagName}`, current: true, icon: '🏷️' });
   } else if (pathname.startsWith('/blog/') && pathname !== '/blog') {
-    breadcrumbs.push({ label: 'Artículo', current: true, icon: '📄' });
-  } else if (pathname === '/blog') {
-    breadcrumbs.push({ label: 'Blog', current: true, icon: '📝' });
+    // Posts individuales (cualquier otra ruta que empiece con /blog/)
+    breadcrumbs.push({ label: 'Blog', href: '/blog', icon: '📝' });
+    breadcrumbs.push({ label: customTitle || 'Artículo', current: true, icon: '📄' });
   }
 }
 
