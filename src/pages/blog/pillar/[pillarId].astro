@@ -18,6 +18,8 @@ import {
   getTagUrl,
   transformPostsToCardData
 } from '../../../utils/blogPost';
+import ContentContainer from '../../../components/layout/ContentContainer.astro';
+import ContentWidth from '../../../components/layout/ContentWidth.astro';
 
 // Generar rutas estáticas para todos los pilares
 export const getStaticPaths: GetStaticPaths = async () => {
@@ -105,8 +107,8 @@ const customTitle = pillar.title;
   </div>
 
   <!-- Main Content -->
-  <div class="container mx-auto px-6 sm:px-4 py-8">
-    <div class="max-w-4xl mx-auto">
+  <ContentContainer className="py-8">
+    <ContentWidth width="standard">
     
     <!-- Pillar Header -->
     <header class="mb-12">
@@ -218,8 +220,8 @@ const customTitle = pillar.title;
         }
       </div>
     </aside>
-    </div>
-  </div>
+    </ContentWidth>
+  </ContentContainer>
 
   <div slot="footer">
     <!-- Footer content if needed -->

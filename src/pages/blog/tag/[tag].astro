@@ -11,6 +11,8 @@ import {
   transformPostsToCardData,
   getTagSeoData
 } from '../../../utils/blogPost.ts';
+import ContentContainer from '../../../components/layout/ContentContainer.astro';
+import ContentWidth from '../../../components/layout/ContentWidth.astro';
 
 // Static paths generation for dynamic routes
 export async function getStaticPaths() {
@@ -55,29 +57,31 @@ const { title, description } = getTagSeoData(tag);
 
   <BlogNavbar currentPath={`/blog/tag/${tag}`} slot="header" />
 
-  <main class="container mx-auto px-4 py-8">
-    <!-- Mostrar la etiqueta actual con un tamaño más grande -->
-    <div class="mb-8">
-      <h1 class="text-3xl font-bold mb-2 text-content">Artículos con la etiqueta</h1>
-      <TagButton tag={tag} />
-    </div>
+  <ContentContainer as="main" className="py-8">
+    <ContentWidth width="standard">
+      <!-- Mostrar la etiqueta actual con un tamaño más grande -->
+      <div class="mb-8">
+        <h1 class="text-3xl font-bold mb-2 text-content">Artículos con la etiqueta</h1>
+        <TagButton tag={tag} />
+      </div>
 
-    <!-- Posts list with tag filter -->
-    {postCards.length > 0 ? (
-      <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-        {postCards.map((postCard, index) => (
-          <BlogPostCard
-            post={postCard}
-            loading={index < 3 ? 'eager' : 'lazy'}
-          />
-        ))}
-      </div>
-    ) : (
-      <div class="text-center py-12">
-        <p class="text-xl text-primary-content opacity-75">No hay artículos con esta etiqueta aún.</p>
-      </div>
-    )}
-  </main>
+      <!-- Posts list with tag filter -->
+      {postCards.length > 0 ? (
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+          {postCards.map((postCard, index) => (
+            <BlogPostCard
+              post={postCard}
+              loading={index < 3 ? 'eager' : 'lazy'}
+            />
+          ))}
+        </div>
+      ) : (
+        <div class="text-center py-12">
+          <p class="text-xl text-primary-content opacity-75">No hay artículos con esta etiqueta aún.</p>
+        </div>
+      )}
+    </ContentWidth>
+  </ContentContainer>
 
   <Footer slot="footer" />
 </BaseLayout>

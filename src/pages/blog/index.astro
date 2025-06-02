@@ -16,6 +16,8 @@ import {
 } from '../../utils/blogPost.ts';
 import { PillarGrid } from '../../features/content-pillars/components';
 import { getFeaturedPillars } from '../../features/content-pillars/config/pillars.config';
+import ContentContainer from '../../components/layout/ContentContainer.astro';
+import ContentWidth from '../../components/layout/ContentWidth.astro';
 
 // Get all blog posts
 const allPosts = await getCollection('blog');
@@ -49,8 +51,8 @@ const featuredPillars = getFeaturedPillars();
   <BlogNavbar currentPath="/blog" slot="header" />
 
     <!-- Hero Section -->
-    <section class="container mx-auto px-6 sm:px-4 py-10">
-        <div class="max-w-4xl mx-auto">
+    <ContentContainer as="section" className="py-10">
+        <ContentWidth width="standard">
             <Card className="text-center blog-hero" variant="default">
                 <div class="space-y-6">
                     <div class="flex items-center justify-center mb-4">
@@ -78,13 +80,14 @@ const featuredPillars = getFeaturedPillars();
                     </div>
                 </div>
             </Card>
-        </div>
-    </section>
+        </ContentWidth>
+    </ContentContainer>
 
-    <main class="container mx-auto px-6 sm:px-4 pb-10">
+    <main class="pb-10">
         <!-- Featured Pillars Section -->
         {featuredPillars.length > 0 && (
-            <section class="mb-12">
+        <ContentContainer as="section" className="mb-12">
+            <ContentWidth width="standard">
                 <Card className="mb-8 blog-card" variant="default">
                     <div class="flex items-center justify-between mb-6">
                         <div class="flex items-center">
@@ -105,49 +108,54 @@ const featuredPillars = getFeaturedPillars();
                     <PillarGrid
                         pillars={featuredPillars}
                         variant="compact"
-                        columns={{ desktop: 3, tablet: 2, mobile: 1 }}
+                        columns={{ desktop: 2, tablet: 2, mobile: 1 }}
                         showStats={true}
                         className="mb-4"
                     />
                 </Card>
-            </section>
+            </ContentWidth>
+        </ContentContainer>
         )}
 
         <!-- Tag filter section -->
-        <section class="mb-12">
-            <Card className="blog-card tag-container" variant="default">
-                <div class="flex items-center mb-6">
-                    <div class="w-8 h-8 bg-secondary/20 rounded-lg flex items-center justify-center mr-3 blog-section-icon">
-                        <Icon name="tag" size={20} />
+        <ContentContainer as="section" className="mb-12">
+            <ContentWidth width="standard">
+                <Card className="blog-card tag-container" variant="default">
+                    <div class="flex items-center mb-6">
+                        <div class="w-8 h-8 bg-secondary/20 rounded-lg flex items-center justify-center mr-3 blog-section-icon">
+                            <Icon name="tag" size={20} />
+                        </div>
+                        <h2 class="text-2xl font-bold text-primary">Explorar por tema</h2>
                     </div>
-                    <h2 class="text-2xl font-bold text-primary">Explorar por tema</h2>
-                </div>
-                <div class="flex flex-wrap gap-2">
-                    {allTags.map(tag => (
-                        <BaseTag tag={tag} href={getTagUrl(tag)} />
-                    ))}
-                </div>
-            </Card>
-        </section>
+                    <div class="flex flex-wrap gap-2">
+                        {allTags.map(tag => (
+                            <BaseTag tag={tag} href={getTagUrl(tag)} />
+                        ))}
+                    </div>
+                </Card>
+            </ContentWidth>
+        </ContentContainer>
 
         <!-- Posts list -->
-        <section>
-            <div class="flex items-center mb-8">
-                <div class="w-8 h-8 bg-green-500/20 rounded-lg flex items-center justify-center mr-3 blog-section-icon">
-                    <Icon name="article" size={20} />
+        <ContentContainer as="section">
+            <ContentWidth width="standard">
+                <div class="flex items-center mb-8">
+                    <div class="w-8 h-8 bg-green-500/20 rounded-lg flex items-center justify-center mr-3 blog-section-icon">
+                        <Icon name="article" size={20} />
+                    </div>
+                    <h2 class="text-2xl font-bold text-primary">Artículos recientes</h2>
                 </div>
-                <h2 class="text-2xl font-bold text-primary">Artículos recientes</h2>
-            </div>
 
-            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-                {postCards.map((postCard, index) => (
-                    <BlogPostCard
-                        post={postCard}
-                        loading={index < 3 ? 'eager' : 'lazy'}
-                    />
-                ))}
-            </div>
-        </section>
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    {postCards.map((postCard, index) => (
+                        <BlogPostCard
+                            post={postCard}
+                            loading={index < 3 ? 'eager' : 'lazy'}
+                        />
+                    ))}
+                </div>
+            </ContentWidth>
+        </ContentContainer>
     </main>
 
   <Footer slot="footer" />

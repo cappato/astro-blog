@@ -9,6 +9,8 @@ import { getReadingTime, formatReadingTime } from '../features/reading-time';
 import AuthorCard from '../features/blog-enhancements/components/AuthorCard.astro';
 import RelatedArticles from '../features/related-articles/components/RelatedArticles.astro';
 import OptimizedImage from '../features/performance-optimization/components/OptimizedImage.astro';
+import ContentContainer from '../components/layout/ContentContainer.astro';
+import ContentWidth from '../components/layout/ContentWidth.astro';
 
 import type { CollectionEntry } from 'astro:content';
 
@@ -129,9 +131,10 @@ const currentPost = {
 
 
 
-  <main id="main-content" class="container mx-auto px-6 sm:px-4 py-4">
-    <!-- Contenido del artículo -->
-    <article class="max-w-4xl mx-auto">
+  <ContentContainer as="main" id="main-content" className="py-4">
+    <ContentWidth width="standard">
+      <!-- Contenido del artículo -->
+      <article>
       <!-- Imagen destacada optimizada -->
       <div class="w-full h-64 md:h-80 overflow-hidden rounded-lg">
         {useNewImageSystem ? (
@@ -255,8 +258,9 @@ const currentPost = {
           </div>
         </div>
       </div>
-    </article>
-  </main>
+      </article>
+    </ContentWidth>
+  </ContentContainer>
 
   <Footer slot="footer" />
 
