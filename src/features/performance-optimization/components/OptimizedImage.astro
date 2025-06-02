@@ -40,25 +40,13 @@ const {
   aspectRatio
 } = Astro.props;
 
-// Extraer información de la imagen
-const imagePath = src.replace(/\.[^/.]+$/, ''); // Remover extensión
-const imageDir = src.substring(0, src.lastIndexOf('/'));
-const imageName = src.substring(src.lastIndexOf('/') + 1).replace(/\.[^/.]+$/, '');
-
-// Generar rutas para diferentes formatos y variantes
-function generateImageSources(basePath: string, variant: string) {
-  const suffix = variant === 'default' ? '' : `-${variant}`;
-  
-  return {
-    avif: `${basePath}${suffix}.avif`,
-    webp: `${basePath}${suffix}.webp`,
-    fallback: `${basePath}${suffix}.webp`,
-    lqip: `${basePath}-lqip.webp`,
-    thumb: `${basePath}-thumb.webp`
-  };
-}
-
-const sources = generateImageSources(imagePath, variant);
+// Usar la imagen original directamente (simplificado)
+const sources = {
+  fallback: src,
+  webp: src,
+  avif: src.replace(/\.(webp|jpg|jpeg|png)$/i, '.avif'),
+  lqip: src // Por ahora usar la misma imagen
+};
 
 // Configuración de lazy loading
 const loadingStrategy = priority ? 'eager' : (lazy ? 'lazy' : 'eager');
@@ -81,15 +69,9 @@ const responsiveConfig = {
   large: { width: 1920, quality: 95 }
 };
 
-// Generar srcset para responsive images
-function generateSrcSet(basePath: string, variant: string, format: string) {
-  const suffix = variant === 'default' ? '' : `-${variant}`;
-  const ext = format === 'avif' ? '.avif' : '.webp';
-  
-  return [
-    `${basePath}${suffix}${ext} 1x`,
-    `${basePath}${suffix}${ext} 2x`
-  ].join(', ');
+// Generar srcset simplificado
+function generateSrcSet(imageSrc: string) {
+  return `${imageSrc} 1x`;
 }
 
 // ID único para el componente
@@ -128,37 +110,20 @@ const imageId = `img-${Math.random().toString(36).substr(2, 9)}`;
     ></div>
   )}
 
-  <!-- Picture element con formatos optimizados -->
-  <picture class="optimized-image-picture">
-    <!-- AVIF para navegadores modernos -->
-    <source
-      srcset={generateSrcSet(imagePath, variant, 'avif')}
-      type="image/avif"
-      sizes={sizes}
-    />
-    
-    <!-- WebP como fallback -->
-    <source
-      srcset={generateSrcSet(imagePath, variant, 'webp')}
-      type="image/webp"
-      sizes={sizes}
-    />
-    
-    <!-- Imagen principal -->
-    <img
-      src={sources.fallback}
-      alt={alt}
-      width={width}
-      height={height}
-      loading={loadingStrategy}
-      fetchpriority={fetchPriority}
-      class={imageClasses}
-      sizes={sizes}
-      decoding={priority ? 'sync' : 'async'}
-      data-src={sources.fallback}
-      data-loaded="false"
-    />
-  </picture>
+  <!-- Imagen optimizada simplificada -->
+  <img
+    src={sources.fallback}
+    alt={alt}
+    width={width}
+    height={height}
+    loading={loadingStrategy}
+    fetchpriority={fetchPriority}
+    class={imageClasses}
+    sizes={sizes}
+    decoding={priority ? 'sync' : 'async'}
+    data-src={sources.fallback}
+    data-loaded="false"
+  />
 
   <!-- Loading indicator -->
   {lazy && !priority && (

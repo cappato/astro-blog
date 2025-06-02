@@ -31,12 +31,70 @@ const {
 // Configuración final
 const config = { ...DEFAULT_BREADCRUMB_CONFIG, ...customConfig };
 
-// Generar breadcrumbs automáticamente o usar los personalizados
-const breadcrumbs = customBreadcrumbs || generateBreadcrumbsFromConfig(
-  Astro.url.pathname,
-  config,
-  customTitle
-);
+// Generar breadcrumbs de forma simple y directa
+const breadcrumbs = customBreadcrumbs || generateSimpleBreadcrumbs(Astro.url.pathname, customTitle);
+
+function generateSimpleBreadcrumbs(pathname: string, customTitle?: string) {
+  const breadcrumbs = [];
+
+  // Siempre agregar Home si no estamos en home
+  if (pathname !== '/') {
+    breadcrumbs.push({
+      label: 'Inicio',
+      href: '/',
+      icon: '🏠'
+    });
+  }
+
+  // Rutas específicas
+  if (pathname.startsWith('/blog')) {
+    if (pathname !== '/blog') {
+      breadcrumbs.push({
+        label: 'Blog',
+        href: '/blog',
+        icon: '📝'
+      });
+    }
+
+    if (pathname === '/blog/pillars') {
+      breadcrumbs.push({
+        label: 'Pilares de Contenido',
+        current: true,
+        icon: '📚'
+      });
+    } else if (pathname.startsWith('/blog/tag/')) {
+      const tagName = pathname.split('/').pop();
+      breadcrumbs.push({
+        label: `#${tagName}`,
+        current: true,
+        icon: '🏷️'
+      });
+    } else if (pathname.startsWith('/blog/') && pathname !== '/blog') {
+      breadcrumbs.push({
+        label: customTitle || 'Artículo',
+        current: true,
+        icon: '📄'
+      });
+    } else if (pathname === '/blog') {
+      breadcrumbs.push({
+        label: 'Blog',
+        current: true,
+        icon: '📝'
+      });
+    }
+  }
+
+  // Si estamos en home, mostrar solo home
+  if (pathname === '/') {
+    breadcrumbs.push({
+      label: 'Inicio',
+      current: true,
+      icon: '🏠'
+    });
+  }
+
+  return breadcrumbs;
+}
 
 // Generar clases CSS
 const containerClasses = [
