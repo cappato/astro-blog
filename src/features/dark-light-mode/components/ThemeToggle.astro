@@ -1,52 +1,58 @@
 ---
 /**
  * ThemeToggle Component - Button to switch between light and dark theme
- * Integrated with TypeScript theme system
+ * Integrated with modular theme system
+ * 
+ * @example
+ * ```astro
+ * ---
+ * import { ThemeToggle } from '@features/theme-system/components';
+ * ---
+ * <ThemeToggle size="md" showLabel={false} />
+ * ```
  */
 
-import Icon from './Icon.astro';
+import Icon from '../../../components/ui/Icon.astro';
+import type { ThemeToggleProps } from '../engine/types';
+import { TOGGLE_SIZE_CONFIG } from '../engine/types';
 
-interface Props {
+interface Props extends ThemeToggleProps {
+  /** Button size */
   size?: 'sm' | 'md' | 'lg';
+  /** Additional CSS classes */
   className?: string;
+  /** Show text label */
   showLabel?: boolean;
+  /** Custom aria label */
+  ariaLabel?: string;
 }
 
 const {
   size = 'md',
   className = '',
-  showLabel = false
+  showLabel = false,
+  ariaLabel = 'Toggle theme'
 } = Astro.props;
 
-// Mapeo de tamaños
-const sizeClasses = {
-  sm: 'p-1.5',
-  md: 'p-2',
-  lg: 'p-3'
-};
-
-const iconSizes = {
-  sm: 16,
-  md: 20,
-  lg: 24
-};
+// Get size configuration
+const sizeConfig = TOGGLE_SIZE_CONFIG[size];
 ---
 
 <button
   id="theme-toggle"
   type="button"
-  class={`theme-toggle-btn inline-flex items-center justify-center rounded-lg bg-button hover:bg-button-hover text-content hover:text-primary transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2 focus:ring-offset-card ${sizeClasses[size]} ${className}`}
-  aria-label="Toggle theme"
-  title="Toggle theme"
+  class={`theme-toggle-btn inline-flex items-center justify-center rounded-lg bg-button hover:bg-button-hover text-content hover:text-primary transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2 focus:ring-offset-card ${sizeConfig.padding} ${className}`}
+  aria-label={ariaLabel}
+  title={ariaLabel}
 >
   <!-- Light theme icon (visible in dark mode) -->
   <span class="theme-icon-light hidden dark:inline-flex">
-    <Icon name="sun" size={iconSizes[size]} />
+    <Icon name="sun" size={sizeConfig.iconSize} />
   </span>
 
   <!-- Dark theme icon (visible in light mode) -->
   <span class="theme-icon-dark inline-flex dark:hidden">
-    <Icon name="moon" size={iconSizes[size]} />
+    <Icon name="moon" size={sizeConfig.iconSize} />
   </span>
 
   {showLabel && (
@@ -58,7 +64,7 @@ const iconSizes = {
 </button>
 
 <script>
-  import { themeManager } from '../../utils/theme.ts';
+  import { themeManager } from '../engine/manager';
 
   // Function to initialize theme toggle
   function initThemeToggle() {

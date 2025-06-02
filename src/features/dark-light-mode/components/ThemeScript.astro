@@ -1,0 +1,57 @@
+---
+/**
+ * ThemeScript Component - Anti-flicker script for theme initialization
+ * Must be included early in <head> to prevent theme flashing
+ * 
+ * @example
+ * ```astro
+ * ---
+ * import { ThemeScript } from '@features/theme-system/components';
+ * ---
+ * <head>
+ *   <ThemeScript />
+ * </head>
+ * ```
+ */
+
+import { getThemeInitScript } from '../engine/script-generator';
+
+interface Props {
+  /** Whether to minify the script (default: true) */
+  minify?: boolean;
+  /** Custom storage key for theme preference */
+  storageKey?: string;
+  /** Default theme when no preference is stored */
+  defaultTheme?: 'light' | 'dark';
+  /** CSS class for dark theme */
+  htmlClass?: string;
+  /** HTML attribute for theme identification */
+  attribute?: string;
+}
+
+const {
+  minify = true,
+  storageKey = 'theme-preference',
+  defaultTheme = 'dark',
+  htmlClass = 'dark',
+  attribute = 'data-theme'
+} = Astro.props;
+
+// Generate the anti-flicker script with configuration
+const script = getThemeInitScript(minify);
+---
+
+<!-- Anti-flicker script that executes immediately -->
+<script is:inline set:html={script}></script>
+
+<!-- 
+  IMPORTANT: This script must be placed early in the <head> section
+  to prevent theme flashing during page load. It runs before the page
+  content is rendered, applying the correct theme immediately.
+  
+  The script:
+  1. Reads theme preference from localStorage
+  2. Applies theme classes to document.documentElement
+  3. Updates meta theme-color for mobile browsers
+  4. Handles errors gracefully for environments without localStorage
+-->
