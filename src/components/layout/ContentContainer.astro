@@ -1,31 +1,20 @@
 ---
 interface Props {
-  width?: 'standard' | 'wide' | 'narrow' | 'full';
   className?: string;
   as?: 'div' | 'section' | 'main' | 'article';
   padding?: boolean;
 }
 
 const {
-  width = 'standard',
   className = '',
   as: Element = 'div',
   padding = true
 } = Astro.props;
 
-// Definir los anchos de manera centralizada
-const widthClasses = {
-  standard: 'max-w-4xl mx-auto',    // 896px - Ancho estándar para todo el sitio
-  wide: 'max-w-6xl mx-auto',        // 1152px - Para galerías, tablas
-  narrow: 'max-w-2xl mx-auto',      // 672px - Para formularios
-  full: 'w-full'                    // Ancho completo
-};
-
-// Clases de padding responsive
+// CONTENEDOR PRINCIPAL - Solo container + padding
+// NO incluye max-width para evitar anidamiento problemático
 const paddingClasses = padding ? 'px-6 sm:px-4' : '';
-
-// Combinar todas las clases
-const containerClasses = `container mx-auto ${paddingClasses} ${widthClasses[width]} ${className}`.trim();
+const containerClasses = `container mx-auto ${paddingClasses} ${className}`.trim();
 ---
 
 <Element class={containerClasses}>
