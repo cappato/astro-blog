@@ -15,7 +15,8 @@ import {
   TAG_TO_PILLAR_MAPPING
 } from '../../../features/content-pillars/config/pillars.config';
 import {
-  getTagUrl
+  getTagUrl,
+  transformPostsToCardData
 } from '../../../utils/blogPost';
 
 // Generar rutas estáticas para todos los pilares
@@ -59,20 +60,8 @@ const sortedPosts = pillarPosts.sort((a, b) =>
   new Date(b.data.date).getTime() - new Date(a.data.date).getTime()
 );
 
-// Crear datos para las cards directamente
-const postCards = sortedPosts.map(post => ({
-  title: post.data.title,
-  description: post.data.description,
-  date: post.data.date,
-  formattedDate: new Date(post.data.date).toLocaleDateString('es-ES'),
-  url: `/blog/${post.slug}`,
-  tags: post.data.tags || [],
-  readingTime: Math.ceil((post.body || '').split(/\s+/).length / 200),
-  image: post.data.image ? {
-    url: post.data.image,
-    alt: post.data.title
-  } : undefined
-}));
+// Usar la función oficial para transformar posts a card data
+const postCards = transformPostsToCardData(sortedPosts);
 
 // Obtener todos los tags únicos de este pilar
 const pillarTags = Object.keys(TAG_TO_PILLAR_MAPPING)
@@ -94,6 +83,11 @@ const seoData = {
   keywords: [...pillar.keywords, ...pillar.tags],
   type: 'website' as const
 };
+
+// DEBUG: Verificar que la página se ejecuta
+if (import.meta.env.DEV) {
+  console.log('📄 PILLAR PAGE DEBUG:', { pathname: Astro.url.pathname, pillarId, pillarTitle: pillar.title });
+}
 
 // Breadcrumb personalizado - Nombre específico del pilar
 const customTitle = pillar.title;
