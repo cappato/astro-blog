@@ -198,14 +198,67 @@ When adding new features, ensure:
 - File generation speed
 - Memory usage
 
+## 🔍 SEO Production Tests
+
+### Manual SEO Validation (`npm run test:seo`)
+**Purpose**: Comprehensive SEO validation on live production site
+**Target**: https://cappato.dev and subpages
+**Execution**: Manual (on-demand verification)
+
+#### SEO Test Suites:
+```bash
+# Navigate to project directory first
+cd /home/tato/repos/cappato.dev/blog
+
+# Quick connectivity test (5 seconds - start here)
+npx vitest run src/__tests__/seo/basic-connectivity.test.ts
+
+# Specific SEO areas
+npm run test:seo:production    # Overall SEO health (30-60s)
+npm run test:seo:meta         # Meta tags validation (30s)
+npm run test:seo:schema       # Structured data Schema.org (45s)
+npm run test:seo:performance  # Core Web Vitals & performance (60s)
+
+# Complete SEO test suite (2-3 minutes)
+npm run test:seo
+```
+
+#### Recommended Usage Flow:
+```bash
+# 1. Daily quick check
+npx vitest run src/__tests__/seo/basic-connectivity.test.ts
+
+# 2. After content changes
+npm run test:seo:meta
+
+# 3. After performance work
+npm run test:seo:performance
+
+# 4. Monthly full audit
+npm run test:seo
+```
+
+#### What Gets Tested:
+- ✅ **Meta Tags**: Title, description, Open Graph, Twitter Cards
+- ✅ **Structured Data**: JSON-LD schemas, rich snippets
+- ✅ **Performance**: Response times, Core Web Vitals indicators
+- ✅ **Technical SEO**: Canonical URLs, robots, sitemaps
+- ✅ **Content Quality**: Proper heading structure, alt texts
+- ✅ **Mobile SEO**: Viewport, touch targets, mobile performance
+
+#### Coverage:
+- 🏠 **Homepage** (https://cappato.dev)
+- 📝 **Blog Section** (https://cappato.dev/blog)
+- 📄 **Individual Blog Posts** (dynamic discovery)
+- 🔗 **RSS/Sitemap/AI Metadata** endpoints
+
 ## 🎯 Future Enhancements
 
 ### Planned Improvements
 - Visual regression testing
-- Performance benchmarking
-- Accessibility testing
-- SEO validation
+- Accessibility testing (WCAG compliance)
 - Security scanning
+- Lighthouse CI integration
 
 ### Monitoring
 - Test result dashboards
