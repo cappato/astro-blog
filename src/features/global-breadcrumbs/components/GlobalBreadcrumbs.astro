@@ -7,9 +7,21 @@ interface Props {
   customTitle?: string;
 }
 
+interface BreadcrumbItem {
+  label: string;
+  href?: string;
+  current?: boolean;
+  icon?: string;
+}
+
 const { customTitle } = Astro.props;
 const pathname = Astro.url.pathname;
-const breadcrumbs = [];
+const breadcrumbs: BreadcrumbItem[] = [];
+
+// DEBUG: Solo en desarrollo
+if (import.meta.env.DEV) {
+  console.log('🧭 BREADCRUMB DEBUG:', pathname, customTitle);
+}
 
 // Home
 if (pathname !== '/') {
@@ -31,7 +43,7 @@ if (pathname.startsWith('/blog')) {
     const tagName = pathname.split('/').pop();
     breadcrumbs.push({ label: 'Blog', href: '/blog', icon: '📝' });
     breadcrumbs.push({ label: `#${tagName}`, current: true, icon: '🏷️' });
-  } else if (pathname.startsWith('/blog/') && pathname !== '/blog') {
+  } else if (pathname.startsWith('/blog/') && pathname !== '/blog' && pathname !== '/blog/pillars') {
     // Posts individuales (cualquier otra ruta que empiece con /blog/)
     breadcrumbs.push({ label: 'Blog', href: '/blog', icon: '📝' });
     breadcrumbs.push({ label: customTitle || 'Artículo', current: true, icon: '📄' });

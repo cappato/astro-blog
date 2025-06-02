@@ -311,9 +311,24 @@ export function validatePillar(pillar: Partial<ContentPillar>): {
 
 /**
  * Generar URL para página de pilar
+ * Los pilares redirigen a la página principal de tags del pilar
  */
 export function generatePillarUrl(pillarId: string): string {
-  return `/blog/pillar/${pillarId}`;
+  // Mapear pilares a sus tags principales
+  const pillarToTagMapping: Record<string, string> = {
+    'astro-performance': 'astro',
+    'typescript-architecture': 'typescript',
+    'automation-devops': 'automation',
+    'seo-optimization': 'seo'
+  };
+
+  const mainTag = pillarToTagMapping[pillarId];
+  if (mainTag) {
+    return `/blog/tag/${mainTag}`;
+  }
+
+  // Fallback a la página de pilares
+  return '/blog/pillars';
 }
 
 /**
