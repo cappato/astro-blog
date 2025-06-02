@@ -1,6 +1,6 @@
 ---
-title: "SEO Automático con TypeScript: Meta Tags, Schema.org y Performance"
-description: "Aprende a implementar un sistema SEO completo y automático usando TypeScript, con meta tags inteligentes, Schema.org estructurado y optimización de performance."
+title: "SEO Automático con TypeScript: Meta Tags y Schema.org"
+description: "Sistema SEO completo y automático con TypeScript: meta tags inteligentes, Schema.org estructurado y optimización de performance."
 date: "2024-06-02"
 author: "Matías Cappato"
 image:

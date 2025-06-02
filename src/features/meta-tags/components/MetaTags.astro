@@ -68,6 +68,8 @@ const {
 } = Astro.props;
 
 // Prepare props for the meta tag generator
+// For homepage, don't set canonicalUrl to let it default to siteUrl
+const isHomepage = Astro.url.pathname === '/';
 const metaProps: MetaTagProps = {
   title,
   description,
@@ -77,7 +79,7 @@ const metaProps: MetaTagProps = {
   publishedDate,
   modifiedDate,
   author,
-  canonicalUrl: canonicalUrl || Astro.url.pathname,
+  canonicalUrl: canonicalUrl || (isHomepage ? undefined : Astro.url.pathname),
   twitterUsername,
   postId
 };

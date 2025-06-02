@@ -1,6 +1,6 @@
 ---
-title: "Arquitectura Modular en Astro: Cómo Construir Features Reutilizables"
-description: "Descubre cómo implementar una arquitectura modular en Astro que permite crear features completamente reutilizables, self-contained y fáciles de mantener."
+title: "Arquitectura Modular en Astro: Features Reutilizables"
+description: "Implementa una arquitectura modular en Astro con features reutilizables, self-contained y fáciles de mantener."
 date: "2024-06-02"
 author: "Matías Cappato"
 image:

@@ -1,6 +1,6 @@
 ---
-title: "Testing Automatizado para Sitios Estáticos: SEO, Performance y Accesibilidad"
-description: "Implementa una suite de testing completa que valida automáticamente SEO, performance, accesibilidad y calidad de código en sitios estáticos."
+title: "Testing Automatizado: SEO, Performance y Accesibilidad"
+description: "Suite de testing completa para validar automáticamente SEO, performance, accesibilidad y calidad de código."
 date: "2024-06-02"
 author: "Matías Cappato"
 image:
