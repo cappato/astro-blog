@@ -1,0 +1,376 @@
+---
+/**
+ * Performance Optimization Feature - Optimized Image Component
+ * 
+ * Componente de imagen optimizada con:
+ * - Lazy loading automático
+ * - Formatos modernos (AVIF, WebP)
+ * - Responsive images
+ * - LQIP (Low Quality Image Placeholder)
+ * - Preload para imágenes críticas
+ */
+
+interface Props {
+  src: string;
+  alt: string;
+  width?: number;
+  height?: number;
+  className?: string;
+  lazy?: boolean;
+  priority?: boolean;
+  sizes?: string;
+  quality?: 'low' | 'medium' | 'high';
+  variant?: 'default' | 'thumbnail' | 'og' | 'wsp';
+  showLQIP?: boolean;
+  aspectRatio?: string;
+}
+
+const {
+  src,
+  alt,
+  width,
+  height,
+  className = '',
+  lazy = true,
+  priority = false,
+  sizes = '(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw',
+  quality = 'high',
+  variant = 'default',
+  showLQIP = true,
+  aspectRatio
+} = Astro.props;
+
+// Extraer información de la imagen
+const imagePath = src.replace(/\.[^/.]+$/, ''); // Remover extensión
+const imageDir = src.substring(0, src.lastIndexOf('/'));
+const imageName = src.substring(src.lastIndexOf('/') + 1).replace(/\.[^/.]+$/, '');
+
+// Generar rutas para diferentes formatos y variantes
+function generateImageSources(basePath: string, variant: string) {
+  const suffix = variant === 'default' ? '' : `-${variant}`;
+  
+  return {
+    avif: `${basePath}${suffix}.avif`,
+    webp: `${basePath}${suffix}.webp`,
+    fallback: `${basePath}${suffix}.webp`,
+    lqip: `${basePath}-lqip.webp`,
+    thumb: `${basePath}-thumb.webp`
+  };
+}
+
+const sources = generateImageSources(imagePath, variant);
+
+// Configuración de lazy loading
+const loadingStrategy = priority ? 'eager' : (lazy ? 'lazy' : 'eager');
+const fetchPriority = priority ? 'high' : 'auto';
+
+// Generar clases CSS
+const imageClasses = [
+  'optimized-image',
+  priority ? 'optimized-image--priority' : '',
+  lazy ? 'optimized-image--lazy' : '',
+  showLQIP ? 'optimized-image--lqip' : '',
+  className
+].filter(Boolean).join(' ');
+
+// Configuración de responsive
+const responsiveConfig = {
+  mobile: { width: 375, quality: 80 },
+  tablet: { width: 768, quality: 85 },
+  desktop: { width: 1200, quality: 90 },
+  large: { width: 1920, quality: 95 }
+};
+
+// Generar srcset para responsive images
+function generateSrcSet(basePath: string, variant: string, format: string) {
+  const suffix = variant === 'default' ? '' : `-${variant}`;
+  const ext = format === 'avif' ? '.avif' : '.webp';
+  
+  return [
+    `${basePath}${suffix}${ext} 1x`,
+    `${basePath}${suffix}${ext} 2x`
+  ].join(', ');
+}
+
+// ID único para el componente
+const imageId = `img-${Math.random().toString(36).substr(2, 9)}`;
+---
+
+<!-- Preload para imágenes críticas -->
+{priority && (
+  <>
+    <link 
+      rel="preload" 
+      as="image" 
+      href={sources.avif}
+      type="image/avif"
+    />
+    <link 
+      rel="preload" 
+      as="image" 
+      href={sources.webp}
+      type="image/webp"
+    />
+  </>
+)}
+
+<!-- Container con aspect ratio -->
+<div 
+  class={`optimized-image-container ${aspectRatio ? 'has-aspect-ratio' : ''}`}
+  style={aspectRatio ? `aspect-ratio: ${aspectRatio}` : undefined}
+  data-image-id={imageId}
+>
+  <!-- LQIP Background -->
+  {showLQIP && (
+    <div 
+      class="optimized-image-lqip"
+      style={`background-image: url('${sources.lqip}')`}
+    ></div>
+  )}
+
+  <!-- Picture element con formatos optimizados -->
+  <picture class="optimized-image-picture">
+    <!-- AVIF para navegadores modernos -->
+    <source
+      srcset={generateSrcSet(imagePath, variant, 'avif')}
+      type="image/avif"
+      sizes={sizes}
+    />
+    
+    <!-- WebP como fallback -->
+    <source
+      srcset={generateSrcSet(imagePath, variant, 'webp')}
+      type="image/webp"
+      sizes={sizes}
+    />
+    
+    <!-- Imagen principal -->
+    <img
+      src={sources.fallback}
+      alt={alt}
+      width={width}
+      height={height}
+      loading={loadingStrategy}
+      fetchpriority={fetchPriority}
+      class={imageClasses}
+      sizes={sizes}
+      decoding={priority ? 'sync' : 'async'}
+      data-src={sources.fallback}
+      data-loaded="false"
+    />
+  </picture>
+
+  <!-- Loading indicator -->
+  {lazy && !priority && (
+    <div class="optimized-image-loading">
+      <div class="loading-spinner"></div>
+    </div>
+  )}
+</div>
+
+<style>
+  .optimized-image-container {
+    position: relative;
+    overflow: hidden;
+    background: var(--color-surface-secondary);
+  }
+  
+  .has-aspect-ratio {
+    width: 100%;
+    height: auto;
+  }
+  
+  .optimized-image-picture {
+    display: block;
+    width: 100%;
+    height: 100%;
+  }
+  
+  .optimized-image {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    object-position: center;
+    transition: opacity 0.3s ease, transform 0.3s ease;
+  }
+  
+  /* LQIP (Low Quality Image Placeholder) */
+  .optimized-image-lqip {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+    filter: blur(10px);
+    transform: scale(1.1);
+    opacity: 1;
+    transition: opacity 0.5s ease;
+    z-index: 1;
+  }
+  
+  /* Ocultar LQIP cuando la imagen carga */
+  .optimized-image[data-loaded="true"] + .optimized-image-lqip,
+  .optimized-image-container:has(.optimized-image[data-loaded="true"]) .optimized-image-lqip {
+    opacity: 0;
+  }
+  
+  /* Loading state */
+  .optimized-image--lazy {
+    opacity: 0;
+  }
+  
+  .optimized-image--lazy[data-loaded="true"] {
+    opacity: 1;
+  }
+  
+  /* Loading spinner */
+  .optimized-image-loading {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    z-index: 2;
+    opacity: 1;
+    transition: opacity 0.3s ease;
+  }
+  
+  .optimized-image-container:has(.optimized-image[data-loaded="true"]) .optimized-image-loading {
+    opacity: 0;
+    pointer-events: none;
+  }
+  
+  .loading-spinner {
+    width: 32px;
+    height: 32px;
+    border: 3px solid var(--color-border);
+    border-top: 3px solid var(--color-primary);
+    border-radius: 50%;
+    animation: spin 1s linear infinite;
+  }
+  
+  @keyframes spin {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+  }
+  
+  /* Priority images */
+  .optimized-image--priority {
+    opacity: 1;
+  }
+  
+  /* Hover effects */
+  .optimized-image-container:hover .optimized-image {
+    transform: scale(1.02);
+  }
+  
+  /* Dark mode */
+  :global(.dark) .optimized-image-container {
+    background: var(--color-surface-secondary-dark);
+  }
+  
+  :global(.dark) .loading-spinner {
+    border-color: var(--color-border-dark);
+    border-top-color: var(--color-primary);
+  }
+  
+  /* Responsive optimizations */
+  @media (max-width: 640px) {
+    .optimized-image-container:hover .optimized-image {
+      transform: none; /* Disable hover effects on mobile */
+    }
+    
+    .loading-spinner {
+      width: 24px;
+      height: 24px;
+      border-width: 2px;
+    }
+  }
+  
+  /* High contrast mode */
+  @media (prefers-contrast: high) {
+    .optimized-image-lqip {
+      filter: blur(10px) contrast(1.2);
+    }
+  }
+  
+  /* Reduced motion */
+  @media (prefers-reduced-motion: reduce) {
+    .optimized-image,
+    .optimized-image-lqip,
+    .optimized-image-loading {
+      transition: none;
+    }
+    
+    .optimized-image-container:hover .optimized-image {
+      transform: none;
+    }
+    
+    .loading-spinner {
+      animation: none;
+    }
+  }
+  
+  /* Print styles */
+  @media print {
+    .optimized-image-loading,
+    .optimized-image-lqip {
+      display: none;
+    }
+    
+    .optimized-image {
+      opacity: 1 !important;
+    }
+  }
+</style>
+
+<script>
+  // Intersection Observer para lazy loading
+  if ('IntersectionObserver' in window) {
+    const imageObserver = new IntersectionObserver((entries, observer) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          const img = entry.target as HTMLImageElement;
+          
+          // Cargar imagen
+          if (img.dataset.src) {
+            img.src = img.dataset.src;
+            img.dataset.loaded = 'true';
+            
+            // Cleanup
+            delete img.dataset.src;
+            observer.unobserve(img);
+          }
+        }
+      });
+    }, {
+      rootMargin: '50px 0px', // Cargar 50px antes de que sea visible
+      threshold: 0.01
+    });
+
+    // Observar todas las imágenes lazy
+    document.querySelectorAll('.optimized-image--lazy').forEach(img => {
+      imageObserver.observe(img);
+    });
+  } else {
+    // Fallback para navegadores sin IntersectionObserver
+    document.querySelectorAll('.optimized-image--lazy').forEach(img => {
+      const image = img as HTMLImageElement;
+      if (image.dataset.src) {
+        image.src = image.dataset.src;
+        image.dataset.loaded = 'true';
+        delete image.dataset.src;
+      }
+    });
+  }
+
+  // Manejar eventos de carga de imagen
+  document.addEventListener('load', (e) => {
+    const target = e.target as HTMLImageElement;
+    if (target.classList.contains('optimized-image')) {
+      target.dataset.loaded = 'true';
+    }
+  }, true);
+</script>

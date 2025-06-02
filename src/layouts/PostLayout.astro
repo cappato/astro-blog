@@ -15,6 +15,7 @@ import { getReadingTime, formatReadingTime } from '../features/reading-time';
 import { AIMetadata } from '../features/ai-metadata';
 import AuthorCard from '../features/blog-enhancements/components/AuthorCard.astro';
 import RelatedArticles from '../features/related-articles/components/RelatedArticles.astro';
+import OptimizedImage from '../features/performance-optimization/components/OptimizedImage.astro';
 
 import type { CollectionEntry } from 'astro:content';
 
@@ -177,8 +178,8 @@ const currentPost = {
   <main id="main-content" class="container mx-auto px-4 py-4">
     <!-- Contenido del artículo -->
     <article class="max-w-3xl mx-auto">
-      <!-- Imagen destacada -->
-      <div class="w-full h-64 md:h-80 overflow-hidden">
+      <!-- Imagen destacada optimizada -->
+      <div class="w-full h-64 md:h-80 overflow-hidden rounded-lg">
         {useNewImageSystem ? (
           <ImageVariants
             postId={postId}
@@ -191,16 +192,24 @@ const currentPost = {
             height={630}
             debug={import.meta.env.DEV}
           />
-        ) : (
-          <img
-            src={image?.url}
-            alt={image?.alt || title}
-            width="1200"
-            height="630"
-            class="w-full h-full object-cover"
-            loading="eager"
-            fetchpriority="high"
+        ) : image?.url ? (
+          <OptimizedImage
+            src={image.url}
+            alt={image.alt || title}
+            width={1200}
+            height={630}
+            className="w-full h-full object-cover"
+            lazy={false}
+            priority={true}
+            aspectRatio="16/9"
+            variant="default"
+            showLQIP={false}
+            sizes="(max-width: 768px) 100vw, 1200px"
           />
+        ) : (
+          <div class="w-full h-full bg-gradient-to-br from-primary/20 to-primary/5 flex items-center justify-center">
+            <span class="text-primary/60 text-lg font-medium">📄 {title}</span>
+          </div>
         )}
       </div>
 

@@ -7,6 +7,7 @@
  */
 
 import type { RelatedArticleCardProps } from '../types/related.types';
+import OptimizedImage from '../../performance-optimization/components/OptimizedImage.astro';
 import { getReadingTime, formatReadingTime } from '../../reading-time';
 
 interface Props extends RelatedArticleCardProps {}
@@ -69,15 +70,20 @@ const displayTags = tags ? tags.slice(0, 3) : [];
     <!-- Thumbnail -->
     {showThumbnail && (
       <div class="related-card__thumbnail">
-        <img 
+        <OptimizedImage
           src={cardImage}
           alt={title}
-          class="related-card__image"
-          loading="lazy"
-          width="300"
-          height="200"
+          width={300}
+          height={200}
+          className="related-card__image"
+          lazy={true}
+          priority={false}
+          aspectRatio="16/9"
+          variant="thumbnail"
+          showLQIP={true}
+          sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw"
         />
-        
+
         {showSimilarityScore && import.meta.env.DEV && (
           <div class="related-card__similarity-badge">
             {Math.round(similarityScore * 100)}%
@@ -185,12 +191,14 @@ const displayTags = tags ? tags.slice(0, 3) : [];
     border: 1px solid var(--color-border);
     border-radius: 12px;
     overflow: hidden;
-    transition: all 0.3s ease;
     height: 100%;
     display: flex;
     flex-direction: column;
+    /* Optimized animations */
+    transition: transform 0.2s ease, box-shadow 0.2s ease, border-color 0.2s ease;
+    will-change: transform, box-shadow;
   }
-  
+
   .related-card:hover {
     transform: translateY(-4px);
     box-shadow: 0 8px 25px var(--color-shadow);
@@ -213,18 +221,14 @@ const displayTags = tags ? tags.slice(0, 3) : [];
   /* Thumbnail */
   .related-card__thumbnail {
     position: relative;
-    aspect-ratio: 16 / 9;
     overflow: hidden;
     background: var(--color-surface-secondary);
   }
-  
+
   .related-card__image {
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
     transition: transform 0.3s ease;
   }
-  
+
   .related-card:hover .related-card__image {
     transform: scale(1.05);
   }

@@ -1,0 +1,56 @@
+---
+/**
+ * Performance Optimization Feature - Deferred Scripts Component
+ *
+ * Componente simple para optimización de scripts
+ */
+
+interface Props {
+  enableAnalytics?: boolean;
+  deferAnalytics?: boolean;
+}
+
+const {
+  enableAnalytics = false,
+  deferAnalytics = true
+} = Astro.props;
+---
+
+<!-- Performance Script Loader -->
+<script type="module">
+  // Simple performance optimizations
+  console.log('⚡ Performance optimizations loaded');
+
+  // Defer non-critical scripts
+  if ('requestIdleCallback' in window) {
+    requestIdleCallback(() => {
+      console.log('📦 Loading deferred scripts...');
+    }, { timeout: 2000 });
+  }
+</script>
+
+<style>
+  /* Estilos para indicadores de carga si es necesario */
+  .script-loading-indicator {
+    position: fixed;
+    bottom: 20px;
+    right: 20px;
+    background: var(--color-primary);
+    color: white;
+    padding: 8px 12px;
+    border-radius: 4px;
+    font-size: 12px;
+    z-index: 9999;
+    opacity: 0;
+    transition: opacity 0.3s ease;
+  }
+  
+  .script-loading-indicator.visible {
+    opacity: 1;
+  }
+  
+  /* Dark mode */
+  :global(.dark) .script-loading-indicator {
+    background: var(--color-primary);
+  }
+</style>

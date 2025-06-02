@@ -1,0 +1,448 @@
+---
+/**
+ * Performance Optimization Feature - Performance Monitor
+ * 
+ * Componente para monitorear métricas de performance en tiempo real
+ * Solo activo en desarrollo para debugging
+ */
+
+interface Props {
+  enabled?: boolean;
+  showMetrics?: boolean;
+  logToConsole?: boolean;
+  trackCLS?: boolean;
+  trackLCP?: boolean;
+  trackFID?: boolean;
+  trackTTFB?: boolean;
+}
+
+const {
+  enabled = import.meta.env.DEV,
+  showMetrics = import.meta.env.DEV,
+  logToConsole = true,
+  trackCLS = true,
+  trackLCP = true,
+  trackFID = true,
+  trackTTFB = true
+} = Astro.props;
+---
+
+{enabled && (
+  <>
+    <!-- Performance Metrics Display -->
+    {showMetrics && (
+      <div id="performance-monitor" class="performance-monitor">
+        <div class="performance-monitor__header">
+          <h3>⚡ Performance Monitor</h3>
+          <button id="toggle-monitor" class="performance-monitor__toggle">−</button>
+        </div>
+        <div class="performance-monitor__content">
+          <div class="performance-monitor__metrics">
+            <div class="metric" id="lcp-metric">
+              <span class="metric__label">LCP:</span>
+              <span class="metric__value">—</span>
+            </div>
+            <div class="metric" id="fid-metric">
+              <span class="metric__label">FID:</span>
+              <span class="metric__value">—</span>
+            </div>
+            <div class="metric" id="cls-metric">
+              <span class="metric__label">CLS:</span>
+              <span class="metric__value">—</span>
+            </div>
+            <div class="metric" id="ttfb-metric">
+              <span class="metric__label">TTFB:</span>
+              <span class="metric__value">—</span>
+            </div>
+          </div>
+          <div class="performance-monitor__actions">
+            <button id="refresh-metrics" class="btn-small">🔄 Refresh</button>
+            <button id="export-metrics" class="btn-small">📊 Export</button>
+          </div>
+        </div>
+      </div>
+    )}
+
+    <!-- Performance Monitoring Script -->
+    <script type="module">
+      class PerformanceMonitor {
+        constructor(options = {}) {
+          this.options = {
+            logToConsole: {logToConsole},
+            trackCLS: {trackCLS},
+            trackLCP: {trackLCP},
+            trackFID: {trackFID},
+            trackTTFB: {trackTTFB},
+            ...options
+          };
+          
+          this.metrics = {};
+          this.observers = [];
+          
+          this.init();
+        }
+
+        init() {
+          console.log('🚀 Performance Monitor initialized');
+          
+          // Inicializar observadores
+          if (this.options.trackLCP) this.observeLCP();
+          if (this.options.trackFID) this.observeFID();
+          if (this.options.trackCLS) this.observeCLS();
+          if (this.options.trackTTFB) this.measureTTFB();
+          
+          // Configurar UI si está disponible
+          this.setupUI();
+          
+          // Medir métricas adicionales
+          this.measureAdditionalMetrics();
+        }
+
+        observeLCP() {
+          if (!('PerformanceObserver' in window)) return;
+          
+          const observer = new PerformanceObserver((list) => {
+            const entries = list.getEntries();
+            const lastEntry = entries[entries.length - 1];
+            
+            this.metrics.lcp = Math.round(lastEntry.startTime);
+            this.updateUI('lcp', `${this.metrics.lcp}ms`);
+            this.logMetric('LCP', this.metrics.lcp, 'ms');
+          });
+          
+          observer.observe({ entryTypes: ['largest-contentful-paint'] });
+          this.observers.push(observer);
+        }
+
+        observeFID() {
+          if (!('PerformanceObserver' in window)) return;
+          
+          const observer = new PerformanceObserver((list) => {
+            const entries = list.getEntries();
+            entries.forEach(entry => {
+              this.metrics.fid = Math.round(entry.processingStart - entry.startTime);
+              this.updateUI('fid', `${this.metrics.fid}ms`);
+              this.logMetric('FID', this.metrics.fid, 'ms');
+            });
+          });
+          
+          observer.observe({ entryTypes: ['first-input'] });
+          this.observers.push(observer);
+        }
+
+        observeCLS() {
+          if (!('PerformanceObserver' in window)) return;
+          
+          let clsValue = 0;
+          
+          const observer = new PerformanceObserver((list) => {
+            const entries = list.getEntries();
+            entries.forEach(entry => {
+              if (!entry.hadRecentInput) {
+                clsValue += entry.value;
+              }
+            });
+            
+            this.metrics.cls = Math.round(clsValue * 1000) / 1000;
+            this.updateUI('cls', this.metrics.cls.toFixed(3));
+            this.logMetric('CLS', this.metrics.cls);
+          });
+          
+          observer.observe({ entryTypes: ['layout-shift'] });
+          this.observers.push(observer);
+        }
+
+        measureTTFB() {
+          if (!('PerformanceObserver' in window)) return;
+          
+          const observer = new PerformanceObserver((list) => {
+            const entries = list.getEntries();
+            entries.forEach(entry => {
+              if (entry.name === window.location.href) {
+                this.metrics.ttfb = Math.round(entry.responseStart - entry.requestStart);
+                this.updateUI('ttfb', `${this.metrics.ttfb}ms`);
+                this.logMetric('TTFB', this.metrics.ttfb, 'ms');
+              }
+            });
+          });
+          
+          observer.observe({ entryTypes: ['navigation'] });
+          this.observers.push(observer);
+        }
+
+        measureAdditionalMetrics() {
+          // DOM Content Loaded
+          if (document.readyState === 'loading') {
+            document.addEventListener('DOMContentLoaded', () => {
+              this.metrics.dcl = performance.now();
+              this.logMetric('DCL', Math.round(this.metrics.dcl), 'ms');
+            });
+          }
+          
+          // Load event
+          window.addEventListener('load', () => {
+            this.metrics.load = performance.now();
+            this.logMetric('Load', Math.round(this.metrics.load), 'ms');
+            
+            // Medir recursos
+            this.measureResourceMetrics();
+          });
+        }
+
+        measureResourceMetrics() {
+          const resources = performance.getEntriesByType('resource');
+          const imageResources = resources.filter(r => r.initiatorType === 'img');
+          const scriptResources = resources.filter(r => r.initiatorType === 'script');
+          const cssResources = resources.filter(r => r.initiatorType === 'link');
+          
+          this.metrics.resources = {
+            total: resources.length,
+            images: imageResources.length,
+            scripts: scriptResources.length,
+            css: cssResources.length,
+            totalSize: resources.reduce((sum, r) => sum + (r.transferSize || 0), 0)
+          };
+          
+          this.logMetric('Resources', this.metrics.resources);
+        }
+
+        updateUI(metric, value) {
+          const element = document.getElementById(`${metric}-metric`);
+          if (element) {
+            const valueElement = element.querySelector('.metric__value');
+            if (valueElement) {
+              valueElement.textContent = value;
+              
+              // Agregar clase de color según el valor
+              this.updateMetricColor(element, metric, value);
+            }
+          }
+        }
+
+        updateMetricColor(element, metric, value) {
+          element.classList.remove('metric--good', 'metric--needs-improvement', 'metric--poor');
+          
+          const numericValue = parseFloat(value);
+          
+          switch (metric) {
+            case 'lcp':
+              if (numericValue <= 2500) element.classList.add('metric--good');
+              else if (numericValue <= 4000) element.classList.add('metric--needs-improvement');
+              else element.classList.add('metric--poor');
+              break;
+            case 'fid':
+              if (numericValue <= 100) element.classList.add('metric--good');
+              else if (numericValue <= 300) element.classList.add('metric--needs-improvement');
+              else element.classList.add('metric--poor');
+              break;
+            case 'cls':
+              if (numericValue <= 0.1) element.classList.add('metric--good');
+              else if (numericValue <= 0.25) element.classList.add('metric--needs-improvement');
+              else element.classList.add('metric--poor');
+              break;
+            case 'ttfb':
+              if (numericValue <= 800) element.classList.add('metric--good');
+              else if (numericValue <= 1800) element.classList.add('metric--needs-improvement');
+              else element.classList.add('metric--poor');
+              break;
+          }
+        }
+
+        logMetric(name, value, unit = '') {
+          if (this.options.logToConsole) {
+            console.log(`📊 ${name}: ${value}${unit}`);
+          }
+        }
+
+        setupUI() {
+          const monitor = document.getElementById('performance-monitor');
+          if (!monitor) return;
+          
+          // Toggle visibility
+          const toggleBtn = document.getElementById('toggle-monitor');
+          const content = monitor.querySelector('.performance-monitor__content');
+          
+          if (toggleBtn && content) {
+            toggleBtn.addEventListener('click', () => {
+              const isVisible = content.style.display !== 'none';
+              content.style.display = isVisible ? 'none' : 'block';
+              toggleBtn.textContent = isVisible ? '+' : '−';
+            });
+          }
+          
+          // Refresh metrics
+          const refreshBtn = document.getElementById('refresh-metrics');
+          if (refreshBtn) {
+            refreshBtn.addEventListener('click', () => {
+              this.refreshMetrics();
+            });
+          }
+          
+          // Export metrics
+          const exportBtn = document.getElementById('export-metrics');
+          if (exportBtn) {
+            exportBtn.addEventListener('click', () => {
+              this.exportMetrics();
+            });
+          }
+        }
+
+        refreshMetrics() {
+          // Limpiar observadores existentes
+          this.observers.forEach(observer => observer.disconnect());
+          this.observers = [];
+          
+          // Reinicializar
+          this.metrics = {};
+          this.init();
+        }
+
+        exportMetrics() {
+          const data = {
+            timestamp: new Date().toISOString(),
+            url: window.location.href,
+            userAgent: navigator.userAgent,
+            metrics: this.metrics
+          };
+          
+          const blob = new Blob([JSON.stringify(data, null, 2)], { type: 'application/json' });
+          const url = URL.createObjectURL(blob);
+          const a = document.createElement('a');
+          a.href = url;
+          a.download = `performance-metrics-${Date.now()}.json`;
+          a.click();
+          URL.revokeObjectURL(url);
+        }
+
+        destroy() {
+          this.observers.forEach(observer => observer.disconnect());
+          this.observers = [];
+        }
+      }
+
+      // Inicializar monitor
+      const monitor = new PerformanceMonitor();
+      
+      // Cleanup al salir de la página
+      window.addEventListener('beforeunload', () => {
+        monitor.destroy();
+      });
+    </script>
+  </>
+)}
+
+<style>
+  .performance-monitor {
+    position: fixed;
+    top: 20px;
+    right: 20px;
+    background: rgba(0, 0, 0, 0.9);
+    color: white;
+    padding: 12px;
+    border-radius: 8px;
+    font-family: 'Monaco', 'Menlo', monospace;
+    font-size: 12px;
+    z-index: 9999;
+    min-width: 200px;
+    backdrop-filter: blur(10px);
+  }
+  
+  .performance-monitor__header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 8px;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.2);
+    padding-bottom: 8px;
+  }
+  
+  .performance-monitor__header h3 {
+    margin: 0;
+    font-size: 14px;
+    font-weight: 600;
+  }
+  
+  .performance-monitor__toggle {
+    background: none;
+    border: none;
+    color: white;
+    cursor: pointer;
+    font-size: 16px;
+    padding: 0;
+    width: 20px;
+    height: 20px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  
+  .performance-monitor__metrics {
+    display: grid;
+    gap: 4px;
+    margin-bottom: 8px;
+  }
+  
+  .metric {
+    display: flex;
+    justify-content: space-between;
+    padding: 2px 0;
+  }
+  
+  .metric__label {
+    font-weight: 600;
+  }
+  
+  .metric__value {
+    font-family: monospace;
+  }
+  
+  .metric--good .metric__value {
+    color: #4ade80;
+  }
+  
+  .metric--needs-improvement .metric__value {
+    color: #fbbf24;
+  }
+  
+  .metric--poor .metric__value {
+    color: #f87171;
+  }
+  
+  .performance-monitor__actions {
+    display: flex;
+    gap: 8px;
+    padding-top: 8px;
+    border-top: 1px solid rgba(255, 255, 255, 0.2);
+  }
+  
+  .btn-small {
+    background: rgba(255, 255, 255, 0.1);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    color: white;
+    padding: 4px 8px;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 10px;
+    transition: background 0.2s ease;
+  }
+  
+  .btn-small:hover {
+    background: rgba(255, 255, 255, 0.2);
+  }
+  
+  /* Dark mode adjustments */
+  :global(.dark) .performance-monitor {
+    background: rgba(255, 255, 255, 0.1);
+    color: white;
+  }
+  
+  /* Mobile adjustments */
+  @media (max-width: 768px) {
+    .performance-monitor {
+      top: 10px;
+      right: 10px;
+      font-size: 11px;
+      min-width: 180px;
+    }
+  }
+</style>
