@@ -7,12 +7,15 @@ import { MetaTags } from '../features/meta-tags/components';
 import ImageVariants from '../components/media/ImageVariants.astro';
 import { AutoSchema } from '../features/schema';
 import { ShareButtons, ShareMessage, CopyToast } from '../features/social-share';
-import Logo from '../components/ui/Logo.astro';
+
 import BlogNavbar from '../components/layout/navbar/BlogNavbar.astro';
 import Footer from '../components/layout/footer/Footer.astro';
 import TagList from '../components/blog/TagList.astro';
 import { getReadingTime, formatReadingTime } from '../features/reading-time';
 import { AIMetadata } from '../features/ai-metadata';
+import Breadcrumbs from '../features/blog-enhancements/components/Breadcrumbs.astro';
+import AuthorCard from '../features/blog-enhancements/components/AuthorCard.astro';
+import { generatePostBreadcrumbs, detectPrimaryTag } from '../features/blog-enhancements/utils/breadcrumbs';
 
 import type { CollectionEntry } from 'astro:content';
 
@@ -70,6 +73,15 @@ const readingTimeText = formatReadingTime(readingTime);
 
 // URL actual para compartir
 const currentUrl = Astro.url.href;
+
+// Generar breadcrumbs automáticamente
+const primaryTag = detectPrimaryTag(tags || []);
+const breadcrumbs = generatePostBreadcrumbs(
+  Astro.url.pathname,
+  title,
+  tags || [],
+  primaryTag
+);
 ---
 
 <!DOCTYPE html>
@@ -122,11 +134,19 @@ const currentUrl = Astro.url.href;
 
   <CommonScripts />
   <link rel="stylesheet" href="/styles/blog.css">
+  <style>
+    @import '../features/blog-enhancements/styles/blog-enhancements.css';
+  </style>
 </head>
 <body class="font-sans transition-theme">
   <BlogNavbar currentPath={Astro.url.pathname} />
 
-  <main id="main-content" class="container mx-auto px-4 py-8">
+  <!-- Breadcrumbs Navigation -->
+  <div class="container mx-auto px-4 pt-4">
+    <Breadcrumbs items={breadcrumbs} />
+  </div>
+
+  <main id="main-content" class="container mx-auto px-4 py-4">
     <!-- Contenido del artículo -->
     <article class="max-w-3xl mx-auto">
       <!-- Imagen destacada -->
@@ -185,6 +205,9 @@ const currentUrl = Astro.url.href;
         <div class="prose prose-lg max-w-none dark:prose-invert">
           <slot />
         </div>
+
+        <!-- Módulo de Autor -->
+        <AuthorCard variant="full" showRelatedPosts={true} />
 
         <!-- Botones para compartir -->
         <div class="mt-8 pt-6 border-t border-border dark:border-border-dark">
