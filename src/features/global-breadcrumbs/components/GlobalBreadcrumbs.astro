@@ -75,7 +75,11 @@ if (pathname === '/') {
               <span class="global-breadcrumbs__text">{item.label}</span>
             </span>
           ) : (
-            <a href={item.href} class="global-breadcrumbs__link">
+            <a
+              href={item.href}
+              class="global-breadcrumbs__link"
+              data-breadcrumb-click={item.label}
+            >
               <span class="global-breadcrumbs__icon">{item.icon}</span>
               <span class="global-breadcrumbs__text">{item.label}</span>
             </a>
@@ -327,3 +331,37 @@ if (pathname === '/') {
     }
   }
 </style>
+
+<script>
+  // Simple breadcrumb analytics tracking
+  document.addEventListener('DOMContentLoaded', () => {
+    const breadcrumbLinks = document.querySelectorAll('[data-breadcrumb-click]');
+
+    breadcrumbLinks.forEach(link => {
+      link.addEventListener('click', (event) => {
+        const target = event.currentTarget as HTMLAnchorElement;
+        if (!target) return;
+
+        const breadcrumbLabel = target.getAttribute('data-breadcrumb-click');
+        const href = target.getAttribute('href');
+
+        // Track breadcrumb navigation
+        if (typeof (window as any).gtag !== 'undefined') {
+          // Google Analytics 4
+          (window as any).gtag('event', 'breadcrumb_navigation', {
+            breadcrumb_label: breadcrumbLabel,
+            destination_url: href,
+            page_location: window.location.href
+          });
+        }
+
+        // Console log for development
+        console.log('🧭 Breadcrumb Navigation:', {
+          label: breadcrumbLabel,
+          destination: href,
+          from: window.location.pathname
+        });
+      });
+    });
+  });
+</script>
