@@ -8,18 +8,10 @@
 import MainLayout from '../../layouts/MainLayout.astro';
 import { PillarGrid } from '../../features/content-pillars/components';
 import { getFeaturedPillars, getAllPillars } from '../../features/content-pillars/config/pillars.config';
-import Breadcrumbs from '../../features/blog-enhancements/components/Breadcrumbs.astro';
 
 // Obtener pilares
 const featuredPillars = getFeaturedPillars();
 const allPillars = getAllPillars();
-
-// Breadcrumbs
-const breadcrumbs = [
-  { label: 'Inicio', href: '/' },
-  { label: 'Blog', href: '/blog' },
-  { label: 'Pilares de Contenido', current: true }
-];
 
 // SEO metadata
 const seoData = {
@@ -31,11 +23,6 @@ const seoData = {
 ---
 
 <MainLayout {...seoData}>
-  <!-- Breadcrumbs -->
-  <div class="container mx-auto px-4 pt-4">
-    <Breadcrumbs items={breadcrumbs} />
-  </div>
-
   <!-- Hero Section -->
   <section class="container mx-auto px-4 py-8">
     <div class="text-center max-w-4xl mx-auto">
