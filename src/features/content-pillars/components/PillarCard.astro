@@ -44,7 +44,7 @@ const pillarUrl = generatePillarUrl(pillar.id);
         )}
 
         <div class="flex-1 min-w-0">
-          <h3 class="text-xl font-bold text-primary mb-1 leading-tight line-clamp-2">
+          <h3 class="text-xl font-bold text-foreground mb-1 leading-tight line-clamp-2">
             {pillar.title}
           </h3>
 
@@ -62,7 +62,7 @@ const pillarUrl = generatePillarUrl(pillar.id);
       <!-- Content -->
       {showDescription && variant !== 'compact' && (
         <div class="flex-1 mb-4">
-          <p class="text-content leading-relaxed text-sm line-clamp-3">
+          <p class="text-muted leading-relaxed text-sm line-clamp-3">
             {pillar.description}
           </p>
         </div>
