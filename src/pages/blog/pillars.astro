@@ -24,7 +24,7 @@ const seoData = {
 
 <MainLayout {...seoData}>
   <!-- Hero Section -->
-  <section class="container mx-auto px-4 py-8">
+  <section class="container mx-auto px-6 sm:px-4 py-8">
     <div class="text-center max-w-4xl mx-auto">
       <h1 class="text-4xl md:text-5xl font-bold text-primary mb-6">
         Pilares de Contenido
@@ -39,8 +39,9 @@ const seoData = {
 
   <!-- Featured Pillars -->
   {featuredPillars.length > 0 && (
-    <section class="container mx-auto px-4 py-8">
-      <div class="mb-8">
+    <section class="container mx-auto px-6 sm:px-4 py-8">
+      <div class="max-w-4xl mx-auto">
+        <div class="mb-8">
         <h2 class="text-3xl font-bold text-primary mb-4">
           🌟 Pilares Destacados
         </h2>
@@ -56,12 +57,14 @@ const seoData = {
         showStats={true}
         className="featured-pillars"
       />
+      </div>
     </section>
   )}
 
   <!-- All Pillars -->
-  <section class="container mx-auto px-4 py-8">
-    <div class="mb-8">
+  <section class="container mx-auto px-6 sm:px-4 py-8">
+    <div class="max-w-4xl mx-auto">
+      <div class="mb-8">
       <h2 class="text-3xl font-bold text-primary mb-4">
         📚 Todos los Pilares
       </h2>
@@ -77,10 +80,11 @@ const seoData = {
       showStats={true}
       className="all-pillars"
     />
+    </div>
   </section>
 
   <!-- CTA Section -->
-  <section class="container mx-auto px-4 py-12">
+  <section class="container mx-auto px-6 sm:px-4 py-12">
     <div class="bg-surface border border-border rounded-2xl p-8 text-center max-w-4xl mx-auto">
       <h2 class="text-2xl font-bold text-primary mb-4">
         ¿Buscas algo específico?

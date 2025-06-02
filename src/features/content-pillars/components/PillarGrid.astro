@@ -16,11 +16,6 @@ interface Props extends PillarGridProps {}
 const {
   pillars,
   variant = 'default',
-  columns = {
-    desktop: 3,
-    tablet: 2,
-    mobile: 1
-  },
   showStats = true,
   className = ''
 } = Astro.props;
@@ -42,19 +37,11 @@ const gridClasses = [
   `pillar-grid--${variant}`,
   className
 ].filter(Boolean).join(' ');
-
-// Estilos CSS dinámicos para columnas
-const gridStyles = {
-  '--grid-columns-desktop': columns.desktop?.toString() || '3',
-  '--grid-columns-tablet': columns.tablet?.toString() || '2',
-  '--grid-columns-mobile': columns.mobile?.toString() || '1'
-};
 ---
 
 <!-- Pillar Grid -->
-<section 
+<section
   class={gridClasses}
-  style={gridStyles}
   aria-label="Pilares de contenido"
 >
   {pillars.length === 0 ? (
@@ -96,182 +83,43 @@ const gridStyles = {
 
 <style>
   .pillar-grid {
-    width: 100%;
-    margin: 2rem 0;
+    @apply w-full my-8;
   }
-  
+
   .pillar-grid__container {
-    display: grid;
-    grid-template-columns: repeat(var(--grid-columns-desktop), 1fr);
-    gap: 2rem;
-    width: 100%;
+    @apply grid grid-cols-1 md:grid-cols-2 gap-6;
   }
-  
+
   .pillar-grid__item {
-    height: 100%;
+    @apply h-full;
   }
   
   /* Empty state */
   .pillar-grid__empty {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    text-align: center;
-    padding: 4rem 2rem;
-    background: var(--color-surface);
-    border: 2px dashed var(--color-border);
-    border-radius: 12px;
-    min-height: 300px;
+    @apply flex flex-col items-center justify-center text-center;
+    @apply p-16 bg-surface-secondary border-2 border-dashed border-border rounded-xl;
+    @apply min-h-[300px];
   }
-  
+
   .pillar-grid__empty-icon {
-    font-size: 4rem;
-    margin-bottom: 1rem;
-    opacity: 0.6;
+    @apply text-6xl mb-4 opacity-60;
   }
-  
+
   .pillar-grid__empty-title {
-    font-size: 1.5rem;
-    font-weight: 600;
-    color: var(--color-text-primary);
-    margin: 0 0 0.5rem 0;
+    @apply text-2xl font-semibold text-primary mb-2;
   }
-  
+
   .pillar-grid__empty-description {
-    color: var(--color-text-secondary);
-    margin: 0;
-    max-width: 400px;
-    line-height: 1.6;
+    @apply text-content max-w-md leading-relaxed;
   }
   
   /* Variants */
   .pillar-grid--compact .pillar-grid__container {
-    gap: 1rem;
+    @apply gap-4;
   }
-  
+
   .pillar-grid--featured .pillar-grid__container {
-    gap: 2.5rem;
+    @apply gap-8;
   }
-  
-  /* Responsive design */
-  @media (max-width: 1024px) {
-    .pillar-grid__container {
-      grid-template-columns: repeat(var(--grid-columns-tablet), 1fr);
-      gap: 1.5rem;
-    }
-  }
-  
-  @media (max-width: 640px) {
-    .pillar-grid {
-      margin: 1.5rem 0;
-    }
-    
-    .pillar-grid__container {
-      grid-template-columns: repeat(var(--grid-columns-mobile), 1fr);
-      gap: 1rem;
-    }
-    
-    .pillar-grid__empty {
-      padding: 3rem 1.5rem;
-      min-height: 250px;
-    }
-    
-    .pillar-grid__empty-icon {
-      font-size: 3rem;
-    }
-    
-    .pillar-grid__empty-title {
-      font-size: 1.25rem;
-    }
-    
-    .pillar-grid__empty-description {
-      font-size: 0.875rem;
-    }
-  }
-  
-  /* Dark mode */
-  :global(.dark) .pillar-grid__empty {
-    background: var(--color-surface-dark);
-    border-color: var(--color-border-dark);
-  }
-  
-  /* High contrast mode */
-  @media (prefers-contrast: high) {
-    .pillar-grid__empty {
-      border-width: 3px;
-    }
-  }
-  
-  /* Print styles */
-  @media print {
-    .pillar-grid__container {
-      grid-template-columns: 1fr;
-      gap: 1rem;
-    }
-    
-    .pillar-grid__empty {
-      display: none;
-    }
-  }
-  
-  /* Auto-fit columns for very wide screens */
-  @media (min-width: 1400px) {
-    .pillar-grid__container {
-      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-      max-width: 1200px;
-      margin: 0 auto;
-    }
-  }
-  
-  /* Animation for grid items */
-  .pillar-grid__item {
-    animation: fadeInUp 0.6s ease-out;
-    animation-fill-mode: both;
-  }
-  
-  .pillar-grid__item:nth-child(1) { animation-delay: 0.1s; }
-  .pillar-grid__item:nth-child(2) { animation-delay: 0.2s; }
-  .pillar-grid__item:nth-child(3) { animation-delay: 0.3s; }
-  .pillar-grid__item:nth-child(4) { animation-delay: 0.4s; }
-  .pillar-grid__item:nth-child(5) { animation-delay: 0.5s; }
-  .pillar-grid__item:nth-child(6) { animation-delay: 0.6s; }
-  
-  @keyframes fadeInUp {
-    from {
-      opacity: 0;
-      transform: translateY(30px);
-    }
-    to {
-      opacity: 1;
-      transform: translateY(0);
-    }
-  }
-  
-  /* Disable animations for reduced motion */
-  @media (prefers-reduced-motion: reduce) {
-    .pillar-grid__item {
-      animation: none;
-    }
-  }
-  
-  /* Focus management for keyboard navigation */
-  .pillar-grid__container:focus-within .pillar-grid__item:not(:focus-within) {
-    opacity: 0.7;
-    transition: opacity 0.3s ease;
-  }
-  
-  /* Hover effects for the entire grid */
-  .pillar-grid__container:hover .pillar-grid__item:not(:hover) {
-    opacity: 0.8;
-    transition: opacity 0.3s ease;
-  }
-  
-  @media (prefers-reduced-motion: reduce) {
-    .pillar-grid__container:focus-within .pillar-grid__item:not(:focus-within),
-    .pillar-grid__container:hover .pillar-grid__item:not(:hover) {
-      opacity: 1;
-      transition: none;
-    }
-  }
+
 </style>
