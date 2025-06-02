@@ -66,9 +66,13 @@ export class MetaTagValidator {
         normalizedUrl = normalizedUrl.replace('matiascappato.com', 'cappato.dev');
       }
 
-      // Remove trailing slash for consistency
-      if (normalizedUrl.endsWith('/') && normalizedUrl !== `${siteUrl}/`) {
-        normalizedUrl = normalizedUrl.slice(0, -1);
+      // Remove trailing slash for consistency (except for root domain)
+      if (normalizedUrl.endsWith('/')) {
+        const urlObj = new URL(normalizedUrl);
+        // Only remove trailing slash if it's not the root path
+        if (urlObj.pathname !== '/') {
+          normalizedUrl = normalizedUrl.slice(0, -1);
+        }
       }
 
     } catch (error) {

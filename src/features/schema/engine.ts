@@ -53,7 +53,15 @@ export function detectPageType(context: SchemaContext): PageType {
 function toAbsoluteUrl(path: string): string {
   if (path.startsWith('http')) return path;
   const baseUrl = SCHEMA_CONFIG.site.url;
-  return `${baseUrl}${path.startsWith('/') ? '' : '/'}${path}`;
+
+  // Handle root path
+  if (path === '/' || path === '') {
+    return baseUrl;
+  }
+
+  // Ensure path starts with / and construct URL
+  const normalizedPath = path.startsWith('/') ? path : `/${path}`;
+  return `${baseUrl}${normalizedPath}`;
 }
 
 /**

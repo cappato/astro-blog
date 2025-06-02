@@ -7,9 +7,10 @@ import SkillsSection from '../components/sections/SkillsSection.astro';
 import AchievementsSection from '../components/sections/AchievementsSection.astro';
 import HobbiesSection from '../components/sections/HobbiesSection.astro';
 import ContactSection from '../components/sections/ContactSection.astro';
+import { SITE_INFO } from '../config/site.ts';
 ---
 
-<MainLayout title="Matías Sebastián Cappato - Resume">
+<MainLayout title={SITE_INFO.title}>
     <AboutSection />
     <ExperienceSection />
     <EducationSection />
