@@ -165,39 +165,39 @@ export const PILLARS_CONFIG = {
 /**
  * Mapeo de tags a pilares
  * Permite clasificar automáticamente posts en pilares basado en sus tags
+ * Solo incluye tags que realmente existen en los posts del blog
  */
 export const TAG_TO_PILLAR_MAPPING: Record<string, string> = {
   // Astro & Performance
   'astro': 'astro-performance',
   'performance': 'astro-performance',
-  'optimization': 'astro-performance',
-  'web-vitals': 'astro-performance',
   'ssr': 'astro-performance',
-  'static-site': 'astro-performance',
 
   // TypeScript & Architecture
   'typescript': 'typescript-architecture',
-  'architecture': 'typescript-architecture',
-  'design-patterns': 'typescript-architecture',
-  'scalability': 'typescript-architecture',
-  'enterprise': 'typescript-architecture',
-  'clean-code': 'typescript-architecture',
+  'arquitectura': 'typescript-architecture', // Nota: en español en los posts
+  'modular': 'typescript-architecture',
+  'features': 'typescript-architecture',
 
   // Automation & DevOps
   'automation': 'automation-devops',
-  'devops': 'automation-devops',
   'testing': 'automation-devops',
-  'ci-cd': 'automation-devops',
-  'deployment': 'automation-devops',
-  'docker': 'automation-devops',
-  'github-actions': 'automation-devops',
+  'vitest': 'automation-devops',
+  'seo-testing': 'automation-devops',
 
   // SEO & Optimization
   'seo': 'seo-optimization',
   'meta-tags': 'seo-optimization',
   'schema.org': 'seo-optimization',
-  'search-ranking': 'seo-optimization',
-  'google': 'seo-optimization'
+
+  // Theme & UI (podría ir en cualquier pilar, lo ponemos en Astro & Performance)
+  'dark-mode': 'astro-performance',
+  'css-variables': 'astro-performance',
+  'theme-system': 'astro-performance',
+
+  // General tags (sin pilar específico, pero necesarios para el mapeo)
+  'blog': 'astro-performance', // Tag general, lo asignamos a Astro
+  'bienvenida': 'astro-performance' // Tag de bienvenida, lo asignamos a Astro
 };
 
 /**
