@@ -6,8 +6,9 @@ import { AutoSchema } from '../../features/schema';
 import { ThemeScript } from '../../features/dark-light-mode/components';
 import CommonScripts from './CommonScripts.astro';
 import Favicons from '../seo/Favicons.astro';
-import GlobalBreadcrumbs from '../../features/global-breadcrumbs/components/GlobalBreadcrumbs.astro';
+
 import DeferredScripts from '../../features/performance-optimization/components/DeferredScripts.astro';
+import Breadcrumbs from '../../features/breadcrumbs/components/Breadcrumbs.astro';
 // import PerformanceMonitor from '../../features/performance-optimization/components/PerformanceMonitor.astro';
 
 interface Props {
@@ -100,9 +101,9 @@ const currentUrl = Astro.url.pathname;
     <slot name="header" />
   </header>
 
-  <!-- Global Breadcrumbs - EN TODAS LAS PÁGINAS -->
+  <!-- Global Breadcrumbs - Connected once in base layout -->
   <div class="container mx-auto px-4">
-    <GlobalBreadcrumbs customTitle={customTitle} />
+    <Breadcrumbs customTitle={customTitle} />
   </div>
 
   <main id="main-content" class="flex-grow">
