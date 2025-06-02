@@ -1,15 +1,19 @@
 ---
 import Icon from '../ui/Icon.astro';
 import Card from '../ui/Card.astro';
+import ContentContainer from '../layout/ContentContainer.astro';
+import ContentWidth from '../layout/ContentWidth.astro';
 ---
 
 <!-- Contact Section -->
-<section id="contact" class="content-container py-10">
-    <h2 class="text-3xl font-bold text-primary mb-6 border-b border-surface-700 pb-2 content-width">Contact</h2>
+<ContentContainer as="section" className="py-10" width="standard">
+    <ContentWidth>
+        <h2 class="text-3xl font-bold text-primary mb-6 border-b border-surface-700 pb-2">Contact</h2>
+    </ContentWidth>
 
-    <div class="content-width">
+    <ContentWidth>
         <Card variant="default">
-            <div class="content-width-narrow">
+            <ContentWidth width="narrow">
                 <h3 class="text-xl sm:text-2xl font-bold text-secondary mb-4">Get In Touch</h3>
                 <p class="text-content mb-8">Feel free to reach out if you'd like to discuss potential opportunities or just want to connect.</p>
 
@@ -45,9 +49,9 @@ import Card from '../ui/Card.astro';
                         <span class="mr-2"><Icon name="email" size={18} /></span> Send Email
                     </a>
                 </div>
-            </div>
+            </ContentWidth>
         </Card>
-    </div>
-</section>
+    </ContentWidth>
+</ContentContainer>
 
 

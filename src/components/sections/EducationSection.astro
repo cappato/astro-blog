@@ -1,12 +1,16 @@
 ---
 import Card from '../ui/Card.astro';
+import ContentContainer from '../layout/ContentContainer.astro';
+import ContentWidth from '../layout/ContentWidth.astro';
 ---
 
 <!-- Education Section -->
-<section id="education" class="content-container py-10">
-    <h2 class="text-3xl font-bold text-primary mb-6 border-b border-surface-700 pb-2 content-width">Education</h2>
+<ContentContainer as="section" className="py-10" width="standard">
+    <ContentWidth>
+        <h2 class="text-3xl font-bold text-primary mb-6 border-b border-surface-700 pb-2">Education</h2>
+    </ContentWidth>
 
-    <div class="content-width space-y-6">
+    <ContentWidth className="space-y-6">
         <Card variant="default">
             <h3 class="text-xl sm:text-2xl font-bold text-secondary">National University of Mar del Plata</h3>
             <h4 class="text-lg sm:text-xl text-content mb-2">System Analyst</h4>
@@ -20,5 +24,5 @@ import Card from '../ui/Card.astro';
             <p class="text-content mb-4">Currently enrolled</p>
             <p class="text-content">Degree: Completed finals of the first year and two courses from the second year.</p>
         </Card>
-    </div>
-</section> <!-- Education Section -->
+    </ContentWidth>
+</ContentContainer> <!-- Education Section -->

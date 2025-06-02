@@ -1,17 +1,21 @@
 ---
 import ExperienceCard from './experience/ExperienceCard.astro';
 import { experienceData } from './experience/experienceData';
+import ContentContainer from '../layout/ContentContainer.astro';
+import ContentWidth from '../layout/ContentWidth.astro';
 ---
 
 <!-- Experience Section -->
-<section id="experience" class="content-container py-10">
-    <h2 class="text-3xl font-bold text-primary mb-6 border-b divider pb-2 content-width">Professional Experience</h2>
+<ContentContainer as="section" className="py-10" width="standard">
+    <ContentWidth>
+        <h2 class="text-3xl font-bold text-primary mb-6 border-b divider pb-2">Professional Experience</h2>
+    </ContentWidth>
 
-    <div class="content-width space-y-10">
+    <ContentWidth className="space-y-10">
         {experienceData.map((experience) => (
             <ExperienceCard experience={experience} />
         ))}
-    </div>
-</section>
+    </ContentWidth>
+</ContentContainer>
 
 

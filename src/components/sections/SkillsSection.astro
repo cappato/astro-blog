@@ -1,12 +1,16 @@
 ---
 import Card from '../ui/Card.astro';
+import ContentContainer from '../layout/ContentContainer.astro';
+import ContentWidth from '../layout/ContentWidth.astro';
 ---
 
 <!-- Skills Section -->
-<section id="skills" class="content-container py-10">
-    <h2 class="text-3xl font-bold text-primary mb-6 border-b border-surface-700 pb-2 content-width">Skills</h2>
+<ContentContainer as="section" className="py-10" width="standard">
+    <ContentWidth>
+        <h2 class="text-3xl font-bold text-primary mb-6 border-b border-surface-700 pb-2">Skills</h2>
+    </ContentWidth>
 
-    <div class="content-width">
+    <ContentWidth>
         <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
             <Card variant="default">
                 <h3 class="text-xl sm:text-2xl font-bold text-secondary mb-4">Professional Skills</h3>
@@ -31,5 +35,5 @@ import Card from '../ui/Card.astro';
                 </ul>
             </Card>
         </div>
-    </div>
-</section>
+    </ContentWidth>
+</ContentContainer>

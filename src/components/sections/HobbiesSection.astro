@@ -1,12 +1,16 @@
 ---
 import Card from '../ui/Card.astro';
+import ContentContainer from '../layout/ContentContainer.astro';
+import ContentWidth from '../layout/ContentWidth.astro';
 ---
 
 <!-- Hobbies Section -->
-<section id="hobbies" class="content-container py-10">
-    <h2 class="text-3xl font-bold text-primary mb-6 border-b border-surface-700 pb-2 content-width">Hobbies</h2>
+<ContentContainer as="section" className="py-10" width="standard">
+    <ContentWidth>
+        <h2 class="text-3xl font-bold text-primary mb-6 border-b border-surface-700 pb-2">Hobbies</h2>
+    </ContentWidth>
 
-    <div class="content-width">
+    <ContentWidth>
         <Card variant="default">
             <ul class="list-disc pl-5 space-y-3 text-content">
                 <li>Passionate about programming.</li>
@@ -14,5 +18,5 @@ import Card from '../ui/Card.astro';
                 <li>Took a lifeguard course as a personal interest.</li>
             </ul>
         </Card>
-    </div>
-</section>
+    </ContentWidth>
+</ContentContainer>

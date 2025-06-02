@@ -49,37 +49,39 @@ const featuredPillars = getFeaturedPillars();
   <BlogNavbar currentPath="/blog" slot="header" />
 
     <!-- Hero Section -->
-    <section class="content-container py-10">
-        <Card className="content-width text-center blog-hero" variant="default">
-            <div class="space-y-6">
-                <div class="flex items-center justify-center mb-4">
-                    <div class="w-16 h-16 bg-primary/10 rounded-full flex items-center justify-center mr-4 blog-section-icon">
-                        <Icon name="blog" size={32} />
+    <section class="container mx-auto px-6 sm:px-4 py-10">
+        <div class="max-w-4xl mx-auto">
+            <Card className="text-center blog-hero" variant="default">
+                <div class="space-y-6">
+                    <div class="flex items-center justify-center mb-4">
+                        <div class="w-16 h-16 bg-primary/10 rounded-full flex items-center justify-center mr-4 blog-section-icon">
+                            <Icon name="blog" size={32} />
+                        </div>
+                        <h1 class="text-3xl md:text-5xl font-bold text-primary">Blog</h1>
                     </div>
-                    <h1 class="text-3xl md:text-5xl font-bold text-primary">Blog</h1>
+                    <p class="text-lg md:text-xl text-content leading-relaxed">
+                        {description}
+                    </p>
+                    <div class="flex flex-wrap justify-center gap-4 pt-4">
+                        <div class="flex items-center text-muted blog-stats">
+                            <Icon name="article" size={16} />
+                            <span class="ml-2 text-sm font-medium">{postCards.length} artículos</span>
+                        </div>
+                        <div class="flex items-center text-muted blog-stats">
+                            <Icon name="tag" size={16} />
+                            <span class="ml-2 text-sm font-medium">{allTags.length} temas</span>
+                        </div>
+                        <div class="flex items-center text-muted blog-stats">
+                            <Icon name="pillar" size={16} />
+                            <span class="ml-2 text-sm font-medium">{featuredPillars.length} pilares</span>
+                        </div>
+                    </div>
                 </div>
-                <p class="text-lg md:text-xl text-content leading-relaxed">
-                    {description}
-                </p>
-                <div class="flex flex-wrap justify-center gap-4 pt-4">
-                    <div class="flex items-center text-muted blog-stats">
-                        <Icon name="article" size={16} />
-                        <span class="ml-2 text-sm font-medium">{postCards.length} artículos</span>
-                    </div>
-                    <div class="flex items-center text-muted blog-stats">
-                        <Icon name="tag" size={16} />
-                        <span class="ml-2 text-sm font-medium">{allTags.length} temas</span>
-                    </div>
-                    <div class="flex items-center text-muted blog-stats">
-                        <Icon name="pillar" size={16} />
-                        <span class="ml-2 text-sm font-medium">{featuredPillars.length} pilares</span>
-                    </div>
-                </div>
-            </div>
-        </Card>
+            </Card>
+        </div>
     </section>
 
-    <main class="content-container pb-10">
+    <main class="container mx-auto px-6 sm:px-4 pb-10">
         <!-- Featured Pillars Section -->
         {featuredPillars.length > 0 && (
             <section class="mb-12">
