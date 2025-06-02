@@ -49,8 +49,8 @@ const featuredPillars = getFeaturedPillars();
   <BlogNavbar currentPath="/blog" slot="header" />
 
     <!-- Hero Section -->
-    <section class="container mx-auto px-6 sm:px-4 py-10">
-        <Card className="max-w-4xl mx-auto text-center blog-hero" variant="default">
+    <section class="content-container py-10">
+        <Card className="content-width text-center blog-hero" variant="default">
             <div class="space-y-6">
                 <div class="flex items-center justify-center mb-4">
                     <div class="w-16 h-16 bg-primary/10 rounded-full flex items-center justify-center mr-4 blog-section-icon">
@@ -58,7 +58,7 @@ const featuredPillars = getFeaturedPillars();
                     </div>
                     <h1 class="text-3xl md:text-5xl font-bold text-primary">Blog</h1>
                 </div>
-                <p class="text-lg md:text-xl text-content max-w-4xl mx-auto leading-relaxed">
+                <p class="text-lg md:text-xl text-content leading-relaxed">
                     {description}
                 </p>
                 <div class="flex flex-wrap justify-center gap-4 pt-4">
@@ -79,7 +79,7 @@ const featuredPillars = getFeaturedPillars();
         </Card>
     </section>
 
-    <main class="container mx-auto px-6 sm:px-4 pb-10">
+    <main class="content-container pb-10">
         <!-- Featured Pillars Section -->
         {featuredPillars.length > 0 && (
             <section class="mb-12">

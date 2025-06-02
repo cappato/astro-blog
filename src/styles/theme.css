@@ -27,6 +27,30 @@
 }
 
 @layer components {
+  /* ========================================
+   * SISTEMA DE CONTENEDORES CENTRALIZADOS
+   * ======================================== */
+
+  /* Contenedor principal estándar para todas las páginas */
+  .content-container {
+    @apply container mx-auto px-6 sm:px-4;
+  }
+
+  /* Ancho de contenido principal - ÚNICO PUNTO DE CONFIGURACIÓN */
+  .content-width {
+    @apply max-w-4xl mx-auto;
+  }
+
+  /* Ancho de contenido amplio (para casos especiales) */
+  .content-width-wide {
+    @apply max-w-6xl mx-auto;
+  }
+
+  /* Ancho de contenido estrecho (para formularios, etc.) */
+  .content-width-narrow {
+    @apply max-w-2xl mx-auto;
+  }
+
   /* Componente base para cards */
   .card-base {
     @apply bg-card border border-border rounded-lg shadow-sm;
