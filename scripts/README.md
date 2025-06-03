@@ -2,15 +2,12 @@
 
 This directory contains general utility scripts for the project.
 
-## Utility Scripts
+## Available Scripts
 
-### Zone.Identifier Cleanup
-Scripts to clean Windows `Zone.Identifier` files that get created when downloading files from the internet.
+### PageSpeed Analyzer
+Performance analysis tool for the website.
 
-- **`clean-zone-identifiers.ps1`** - PowerShell version (Windows)
-- **`clean-zone-identifiers.sh`** - Bash version (Cross-platform)
-
-These files can clutter git repositories and should be removed before committing.
+- **`pagespeed-analyzer.js`** - Comprehensive performance testing
 
 ## Migrated Features
 

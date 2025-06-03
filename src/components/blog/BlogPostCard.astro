@@ -27,7 +27,7 @@ const imageAlt = post.image?.alt || post.title;
 ---
 
 <!-- Estructura unificada de artículo -->
-<article class={`bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-lg overflow-hidden shadow-lg hover:shadow-xl transition-all duration-300 h-full flex flex-col ${className}`}>
+<article class={`bg-card border border-card rounded-lg overflow-hidden shadow-lg hover:shadow-xl transition-all duration-300 h-full flex flex-col ${className}`}>
   <!-- Post Image -->
   <a href={post.url} class="block flex-shrink-0">
     <img
@@ -44,18 +44,18 @@ const imageAlt = post.image?.alt || post.title;
   <div class="p-4 flex-1 flex flex-col">
     <!-- Post Title -->
     <h3 class="text-xl font-bold mb-2 line-clamp-2">
-      <a href={post.url} class="text-gray-900 dark:text-white hover:text-blue-600 dark:text-blue-400 transition-colors">
+      <a href={post.url} class="text-content hover:text-blue-600 dark:text-blue-400 transition-colors">
         {post.title}
       </a>
     </h3>
 
     <!-- Post Date -->
-    <p class="text-gray-600 dark:text-gray-300 text-sm mb-3">
+    <p class="text-secondary text-sm mb-3">
       {post.formattedDate}
     </p>
 
     <!-- Post Description -->
-    <p class="text-gray-600 dark:text-gray-300 mb-4 line-clamp-3 flex-1">
+    <p class="text-secondary mb-4 line-clamp-3 flex-1">
       {post.description}
     </p>
 

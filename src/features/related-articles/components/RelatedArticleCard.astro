@@ -61,7 +61,7 @@ const displayTags = tags ? tags.slice(0, 3) : [];
 ---
 
 <!-- Related Article Card - Estructura Unificada -->
-<article class={`bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-lg overflow-hidden shadow-lg hover:shadow-xl transition-all duration-300 h-full flex flex-col ${className}`}>
+<article class={`bg-card border border-card rounded-lg overflow-hidden shadow-lg hover:shadow-xl transition-all duration-300 h-full flex flex-col ${className}`}>
   <a
     href={postUrl}
     class="block h-full flex flex-col"
@@ -91,12 +91,12 @@ const displayTags = tags ? tags.slice(0, 3) : [];
     <div class="p-4 flex-1 flex flex-col">
       <!-- Header -->
       <header class="mb-4">
-        <h3 class="text-xl font-bold mb-2 line-clamp-2 text-gray-900 dark:text-white">
+        <h3 class="text-xl font-bold mb-2 line-clamp-2 text-content">
           {title}
         </h3>
 
         <!-- Meta info -->
-        <div class="flex items-center gap-3 text-sm text-gray-600 dark:text-gray-300 mb-3">
+        <div class="flex items-center gap-3 text-sm text-secondary mb-3">
           {showPublishDate && (
             <time datetime={date.toISOString()}>
               {formattedDate}
@@ -114,7 +114,7 @@ const displayTags = tags ? tags.slice(0, 3) : [];
       <!-- Excerpt -->
       {showExcerpt && excerpt && variant !== 'minimal' && (
         <div class="mb-4 flex-1">
-          <p class="text-gray-600 dark:text-gray-300 line-clamp-3">{excerpt}</p>
+          <p class="text-secondary line-clamp-3">{excerpt}</p>
         </div>
       )}
 
@@ -127,7 +127,7 @@ const displayTags = tags ? tags.slice(0, 3) : [];
             </span>
           ))}
           {tags && tags.length > 3 && (
-            <span class="px-2 py-1 rounded-md text-xs font-medium bg-muted/20 text-gray-600 dark:text-gray-300">
+            <span class="px-2 py-1 rounded-md text-xs font-medium bg-muted/20 text-secondary">
               +{tags.length - 3}
             </span>
           )}
@@ -136,7 +136,7 @@ const displayTags = tags ? tags.slice(0, 3) : [];
 
       <!-- Relation reasons (solo en desarrollo) -->
       {import.meta.env.DEV && reasons.length > 0 && (
-        <div class="mb-4 text-xs text-gray-600 dark:text-gray-300">
+        <div class="mb-4 text-xs text-secondary">
           <details>
             <summary class="cursor-pointer">¿Por qué es relacionado?</summary>
             <ul class="mt-2 space-y-1">

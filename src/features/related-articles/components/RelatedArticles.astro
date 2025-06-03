@@ -67,15 +67,15 @@ const relatedArticles = relatedResult.articles;
 
 {relatedArticles.length > 0 && (
   <section
-    class={`mt-12 pt-8 border-t border-gray-200 dark:border-gray-700 ${className}`}
+    class={`mt-12 pt-8 border-t border-card ${className}`}
     aria-label="Artículos relacionados"
   >
     <!-- Header -->
     <header class="text-center mb-8">
-      <h2 class="text-3xl font-bold text-gray-900 dark:text-white mb-2">
+      <h2 class="text-3xl font-bold text-content mb-2">
         {title}
       </h2>
-      <p class="text-gray-600 dark:text-gray-300 max-w-2xl mx-auto">
+      <p class="text-secondary max-w-2xl mx-auto">
         Contenido que podría interesarte basado en este artículo
       </p>
     </header>
@@ -98,9 +98,9 @@ const relatedArticles = relatedResult.articles;
 
     <!-- Debug info (solo en desarrollo) -->
     {import.meta.env.DEV && (
-      <details class="mt-8 p-4 bg-green-600 dark:bg-green-500/10 border border-gray-200 dark:border-gray-700 rounded-lg text-sm">
-        <summary class="cursor-pointer font-medium text-gray-600 dark:text-gray-300">Debug Info (solo en desarrollo)</summary>
-        <div class="mt-4 space-y-2 text-gray-600 dark:text-gray-300">
+      <details class="mt-8 p-4 bg-green-600 dark:bg-green-500/10 border border-card rounded-lg text-sm">
+        <summary class="cursor-pointer font-medium text-secondary">Debug Info (solo en desarrollo)</summary>
+        <div class="mt-4 space-y-2 text-secondary">
           <p><strong>Algoritmo:</strong> {relatedResult.algorithmUsed}</p>
           <p><strong>Tiempo de ejecución:</strong> {relatedResult.executionTime.toFixed(2)}ms</p>
           <p><strong>Candidatos totales:</strong> {relatedResult.totalCandidates}</p>

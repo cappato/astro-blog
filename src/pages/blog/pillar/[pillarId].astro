@@ -117,23 +117,23 @@ const customTitle = pillar.title;
           {pillar.emoji}
         </div>
         <div>
-          <h1 class="text-4xl font-bold text-gray-900 dark:text-white mb-2">
+          <h1 class="text-4xl font-bold text-content mb-2">
             {pillar.title}
           </h1>
-          <div class="flex items-center gap-4 text-sm text-gray-600 dark:text-gray-300">
+          <div class="flex items-center gap-4 text-sm text-secondary">
             <span>📝 {totalPosts} {totalPosts === 1 ? 'artículo' : 'artículos'}</span>
             <span>⏱️ {totalReadingTime} min de contenido</span>
           </div>
         </div>
       </div>
       
-      <p class="text-lg text-gray-600 dark:text-gray-300 leading-relaxed mb-8">
+      <p class="text-lg text-secondary leading-relaxed mb-8">
         {pillar.description}
       </p>
 
       <!-- Tags del Pilar -->
       <div class="mb-8">
-        <h3 class="text-sm font-semibold text-gray-600 dark:text-gray-300 uppercase tracking-wide mb-4">
+        <h3 class="text-sm font-semibold text-secondary uppercase tracking-wide mb-4">
           Tags relacionados
         </h3>
         <div class="flex flex-wrap gap-2">
@@ -151,7 +151,7 @@ const customTitle = pillar.title;
     <!-- Posts Section -->
     {totalPosts > 0 ? (
       <section>
-        <h2 class="text-2xl font-bold text-gray-900 dark:text-white mb-8">
+        <h2 class="text-2xl font-bold text-content mb-8">
           📚 Artículos de {pillar.title}
         </h2>
 
@@ -169,10 +169,10 @@ const customTitle = pillar.title;
       <!-- Empty State -->
       <section class="text-center py-16">
         <div class="text-6xl mb-4">{pillar.emoji}</div>
-        <h2 class="text-2xl font-bold text-gray-900 dark:text-white mb-4">
+        <h2 class="text-2xl font-bold text-content mb-4">
           Próximamente contenido sobre {pillar.title}
         </h2>
-        <p class="text-gray-600 dark:text-gray-300 mb-8">
+        <p class="text-secondary mb-8">
           Este pilar está en desarrollo. Pronto habrá artículos increíbles sobre estos temas.
         </p>
         <a 
@@ -185,8 +185,8 @@ const customTitle = pillar.title;
     )}
 
     <!-- Related Pillars -->
-    <aside class="mt-16 pt-8 border-t border-gray-200 dark:border-gray-700">
-      <h3 class="text-xl font-bold text-gray-900 dark:text-white mb-6">
+    <aside class="mt-16 pt-8 border-t border-card">
+      <h3 class="text-xl font-bold text-content mb-6">
         🔗 Otros pilares de contenido
       </h3>
       <div class="flex flex-wrap gap-4">
@@ -196,16 +196,16 @@ const customTitle = pillar.title;
           .map(relatedPillar => (
             <a 
               href={`/blog/pillar/${relatedPillar.id}`}
-              class="flex items-center gap-3 p-4 rounded-lg border border-gray-200 dark:border-gray-700 hover:border-blue-600 dark:border-blue-500 transition-colors group"
+              class="flex items-center gap-3 p-4 rounded-lg border border-card hover:border-blue-600 dark:border-blue-500 transition-colors group"
             >
               <div class="w-10 h-10 rounded-lg flex items-center justify-center text-lg bg-green-600 dark:bg-green-500/10 text-green-600 dark:text-green-400">
                 {relatedPillar.emoji}
               </div>
               <div>
-                <div class="font-semibold text-gray-900 dark:text-white group-hover:text-blue-600 dark:text-blue-400 transition-colors">
+                <div class="font-semibold text-content group-hover:text-blue-600 dark:text-blue-400 transition-colors">
                   {relatedPillar.title}
                 </div>
-                <div class="text-sm text-gray-600 dark:text-gray-300">
+                <div class="text-sm text-secondary">
                   Explorar contenido
                 </div>
               </div>

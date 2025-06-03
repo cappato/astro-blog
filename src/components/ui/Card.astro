@@ -13,9 +13,9 @@ const {
 
 // Definir las variantes de la card usando solo Tailwind
 const variants = {
-  default: 'bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-lg shadow-sm p-4 sm:p-6',
-  hover: 'bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-lg shadow-sm hover:shadow-sm-hover transition-shadow duration-200 p-4 sm:p-6',
-  compact: 'bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-lg shadow-sm p-3 sm:p-4'
+  default: 'bg-card border border-card rounded-lg shadow-sm p-4 sm:p-6',
+  hover: 'bg-card border border-card rounded-lg shadow-sm hover:shadow-sm-hover transition-shadow duration-200 p-4 sm:p-6',
+  compact: 'bg-card border border-card rounded-lg shadow-sm p-3 sm:p-4'
 };
 
 const cardClasses = `${variants[variant]} ${className}`;

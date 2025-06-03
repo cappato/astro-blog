@@ -12,3 +12,32 @@
     @apply scroll-smooth;
   }
 }
+
+@layer components {
+  /* Clases semánticas para patrones repetitivos */
+
+  /* Texto principal - Reemplaza: text-gray-900 dark:text-white */
+  .text-content {
+    @apply text-gray-900 dark:text-white;
+  }
+
+  /* Fondo de tarjetas - Reemplaza: bg-white dark:bg-gray-800 */
+  .bg-card {
+    @apply bg-white dark:bg-gray-800;
+  }
+
+  /* Bordes de tarjetas - Reemplaza: border-gray-200 dark:border-gray-700 */
+  .border-card {
+    @apply border-gray-200 dark:border-gray-700;
+  }
+
+  /* Texto secundario - Reemplaza: text-gray-600 dark:text-gray-300 */
+  .text-secondary {
+    @apply text-gray-600 dark:text-gray-300;
+  }
+
+  /* Combinación completa de tarjeta */
+  .card-base {
+    @apply bg-card border border-card rounded-lg shadow-sm;
+  }
+}
