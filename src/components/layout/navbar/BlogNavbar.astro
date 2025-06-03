@@ -15,9 +15,9 @@ const isMainBlogPage = currentPath === '/blog';
   <!-- Botón Blog en la zona de acciones (al lado del toggle) -->
   <div slot="actions">
     {isMainBlogPage ? (
-      <span class="text-primary font-medium px-3 py-2 rounded-md bg-primary/10 border border-primary/20">Blog</span>
+      <span class="text-blue-600 dark:text-blue-400 font-medium px-3 py-2 rounded-md bg-blue-600/10 dark:bg-blue-500/10 border border-blue-600/20 dark:border-blue-500/20">Blog</span>
     ) : (
-      <a href="/blog" class="text-content hover:text-primary font-medium px-3 py-2 rounded-md hover:bg-button transition-all duration-200 flex items-center">Blog</a>
+      <a href="/blog" class="text-gray-900 dark:text-white hover:text-blue-600 dark:text-blue-400 font-medium px-3 py-2 rounded-md hover:bg-gray-100 dark:hover:bg-gray-800 transition-all duration-200 flex items-center">Blog</a>
     )}
   </div>
 </BaseNavbar>

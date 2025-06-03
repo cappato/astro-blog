@@ -85,15 +85,14 @@ const currentUrl = Astro.url.pathname;
     deferAnalytics={true}
   />
 
-  <!-- Optimized Animations CSS - Import directo -->
-  <link rel="stylesheet" href="/styles/optimized-animations.css">
+
 
   <!-- Slot para estilos adicionales específicos de página -->
   <slot name="head" />
 </head>
 <body class="font-sans min-h-screen flex flex-col transition-theme">
   <!-- Mejora: Skip to content para accesibilidad -->
-  <a href="#main-content" class="sr-only focus:not-sr-only focus:absolute focus:p-4 focus:bg-primary focus:text-white focus:z-50">
+  <a href="#main-content" class="sr-only focus:not-sr-only focus:absolute focus:p-4 focus:bg-blue-600 dark:focus:bg-blue-500 focus:text-white focus:z-50">
     Saltar al contenido principal
   </a>
 

@@ -40,20 +40,20 @@ const variant = compact ? 'compact' : 'full';
 const buttonSize = compact ? 'sm' : 'md';
 
 // Clases CSS para el contenedor
-const containerClasses = compact ? 'mt-4 mb-3' : 'mt-8';
-const buttonsContainerClasses = compact ? 'flex space-x-2' : 'flex flex-wrap gap-3';
+const containerClasses = compact ? 'share-buttons-compact' : 'mt-8';
+const buttonsContainerClasses = compact ? 'flex space-x-2 items-center' : 'flex flex-wrap gap-3';
 ---
 
 <div class={containerClasses}>
   {showTitle && !compact && (
-    <h3 class="text-lg font-medium mb-4 text-content">
+    <h3 class="text-lg font-medium mb-4 text-gray-900 dark:text-white">
       ¿Te gustó este artículo? ¡Compártelo!
     </h3>
   )}
 
   <div class="flex items-center">
     {compact && (
-      <span class="text-xs text-content mr-3">
+      <span class="text-sm text-gray-900 dark:text-white mr-3 font-medium">
         Compartir:
       </span>
     )}
@@ -143,48 +143,4 @@ const buttonsContainerClasses = compact ? 'flex space-x-2' : 'flex flex-wrap gap
   });
 </script>
 
-<style>
-  /* Estilos para el contenedor principal */
-  .share-buttons-container {
-    position: relative;
-  }
-
-  /* Animación de entrada suave */
-  @media (prefers-reduced-motion: no-preference) {
-    .share-buttons-container {
-      animation: fadeInUp 0.3s ease-out;
-    }
-  }
-
-  @keyframes fadeInUp {
-    from {
-      opacity: 0;
-      transform: translateY(10px);
-    }
-    to {
-      opacity: 1;
-      transform: translateY(0);
-    }
-  }
-
-  /* Respeto por las preferencias de movimiento reducido */
-  @media (prefers-reduced-motion: reduce) {
-    .share-buttons-container {
-      animation: none;
-    }
-  }
-
-  /* Mejoras de accesibilidad */
-  .share-buttons-container:focus-within {
-    outline: 2px solid transparent;
-  }
-
-  /* Espaciado responsivo */
-  @media (max-width: 640px) {
-    .share-buttons-container .flex-wrap {
-      flex-direction: column;
-      align-items: stretch;
-      gap: 0.5rem;
-    }
-  }
-</style>
+<!-- CSS eliminado - Usar Tailwind: relative, animate-fade-in-up, transition-all duration-200 hover:-translate-y-0.5 active:translate-y-0 -->

@@ -24,98 +24,83 @@ const {
 const pillarUrl = generatePillarUrl(pillar.id);
 ---
 
-<!-- Pillar Card con diseño limpio y profesional -->
-<Card variant="default" className={`group hover:shadow-lg transition-all duration-300 ${className}`}>
+<!-- Pillar Card con estilo similar a artículos relacionados -->
+<article class={`pillar-card pillar-card--${variant} ${className}`}>
   <a
     href={pillarUrl}
-    class="block h-full no-underline text-inherit hover:text-inherit"
+    class="pillar-card__link"
     aria-label={`Explorar artículos sobre ${pillar.title}`}
   >
-    <!-- Imagen del pilar -->
-    <div class="relative overflow-hidden rounded-t-lg">
+    <!-- Thumbnail -->
+    <div class="pillar-card__thumbnail">
       <img
         src={pillar.image.src}
         alt={pillar.image.alt}
-        class="w-full h-48 object-cover transition-transform duration-300 group-hover:scale-105"
+        class="pillar-card__image"
         loading="lazy"
+        width="300"
+        height="200"
       />
     </div>
 
-    <!-- Contenido de la card -->
-    <div class="p-6">
-      <!-- Título centrado -->
-      <div class="text-center mb-4">
-        <h3 class="text-xl font-bold text-foreground mb-2 leading-tight">
+    <!-- Content -->
+    <div class="pillar-card__content">
+      <!-- Header -->
+      <header class="pillar-card__header">
+        <h3 class="pillar-card__title">
           {pillar.title}
         </h3>
 
-        {showPostCount && postCount > 0 && (
-          <span class="inline-flex items-center px-3 py-1 rounded-full text-sm font-medium bg-primary/10 text-primary">
-            {postCount} {postCount === 1 ? 'artículo' : 'artículos'}
-          </span>
-        )}
-      </div>
+        <!-- Meta info -->
+        <div class="pillar-card__meta">
+          {showPostCount && postCount > 0 && (
+            <span class="pillar-card__post-count">
+              {postCount} {postCount === 1 ? 'artículo' : 'artículos'}
+            </span>
+          )}
 
-      <!-- Descripción -->
+          {showIcon && pillar.emoji && (
+            <span class="pillar-card__emoji">
+              {pillar.emoji}
+            </span>
+          )}
+        </div>
+      </header>
+
+      <!-- Description -->
       {showDescription && variant !== 'compact' && (
-        <div class="mb-6">
-          <p class="text-muted leading-relaxed text-sm text-center line-clamp-3">
-            {pillar.description}
-          </p>
+        <div class="pillar-card__description">
+          <p>{pillar.description}</p>
         </div>
       )}
 
-      <!-- Tags (solo en variant featured) -->
-      {variant === 'featured' && pillar.tags && pillar.tags.length > 0 && (
-        <div class="flex flex-wrap gap-2 justify-center mb-6">
+      <!-- Tags -->
+      {pillar.tags && pillar.tags.length > 0 && (
+        <div class="pillar-card__tags">
           {pillar.tags.slice(0, 3).map(tag => (
-            <span class="px-2 py-1 rounded-md text-xs font-medium bg-secondary/20 text-secondary">
+            <span class="pillar-card__tag">
               #{tag}
             </span>
           ))}
           {pillar.tags.length > 3 && (
-            <span class="px-2 py-1 rounded-md text-xs font-medium bg-muted/20 text-muted">
+            <span class="pillar-card__tag-more">
               +{pillar.tags.length - 3}
             </span>
           )}
         </div>
       )}
-
-      <!-- Call to action centrado -->
-      <div class="text-center">
-        <span class="inline-flex items-center gap-2 text-primary font-medium text-sm group-hover:gap-3 transition-all duration-300">
-          Explorar artículos
-          <svg
-            class="w-4 h-4 transition-transform duration-300 group-hover:translate-x-1"
-            viewBox="0 0 16 16"
-            aria-hidden="true"
-          >
-            <path
-              d="M6 4l4 4-4 4"
-              stroke="currentColor"
-              stroke-width="2"
-              fill="none"
-            />
-          </svg>
-        </span>
-      </div>
     </div>
+
+    <!-- Footer con CTA -->
+    <footer class="pillar-card__footer">
+      <div class="pillar-card__cta">
+        <span>Explorar artículos</span>
+        <svg class="pillar-card__cta-icon" width="16" height="16" viewBox="0 0 16 16" aria-hidden="true">
+          <path d="M6 4l4 4-4 4" stroke="currentColor" stroke-width="2" fill="none"/>
+        </svg>
+      </div>
+    </footer>
   </a>
-</Card>
+</article>
 
-<style>
-  /* Estilos mínimos para line-clamp si no está disponible en Tailwind */
-  .line-clamp-2 {
-    display: -webkit-box;
-    -webkit-line-clamp: 2;
-    -webkit-box-orient: vertical;
-    overflow: hidden;
-  }
-
-  .line-clamp-3 {
-    display: -webkit-box;
-    -webkit-line-clamp: 3;
-    -webkit-box-orient: vertical;
-    overflow: hidden;
-  }
-</style>
+<!-- CSS eliminado - Usar Tailwind directo: bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-lg overflow-hidden transition-all duration-300 hover:shadow-lg h-full flex flex-col -->

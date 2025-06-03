@@ -97,9 +97,9 @@ const currentPost = {
   modifiedDate={date.toISOString()}
   customTitle={title}
 >
-  <link rel="stylesheet" href="/styles/blog.css" slot="head">
+  <!-- CSS eliminado - Ahora usa solo Tailwind -->
   <style slot="head">
-    @import '../features/blog-enhancements/styles/blog-enhancements.css';
+    /* @import eliminado - archivo no existe */
 
     /* Estilos específicos para las variantes del autor en posts */
     .author-byline {
@@ -111,9 +111,41 @@ const currentPost = {
     }
 
     .author-extended {
-      margin-top: 3rem;
-      padding-top: 2rem;
-      border-top: 2px solid var(--color-border);
+      margin-top: 0;
+      padding-top: 0;
+      border-top: none;
+    }
+
+    /* Optimización para artículos relacionados */
+    .related-articles-optimized .related-articles__container {
+      display: grid !important;
+      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)) !important;
+      gap: 1.5rem !important;
+      width: 100% !important;
+    }
+
+    /* Asegurar que las cards ocupen todo el espacio disponible */
+    .related-articles-optimized .related-articles__item {
+      width: 100% !important;
+      max-width: none !important;
+    }
+
+    /* Responsive para artículos relacionados */
+    @media (max-width: 768px) {
+      .related-articles-optimized .related-articles__container {
+        grid-template-columns: 1fr !important;
+        gap: 1rem !important;
+      }
+    }
+
+    /* Estilos para botones de compartir compactos */
+    .share-buttons-compact {
+      padding: 0.75rem 0;
+    }
+
+    .share-buttons-compact .share-button {
+      padding: 0.5rem 1rem;
+      font-size: 0.875rem;
     }
 
     /* Dark mode */
@@ -165,7 +197,7 @@ const currentPost = {
           />
         ) : (
           <div class="w-full h-full bg-gradient-to-br from-primary/20 to-primary/5 flex items-center justify-center">
-            <span class="text-primary/60 text-lg font-medium">📄 {title}</span>
+            <span class="text-blue-600 dark:text-blue-400/60 text-lg font-medium">📄 {title}</span>
           </div>
         )}
       </div>
@@ -173,7 +205,7 @@ const currentPost = {
       <div class="p-6">
         <!-- Metadatos del post -->
         <div class="mb-6 border-b divider pb-4">
-          <h1 class="text-3xl font-bold text-primary mb-3">{title}</h1>
+          <h1 class="text-3xl font-bold text-blue-600 dark:text-blue-400 mb-3">{title}</h1>
 
           <!-- Autor compacto al inicio del artículo -->
           <div class="mb-4">
@@ -190,7 +222,7 @@ const currentPost = {
             />
           </div>
 
-          <div class="flex flex-wrap items-center text-sm text-muted mb-3">
+          <div class="flex flex-wrap items-center text-sm text-gray-600 dark:text-gray-300 mb-3">
             <span class="mr-4 flex items-center">
               <i class="fas fa-calendar mr-1"></i> {formattedDate}
             </span>
@@ -213,18 +245,31 @@ const currentPost = {
           <slot />
         </div>
 
+        <!-- Botones para compartir - Movidos después del contenido -->
+        <div class="mt-6 pt-4 border-t border-gray-200 dark:border-gray-700 dark:border-gray-200 dark:border-gray-700-dark">
+          <div class="flex items-center justify-between mb-3">
+            <h3 class="text-base font-medium text-gray-900 dark:text-white">Compartir Artículo</h3>
+          </div>
+
+          <!-- Componente de botones para compartir (versión compacta) -->
+          <ShareButtons url={currentUrl} title={title} compact={true} showTitle={false} />
+        </div>
+
         <!-- Módulo de Autor Extendido -->
-        <AuthorCard
-          variant="full"
-          layout="vertical"
-          showBio="extended"
-          showStats={true}
-          showAchievements={true}
-          showSkills={true}
-          showSocial={true}
-          maxSocialLinks={6}
-          className="author-extended"
-        />
+        <div class="mt-8 pt-6 border-t border-gray-200 dark:border-gray-700 dark:border-gray-200 dark:border-gray-700-dark">
+          <h3 class="text-lg font-medium mb-4 text-gray-900 dark:text-white">Autor</h3>
+          <AuthorCard
+            variant="full"
+            layout="vertical"
+            showBio="extended"
+            showStats={true}
+            showAchievements={true}
+            showSkills={true}
+            showSocial={true}
+            maxSocialLinks={6}
+            className="author-extended"
+          />
+        </div>
 
         <!-- Artículos Relacionados -->
         <RelatedArticles
@@ -238,25 +283,8 @@ const currentPost = {
           showExcerpt={true}
           showThumbnail={true}
           title="Artículos Relacionados"
+          className="related-articles-optimized"
         />
-
-        <!-- Botones para compartir -->
-        <div class="mt-8 pt-6 border-t border-border dark:border-border-dark">
-          <h3 class="text-lg font-medium mb-4 text-primary-content">¿Te gustó este artículo? ¡Compártelo!</h3>
-
-          <!-- Componente de botones para compartir (versión completa) -->
-          <ShareButtons url={currentUrl} title={title} compact={false} showTitle={false} />
-
-          <!-- Componente de mensaje para compartir -->
-          <div class="mt-6">
-            <ShareMessage
-              title={title}
-              description={description}
-              url={currentUrl}
-              tags={tags}
-            />
-          </div>
-        </div>
       </div>
       </article>
     </ContentWidth>

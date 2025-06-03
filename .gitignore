@@ -31,3 +31,7 @@ pnpm-debug.log*
 
 # Windows Zone.Identifier files
 *:Zone.Identifier
+clean-zone-identifiers.sh
+
+# Augment AI system files (never version)
+.augment/

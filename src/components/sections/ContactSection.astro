@@ -8,43 +8,43 @@ import ContentWidth from '../layout/ContentWidth.astro';
 <!-- Contact Section -->
 <ContentContainer as="section" className="py-10" width="standard">
     <ContentWidth>
-        <h2 class="text-3xl font-bold text-primary mb-6 border-b border-surface-700 pb-2">Contact</h2>
+        <h2 class="text-3xl font-bold text-blue-600 dark:text-blue-400 mb-6 border-b border-gray-200 dark:border-gray-700 pb-2">Contact</h2>
     </ContentWidth>
 
     <ContentWidth>
         <Card variant="default">
             <ContentWidth width="narrow">
-                <h3 class="text-xl sm:text-2xl font-bold text-secondary mb-4">Get In Touch</h3>
-                <p class="text-content mb-8">Feel free to reach out if you'd like to discuss potential opportunities or just want to connect.</p>
+                <h3 class="text-xl sm:text-2xl font-bold text-green-600 dark:text-green-400 mb-4">Get In Touch</h3>
+                <p class="text-gray-900 dark:text-white mb-8">Feel free to reach out if you'd like to discuss potential opportunities or just want to connect.</p>
 
                 <div class="space-y-6">
                     <div class="flex items-center">
-                        <span class="w-8 text-primary"><Icon name="location" size={20} /></span>
-                        <span class="text-content">Mar del Plata, Buenos Aires, Argentina</span>
+                        <span class="w-8 text-blue-600 dark:text-blue-400"><Icon name="location" size={20} /></span>
+                        <span class="text-gray-900 dark:text-white">Mar del Plata, Buenos Aires, Argentina</span>
                     </div>
                     <div class="flex items-center">
-                        <span class="w-8 text-primary"><Icon name="email" size={20} /></span>
-                        <a href="mailto:matias@cappato.dev" class="text-primary-400 hover:text-primary-300 hover:underline transition-colors">matias@cappato.dev</a>
+                        <span class="w-8 text-blue-600 dark:text-blue-400"><Icon name="email" size={20} /></span>
+                        <a href="mailto:matias@cappato.dev" class="text-blue-600 dark:text-blue-400 hover:text-blue-700 dark:hover:text-blue-300 hover:underline transition-colors">matias@cappato.dev</a>
                     </div>
                     <div class="flex items-center">
-                        <span class="w-8 text-primary"><Icon name="github" size={20} /></span>
-                        <a href="https://github.com/cappato" class="text-primary-400 hover:text-primary-300 hover:underline transition-colors">github.com/cappato</a>
+                        <span class="w-8 text-blue-600 dark:text-blue-400"><Icon name="github" size={20} /></span>
+                        <a href="https://github.com/cappato" class="text-blue-600 dark:text-blue-400 hover:text-blue-700 dark:hover:text-blue-300 hover:underline transition-colors">github.com/cappato</a>
                     </div>
                     <div class="flex items-center">
-                        <span class="w-8 text-primary"><Icon name="linkedin" size={20} /></span>
-                        <a href="https://www.linkedin.com/in/matiascappato/" class="text-primary-400 hover:text-primary-300 hover:underline transition-colors">linkedin.com/in/matiascappato</a>
+                        <span class="w-8 text-blue-600 dark:text-blue-400"><Icon name="linkedin" size={20} /></span>
+                        <a href="https://www.linkedin.com/in/matiascappato/" class="text-blue-600 dark:text-blue-400 hover:text-blue-700 dark:hover:text-blue-300 hover:underline transition-colors">linkedin.com/in/matiascappato</a>
                     </div>
                 </div>
 
                 <div class="mt-10 flex flex-wrap justify-center gap-4">
-                    <a href="https://github.com/cappato" class="bg-button hover:bg-button-hover text-white px-3 py-2 rounded-lg transition-colors flex items-center text-sm sm:text-base font-medium">
+                    <a href="https://github.com/cappato" class="bg-gray-700 hover:bg-gray-600 text-white px-3 py-2 rounded-lg transition-colors flex items-center text-sm sm:text-base font-medium">
                         <span class="mr-2"><Icon name="github" size={18} /></span> GitHub Profile
                     </a>
-                    <a href="https://www.linkedin.com/in/matiascappato/" class="bg-button hover:bg-button-hover text-white px-3 py-2 rounded-lg transition-colors flex items-center text-sm sm:text-base font-medium">
+                    <a href="https://www.linkedin.com/in/matiascappato/" class="bg-gray-700 hover:bg-gray-600 text-white px-3 py-2 rounded-lg transition-colors flex items-center text-sm sm:text-base font-medium">
                         <span class="mr-2"><Icon name="linkedin" size={18} /></span> LinkedIn
                     </a>
                     <a href="mailto:matias@cappato.dev"
-                       class="bg-primary-600 hover:bg-primary-700 text-white px-3 py-2 rounded-lg transition-colors flex items-center text-sm sm:text-base font-medium"
+                       class="bg-blue-600 dark:bg-blue-500 hover:bg-blue-700 dark:hover:bg-blue-600 text-white px-3 py-2 rounded-lg transition-colors flex items-center text-sm sm:text-base font-medium"
                        aria-label="Enviar correo electrónico">
                         <span class="mr-2"><Icon name="email" size={18} /></span> Send Email
                     </a>

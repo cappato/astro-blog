@@ -221,20 +221,20 @@ export const BLOG_POST_CONFIG = {
     },
     fallback: {
       text: 'Sin imagen',
-      bgClass: 'bg-muted dark:bg-muted-dark'
+      bgClass: 'bg-gray-100 dark:bg-gray-700'
     }
   },
 
   /** Card styling configuration */
   cardStyles: {
-    base: 'card-base overflow-hidden shadow-theme-lg hover:shadow-xl transition-all duration-200',
+    base: 'bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-lg shadow-lg hover:shadow-xl transition-all duration-200 overflow-hidden',
     image: 'w-full h-48 object-cover',
     content: 'p-4',
     title: 'text-xl font-bold mb-2',
-    titleLink: 'text-primary hover:underline',
-    date: 'text-content text-sm mb-3 opacity-75',
-    description: 'text-content mb-4 line-clamp-3 opacity-90',
-    readMore: 'mt-4 inline-block text-primary hover:underline text-sm font-medium'
+    titleLink: 'text-blue-600 dark:text-blue-400 hover:underline',
+    date: 'text-gray-900 dark:text-white text-sm mb-3 opacity-75',
+    description: 'text-gray-900 dark:text-white mb-4 line-clamp-3 opacity-90',
+    readMore: 'mt-4 inline-block text-blue-600 dark:text-blue-400 hover:underline text-sm font-medium'
   },
 
   /** SEO configuration */

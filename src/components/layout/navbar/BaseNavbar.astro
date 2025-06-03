@@ -9,13 +9,13 @@ interface Props {
 const { className = '' } = Astro.props;
 ---
 
-<nav class={`nav-base ${className}`}>
+<nav class={`bg-white dark:bg-gray-900 border-b border-gray-200 dark:border-gray-700 shadow-sm ${className}`}>
   <div class="container mx-auto px-6 sm:px-4 py-3">
     <div class="flex justify-between items-center">
       <!-- Logo y título (común en todas las páginas) -->
       <a href="/" class="flex items-center gap-3 hover:opacity-90 transition-opacity">
         <Logo size="medium" />
-        <span class="text-primary text-2xl font-bold">Matías S. Cappato</span>
+        <span class="text-blue-600 dark:text-blue-400 text-2xl font-bold">Matías S. Cappato</span>
       </a>
 
       <!-- Slot para navegación específica de cada página -->

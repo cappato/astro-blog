@@ -41,7 +41,7 @@ const sizeConfig = TOGGLE_SIZE_CONFIG[size];
 <button
   id="theme-toggle"
   type="button"
-  class={`theme-toggle-btn inline-flex items-center justify-center rounded-lg bg-button hover:bg-button-hover text-content hover:text-primary transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2 focus:ring-offset-card ${sizeConfig.padding} ${className}`}
+  class={`theme-toggle-btn inline-flex items-center justify-center rounded-lg bg-gray-100 hover:bg-gray-200 dark:bg-gray-800 dark:hover:bg-gray-700 text-gray-900 dark:text-white hover:text-blue-600 dark:hover:text-blue-400 transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 focus:ring-offset-white dark:focus:ring-offset-gray-900 ${sizeConfig.padding} ${className}`}
   aria-label={ariaLabel}
   title={ariaLabel}
 >
@@ -103,36 +103,4 @@ const sizeConfig = TOGGLE_SIZE_CONFIG[size];
   document.addEventListener('astro:page-load', initThemeToggle);
 </script>
 
-<style>
-  /* Additional styles for smooth transitions */
-  .theme-toggle-btn {
-    transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
-  }
 
-  .theme-toggle-btn:hover {
-    transform: translateY(-1px);
-  }
-
-  .theme-toggle-btn:active {
-    transform: translateY(0);
-  }
-
-  /* Smooth animation for icon changes */
-  .theme-icon-light,
-  .theme-icon-dark {
-    transition: opacity 0.2s ease-in-out;
-  }
-
-  /* Respect reduced motion preferences */
-  @media (prefers-reduced-motion: reduce) {
-    .theme-toggle-btn {
-      transition: none;
-      transform: none !important;
-    }
-
-    .theme-icon-light,
-    .theme-icon-dark {
-      transition: none;
-    }
-  }
-</style>

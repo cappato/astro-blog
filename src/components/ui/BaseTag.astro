@@ -22,9 +22,9 @@ const {
 
 // Variantes de tamaño
 const variants = {
-  default: 'text-tag',
-  compact: 'text-tag text-xs px-1.5 py-0.5',
-  large: 'text-tag text-sm px-3 py-2'
+  default: 'inline-block px-2 py-1 text-xs font-medium text-white bg-blue-600 hover:bg-blue-700 dark:bg-blue-500 dark:hover:bg-blue-600 rounded-md no-underline transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2',
+  compact: 'inline-block px-2 py-1 text-xs font-medium text-white bg-blue-600 hover:bg-blue-700 dark:bg-blue-500 dark:hover:bg-blue-600 rounded-md no-underline transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 text-xs px-1.5 py-0.5',
+  large: 'inline-block px-2 py-1 text-xs font-medium text-white bg-blue-600 hover:bg-blue-700 dark:bg-blue-500 dark:hover:bg-blue-600 rounded-md no-underline transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 text-sm px-3 py-2'
 };
 
 const tagClasses = `${variants[variant]} ${className}`.trim();

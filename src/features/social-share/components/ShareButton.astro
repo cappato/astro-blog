@@ -38,7 +38,7 @@ const shareUrl = platform === SocialPlatform.COPY || platform === SocialPlatform
 const shouldOpenInNewWindow = platform !== SocialPlatform.COPY;
 
 // Clases CSS dinámicas
-const baseClasses = 'flex items-center justify-center transition-all duration-200 font-medium focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary';
+const baseClasses = 'flex items-center justify-center transition-all duration-200 font-medium focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500';
 
 const sizeClasses = isCompact
   ? 'w-8 h-8 rounded-full'
@@ -93,41 +93,4 @@ const commonProps = {
   </a>
 )}
 
-<style>
-  /* Estilos adicionales para accesibilidad y animaciones */
-  button, a {
-    transition: all 0.2s ease-in-out;
-  }
-
-  button:hover, a:hover {
-    transform: translateY(-1px);
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
-  }
-
-  button:active, a:active {
-    transform: translateY(0);
-  }
-
-  /* Mejoras de accesibilidad */
-  button:focus-visible, a:focus-visible {
-    @apply outline-2 outline-primary outline-offset-2;
-  }
-
-  /* Animación suave para el hover */
-  @media (prefers-reduced-motion: no-preference) {
-    button, a {
-      transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
-    }
-  }
-
-  /* Respeto por las preferencias de movimiento reducido */
-  @media (prefers-reduced-motion: reduce) {
-    button, a {
-      transition: none;
-    }
-
-    button:hover, a:hover {
-      transform: none;
-    }
-  }
-</style>
+<!-- CSS eliminado - Usar Tailwind: transition-all duration-200 hover:-translate-y-0.5 hover:shadow-lg active:translate-y-0 focus-visible:outline-2 focus-visible:outline-primary focus-visible:outline-offset-2 -->

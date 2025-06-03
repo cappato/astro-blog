@@ -30,10 +30,10 @@ const seoData = {
   <ContentContainer as="section" className="py-8">
     <ContentWidth width="standard">
       <div class="text-center">
-        <h1 class="text-4xl md:text-5xl font-bold text-primary mb-6">
+        <h1 class="text-4xl md:text-5xl font-bold text-blue-600 dark:text-blue-400 mb-6">
           Pilares de Contenido
         </h1>
-        <p class="text-xl text-muted leading-relaxed mb-8">
+        <p class="text-xl text-gray-600 dark:text-gray-300 leading-relaxed mb-8">
           Explora el contenido del blog organizado por temáticas estratégicas.
           Cada pilar representa un área de especialización con artículos profundos
           y recursos valiosos para desarrolladores.
@@ -47,10 +47,10 @@ const seoData = {
     <ContentContainer as="section" className="py-8">
       <ContentWidth width="standard">
         <div class="mb-8">
-          <h2 class="text-3xl font-bold text-primary mb-4">
+          <h2 class="text-3xl font-bold text-blue-600 dark:text-blue-400 mb-4">
             🌟 Pilares Destacados
           </h2>
-          <p class="text-muted text-lg">
+          <p class="text-gray-600 dark:text-gray-300 text-lg">
             Los pilares principales que definen la identidad y especialización del blog.
           </p>
         </div>
@@ -70,10 +70,10 @@ const seoData = {
   <ContentContainer as="section" className="py-8">
     <ContentWidth width="standard">
       <div class="mb-8">
-        <h2 class="text-3xl font-bold text-primary mb-4">
+        <h2 class="text-3xl font-bold text-blue-600 dark:text-blue-400 mb-4">
           📚 Todos los Pilares
         </h2>
-        <p class="text-muted text-lg">
+        <p class="text-gray-600 dark:text-gray-300 text-lg">
           Explora todas las temáticas disponibles y encuentra el contenido que más te interese.
         </p>
       </div>
@@ -92,10 +92,10 @@ const seoData = {
   <ContentContainer as="section" className="py-12">
     <ContentWidth width="standard">
       <Card variant="default" className="text-center p-8">
-        <h2 class="text-2xl font-bold text-primary mb-4">
+        <h2 class="text-2xl font-bold text-blue-600 dark:text-blue-400 mb-4">
           ¿Buscas algo específico?
         </h2>
-        <p class="text-muted text-lg mb-6">
+        <p class="text-gray-600 dark:text-gray-300 text-lg mb-6">
           Navega por todos los artículos del blog o busca por tags específicos
           para encontrar exactamente lo que necesitas.
         </p>
@@ -118,75 +118,4 @@ const seoData = {
   </ContentContainer>
 </MainLayout>
 
-<style>
-  /* Estilos específicos para la página de pilares */
-  .featured-pillars {
-    margin-bottom: 4rem;
-  }
-  
-  .all-pillars {
-    margin-bottom: 2rem;
-  }
-  
-  /* Botones CTA */
-  .btn {
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-    padding: 0.75rem 2rem;
-    border-radius: 8px;
-    font-weight: 600;
-    text-decoration: none;
-    transition: all 0.2s ease;
-    border: 2px solid transparent;
-  }
-  
-  .btn-primary {
-    background: var(--color-primary);
-    color: white;
-  }
-  
-  .btn-primary:hover {
-    background: var(--color-primary-dark);
-    transform: translateY(-2px);
-    box-shadow: 0 4px 12px var(--color-primary-alpha);
-  }
-  
-  .btn-secondary {
-    background: transparent;
-    color: var(--color-primary);
-    border-color: var(--color-primary);
-  }
-  
-  .btn-secondary:hover {
-    background: var(--color-primary);
-    color: white;
-    transform: translateY(-2px);
-    box-shadow: 0 4px 12px var(--color-primary-alpha);
-  }
-  
-  /* Dark mode */
-  :global(.dark) .btn-secondary {
-    border-color: var(--color-primary);
-    color: var(--color-primary);
-  }
-  
-  /* Mobile responsive */
-  @media (max-width: 640px) {
-    .btn {
-      padding: 0.625rem 1.5rem;
-      font-size: 0.875rem;
-    }
-  }
-  
-  /* Reduced motion */
-  @media (prefers-reduced-motion: reduce) {
-    .btn {
-      transition: none;
-    }
-    
-    .btn:hover {
-      transform: none;
-    }
-  }
-</style>
+<!-- CSS eliminado - Usar Tailwind directo: mb-16, mb-8, inline-flex items-center justify-center px-8 py-3 rounded-lg font-semibold no-underline transition-all duration-200 border-2 border-transparent bg-blue-600 dark:bg-blue-500 text-white hover:bg-blue-600 dark:bg-blue-500-600 hover:-translate-y-0.5 hover:shadow-lg -->

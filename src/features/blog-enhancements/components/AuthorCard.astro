@@ -66,7 +66,7 @@ const structuredData = generateAuthorStructuredData();
 {variant === 'inline' ? (
   <!-- Inline variant (para bylines) -->
   <div class={`flex items-center gap-3 ${className}`}>
-    <div class="w-8 h-8 rounded-full overflow-hidden border-2 border-border flex-shrink-0">
+    <div class="w-8 h-8 rounded-full overflow-hidden border-2 border-gray-200 dark:border-gray-700 flex-shrink-0">
       <img
         src={author.images.avatar}
         alt={`Foto de ${author.personal.name}`}
@@ -77,8 +77,8 @@ const structuredData = generateAuthorStructuredData();
       />
     </div>
     <div class="flex flex-col">
-      <span class="text-sm font-semibold text-content">{author.personal.name}</span>
-      <span class="text-xs text-muted">{author.personal.title}</span>
+      <span class="text-sm font-semibold text-gray-900 dark:text-white">{author.personal.name}</span>
+      <span class="text-xs text-gray-600 dark:text-gray-300">{author.personal.title}</span>
     </div>
   </div>
 ) : (
@@ -86,7 +86,7 @@ const structuredData = generateAuthorStructuredData();
   <Card variant="default" className={`author-card-modern ${className}`}>
     <div class="flex items-start gap-4">
       <!-- Avatar -->
-      <div class={`rounded-full overflow-hidden border-2 border-border flex-shrink-0 ${
+      <div class={`rounded-full overflow-hidden border-2 border-gray-200 dark:border-gray-700 flex-shrink-0 ${
         resolvedConfig.imageSize === 'small' ? 'w-12 h-12' :
         resolvedConfig.imageSize === 'medium' ? 'w-16 h-16' :
         resolvedConfig.imageSize === 'large' ? 'w-20 h-20' : 'w-14 h-14'
@@ -104,11 +104,11 @@ const structuredData = generateAuthorStructuredData();
         <!-- Header info -->
         <div class="flex flex-col sm:flex-row sm:items-start sm:justify-between gap-2 mb-3">
           <div class="flex-1 min-w-0">
-            <h3 class="text-lg font-bold text-primary mb-1">{author.personal.name}</h3>
-            <p class="text-sm font-medium text-secondary mb-1">{author.personal.title}</p>
+            <h3 class="text-lg font-bold text-blue-600 dark:text-blue-400 mb-1">{author.personal.name}</h3>
+            <p class="text-sm font-medium text-green-600 dark:text-green-400 mb-1">{author.personal.title}</p>
 
             {(variant === 'full' || variant === 'standard') && (
-              <div class="flex flex-wrap items-center gap-3 text-xs text-muted">
+              <div class="flex flex-wrap items-center gap-3 text-xs text-gray-600 dark:text-gray-300">
                 <span class="flex items-center gap-1">
                   📍 {author.personal.location}
                 </span>
@@ -127,7 +127,7 @@ const structuredData = generateAuthorStructuredData();
                   href={socialLinks.github}
                   target="_blank"
                   rel="noopener noreferrer"
-                  class="w-8 h-8 rounded-lg bg-surface border border-border hover:border-primary hover:bg-primary hover:text-white transition-all duration-200 flex items-center justify-center text-muted hover:text-white"
+                  class="w-8 h-8 rounded-lg bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 hover:border-blue-600 dark:hover:border-blue-500 hover:bg-blue-600 dark:hover:bg-blue-500 hover:text-white transition-all duration-200 flex items-center justify-center text-gray-600 dark:text-gray-300"
                   aria-label={`GitHub de ${author.personal.firstName}`}
                 >
                   <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor">
@@ -140,7 +140,7 @@ const structuredData = generateAuthorStructuredData();
                   href={socialLinks.linkedin}
                   target="_blank"
                   rel="noopener noreferrer"
-                  class="w-8 h-8 rounded-lg bg-surface border border-border hover:border-primary hover:bg-primary hover:text-white transition-all duration-200 flex items-center justify-center text-muted hover:text-white"
+                  class="w-8 h-8 rounded-lg bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 hover:border-blue-600 dark:hover:border-blue-500 hover:bg-blue-600 dark:hover:bg-blue-500 hover:text-white transition-all duration-200 flex items-center justify-center text-gray-600 dark:text-gray-300"
                   aria-label={`LinkedIn de ${author.personal.firstName}`}
                 >
                   <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor">
@@ -151,7 +151,7 @@ const structuredData = generateAuthorStructuredData();
               {socialLinks.email && (
                 <a
                   href={`mailto:${socialLinks.email}`}
-                  class="w-8 h-8 rounded-lg bg-surface border border-border hover:border-primary hover:bg-primary hover:text-white transition-all duration-200 flex items-center justify-center text-muted hover:text-white"
+                  class="w-8 h-8 rounded-lg bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 hover:border-blue-600 dark:hover:border-blue-500 hover:bg-blue-600 dark:hover:bg-blue-500 hover:text-white transition-all duration-200 flex items-center justify-center text-gray-600 dark:text-gray-300"
                   aria-label={`Email de ${author.personal.firstName}`}
                 >
                   <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor">
@@ -166,17 +166,17 @@ const structuredData = generateAuthorStructuredData();
         <!-- Bio compacta -->
         {resolvedConfig.showBio && bioText && (
           <div class="mb-3">
-            <p class="text-sm text-muted leading-relaxed">{bioText}</p>
+            <p class="text-sm text-gray-600 dark:text-gray-300 leading-relaxed">{bioText}</p>
           </div>
         )}
 
         <!-- Skills/Specialties en layout horizontal compacto -->
         {resolvedConfig.showSkills && (
           <div class="mb-3">
-            <h4 class="text-xs font-semibold text-muted uppercase tracking-wide mb-2">Especialidades</h4>
+            <h4 class="text-xs font-semibold text-gray-600 dark:text-gray-300 uppercase tracking-wide mb-2">Especialidades</h4>
             <div class="flex flex-wrap gap-1.5">
               {author.experience.specialties.slice(0, variant === 'compact' ? 3 : 5).map(specialty => (
-                <span class="px-2 py-1 text-xs font-medium bg-primary/10 text-primary rounded-md border border-primary/20">
+                <span class="px-2 py-1 text-xs font-medium bg-blue-600/10 dark:bg-blue-500/10 text-blue-600 dark:text-blue-400 rounded-md border border-blue-600/20 dark:border-blue-500/20">
                   {specialty}
                 </span>
               ))}
@@ -187,11 +187,11 @@ const structuredData = generateAuthorStructuredData();
         <!-- Achievements compactos solo para variant full -->
         {resolvedConfig.showAchievements && variant === 'full' && (
           <div class="mb-3">
-            <h4 class="text-xs font-semibold text-muted uppercase tracking-wide mb-2">Logros destacados</h4>
+            <h4 class="text-xs font-semibold text-gray-600 dark:text-gray-300 uppercase tracking-wide mb-2">Logros destacados</h4>
             <div class="grid grid-cols-1 sm:grid-cols-2 gap-1.5">
               {author.experience.achievements.slice(0, 4).map(achievement => (
-                <div class="flex items-start gap-2 text-xs text-muted">
-                  <span class="text-primary mt-0.5">•</span>
+                <div class="flex items-start gap-2 text-xs text-gray-600 dark:text-gray-300">
+                  <span class="text-blue-600 dark:text-blue-400 mt-0.5">•</span>
                   <span class="leading-relaxed">{achievement}</span>
                 </div>
               ))}
@@ -201,18 +201,18 @@ const structuredData = generateAuthorStructuredData();
 
         <!-- Stats compactas -->
         {resolvedConfig.showStats && (
-          <div class="flex items-center gap-4 pt-3 border-t border-border">
+          <div class="flex items-center gap-4 pt-3 border-t border-gray-200 dark:border-gray-700">
             <div class="text-center">
-              <div class="text-lg font-bold text-primary">{author.stats.articles}</div>
-              <div class="text-xs text-muted">Artículos</div>
+              <div class="text-lg font-bold text-blue-600 dark:text-blue-400">{author.stats.articles}</div>
+              <div class="text-xs text-gray-600 dark:text-gray-300">Artículos</div>
             </div>
             <div class="text-center">
-              <div class="text-lg font-bold text-primary">{author.stats.projects}</div>
-              <div class="text-xs text-muted">Proyectos</div>
+              <div class="text-lg font-bold text-blue-600 dark:text-blue-400">{author.stats.projects}</div>
+              <div class="text-xs text-gray-600 dark:text-gray-300">Proyectos</div>
             </div>
             <div class="text-center">
-              <div class="text-lg font-bold text-primary">{author.stats.experience}</div>
-              <div class="text-xs text-muted">Experiencia</div>
+              <div class="text-lg font-bold text-blue-600 dark:text-blue-400">{author.stats.experience}</div>
+              <div class="text-xs text-gray-600 dark:text-gray-300">Experiencia</div>
             </div>
           </div>
         )}
@@ -221,26 +221,4 @@ const structuredData = generateAuthorStructuredData();
   </Card>
 )}
 
-<style>
-  /* Estilos mínimos para la nueva Author Card */
-  .author-card-modern {
-    margin: 1.5rem 0;
-  }
 
-  /* Responsive adjustments */
-  @media (max-width: 640px) {
-    .author-card-modern .flex-col {
-      text-align: center;
-    }
-
-    .author-card-modern .sm\\:flex-row {
-      flex-direction: column !important;
-      align-items: center;
-      gap: 1rem;
-    }
-
-    .author-card-modern .sm\\:justify-between {
-      justify-content: center !important;
-    }
-  }
-</style>

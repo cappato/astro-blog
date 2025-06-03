@@ -21,7 +21,7 @@ const {
 } = Astro.props;
 
 // Obtener posts para calcular estadísticas si es necesario
-let postsByPillar = {};
+let postsByPillar: Record<string, any> = {};
 if (showStats) {
   try {
     const allPosts = await getCollection('blog');
@@ -81,45 +81,4 @@ const gridClasses = [
   )}
 </section>
 
-<style>
-  .pillar-grid {
-    @apply w-full my-8;
-  }
-
-  .pillar-grid__container {
-    @apply grid grid-cols-1 md:grid-cols-2 gap-6;
-  }
-
-  .pillar-grid__item {
-    @apply h-full;
-  }
-  
-  /* Empty state */
-  .pillar-grid__empty {
-    @apply flex flex-col items-center justify-center text-center;
-    @apply p-16 bg-card border-2 border-dashed border-border rounded-xl;
-    @apply min-h-[300px];
-  }
-
-  .pillar-grid__empty-icon {
-    @apply text-6xl mb-4 opacity-60;
-  }
-
-  .pillar-grid__empty-title {
-    @apply text-2xl font-semibold text-foreground mb-2;
-  }
-
-  .pillar-grid__empty-description {
-    @apply text-muted max-w-md leading-relaxed;
-  }
-  
-  /* Variants */
-  .pillar-grid--compact .pillar-grid__container {
-    @apply gap-4;
-  }
-
-  .pillar-grid--featured .pillar-grid__container {
-    @apply gap-8;
-  }
-
-</style>
+<!-- CSS eliminado - Usar Tailwind directo: w-full my-8, grid gap-6 grid-cols-1 md:grid-cols-2 lg:grid-cols-3, h-full -->

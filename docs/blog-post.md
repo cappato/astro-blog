@@ -112,10 +112,10 @@ export const BLOG_POST_CONFIG = {
     image: 'w-full h-48 object-cover',
     content: 'p-4',
     title: 'text-xl font-bold mb-2',
-    titleLink: 'text-primary hover:underline',
-    date: 'text-content text-sm mb-3 opacity-75',
-    description: 'text-content mb-4 line-clamp-3 opacity-90',
-    readMore: 'mt-4 inline-block text-primary hover:underline text-sm font-medium'
+    titleLink: 'text-blue-600 dark:text-blue-400 hover:underline',
+    date: 'text-gray-900 dark:text-white text-sm mb-3 opacity-75',
+    description: 'text-gray-900 dark:text-white mb-4 line-clamp-3 opacity-90',
+    readMore: 'mt-4 inline-block text-blue-600 dark:text-blue-400 hover:underline text-sm font-medium'
   },
   seo: {
     blogTitle: 'Blog | Matías Cappato',
