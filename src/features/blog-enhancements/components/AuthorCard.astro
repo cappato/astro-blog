@@ -14,6 +14,7 @@ import {
   getAuthorSocialLinks,
   generateAuthorStructuredData
 } from '../config/author.config';
+import Card from '../../../components/ui/Card.astro';
 
 interface Props extends AuthorCardProps {}
 
@@ -59,533 +60,187 @@ const structuredData = generateAuthorStructuredData();
 ---
 
 <!-- Structured Data para SEO -->
-<script type="application/ld+json" set:html={JSON.stringify(structuredData)} />
+<script type="application/ld+json" is:inline set:html={JSON.stringify(structuredData)} />
 
-<!-- Author Card -->
-<div class={`author-card author-card--${variant} author-card--${resolvedConfig.layout} author-card--${resolvedConfig.imageSize} ${className}`}>
-
-  {variant === 'inline' ? (
-    <!-- Inline variant (para bylines) -->
-    <div class="author-card__inline">
-      <div class="author-card__avatar-container author-card__avatar-container--tiny">
+<!-- Author Card con diseño moderno y horizontal -->
+{variant === 'inline' ? (
+  <!-- Inline variant (para bylines) -->
+  <div class={`flex items-center gap-3 ${className}`}>
+    <div class="w-8 h-8 rounded-full overflow-hidden border-2 border-border flex-shrink-0">
+      <img
+        src={author.images.avatar}
+        alt={`Foto de ${author.personal.name}`}
+        class="w-full h-full object-cover"
+        width="32"
+        height="32"
+        loading="lazy"
+      />
+    </div>
+    <div class="flex flex-col">
+      <span class="text-sm font-semibold text-content">{author.personal.name}</span>
+      <span class="text-xs text-muted">{author.personal.title}</span>
+    </div>
+  </div>
+) : (
+  <!-- Card variants con diseño horizontal optimizado -->
+  <Card variant="default" className={`author-card-modern ${className}`}>
+    <div class="flex items-start gap-4">
+      <!-- Avatar -->
+      <div class={`rounded-full overflow-hidden border-2 border-border flex-shrink-0 ${
+        resolvedConfig.imageSize === 'small' ? 'w-12 h-12' :
+        resolvedConfig.imageSize === 'medium' ? 'w-16 h-16' :
+        resolvedConfig.imageSize === 'large' ? 'w-20 h-20' : 'w-14 h-14'
+      }`}>
         <img
           src={author.images.avatar}
           alt={`Foto de ${author.personal.name}`}
-          class="author-card__avatar"
-          width="32"
-          height="32"
+          class="w-full h-full object-cover transition-transform duration-300 hover:scale-105"
           loading="lazy"
         />
       </div>
-      <div class="author-card__inline-info">
-        <span class="author-card__name">{author.personal.name}</span>
-        <span class="author-card__title">{author.personal.title}</span>
-      </div>
-    </div>
-  ) : (
-    <!-- Full/Compact variants -->
-    <div class="author-card__main">
-      <div class="author-card__header">
-        <div class={`author-card__avatar-container author-card__avatar-container--${resolvedConfig.imageSize}`}>
-          <img
-            src={author.images.avatar}
-            alt={`Foto de ${author.personal.name}`}
-            class="author-card__avatar"
-            loading="lazy"
-          />
-        </div>
 
-        <div class="author-card__info">
-          <h3 class="author-card__name">{author.personal.name}</h3>
-          <p class="author-card__title">{author.personal.title}</p>
+      <!-- Content - Layout horizontal optimizado -->
+      <div class="flex-1 min-w-0">
+        <!-- Header info -->
+        <div class="flex flex-col sm:flex-row sm:items-start sm:justify-between gap-2 mb-3">
+          <div class="flex-1 min-w-0">
+            <h3 class="text-lg font-bold text-primary mb-1">{author.personal.name}</h3>
+            <p class="text-sm font-medium text-secondary mb-1">{author.personal.title}</p>
 
-          {resolvedConfig.layout === 'vertical' && author.personal.tagline && (
-            <p class="author-card__tagline">{author.personal.tagline}</p>
-          )}
+            {(variant === 'full' || variant === 'standard') && (
+              <div class="flex flex-wrap items-center gap-3 text-xs text-muted">
+                <span class="flex items-center gap-1">
+                  📍 {author.personal.location}
+                </span>
+                <span class="flex items-center gap-1">
+                  💼 {author.experience.years} experiencia
+                </span>
+              </div>
+            )}
+          </div>
 
-          {(variant === 'full' || variant === 'standard') && (
-            <div class="author-card__meta">
-              <span class="author-card__location">📍 {author.personal.location}</span>
-              <span class="author-card__experience">💼 {author.experience.years} experiencia</span>
+          <!-- Social links compactos -->
+          {resolvedConfig.showSocial && Object.keys(socialLinks).length > 0 && (
+            <div class="flex items-center gap-2 flex-shrink-0">
+              {socialLinks.github && (
+                <a
+                  href={socialLinks.github}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  class="w-8 h-8 rounded-lg bg-surface border border-border hover:border-primary hover:bg-primary hover:text-white transition-all duration-200 flex items-center justify-center text-muted hover:text-white"
+                  aria-label={`GitHub de ${author.personal.firstName}`}
+                >
+                  <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor">
+                    <path d="M12 0c-6.626 0-12 5.373-12 12 0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23.957-.266 1.983-.399 3.003-.404 1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576 4.765-1.589 8.199-6.086 8.199-11.386 0-6.627-5.373-12-12-12z"/>
+                  </svg>
+                </a>
+              )}
+              {socialLinks.linkedin && (
+                <a
+                  href={socialLinks.linkedin}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  class="w-8 h-8 rounded-lg bg-surface border border-border hover:border-primary hover:bg-primary hover:text-white transition-all duration-200 flex items-center justify-center text-muted hover:text-white"
+                  aria-label={`LinkedIn de ${author.personal.firstName}`}
+                >
+                  <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor">
+                    <path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433c-1.144 0-2.063-.926-2.063-2.065 0-1.138.92-2.063 2.063-2.063 1.14 0 2.064.925 2.064 2.063 0 1.139-.925 2.065-2.064 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z"/>
+                  </svg>
+                </a>
+              )}
+              {socialLinks.email && (
+                <a
+                  href={`mailto:${socialLinks.email}`}
+                  class="w-8 h-8 rounded-lg bg-surface border border-border hover:border-primary hover:bg-primary hover:text-white transition-all duration-200 flex items-center justify-center text-muted hover:text-white"
+                  aria-label={`Email de ${author.personal.firstName}`}
+                >
+                  <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor">
+                    <path d="M24 5.457v13.909c0 .904-.732 1.636-1.636 1.636h-3.819V11.73L12 16.64l-6.545-4.91v9.273H1.636A1.636 1.636 0 0 1 0 19.366V5.457c0-.904.732-1.636 1.636-1.636h.91L12 10.09l9.455-6.269h.909c.904 0 1.636.732 1.636 1.636z"/>
+                  </svg>
+                </a>
+              )}
             </div>
           )}
         </div>
+
+        <!-- Bio compacta -->
+        {resolvedConfig.showBio && bioText && (
+          <div class="mb-3">
+            <p class="text-sm text-muted leading-relaxed">{bioText}</p>
+          </div>
+        )}
+
+        <!-- Skills/Specialties en layout horizontal compacto -->
+        {resolvedConfig.showSkills && (
+          <div class="mb-3">
+            <h4 class="text-xs font-semibold text-muted uppercase tracking-wide mb-2">Especialidades</h4>
+            <div class="flex flex-wrap gap-1.5">
+              {author.experience.specialties.slice(0, variant === 'compact' ? 3 : 5).map(specialty => (
+                <span class="px-2 py-1 text-xs font-medium bg-primary/10 text-primary rounded-md border border-primary/20">
+                  {specialty}
+                </span>
+              ))}
+            </div>
+          </div>
+        )}
+
+        <!-- Achievements compactos solo para variant full -->
+        {resolvedConfig.showAchievements && variant === 'full' && (
+          <div class="mb-3">
+            <h4 class="text-xs font-semibold text-muted uppercase tracking-wide mb-2">Logros destacados</h4>
+            <div class="grid grid-cols-1 sm:grid-cols-2 gap-1.5">
+              {author.experience.achievements.slice(0, 4).map(achievement => (
+                <div class="flex items-start gap-2 text-xs text-muted">
+                  <span class="text-primary mt-0.5">•</span>
+                  <span class="leading-relaxed">{achievement}</span>
+                </div>
+              ))}
+            </div>
+          </div>
+        )}
+
+        <!-- Stats compactas -->
+        {resolvedConfig.showStats && (
+          <div class="flex items-center gap-4 pt-3 border-t border-border">
+            <div class="text-center">
+              <div class="text-lg font-bold text-primary">{author.stats.articles}</div>
+              <div class="text-xs text-muted">Artículos</div>
+            </div>
+            <div class="text-center">
+              <div class="text-lg font-bold text-primary">{author.stats.projects}</div>
+              <div class="text-xs text-muted">Proyectos</div>
+            </div>
+            <div class="text-center">
+              <div class="text-lg font-bold text-primary">{author.stats.experience}</div>
+              <div class="text-xs text-muted">Experiencia</div>
+            </div>
+          </div>
+        )}
       </div>
-      
-      <!-- Content Section -->
-      {resolvedConfig.showBio && bioText && (
-        <div class="author-card__content">
-          <p class="author-card__bio">{bioText}</p>
-        </div>
-      )}
-
-      <!-- Skills/Specialties -->
-      {resolvedConfig.showSkills && (
-        <div class="author-card__specialties">
-          <h4 class="author-card__specialties-title">Especialidades:</h4>
-          <div class="author-card__tags">
-            {author.experience.specialties.map(specialty => (
-              <span class="author-card__tag">{specialty}</span>
-            ))}
-          </div>
-        </div>
-      )}
-
-      <!-- Achievements -->
-      {resolvedConfig.showAchievements && variant === 'full' && (
-        <div class="author-card__achievements">
-          <h4 class="author-card__achievements-title">Logros destacados:</h4>
-          <ul class="author-card__achievements-list">
-            {author.experience.achievements.slice(0, 3).map(achievement => (
-              <li class="author-card__achievement">{achievement}</li>
-            ))}
-          </ul>
-        </div>
-      )}
-
-      <!-- Stats -->
-      {resolvedConfig.showStats && (
-        <div class="author-card__stats">
-          <div class="author-card__stat">
-            <span class="author-card__stat-number">{author.stats.articles}</span>
-            <span class="author-card__stat-label">Artículos</span>
-          </div>
-          <div class="author-card__stat">
-            <span class="author-card__stat-number">{author.stats.projects}</span>
-            <span class="author-card__stat-label">Proyectos</span>
-          </div>
-          <div class="author-card__stat">
-            <span class="author-card__stat-number">{author.stats.experience}</span>
-            <span class="author-card__stat-label">Experiencia</span>
-          </div>
-        </div>
-      )}
-      
-      <!-- Social Links -->
-      {resolvedConfig.showSocial && Object.keys(socialLinks).length > 0 && (
-        <div class="author-card__social">
-          {socialLinks.github && (
-            <a
-              href={socialLinks.github}
-              target="_blank"
-              rel="noopener noreferrer"
-              class="author-card__social-link"
-              aria-label={`GitHub de ${author.personal.firstName}`}
-            >
-              <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
-                <path d="M12 0c-6.626 0-12 5.373-12 12 0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23.957-.266 1.983-.399 3.003-.404 1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576 4.765-1.589 8.199-6.086 8.199-11.386 0-6.627-5.373-12-12-12z"/>
-              </svg>
-            </a>
-          )}
-
-          {socialLinks.linkedin && (
-            <a
-              href={socialLinks.linkedin}
-              target="_blank"
-              rel="noopener noreferrer"
-              class="author-card__social-link"
-              aria-label={`LinkedIn de ${author.personal.firstName}`}
-            >
-              <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
-                <path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433c-1.144 0-2.063-.926-2.063-2.065 0-1.138.92-2.063 2.063-2.063 1.14 0 2.064.925 2.064 2.063 0 1.139-.925 2.065-2.064 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z"/>
-              </svg>
-            </a>
-          )}
-
-          {socialLinks.email && (
-            <a
-              href={`mailto:${socialLinks.email}`}
-              class="author-card__social-link"
-              aria-label={`Email de ${author.personal.firstName}`}
-            >
-              <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
-                <path d="M24 5.457v13.909c0 .904-.732 1.636-1.636 1.636h-3.819V11.73L12 16.64l-6.545-4.91v9.273H1.636A1.636 1.636 0 0 1 0 19.366V5.457c0-.904.732-1.636 1.636-1.636h1.82L12 11.64l8.545-7.819h1.82c.904 0 1.636.732 1.636 1.636z"/>
-              </svg>
-            </a>
-          )}
-
-          {socialLinks.website && (
-            <a
-              href={socialLinks.website}
-              target="_blank"
-              rel="noopener noreferrer"
-              class="author-card__social-link"
-              aria-label={`Sitio web de ${author.personal.firstName}`}
-            >
-              <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
-                <path d="M12 0C5.374 0 0 5.373 0 12s5.374 12 12 12 12-5.373 12-12S18.626 0 12 0zm5.568 13.8h-3.924c-.2 1.96-.9 3.46-1.644 3.46-.744 0-1.444-1.5-1.644-3.46H6.432c.2 1.96.9 3.46 1.644 3.46.744 0 1.444-1.5 1.644-3.46zm0-3.6c-.2-1.96-.9-3.46-1.644-3.46-.744 0-1.444 1.5-1.644 3.46h3.924c-.2-1.96-.9-3.46-1.644-3.46z"/>
-              </svg>
-            </a>
-          )}
-        </div>
-      )}
     </div>
-  )}
-</div>
+  </Card>
+)}
 
 <style>
-  .author-card {
-    background: var(--color-surface);
-    border: 1px solid var(--color-border);
-    border-radius: 12px;
-    padding: 1.5rem;
-    margin: 2rem 0;
-    transition: all 0.2s ease;
-  }
-  
-  .author-card:hover {
-    border-color: var(--color-primary-alpha);
-    box-shadow: 0 4px 12px var(--color-shadow);
-  }
-  
-  /* Inline variant */
-  .author-card--inline {
-    background: none;
-    border: none;
-    padding: 0;
-    margin: 0;
-  }
-  
-  .author-card__inline {
-    display: flex;
-    align-items: center;
-    gap: 0.75rem;
-  }
-  
-  .author-card__inline-info {
-    display: flex;
-    flex-direction: column;
-    gap: 0.125rem;
-  }
-  
-  .author-card__inline .author-card__name {
-    font-size: 0.875rem;
-    font-weight: 600;
-    color: var(--color-text-primary);
-  }
-  
-  .author-card__inline .author-card__title {
-    font-size: 0.75rem;
-    color: var(--color-text-secondary);
-  }
-  
-  /* Compact variant */
-  .author-card--compact {
-    padding: 1rem;
-    margin: 1.5rem 0;
-  }
-  
-  /* Avatar Container - Fixed aspect ratio */
-  .author-card__avatar-container {
-    position: relative;
-    border-radius: 50%;
-    overflow: hidden;
-    border: 3px solid var(--color-border);
-    flex-shrink: 0;
-    background: var(--color-surface-secondary);
-  }
-
-  .author-card__avatar-container--tiny {
-    width: 32px;
-    height: 32px;
-    border-width: 2px;
-  }
-
-  .author-card__avatar-container--small {
-    width: 48px;
-    height: 48px;
-    border-width: 2px;
-  }
-
-  .author-card__avatar-container--medium {
-    width: 64px;
-    height: 64px;
-    border-width: 3px;
-  }
-
-  .author-card__avatar-container--large {
-    width: 80px;
-    height: 80px;
-    border-width: 3px;
-  }
-
-  .author-card__avatar {
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
-    object-position: center;
-    transition: transform 0.3s ease;
-  }
-
-  .author-card:hover .author-card__avatar {
-    transform: scale(1.05);
-  }
-  
-  /* Header */
-  .author-card__header {
-    display: flex;
-    align-items: flex-start;
-    gap: 1rem;
-    margin-bottom: 1rem;
-  }
-  
-  .author-card__info {
-    flex: 1;
-  }
-  
-  .author-card__name {
-    font-size: 1.25rem;
-    font-weight: 700;
-    color: var(--color-text-primary);
-    margin: 0 0 0.25rem 0;
-  }
-  
-  .author-card__title {
-    font-size: 0.875rem;
-    color: var(--color-primary);
-    font-weight: 500;
-    margin: 0 0 0.25rem 0;
-  }
-
-  .author-card__tagline {
-    font-size: 0.8125rem;
-    color: var(--color-text-secondary);
-    font-style: italic;
-    margin: 0 0 0.5rem 0;
-    line-height: 1.4;
-  }
-
-  .author-card__meta {
-    display: flex;
-    gap: 1rem;
-    font-size: 0.8125rem;
-    color: var(--color-text-secondary);
-    flex-wrap: wrap;
-  }
-  
-  /* Content */
-  .author-card__bio {
-    color: var(--color-text-secondary);
-    line-height: 1.6;
-    margin-bottom: 1rem;
-  }
-  
-  .author-card__specialties {
-    margin-bottom: 1rem;
-  }
-  
-  .author-card__specialties-title {
-    font-size: 0.875rem;
-    font-weight: 600;
-    color: var(--color-text-primary);
-    margin: 0 0 0.5rem 0;
-  }
-  
-  .author-card__tags {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 0.5rem;
-  }
-  
-  .author-card__tag {
-    background: var(--color-primary-alpha);
-    color: var(--color-primary);
-    padding: 0.25rem 0.5rem;
-    border-radius: 6px;
-    font-size: 0.75rem;
-    font-weight: 500;
-    transition: all 0.2s ease;
-  }
-
-  .author-card__tag:hover {
-    background: var(--color-primary);
-    color: white;
-    transform: translateY(-1px);
-  }
-
-  /* Achievements */
-  .author-card__achievements {
-    margin-bottom: 1rem;
-  }
-
-  .author-card__achievements-title {
-    font-size: 0.875rem;
-    font-weight: 600;
-    color: var(--color-text-primary);
-    margin: 0 0 0.5rem 0;
-  }
-
-  .author-card__achievements-list {
-    list-style: none;
-    margin: 0;
-    padding: 0;
-    display: flex;
-    flex-direction: column;
-    gap: 0.375rem;
-  }
-
-  .author-card__achievement {
-    font-size: 0.8125rem;
-    color: var(--color-text-secondary);
-    line-height: 1.4;
-    position: relative;
-    padding-left: 1rem;
-  }
-
-  .author-card__achievement::before {
-    content: '✓';
-    position: absolute;
-    left: 0;
-    color: var(--color-primary);
-    font-weight: 600;
-  }
-  
-  /* Stats */
-  .author-card__stats {
-    display: flex;
-    gap: 1.5rem;
-    margin-bottom: 1rem;
-    padding: 1rem 0;
-    border-top: 1px solid var(--color-border);
-  }
-  
-  .author-card__stat {
-    text-align: center;
-  }
-  
-  .author-card__stat-number {
-    display: block;
-    font-size: 1.25rem;
-    font-weight: 700;
-    color: var(--color-primary);
-  }
-  
-  .author-card__stat-label {
-    font-size: 0.75rem;
-    color: var(--color-text-secondary);
-    text-transform: uppercase;
-    letter-spacing: 0.05em;
-  }
-  
-  /* Social Links */
-  .author-card__social {
-    display: flex;
-    gap: 0.75rem;
-  }
-  
-  .author-card__social-link {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    width: 40px;
-    height: 40px;
-    background: var(--color-surface-secondary);
-    border: 1px solid var(--color-border);
-    border-radius: 8px;
-    color: var(--color-text-secondary);
-    text-decoration: none;
-    transition: all 0.2s ease;
-  }
-  
-  .author-card__social-link:hover {
-    background: var(--color-primary);
-    border-color: var(--color-primary);
-    color: white;
-    transform: translateY(-2px);
-  }
-  
-  /* Dark mode */
-  :global(.dark) .author-card {
-    background: var(--color-surface-dark);
-    border-color: var(--color-border-dark);
-  }
-  
-  :global(.dark) .author-card__avatar {
-    border-color: var(--color-border-dark);
-  }
-  
-  :global(.dark) .author-card__stats {
-    border-top-color: var(--color-border-dark);
-  }
-  
-  :global(.dark) .author-card__social-link {
-    background: var(--color-surface-secondary-dark);
-    border-color: var(--color-border-dark);
-  }
-  
-  /* Layout Variants */
-  .author-card--horizontal .author-card__header {
-    align-items: center;
-    gap: 1rem;
-  }
-
-  .author-card--horizontal .author-card__info {
-    flex: 1;
-  }
-
-  .author-card--vertical .author-card__header {
-    flex-direction: column;
-    text-align: center;
-    align-items: center;
-    gap: 1rem;
-  }
-
-  .author-card--vertical .author-card__info {
-    text-align: center;
-  }
-
-  /* Size Variants */
-  .author-card--compact {
-    padding: 1rem;
-    margin: 1rem 0;
-  }
-
-  .author-card--compact .author-card__header {
-    margin-bottom: 0.75rem;
-  }
-
-  .author-card--standard {
-    padding: 1.5rem;
+  /* Estilos mínimos para la nueva Author Card */
+  .author-card-modern {
     margin: 1.5rem 0;
   }
 
-  .author-card--full {
-    padding: 2rem;
-    margin: 2rem 0;
-  }
-
-  /* Mobile responsive */
+  /* Responsive adjustments */
   @media (max-width: 640px) {
-    .author-card {
-      padding: 1rem;
-    }
-
-    .author-card__header {
-      flex-direction: column;
+    .author-card-modern .flex-col {
       text-align: center;
-      gap: 0.75rem;
     }
 
-    .author-card__meta {
-      justify-content: center;
-    }
-
-    .author-card__stats {
+    .author-card-modern .sm\\:flex-row {
+      flex-direction: column !important;
+      align-items: center;
       gap: 1rem;
     }
 
-    .author-card__social {
-      justify-content: center;
-    }
-
-    /* Force horizontal layout on mobile for compact variant */
-    .author-card--compact.author-card--horizontal .author-card__header {
-      flex-direction: row;
-      text-align: left;
-    }
-
-    .author-card--compact.author-card--horizontal .author-card__info {
-      text-align: left;
+    .author-card-modern .sm\\:justify-between {
+      justify-content: center !important;
     }
   }
 </style>
