@@ -1,11 +1,9 @@
 ---
 /**
- * Blog Post Card Component - Unified Structure
- * Estructura unificada para todos los artículos del blog
- * Optimizado con Tailwind CSS y consistente en todas las páginas
+ * Blog Post Card Component - Simple Structure
+ * Basado en la estructura de PillarCard
  */
 
-import TagList from './TagList.astro';
 import type { BlogPostCardData } from '../../utils/blogPost.ts';
 
 interface Props {
@@ -26,54 +24,70 @@ const postImage = post.image?.url || defaultImage;
 const imageAlt = post.image?.alt || post.title;
 ---
 
-<!-- Estructura unificada de artículo -->
-<article class={`bg-card border border-card rounded-lg overflow-hidden shadow-lg hover:shadow-xl transition-all duration-300 h-full flex flex-col ${className}`}>
-  <!-- Post Image -->
-  <a href={post.url} class="block flex-shrink-0">
-    <img
-      src={postImage}
-      alt={imageAlt}
-      class="w-full h-48 object-cover transition-transform duration-300 hover:scale-105"
-      loading={loading}
-      width="600"
-      height="315"
-    />
-  </a>
+<article class={`pillar-grid__item ${className}`}>
+  <a
+    href={post.url}
+    class="block rounded-lg overflow-hidden transition-all duration-300 hover:shadow-lg h-full flex flex-col border border-gray-200 hover:border-gray-300"
+    aria-label={`Leer artículo: ${post.title}`}
+  >
+    <!-- Thumbnail -->
+    <div class="aspect-video overflow-hidden">
+      <img
+        src={postImage}
+        alt={imageAlt}
+        class="w-full h-full object-cover transition-transform duration-300 hover:scale-105"
+        loading={loading}
+        width="300"
+        height="200"
+      />
+    </div>
 
-  <!-- Post Content -->
-  <div class="p-4 flex-1 flex flex-col">
-    <!-- Post Title -->
-    <h3 class="text-xl font-bold mb-2 line-clamp-2">
-      <a href={post.url} class="text-content hover:text-blue-600 dark:text-blue-400 transition-colors">
-        {post.title}
-      </a>
-    </h3>
+    <!-- Content -->
+    <div class="flex-1 p-4 flex flex-col">
+      <!-- Header -->
+      <header class="mb-3">
+        <h3 class="text-lg font-semibold mb-2 line-clamp-2">
+          {post.title}
+        </h3>
 
-    <!-- Post Date -->
-    <p class="text-secondary text-sm mb-3">
-      {post.formattedDate}
-    </p>
+        <!-- Meta info -->
+        <div class="flex items-center justify-between text-sm text-gray-600">
+          <span class="font-medium">
+            {post.formattedDate}
+          </span>
+        </div>
+      </header>
 
-    <!-- Post Description -->
-    <p class="text-secondary mb-4 line-clamp-3 flex-1">
-      {post.description}
-    </p>
+      <!-- Description -->
+      <p class="text-gray-700 mb-4 flex-1 line-clamp-3">
+        {post.description}
+      </p>
 
-    <!-- Post Tags -->
-    {post.tags && post.tags.length > 0 && (
-      <div class="mb-4">
-        <TagList tags={post.tags} />
-      </div>
-    )}
+      <!-- Tags -->
+      {post.tags && post.tags.length > 0 && (
+        <div class="flex flex-wrap gap-1 mb-4">
+          {post.tags.slice(0, 3).map(tag => (
+            <span class="text-xs px-2 py-1 bg-gray-100 rounded-full text-gray-600">
+              #{tag}
+            </span>
+          ))}
+          {post.tags.length > 3 && (
+            <span class="text-xs px-2 py-1 bg-gray-100 rounded-full text-gray-600">
+              +{post.tags.length - 3}
+            </span>
+          )}
+        </div>
+      )}
+    </div>
 
-    <!-- Read More Link -->
-    <div class="mt-auto">
-      <a href={post.url} class="inline-flex items-center text-blue-600 dark:text-blue-400 hover:text-blue-700 dark:hover:text-blue-300 font-medium text-sm transition-colors group">
+    <!-- Footer con CTA -->
+    <footer class="p-4 pt-0 mt-auto">
+      <span class="inline-flex items-center font-medium text-sm text-blue-600 hover:text-blue-700 transition-colors">
         Leer más
-        <svg class="w-4 h-4 ml-1 transition-transform duration-300 group-hover:translate-x-1" viewBox="0 0 16 16" fill="currentColor">
+        <svg class="w-4 h-4 ml-1" viewBox="0 0 16 16" fill="currentColor">
           <path d="M6 4l4 4-4 4" stroke="currentColor" stroke-width="2" fill="none"/>
         </svg>
-      </a>
-    </div>
-  </div>
+      </span>
+    </footer>
+  </a>
 </article>
