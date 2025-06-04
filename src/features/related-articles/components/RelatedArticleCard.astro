@@ -56,7 +56,7 @@ const displayTags = tags ? tags.slice(0, 3) : [];
 <article class={className}>
   <a
     href={postUrl}
-    class="block rounded-lg overflow-hidden transition-all duration-300 hover:shadow-lg h-full flex flex-col border border-gray-200 hover:border-gray-300"
+    class="card-base block overflow-hidden h-full flex flex-col"
     aria-label={`Leer artículo: ${title}`}
   >
     <!-- Thumbnail -->
@@ -114,12 +114,12 @@ const displayTags = tags ? tags.slice(0, 3) : [];
       {showTags && displayTags.length > 0 && (
         <div class="flex flex-wrap gap-1 mb-4">
           {displayTags.map(tag => (
-            <span class="text-xs px-2 py-1 bg-gray-100 rounded-full text-gray-600">
+            <span class="text-xs px-2 py-1 bg-gray-100 dark:bg-gray-700 rounded-md text-gray-600 dark:text-gray-300">
               #{tag}
             </span>
           ))}
           {tags && tags.length > 3 && (
-            <span class="text-xs px-2 py-1 bg-gray-100 rounded-full text-gray-600">
+            <span class="text-xs px-2 py-1 bg-gray-100 dark:bg-gray-700 rounded-md text-gray-600 dark:text-gray-300">
               +{tags.length - 3}
             </span>
           )}
