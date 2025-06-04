@@ -116,12 +116,18 @@ const currentPost = {
       border-top: none;
     }
 
-    /* Optimización para artículos relacionados */
+    /* Optimización para artículos relacionados - 2 columnas desktop, 1 móvil */
     .related-articles-optimized .related-articles__container {
       display: grid !important;
-      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)) !important;
+      grid-template-columns: 1fr !important;
       gap: 1.5rem !important;
       width: 100% !important;
+    }
+
+    @media (min-width: 768px) {
+      .related-articles-optimized .related-articles__container {
+        grid-template-columns: repeat(2, 1fr) !important;
+      }
     }
 
     /* Asegurar que las cards ocupen todo el espacio disponible */
@@ -130,13 +136,7 @@ const currentPost = {
       max-width: none !important;
     }
 
-    /* Responsive para artículos relacionados */
-    @media (max-width: 768px) {
-      .related-articles-optimized .related-articles__container {
-        grid-template-columns: 1fr !important;
-        gap: 1rem !important;
-      }
-    }
+    /* Responsive para artículos relacionados - ya manejado arriba */
 
     /* Estilos para botones de compartir compactos */
     .share-buttons-compact {
@@ -168,7 +168,7 @@ const currentPost = {
       <!-- Contenido del artículo -->
       <article>
       <!-- Imagen destacada optimizada -->
-      <div class="w-full h-64 md:h-80 overflow-hidden rounded-lg">
+      <div class="w-full h-64 md:h-80 overflow-hidden">
         {useNewImageSystem ? (
           <ImageVariants
             postId={postId}
@@ -196,16 +196,16 @@ const currentPost = {
             sizes="(max-width: 768px) 100vw, 1200px"
           />
         ) : (
-          <div class="w-full h-full bg-gradient-to-br from-primary/20 to-primary/5 flex items-center justify-center">
-            <span class="text-blue-600 dark:text-blue-400/60 text-lg font-medium">📄 {title}</span>
+          <div class="w-full h-full flex items-center justify-center">
+            <span class="text-lg font-medium">📄 {title}</span>
           </div>
         )}
       </div>
 
       <div class="p-6">
         <!-- Metadatos del post -->
-        <div class="mb-6 border-b divider pb-4">
-          <h1 class="text-3xl font-bold text-blue-600 dark:text-blue-400 mb-3">{title}</h1>
+        <div class="mb-6 pb-4">
+          <h1 class="text-3xl font-bold mb-3">{title}</h1>
 
           <!-- Autor compacto al inicio del artículo -->
           <div class="mb-4">
@@ -222,12 +222,12 @@ const currentPost = {
             />
           </div>
 
-          <div class="flex flex-wrap items-center text-sm text-secondary mb-3">
+          <div class="flex flex-wrap items-center text-sm mb-3">
             <span class="mr-4 flex items-center">
-              <i class="fas fa-calendar mr-1"></i> {formattedDate}
+              <i class="mr-1"></i> {formattedDate}
             </span>
             <span class="flex items-center">
-              <i class="fas fa-clock mr-1"></i> {readingTimeText}
+              <i class="mr-1"></i> {readingTimeText}
             </span>
           </div>
 
@@ -241,14 +241,14 @@ const currentPost = {
         </div>
 
         <!-- Contenido del post -->
-        <div class="prose prose-lg max-w-none dark:prose-invert">
+        <div >
           <slot />
         </div>
 
         <!-- Botones para compartir - Movidos después del contenido -->
-        <div class="mt-6 pt-4 border-t border-card dark:border-card-dark">
+        <div class="mt-6 pt-4">
           <div class="flex items-center justify-between mb-3">
-            <h3 class="text-base font-medium text-content">Compartir Artículo</h3>
+            <h3 class="text-base font-medium">Compartir Artículo</h3>
           </div>
 
           <!-- Componente de botones para compartir (versión compacta) -->
@@ -256,8 +256,8 @@ const currentPost = {
         </div>
 
         <!-- Módulo de Autor Extendido -->
-        <div class="mt-8 pt-6 border-t border-card dark:border-card-dark">
-          <h3 class="text-lg font-medium mb-4 text-content">Autor</h3>
+        <div class="mt-8 pt-6">
+          <h3 class="text-lg font-medium mb-4">Autor</h3>
           <AuthorCard
             variant="full"
             layout="vertical"
@@ -283,7 +283,7 @@ const currentPost = {
           showExcerpt={true}
           showThumbnail={true}
           title="Artículos Relacionados"
-          className="related-articles-optimized"
+          className=""
         />
       </div>
       </article>

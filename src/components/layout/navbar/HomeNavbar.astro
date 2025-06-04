@@ -11,13 +11,13 @@ const navItems = NAVIGATION_CONFIG.homeNavItems;
 <BaseNavbar>
   <!-- Navegación principal para página home -->
   <div slot="navigation" class="hidden md:block">
-    <ul class="flex space-x-4 lg:space-x-6">
+    <ul class="flex space-x-4">
       {navItems.map(item => (
         <li>
           <NavLink
             href={item.href}
             section={item.section}
-            className="px-3 py-2 rounded-md hover:bg-gray-100 dark:hover:bg-gray-800 text-content hover:text-blue-600 dark:text-blue-400 transition-all duration-200 flex items-center"
+            className="px-3 py-2 flex items-center"
           >
             {item.label}
           </NavLink>
@@ -27,16 +27,16 @@ const navItems = NAVIGATION_CONFIG.homeNavItems;
   </div>
 
   <!-- Botón menú móvil -->
-  <button slot="actions" class="md:hidden text-content hover:text-blue-600 dark:text-blue-400 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 focus:ring-offset-gray-800 p-2 rounded-lg" id="mobile-menu-button">
+  <button slot="actions" class="md:hidden p-2" id="mobile-menu-button">
     <span class="sr-only">Abrir menú de navegación</span>
     <Icon name="menu" size={24} />
   </button>
 
   <!-- Menú móvil usando slot additional -->
-  <div slot="additional" id="mobile-menu" class="fixed inset-0 bg-gray-900 bg-opacity-95 z-50 hidden">
+  <div slot="additional" id="mobile-menu" class="fixed inset-0 z-50 hidden">
   <div class="flex flex-col h-full">
     <div class="flex justify-end p-4">
-      <button id="close-menu" class="text-content hover:text-blue-600 dark:text-blue-400 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 focus:ring-offset-gray-900 p-2 rounded-full hover:bg-gray-800 transition-all duration-200">
+      <button id="close-menu" class="p-2">
         <Icon name="close" size={24} />
       </button>
     </div>
@@ -45,7 +45,7 @@ const navItems = NAVIGATION_CONFIG.homeNavItems;
         <NavLink
           href={item.href}
           section={item.section}
-          className="px-5 py-3 rounded-md hover:bg-gray-100 dark:hover:bg-gray-800 text-content hover:text-blue-600 dark:text-blue-400 transition-all duration-200 w-64 text-center"
+          className="nav-link-mobile px-5 py-3 w-64 text-center"
         >
           {item.label}
         </NavLink>

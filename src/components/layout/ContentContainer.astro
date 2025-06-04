@@ -3,12 +3,14 @@ interface Props {
   className?: string;
   as?: 'div' | 'section' | 'main' | 'article';
   padding?: boolean;
+  id?: string;
 }
 
 const {
   className = '',
   as: Element = 'div',
-  padding = true
+  padding = true,
+  id
 } = Astro.props;
 
 // CONTENEDOR PRINCIPAL - Solo container + padding
@@ -17,6 +19,6 @@ const paddingClasses = padding ? 'px-6 sm:px-4' : '';
 const containerClasses = `container mx-auto ${paddingClasses} ${className}`.trim();
 ---
 
-<Element class={containerClasses}>
+<Element class={containerClasses} id={id}>
   <slot />
 </Element>
