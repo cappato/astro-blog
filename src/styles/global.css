@@ -49,4 +49,35 @@ section[id] {
   scroll-margin-top: 80px;
 }
 
+/* Navigation Styles */
+.nav-link {
+  position: relative;
+  transition: all 0.2s ease;
+}
+
+.nav-link:hover {
+  opacity: 0.8;
+}
+
+.nav-link.active {
+  font-weight: 600;
+}
+
+.nav-link.active::after {
+  content: '';
+  position: absolute;
+  bottom: -2px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 80%;
+  height: 2px;
+  background: currentColor;
+  border-radius: 1px;
+}
+
+.nav-link-mobile.active {
+  font-weight: 600;
+  opacity: 1;
+}
+
 /* CSS custom eliminado - Usar Tailwind para todo lo demás */
