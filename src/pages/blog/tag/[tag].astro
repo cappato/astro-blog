@@ -59,7 +59,7 @@ const { title, description } = getTagSeoData(tag);
     <ContentWidth width="standard">
       <!-- Mostrar la etiqueta actual con un tamaño más grande -->
       <div class="mb-8">
-        <h1 class="text-3xl font-bold mb-2 text-content">Artículos con la etiqueta</h1>
+        <h1 class="text-3xl font-bold mb-2">Artículos con la etiqueta</h1>
         <TagButton tag={tag} />
       </div>
 
@@ -75,7 +75,7 @@ const { title, description } = getTagSeoData(tag);
         </div>
       ) : (
         <div class="text-center py-12">
-          <p class="text-xl text-secondary opacity-75">No hay artículos con esta etiqueta aún.</p>
+          <p class="text-xl">No hay artículos con esta etiqueta aún.</p>
         </div>
       )}
     </ContentWidth>
