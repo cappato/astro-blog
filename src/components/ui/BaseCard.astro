@@ -24,16 +24,14 @@ const {
   ariaLabel
 } = Astro.props;
 
-// Clases base estandarizadas (basadas en PillarCard)
+// Clases base estandarizadas usando card-base
 const baseClasses = [
+  'card-base',
   'block',
-  'rounded-lg',
   'overflow-hidden',
   'h-full',
   'flex',
   'flex-col',
-  showBorder && 'border border-gray-200',
-  showHover && 'transition-all duration-300 hover:shadow-lg hover:border-gray-300',
   className
 ].filter(Boolean).join(' ');
 

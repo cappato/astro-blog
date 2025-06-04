@@ -6,15 +6,15 @@ import ContentWidth from '../layout/ContentWidth.astro';
 ---
 
 <!-- Experience Section -->
-<ContentContainer as="section" id="experience" className="py-10 bg-secondary" width="standard">
-    <ContentWidth>
+<ContentContainer as="section" id="experience" className="py-10 bg-primary">
+    <ContentWidth width="standard">
         <h2 class="text-3xl font-bold mb-6 pb-2 text-primary">Professional Experience</h2>
-    </ContentWidth>
 
-    <ContentWidth className="space-y-10">
-        {experienceData.map((experience) => (
-            <ExperienceCard experience={experience} />
-        ))}
+        <div class="space-y-10">
+            {experienceData.map((experience) => (
+                <ExperienceCard experience={experience} />
+            ))}
+        </div>
     </ContentWidth>
 </ContentContainer>
 

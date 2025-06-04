@@ -181,7 +181,7 @@ const customTitle = pillar.title;
     )}
 
     <!-- Related Pillars -->
-    <aside class="mt-16 pt-8 border-t border-gray-200">
+    <aside class="mt-16 pt-8 border-t border-primary">
       <h3 class="text-xl font-bold mb-6">
         Otros pilares de contenido
       </h3>
@@ -192,7 +192,7 @@ const customTitle = pillar.title;
           .map(relatedPillar => (
             <a
               href={`/blog/pillar/${relatedPillar.id}`}
-              class="block border border-gray-200 rounded-lg overflow-hidden hover:border-gray-300 hover:shadow-sm transition-all duration-200 no-underline"
+              class="card-base block overflow-hidden no-underline"
             >
               <!-- Imagen del pilar -->
               <div class="aspect-video overflow-hidden">

@@ -6,14 +6,12 @@ import ContentWidth from '../layout/ContentWidth.astro';
 ---
 
 <!-- Contact Section -->
-<ContentContainer as="section" id="contact" className="py-10 bg-primary" width="standard">
-    <ContentWidth>
+<ContentContainer as="section" id="contact" className="py-10 bg-primary">
+    <ContentWidth width="standard">
         <h2 class="text-3xl font-bold mb-6 pb-2 text-primary">Contact</h2>
-    </ContentWidth>
 
-    <ContentWidth>
         <Card variant="default">
-            <ContentWidth width="narrow">
+            <div class="max-w-2xl mx-auto">
                 <h3 class="text-xl sm:text-2xl font-bold mb-4 text-primary">Get In Touch</h3>
                 <p class="mb-8 text-secondary">Feel free to reach out if you'd like to discuss potential opportunities or just want to connect.</p>
 
@@ -49,7 +47,7 @@ import ContentWidth from '../layout/ContentWidth.astro';
                         <span class="mr-2"><Icon name="email" size={18} /></span> Send Email
                     </a>
                 </div>
-            </ContentWidth>
+            </div>
         </Card>
     </ContentWidth>
 </ContentContainer>

@@ -101,7 +101,7 @@ const currentUrl = Astro.url.pathname;
   </header>
 
   <!-- Global Breadcrumbs - Connected once in base layout -->
-  <div class="bg-secondary border-b border-primary">
+  <div class="bg-primary border-b border-primary">
     <div class="container mx-auto px-4 py-2">
       <Breadcrumbs customTitle={customTitle} />
     </div>
@@ -111,7 +111,7 @@ const currentUrl = Astro.url.pathname;
     <slot />
   </main>
 
-  <footer class="bg-secondary border-t border-primary">
+  <footer class="bg-primary border-t border-primary">
     <slot name="footer" />
   </footer>
 

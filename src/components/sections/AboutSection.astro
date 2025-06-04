@@ -6,12 +6,9 @@ import ContentWidth from '../layout/ContentWidth.astro';
 ---
 
 <!-- About Section -->
-<ContentContainer as="section" id="about" className="py-10 bg-primary" width="standard">
-    <ContentWidth>
+<ContentContainer as="section" id="about" className="py-10 bg-primary">
+    <ContentWidth width="standard">
         <h2 class="text-3xl font-bold mb-6 pb-2 text-primary">About me</h2>
-    </ContentWidth>
-
-    <ContentWidth>
         <Card variant="default">
         <div class="flex flex-col md:flex-row items-center md:items-start gap-6">
             <div class="w-32 h-32 md:w-48 md:h-48 overflow-hidden flex-shrink-0 rounded-lg">
@@ -19,8 +16,8 @@ import ContentWidth from '../layout/ContentWidth.astro';
                 <img src="/images/profile.webp" alt="Matías Sebastián Cappato" class="w-full h-full object-cover rounded-lg" width="192" height="192" loading="eager">
             </div>
             <div class="flex-1">
-                <h1 class="text-2xl md:text-4xl font-bold mb-2 text-center text-primary">Matías Sebastián Cappato</h1>
-                <h2 class="text-lg md:text-2xl mb-4 text-center text-secondary">System Analyst | Full Stack Developer</h2>
+                <h1 class="text-2xl md:text-4xl font-bold mb-3 text-center md:text-left text-primary">Matías Sebastián Cappato</h1>
+                <h2 class="text-lg md:text-2xl mb-6 text-center md:text-left text-secondary">System Analyst | Full Stack Developer</h2>
                 <div class="space-y-2">
                     <p class="flex items-center text-sm sm:text-base text-secondary">
                         <span class="w-6 mr-2 text-muted"><Icon name="location" size={16} /></span>

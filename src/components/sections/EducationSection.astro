@@ -5,12 +5,11 @@ import ContentWidth from '../layout/ContentWidth.astro';
 ---
 
 <!-- Education Section -->
-<ContentContainer as="section" id="education" className="py-10 bg-primary" width="standard">
-    <ContentWidth>
+<ContentContainer as="section" id="education" className="py-10 bg-primary">
+    <ContentWidth width="standard">
         <h2 class="text-3xl font-bold mb-6 pb-2 text-primary">Education</h2>
-    </ContentWidth>
 
-    <ContentWidth className="space-y-6">
+        <div class="space-y-6">
         <Card variant="default">
             <h3 class="text-xl sm:text-2xl font-bold text-primary">National University of Mar del Plata</h3>
             <h4 class="text-lg sm:text-xl mb-2 text-secondary">System Analyst</h4>
@@ -24,5 +23,6 @@ import ContentWidth from '../layout/ContentWidth.astro';
             <p class="mb-4 text-muted">Currently enrolled</p>
             <p class="text-secondary">Degree: Completed finals of the first year and two courses from the second year.</p>
         </Card>
+        </div>
     </ContentWidth>
-</ContentContainer> <!-- Education Section -->
+</ContentContainer>
