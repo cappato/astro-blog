@@ -5,24 +5,24 @@ import ContentWidth from '../layout/ContentWidth.astro';
 ---
 
 <!-- Achievements Section -->
-<ContentContainer as="section" id="achievements" className="py-10" width="standard">
+<ContentContainer as="section" id="achievements" className="py-10 bg-primary" width="standard">
     <ContentWidth>
-        <h2 class="text-3xl font-bold mb-6 pb-2">Achievements</h2>
+        <h2 class="text-3xl font-bold mb-6 pb-2 text-primary">Achievements</h2>
     </ContentWidth>
 
     <ContentWidth>
         <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
             <Card variant="default">
-                <h3 class="text-xl font-bold mb-4">Development & Architecture</h3>
-                <ul class="list-disc pl-5 space-y-3">
+                <h3 class="text-xl font-bold mb-4 text-primary">Development & Architecture</h3>
+                <ul class="list-disc pl-5 space-y-3 text-secondary">
                     <li>Replaced LAMP/WAMP environments with Docker, streamlining setup and standardizing development environments across multiple projects.</li>
                     <li>Identified and refactored rigid, non-scalable code, turning it into flexible, maintainable solutions, fed by databases, arrays, or JSON files as needed.</li>
                 </ul>
             </Card>
 
             <Card variant="default">
-                <h3 class="text-xl font-bold mb-4">Code Quality & Security</h3>
-                <ul class="list-disc pl-5 space-y-3">
+                <h3 class="text-xl font-bold mb-4 text-primary">Code Quality & Security</h3>
+                <ul class="list-disc pl-5 space-y-3 text-secondary">
                     <li>Promoted code reuse and component separation, improving project organization and ease of maintenance.</li>
                     <li>Contributed to server security by configuring custom Nginx rules and advanced Cloudflare settings.</li>
                 </ul>

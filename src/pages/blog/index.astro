@@ -51,29 +51,29 @@ const featuredPillars = getFeaturedPillars();
   <BlogNavbar currentPath="/blog" slot="header" />
 
     <!-- Hero Section -->
-    <ContentContainer as="section" className="py-10">
+    <ContentContainer as="section" className="py-10 bg-primary">
         <ContentWidth width="standard">
             <Card className="text-center" variant="default">
                 <div class="space-y-6">
                     <div class="flex items-center justify-center mb-4">
-                        <div class="w-16 h-16 flex items-center justify-center mr-4">
+                        <div class="w-16 h-16 flex items-center justify-center mr-4 text-primary">
                             <Icon name="blog" size={32} />
                         </div>
-                        <h1 class="text-3xl md:text-5xl font-bold">Blog</h1>
+                        <h1 class="text-3xl md:text-5xl font-bold text-primary">Blog</h1>
                     </div>
-                    <p class="text-lg md:text-xl leading-relaxed">
+                    <p class="text-lg md:text-xl leading-relaxed text-secondary">
                         {description}
                     </p>
                     <div class="flex flex-wrap justify-center gap-4 pt-4">
-                        <div class="flex items-center">
+                        <div class="flex items-center text-muted">
                             <Icon name="article" size={16} />
                             <span class="ml-2 text-sm font-medium">{postCards.length} artículos</span>
                         </div>
-                        <div class="flex items-center">
+                        <div class="flex items-center text-muted">
                             <Icon name="tag" size={16} />
                             <span class="ml-2 text-sm font-medium">{allTags.length} temas</span>
                         </div>
-                        <div class="flex items-center">
+                        <div class="flex items-center text-muted">
                             <Icon name="pillar" size={16} />
                             <span class="ml-2 text-sm font-medium">{featuredPillars.length} pilares</span>
                         </div>
@@ -83,21 +83,21 @@ const featuredPillars = getFeaturedPillars();
         </ContentWidth>
     </ContentContainer>
 
-    <main class="pb-10">
+    <main class="pb-10 bg-primary">
         <!-- Featured Pillars Section -->
         {featuredPillars.length > 0 && (
-        <ContentContainer as="section" className="mb-12">
+        <ContentContainer as="section" className="mb-12 bg-secondary">
             <ContentWidth width="standard">
                 <div class="flex items-center justify-between mb-8">
                     <div class="flex items-center">
-                        <div class="w-8 h-8 flex items-center justify-center mr-3">
+                        <div class="w-8 h-8 flex items-center justify-center mr-3 text-primary">
                             <Icon name="target" size={20} />
                         </div>
-                        <h2 class="text-2xl font-bold">Pilares de Contenido</h2>
+                        <h2 class="text-2xl font-bold text-primary">Pilares de Contenido</h2>
                     </div>
                     <a
                         href="/blog/pillars"
-                        class="font-medium text-sm flex items-center gap-2"
+                        class="font-medium text-sm flex items-center gap-2 text-blue-600 dark:text-blue-400 hover:text-blue-800 dark:hover:text-blue-300 transition-colors"
                     >
                         Ver todos
                         <Icon name="arrow-right" size={16} />
@@ -116,14 +116,14 @@ const featuredPillars = getFeaturedPillars();
         )}
 
         <!-- Tag filter section -->
-        <ContentContainer as="section" className="mb-12">
+        <ContentContainer as="section" className="mb-12 bg-primary">
             <ContentWidth width="standard">
                 <Card className="" variant="default">
                     <div class="flex items-center mb-6">
-                        <div class="w-8 h-8 flex items-center justify-center mr-3">
+                        <div class="w-8 h-8 flex items-center justify-center mr-3 text-primary">
                             <Icon name="tag" size={20} />
                         </div>
-                        <h2 class="text-2xl font-bold">Explorar por tema</h2>
+                        <h2 class="text-2xl font-bold text-primary">Explorar por tema</h2>
                     </div>
                     <div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-3">
                         {allTags.map(tag => (
@@ -135,13 +135,13 @@ const featuredPillars = getFeaturedPillars();
         </ContentContainer>
 
         <!-- Posts list -->
-        <ContentContainer as="section">
+        <ContentContainer as="section" className="bg-secondary">
             <ContentWidth width="standard">
                 <div class="flex items-center mb-8">
-                    <div class="w-8 h-8 flex items-center justify-center mr-3">
+                    <div class="w-8 h-8 flex items-center justify-center mr-3 text-primary">
                         <Icon name="article" size={20} />
                     </div>
-                    <h2 class="text-2xl font-bold">Artículos recientes</h2>
+                    <h2 class="text-2xl font-bold text-primary">Artículos recientes</h2>
                 </div>
 
                 <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
