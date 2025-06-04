@@ -90,26 +90,28 @@ const currentUrl = Astro.url.pathname;
   <!-- Slot para estilos adicionales específicos de página -->
   <slot name="head" />
 </head>
-<body class="min-h-screen flex flex-col pt-20">
+<body class="container-primary min-h-screen flex flex-col pt-20">
   <!-- Mejora: Skip to content para accesibilidad -->
-  <a href="#main-content" class="sr-only">
+  <a href="#main-content" class="sr-only focus:not-sr-only focus:absolute focus:top-4 focus:left-4 bg-primary text-primary px-4 py-2 rounded-md z-50">
     Saltar al contenido principal
   </a>
 
-  <header>
+  <header class="bg-primary border-b border-primary">
     <slot name="header" />
   </header>
 
   <!-- Global Breadcrumbs - Connected once in base layout -->
-  <div class="container mx-auto px-4">
-    <Breadcrumbs customTitle={customTitle} />
+  <div class="bg-secondary border-b border-primary">
+    <div class="container mx-auto px-4 py-2">
+      <Breadcrumbs customTitle={customTitle} />
+    </div>
   </div>
 
-  <main id="main-content" class="flex-grow">
+  <main id="main-content" class="flex-grow bg-primary">
     <slot />
   </main>
 
-  <footer>
+  <footer class="bg-secondary border-t border-primary">
     <slot name="footer" />
   </footer>
 

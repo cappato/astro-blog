@@ -7,38 +7,123 @@
 @tailwind utilities;
 
 @layer base {
-  /* Solo estilos base esenciales */
+  /* Estilos base esenciales */
   html {
-    @apply scroll-smooth;
+    @apply scroll-smooth bg-white dark:bg-gray-900 text-gray-900 dark:text-white;
+  }
+
+  body {
+    @apply bg-white dark:bg-gray-900 text-gray-900 dark:text-white transition-colors duration-200;
+  }
+
+  /* Scroll personalizado */
+  ::-webkit-scrollbar {
+    width: 8px;
+    height: 8px;
+  }
+
+  ::-webkit-scrollbar-track {
+    @apply bg-gray-100 dark:bg-gray-800;
+  }
+
+  ::-webkit-scrollbar-thumb {
+    @apply bg-gray-400 dark:bg-gray-600 rounded-full;
+  }
+
+  ::-webkit-scrollbar-thumb:hover {
+    @apply bg-gray-500 dark:bg-gray-500;
+  }
+
+  /* Firefox scrollbar */
+  * {
+    scrollbar-width: thin;
+    scrollbar-color: theme('colors.gray.400') theme('colors.gray.100');
+  }
+
+  .dark * {
+    scrollbar-color: theme('colors.gray.600') theme('colors.gray.800');
   }
 }
 
 @layer components {
-  /* Clases semánticas para patrones repetitivos */
+  /* === SISTEMA DE COLORES SEMÁNTICOS === */
 
-  /* Texto principal - Reemplaza: text-gray-900 dark:text-white */
-  .text-content {
+  /* Fondos principales */
+  .bg-primary {
+    @apply bg-white dark:bg-gray-900 transition-colors duration-200;
+  }
+
+  .bg-secondary {
+    @apply bg-gray-50 dark:bg-gray-800 transition-colors duration-200;
+  }
+
+  .bg-surface {
+    @apply bg-white dark:bg-gray-800 transition-colors duration-200;
+  }
+
+  .bg-card {
+    @apply bg-white dark:bg-gray-800 transition-colors duration-200;
+  }
+
+  /* Textos */
+  .text-primary {
     @apply text-gray-900 dark:text-white;
   }
 
-  /* Fondo de tarjetas - Reemplaza: bg-white dark:bg-gray-800 */
-  .bg-card {
-    @apply bg-white dark:bg-gray-800;
-  }
-
-  /* Bordes de tarjetas - Reemplaza: border-gray-200 dark:border-gray-700 */
-  .border-card {
-    @apply border-gray-200 dark:border-gray-700;
-  }
-
-  /* Texto secundario - Reemplaza: text-gray-600 dark:text-gray-300 */
   .text-secondary {
     @apply text-gray-600 dark:text-gray-300;
   }
 
-  /* Combinación completa de tarjeta */
+  .text-muted {
+    @apply text-gray-500 dark:text-gray-400;
+  }
+
+  .text-content {
+    @apply text-gray-900 dark:text-white;
+  }
+
+  /* Bordes */
+  .border-primary {
+    @apply border-gray-200 dark:border-gray-700;
+  }
+
+  .border-secondary {
+    @apply border-gray-300 dark:border-gray-600;
+  }
+
+  .border-card {
+    @apply border-gray-200 dark:border-gray-700;
+  }
+
+  /* Divisores */
+  .divide-primary {
+    @apply divide-gray-200 dark:divide-gray-700;
+  }
+
+  /* Sombras adaptativas */
+  .shadow-card {
+    @apply shadow-sm dark:shadow-lg dark:shadow-gray-900/20;
+  }
+
+  .shadow-elevated {
+    @apply shadow-lg dark:shadow-xl dark:shadow-gray-900/30;
+  }
+
+  /* === COMPONENTES COMBINADOS === */
+
+  /* Tarjeta base completa */
   .card-base {
-    @apply bg-card border border-card rounded-lg shadow-sm;
+    @apply bg-card border border-card rounded-lg shadow-card hover:shadow-elevated transition-all duration-200;
+  }
+
+  /* Superficie elevada */
+  .surface-elevated {
+    @apply bg-surface border border-primary rounded-lg shadow-card;
+  }
+
+  /* Contenedor principal */
+  .container-primary {
+    @apply bg-primary min-h-screen;
   }
 
   /* Estilos específicos para contenido de posts */
