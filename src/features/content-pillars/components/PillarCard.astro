@@ -50,7 +50,7 @@ const pillarUrl = generatePillarUrl(pillar.id);
         </h3>
 
         <!-- Meta info -->
-        <div class="flex items-center justify-between text-sm text-gray-600">
+        <div class="flex items-center justify-between text-sm text-muted">
           {showPostCount && postCount > 0 && (
             <span class="font-medium">
               {postCount} {postCount === 1 ? 'artículo' : 'artículos'}
@@ -62,7 +62,7 @@ const pillarUrl = generatePillarUrl(pillar.id);
       <!-- Description -->
       {showDescription && variant !== 'compact' && (
         <div class="mb-4 flex-1">
-          <p class="text-sm text-gray-600 line-clamp-3">{pillar.description}</p>
+          <p class="text-sm text-muted line-clamp-3">{pillar.description}</p>
         </div>
       )}
 

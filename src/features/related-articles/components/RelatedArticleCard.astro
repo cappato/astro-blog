@@ -88,7 +88,7 @@ const displayTags = tags ? tags.slice(0, 3) : [];
         </h3>
 
         <!-- Meta info -->
-        <div class="flex items-center gap-3 text-sm text-gray-600">
+        <div class="flex items-center justify-between text-sm text-muted">
           {showPublishDate && (
             <time datetime={date.toISOString()}>
               {formattedDate}
@@ -106,7 +106,7 @@ const displayTags = tags ? tags.slice(0, 3) : [];
       <!-- Description -->
       {showExcerpt && excerpt && variant !== 'minimal' && (
         <div class="mb-4 flex-1">
-          <p class="text-gray-700 line-clamp-3">{excerpt}</p>
+          <p class="text-secondary line-clamp-3">{excerpt}</p>
         </div>
       )}
 
@@ -131,7 +131,7 @@ const displayTags = tags ? tags.slice(0, 3) : [];
         <div class="mb-4 text-xs">
           <details>
             <summary class="cursor-pointer text-gray-500">¿Por qué es relacionado?</summary>
-            <ul class="mt-2 space-y-1 text-gray-600">
+            <ul class="mt-2 space-y-1 text-muted">
               {reasons.map(reason => (
                 <li>
                   <strong>{reason.type}:</strong> {reason.details}
