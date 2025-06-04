@@ -22,16 +22,16 @@ const formattedTechnologies = formatTechnologies(experience.technologies);
 const formattedResponsibilities = formatResponsibilities(experience.responsibilities);
 ---
 
-<div class={`p-4 sm:p-6 ${className}`}>
+<div class={`card-base p-4 sm:p-6 ${className}`}>
   <!-- Company and Position Header -->
   <header class="mb-4">
-    <h3 class="text-xl sm:text-2xl font-bold mb-2">
+    <h3 class="text-xl sm:text-2xl font-bold mb-2 text-primary">
       {experience.website ? (
         <a
           href={experience.website}
           target="_blank"
           rel="noopener noreferrer"
-          
+          class="text-blue-600 dark:text-blue-400 hover:text-blue-800 dark:hover:text-blue-300 transition-colors"
           aria-label={`Visit ${experience.company} website`}
         >
           {experience.company}
@@ -42,16 +42,16 @@ const formattedResponsibilities = formatResponsibilities(experience.responsibili
       )}
     </h3>
 
-    <h4 class="text-lg sm:text-xl mb-2">
+    <h4 class="text-lg sm:text-xl mb-2 text-secondary">
       {experience.position}
       {experience.current && (
-        <span class="ml-2 inline-flex items-center px-2 py-1 text-xs font-medium">
+        <span class="ml-2 inline-flex items-center px-2 py-1 text-xs font-medium bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-200 rounded-full">
           Current
         </span>
       )}
     </h4>
 
-    <p class="mb-4">
+    <p class="mb-4 text-muted">
       {experience.period}
       {experience.location && (
         <span class="ml-2">| {experience.location}</span>
@@ -62,7 +62,7 @@ const formattedResponsibilities = formatResponsibilities(experience.responsibili
   <!-- Description (if available) -->
   {experience.description && (
     <div class="mb-4">
-      <p >
+      <p class="text-secondary leading-relaxed">
         {experience.description}
       </p>
     </div>
@@ -71,11 +71,11 @@ const formattedResponsibilities = formatResponsibilities(experience.responsibili
   <!-- Technologies Section -->
   {formattedTechnologies.length > 0 && (
     <div class="mb-4">
-      <h5 class="font-bold mb-2 flex items-center">
+      <h5 class="font-bold mb-2 flex items-center text-primary">
         <span class="mr-2">🛠️</span>
         Technologies and Tools:
       </h5>
-      <ul class="list-disc pl-5 space-y-1">
+      <ul class="list-disc pl-5 space-y-1 text-secondary">
         {formattedTechnologies.map(tech => (
           <li class="leading-relaxed">{tech}</li>
         ))}
@@ -86,11 +86,11 @@ const formattedResponsibilities = formatResponsibilities(experience.responsibili
   <!-- Responsibilities Section -->
   {formattedResponsibilities.length > 0 && (
     <div>
-      <h5 class="font-bold mb-2 flex items-center">
+      <h5 class="font-bold mb-2 flex items-center text-primary">
         <span class="mr-2">🎯</span>
         Responsibilities and Achievements:
       </h5>
-      <ul class="list-disc pl-5 space-y-1">
+      <ul class="list-disc pl-5 space-y-1 text-secondary">
         {formattedResponsibilities.map(responsibility => (
           <li class="leading-relaxed">{responsibility}</li>
         ))}

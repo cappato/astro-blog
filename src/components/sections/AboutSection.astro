@@ -6,47 +6,47 @@ import ContentWidth from '../layout/ContentWidth.astro';
 ---
 
 <!-- About Section -->
-<ContentContainer as="section" id="about" className="py-10" width="standard">
+<ContentContainer as="section" id="about" className="py-10 bg-primary" width="standard">
     <ContentWidth>
-        <h2 class="text-3xl font-bold mb-6 pb-2">About me</h2>
+        <h2 class="text-3xl font-bold mb-6 pb-2 text-primary">About me</h2>
     </ContentWidth>
 
     <ContentWidth>
         <Card variant="default">
         <div class="flex flex-col md:flex-row items-center md:items-start gap-6">
-            <div class="w-32 h-32 md:w-48 md:h-48 overflow-hidden flex-shrink-0">
+            <div class="w-32 h-32 md:w-48 md:h-48 overflow-hidden flex-shrink-0 rounded-lg">
                 <!-- Real profile image -->
-                <img src="/images/profile.webp" alt="Matías Sebastián Cappato" class="w-full h-full object-cover" width="192" height="192" loading="eager">
+                <img src="/images/profile.webp" alt="Matías Sebastián Cappato" class="w-full h-full object-cover rounded-lg" width="192" height="192" loading="eager">
             </div>
             <div class="flex-1">
-                <h1 class="text-2xl md:text-4xl font-bold mb-2 text-center">Matías Sebastián Cappato</h1>
-                <h2 class="text-lg md:text-2xl mb-4 text-center">System Analyst | Full Stack Developer</h2>
+                <h1 class="text-2xl md:text-4xl font-bold mb-2 text-center text-primary">Matías Sebastián Cappato</h1>
+                <h2 class="text-lg md:text-2xl mb-4 text-center text-secondary">System Analyst | Full Stack Developer</h2>
                 <div class="space-y-2">
-                    <p class="flex items-center text-sm sm:text-base">
-                        <span class="w-6 mr-2"><Icon name="location" size={16} /></span>
+                    <p class="flex items-center text-sm sm:text-base text-secondary">
+                        <span class="w-6 mr-2 text-muted"><Icon name="location" size={16} /></span>
                         Mar del Plata, Buenos Aires, Argentina
                     </p>
-                    <p class="flex items-center text-sm sm:text-base">
-                        <span class="w-6 mr-2"><Icon name="email" size={16} /></span>
-                        <a href="mailto:matias@cappato.dev" >matias@cappato.dev</a>
+                    <p class="flex items-center text-sm sm:text-base text-secondary">
+                        <span class="w-6 mr-2 text-muted"><Icon name="email" size={16} /></span>
+                        <a href="mailto:matias@cappato.dev" class="text-blue-600 dark:text-blue-400 hover:text-blue-800 dark:hover:text-blue-300 transition-colors">matias@cappato.dev</a>
                     </p>
-                    <p class="flex items-center text-sm sm:text-base">
-                        <span class="w-6 mr-2"><Icon name="github" size={16} /></span>
-                        <a href="https://github.com/cappato" >github.com/cappato</a>
+                    <p class="flex items-center text-sm sm:text-base text-secondary">
+                        <span class="w-6 mr-2 text-muted"><Icon name="github" size={16} /></span>
+                        <a href="https://github.com/cappato" class="text-blue-600 dark:text-blue-400 hover:text-blue-800 dark:hover:text-blue-300 transition-colors">github.com/cappato</a>
                     </p>
-                    <p class="flex items-center text-sm sm:text-base">
-                        <span class="w-6 mr-2"><Icon name="linkedin" size={16} /></span>
-                        <a href="https://www.linkedin.com/in/matiascappato/" >linkedin.com/in/matiascappato</a>
+                    <p class="flex items-center text-sm sm:text-base text-secondary">
+                        <span class="w-6 mr-2 text-muted"><Icon name="linkedin" size={16} /></span>
+                        <a href="https://www.linkedin.com/in/matiascappato/" class="text-blue-600 dark:text-blue-400 hover:text-blue-800 dark:hover:text-blue-300 transition-colors">linkedin.com/in/matiascappato</a>
                     </p>
                 </div>
                 <div class="mt-6 flex flex-wrap justify-center md:justify-start gap-3">
                     <a href="#"
-                       class="px-3 py-2 text-sm sm:text-base font-medium"
+                       class="px-4 py-2 text-sm sm:text-base font-medium bg-blue-600 text-white hover:bg-blue-700 dark:bg-blue-500 dark:hover:bg-blue-600 rounded-lg transition-colors"
                        aria-label="Descargar currículum">
                        Download Resume
                     </a>
                     <a href="#contact"
-                       class="px-3 py-2 text-sm sm:text-base font-medium">
+                       class="px-4 py-2 text-sm sm:text-base font-medium border border-primary text-primary hover:bg-secondary rounded-lg transition-colors">
                        Contact
                     </a>
                 </div>

@@ -11,11 +11,11 @@ const {
   as: Element = 'div'
 } = Astro.props;
 
-// Definir las variantes de la card usando solo Tailwind - sin fondos específicos
+// Definir las variantes de la card usando el sistema de colores semánticos
 const variants = {
-  default: 'rounded-lg shadow-sm p-4 sm:p-6',
-  hover: 'rounded-lg shadow-sm hover:shadow-md transition-shadow duration-200 p-4 sm:p-6',
-  compact: 'rounded-lg shadow-sm p-3 sm:p-4'
+  default: 'card-base p-4 sm:p-6',
+  hover: 'card-base hover:shadow-elevated transition-all duration-200 p-4 sm:p-6',
+  compact: 'card-base p-3 sm:p-4'
 };
 
 const cardClasses = `${variants[variant as keyof typeof variants]} ${className}`;

@@ -5,16 +5,16 @@ import ContentWidth from '../layout/ContentWidth.astro';
 ---
 
 <!-- Skills Section -->
-<ContentContainer as="section" id="skills" className="py-10" width="standard">
+<ContentContainer as="section" id="skills" className="py-10 bg-secondary" width="standard">
     <ContentWidth>
-        <h2 class="text-3xl font-bold mb-6 pb-2">Skills</h2>
+        <h2 class="text-3xl font-bold mb-6 pb-2 text-primary">Skills</h2>
     </ContentWidth>
 
     <ContentWidth>
         <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
             <Card variant="default">
-                <h3 class="text-xl sm:text-2xl font-bold mb-4">Professional Skills</h3>
-                <ul class="list-disc pl-5 space-y-3">
+                <h3 class="text-xl sm:text-2xl font-bold mb-4 text-primary">Professional Skills</h3>
+                <ul class="list-disc pl-5 space-y-3 text-secondary">
                     <li>Strong knowledge of best practices, agile methodologies, teamwork, and code review processes.</li>
                     <li>Skilled in designing accessible and user-friendly software, focusing on delivering the best user experience.</li>
                     <li>Strong skills in analyzing and migrating legacy code.</li>
@@ -24,14 +24,14 @@ import ContentWidth from '../layout/ContentWidth.astro';
             </Card>
 
             <Card variant="default">
-                <h3 class="text-xl sm:text-2xl font-bold mb-4">Technical Skills</h3>
-                <ul class="list-disc pl-5 space-y-3">
-                    <li><strong>Frontend:</strong> JavaScript (ES6+), TypeScript, React, Angular, HTML5, CSS3, SASS, Bootstrap, Tailwind CSS</li>
-                    <li><strong>Backend:</strong> Node.js, Express, PHP, Laravel, Symfony, CakePHP</li>
-                    <li><strong>Databases:</strong> MySQL, PostgreSQL, MongoDB, Firebase Firestore</li>
-                    <li><strong>DevOps:</strong> Docker, Docker Swarm, Traefik, Nginx, Apache, Digital Ocean, AWS, Google Cloud</li>
-                    <li><strong>Testing:</strong> Jest, PHPUnit</li>
-                    <li><strong>Version Control:</strong> Git, GitHub, GitLab, Bitbucket</li>
+                <h3 class="text-xl sm:text-2xl font-bold mb-4 text-primary">Technical Skills</h3>
+                <ul class="list-disc pl-5 space-y-3 text-secondary">
+                    <li><strong class="text-primary">Frontend:</strong> JavaScript (ES6+), TypeScript, React, Angular, HTML5, CSS3, SASS, Bootstrap, Tailwind CSS</li>
+                    <li><strong class="text-primary">Backend:</strong> Node.js, Express, PHP, Laravel, Symfony, CakePHP</li>
+                    <li><strong class="text-primary">Databases:</strong> MySQL, PostgreSQL, MongoDB, Firebase Firestore</li>
+                    <li><strong class="text-primary">DevOps:</strong> Docker, Docker Swarm, Traefik, Nginx, Apache, Digital Ocean, AWS, Google Cloud</li>
+                    <li><strong class="text-primary">Testing:</strong> Jest, PHPUnit</li>
+                    <li><strong class="text-primary">Version Control:</strong> Git, GitHub, GitLab, Bitbucket</li>
                 </ul>
             </Card>
         </div>
