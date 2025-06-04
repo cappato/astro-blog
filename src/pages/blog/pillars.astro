@@ -5,7 +5,9 @@
  * Muestra todos los pilares de contenido organizados y con estadísticas
  */
 
-import MainLayout from '../../layouts/MainLayout.astro';
+import BaseLayout from '../../components/layout/BaseLayout.astro';
+import BlogNavbar from '../../components/layout/navbar/BlogNavbar.astro';
+import Footer from '../../components/layout/footer/Footer.astro';
 import { PillarGrid } from '../../features/content-pillars/components';
 import { getFeaturedPillars, getAllPillars } from '../../features/content-pillars/config/pillars.config';
 import ContentContainer from '../../components/layout/ContentContainer.astro';
@@ -25,7 +27,15 @@ const seoData = {
 };
 ---
 
-<MainLayout {...seoData}>
+<BaseLayout
+  title={seoData.title}
+  description={seoData.description}
+  keywords={seoData.keywords}
+  type={seoData.type}
+  customTitle="Pilares de Contenido"
+>
+  <BlogNavbar currentPath="/blog/pillars" slot="header" />
+
   <!-- Hero Section -->
   <ContentContainer as="section" className="py-8">
     <ContentWidth width="standard">
@@ -116,6 +126,8 @@ const seoData = {
       </Card>
     </ContentWidth>
   </ContentContainer>
-</MainLayout>
+
+  <Footer slot="footer" />
+</BaseLayout>
 
 <!-- CSS eliminado - Usar Tailwind directo: mb-16, mb-8, inline-flex items-center justify-center px-8 py-3 rounded-lg font-semibold no-underline transition-all duration-200 border-2 border-transparent bg-blue-600 dark:bg-blue-500 text-white hover:bg-blue-600 dark:bg-blue-500-600 hover:-translate-y-0.5 hover:shadow-lg -->

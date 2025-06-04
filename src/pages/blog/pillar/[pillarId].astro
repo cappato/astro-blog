@@ -6,7 +6,9 @@
 
 import { getCollection } from 'astro:content';
 import type { GetStaticPaths } from 'astro';
-import MainLayout from '../../../layouts/MainLayout.astro';
+import BaseLayout from '../../../components/layout/BaseLayout.astro';
+import BlogNavbar from '../../../components/layout/navbar/BlogNavbar.astro';
+import Footer from '../../../components/layout/footer/Footer.astro';
 import BlogPostCard from '../../../components/blog/BlogPostCard.astro';
 import BaseTag from '../../../components/ui/BaseTag.astro';
 import {
@@ -95,16 +97,14 @@ if (import.meta.env.DEV) {
 const customTitle = pillar.title;
 ---
 
-<MainLayout 
+<BaseLayout
   title={seoData.title}
   description={seoData.description}
   keywords={seoData.keywords}
   type={seoData.type}
   customTitle={customTitle}
 >
-  <div slot="header">
-    <!-- Header content if needed -->
-  </div>
+  <BlogNavbar currentPath={Astro.url.pathname} slot="header" />
 
   <!-- Main Content -->
   <ContentContainer className="py-8">
@@ -226,9 +226,7 @@ const customTitle = pillar.title;
     </ContentWidth>
   </ContentContainer>
 
-  <div slot="footer">
-    <!-- Footer content if needed -->
-  </div>
-</MainLayout>
+  <Footer slot="footer" />
+</BaseLayout>
 
 
