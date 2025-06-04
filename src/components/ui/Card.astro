@@ -11,14 +11,14 @@ const {
   as: Element = 'div'
 } = Astro.props;
 
-// Definir las variantes de la card usando solo Tailwind
+// Definir las variantes de la card usando solo Tailwind - sin fondos específicos
 const variants = {
-  default: 'bg-card border border-card rounded-lg shadow-sm p-4 sm:p-6',
-  hover: 'bg-card border border-card rounded-lg shadow-sm hover:shadow-sm-hover transition-shadow duration-200 p-4 sm:p-6',
-  compact: 'bg-card border border-card rounded-lg shadow-sm p-3 sm:p-4'
+  default: 'rounded-lg shadow-sm p-4 sm:p-6',
+  hover: 'rounded-lg shadow-sm hover:shadow-md transition-shadow duration-200 p-4 sm:p-6',
+  compact: 'rounded-lg shadow-sm p-3 sm:p-4'
 };
 
-const cardClasses = `${variants[variant]} ${className}`;
+const cardClasses = `${variants[variant as keyof typeof variants]} ${className}`;
 ---
 
 <Element class={cardClasses}>
