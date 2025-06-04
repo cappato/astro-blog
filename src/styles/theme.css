@@ -40,4 +40,71 @@
   .card-base {
     @apply bg-card border border-card rounded-lg shadow-sm;
   }
+
+  /* Estilos específicos para contenido de posts */
+  .prose {
+    /* Mejorar espaciado entre párrafos y código */
+    @apply text-gray-900 dark:text-gray-100;
+  }
+
+  .prose p {
+    @apply mb-6 leading-relaxed;
+  }
+
+  .prose pre {
+    @apply my-8 bg-gray-900 dark:bg-gray-800 text-gray-100 rounded-lg border border-gray-200 dark:border-gray-700;
+  }
+
+  .prose code:not(pre code) {
+    @apply bg-gray-100 dark:bg-gray-800 text-gray-900 dark:text-gray-100 px-1.5 py-0.5 rounded text-sm font-mono;
+  }
+
+  .prose h2 {
+    @apply text-gray-900 dark:text-white mt-12 mb-6 text-2xl font-bold;
+  }
+
+  .prose h3 {
+    @apply text-gray-900 dark:text-white mt-10 mb-4 text-xl font-semibold;
+  }
+
+  .prose h4 {
+    @apply text-gray-900 dark:text-white mt-8 mb-3 text-lg font-semibold;
+  }
+
+  .prose ul, .prose ol {
+    @apply my-6 space-y-2;
+  }
+
+  .prose li {
+    @apply leading-relaxed;
+  }
+
+  .prose blockquote {
+    @apply my-8 pl-6 border-l-4 border-blue-500 bg-blue-50 dark:bg-blue-900/20 py-4 italic;
+  }
+
+  .prose strong {
+    @apply text-gray-900 dark:text-white font-semibold;
+  }
+
+  .prose a {
+    @apply text-blue-600 dark:text-blue-400 hover:text-blue-800 dark:hover:text-blue-300 underline;
+  }
+
+  /* Espaciado específico para elementos antes y después de código */
+  .prose p + pre {
+    @apply mt-8;
+  }
+
+  .prose pre + p {
+    @apply mt-8;
+  }
+
+  .prose h2 + pre, .prose h3 + pre, .prose h4 + pre {
+    @apply mt-6;
+  }
+
+  .prose pre + h2, .prose pre + h3, .prose pre + h4 {
+    @apply mt-12;
+  }
 }
