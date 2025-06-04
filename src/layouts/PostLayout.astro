@@ -232,11 +232,15 @@ const currentPost = {
           </div>
 
           <!-- Barra de compartir horizontal (componente) -->
-          <ShareButtons url={currentUrl} title={title} compact={true} />
+          <div class="mb-4">
+            <ShareButtons url={currentUrl} title={title} compact={true} />
+          </div>
 
           <!-- Tags -->
           {tags && tags.length > 0 && (
-            <TagList tags={tags} />
+            <div class="mt-4">
+              <TagList tags={tags} />
+            </div>
           )}
         </div>
 
