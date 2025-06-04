@@ -80,8 +80,8 @@ const relatedArticles = relatedResult.articles;
       </p>
     </header>
 
-    <!-- Articles Grid - Estructura Unificada -->
-    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+    <!-- Articles Grid - Estructura Unificada (2 columnas en desktop, 1 en móvil) -->
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
       {relatedArticles.map((relatedArticle, index) => (
         <RelatedArticleCard
           article={relatedArticle}
