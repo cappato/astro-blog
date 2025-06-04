@@ -163,6 +163,11 @@ export class NavigationManager {
 
     if (targetElement) {
       this.scrollToSection(targetId, targetElement);
+
+      // Update URL without hash to keep it clean
+      const url = new URL(window.location.href);
+      url.hash = '';
+      window.history.replaceState({}, '', url.toString());
     }
   }
 
