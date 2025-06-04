@@ -3,7 +3,7 @@ import BaseLayout from '../components/layout/BaseLayout.astro';
 import BlogNavbar from '../components/layout/navbar/BlogNavbar.astro';
 import Footer from '../components/layout/footer/Footer.astro';
 import ImageVariants from '../components/media/ImageVariants.astro';
-import { ShareButtons, ShareMessage, CopyToast } from '../features/social-share';
+import { ShareButtons, ShareMessage, SidebarShareButtons, CopyToast } from '../features/social-share';
 import TagList from '../components/blog/TagList.astro';
 import { getReadingTime, formatReadingTime } from '../features/reading-time';
 import AuthorCard from '../features/blog-enhancements/components/AuthorCard.astro';
@@ -281,6 +281,9 @@ const currentPost = {
 
   <!-- Componente de toast para notificaciones de copia -->
   <CopyToast />
+
+  <!-- Barra lateral de compartir (solo desktop) -->
+  <SidebarShareButtons url={currentUrl} title={title} topOffset={200} />
 </BaseLayout>
 
 

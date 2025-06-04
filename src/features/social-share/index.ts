@@ -27,6 +27,7 @@
 export { default as ShareButtons } from './components/ShareButtons.astro';
 export { default as ShareButton } from './components/ShareButton.astro';
 export { default as ShareMessage } from './components/ShareMessage.astro';
+export { default as SidebarShareButtons } from './components/SidebarShareButtons.astro';
 export { default as CopyToast } from './components/CopyToast.astro';
 
 // Engine exports for advanced usage
@@ -99,7 +100,7 @@ export const SOCIAL_SHARE_FEATURE = {
     'Copy to clipboard'
   ],
   exports: {
-    components: ['ShareButtons', 'ShareButton', 'ShareMessage', 'CopyToast'],
+    components: ['ShareButtons', 'ShareButton', 'ShareMessage', 'SidebarShareButtons', 'CopyToast'],
     functions: ['generateShareUrl', 'copyToClipboard', 'validateShareData'],
     types: ['ShareData', 'ShareButtonProps', 'SocialPlatform'],
     utilities: ['makeAbsoluteUrl', 'sanitizeTitle', 'getDeviceInfo'],

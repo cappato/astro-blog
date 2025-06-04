@@ -1,56 +1,77 @@
-el content debe ser el mismo para todas las cards para articulos pilares articulos relacionados todos los pilares pilares destacados etc,
+este modulo de autor tiene mucho espacio en blanco por debajo de la imagen comom una columna vacia, sobretodo en movil queda peor, podrias hacer magia y cambiar la estructura para que se vea mucho mejor, podes tomar como ejemplo esto para darle mas flexibiad al modulo de autor?
+<div class="card-base p-4 sm:p-6 author-extended">
+  <div class="flex flex-col sm:flex-row sm:items-start sm:gap-4">
+    <!-- Avatar -->
+    <div class="flex justify-center sm:justify-start mb-4 sm:mb-0">
+      <div class="rounded-full overflow-hidden border-2 w-24 h-24 sm:w-20 sm:h-20">
+        <img src="/images/author/profile.webp" alt="Foto de Matías Sebastián Cappato" class="w-full h-full object-cover" loading="lazy">
+      </div>
+    </div>
 
-la estructura correcta para articulos o pilares deberia ser esta
-lo unico que cambia es la fecha en articulos y la cantidad de articulos en pilares pero tienen el mismo estilo
-estructura correcta:
-<div class="flex-1 p-4 flex flex-col"> <!-- Header --> <header class="mb-3"> <h3 class="text-lg font-semibold mb-2 line-clamp-2 text-primary"> SEO Automático con TypeScript: Meta Tags y Schema.org </h3> <!-- Meta info --> <div class="flex items-center justify-between text-sm text-muted"> <span class="font-medium"> 2 de junio de 2024 </span> </div> </header> <!-- Description --> <p class="text-secondary mb-4 flex-1 line-clamp-3"> Sistema SEO completo y automático con TypeScript: meta tags inteligentes, Schema.org estructurado y optimización de performance. </p> <!-- Tags --> <div class="flex flex-wrap gap-1 mb-4"> <span class="text-xs px-2 py-1 bg-gray-100 dark:bg-gray-700 rounded-md text-gray-600 dark:text-gray-300">
-#seo </span><span class="text-xs px-2 py-1 bg-gray-100 dark:bg-gray-700 rounded-md text-gray-600 dark:text-gray-300">
-#typescript </span><span class="text-xs px-2 py-1 bg-gray-100 dark:bg-gray-700 rounded-md text-gray-600 dark:text-gray-300">
-#schema.org </span> <span class="text-xs px-2 py-1 bg-gray-100 dark:bg-gray-700 rounded-md text-gray-600 dark:text-gray-300">
-+2 </span> </div> </div>
+    <!-- Content -->
+    <div class="flex-1 min-w-0">
+      <!-- Header -->
+      <div class="flex flex-col sm:flex-row sm:items-start sm:justify-between gap-2 mb-3">
+        <div class="flex-1 min-w-0">
+          <h3 class="text-lg font-bold mb-1 text-center sm:text-left">Matías Sebastián Cappato</h3>
+          <p class="text-sm font-medium mb-1 text-center sm:text-left">Full Stack Developer &amp; Tech Lead</p>
+          <div class="flex flex-wrap justify-center sm:justify-start gap-3 text-xs">
+            <span class="flex items-center gap-1">📍 Argentina</span>
+            <span class="flex items-center gap-1">💼 8+ experiencia</span>
+          </div>
+        </div>
 
+        <!-- Social Links -->
+        <div class="flex justify-center sm:justify-end items-center gap-2">
+          <a href="https://github.com/cappato" target="_blank" rel="noopener noreferrer" class="w-8 h-8 flex items-center justify-center" aria-label="GitHub de Matías">🔗</a>
+          <a href="https://www.linkedin.com/in/matiascappato/" target="_blank" rel="noopener noreferrer" class="w-8 h-8 flex items-center justify-center" aria-label="LinkedIn de Matías">🔗</a>
+          <a href="mailto:matias@cappato.dev" class="w-8 h-8 flex items-center justify-center" aria-label="Email de Matías">📧</a>
+        </div>
+      </div>
 
+      <!-- Bio -->
+      <div class="mb-3 text-sm leading-relaxed text-center sm:text-left">
+        Desarrollador Full Stack con más de 8 años de experiencia construyendo aplicaciones web escalables y de alto rendimiento...
+      </div>
 
-ejemplo de estructura incorecta
-<div class="flex-1 p-4 flex flex-col"> <!-- Header --> <header class="mb-3"> <h3 class="text-lg font-semibold mb-2 line-clamp-2"> Astro &amp; Performance </h3> <!-- Meta info --> <div class="flex items-center justify-between text-sm text-gray-600"> <span class="font-medium"> 2 artículos </span> </div> </header> <!-- Description --> <div class="mb-4 flex-1"> <p class="text-sm text-gray-600 line-clamp-3">Desarrollo moderno con Astro, optimización de performance y arquitecturas escalables para la web del futuro.</p> </div> <!-- Tags --> <div class="flex flex-wrap gap-1 mb-4"> <span class="text-xs px-2 py-1 bg-gray-100 dark:bg-gray-700 rounded-md text-gray-600 dark:text-gray-300">
-#astro </span><span class="text-xs px-2 py-1 bg-gray-100 dark:bg-gray-700 rounded-md text-gray-600 dark:text-gray-300">
-#performance </span><span class="text-xs px-2 py-1 bg-gray-100 dark:bg-gray-700 rounded-md text-gray-600 dark:text-gray-300">
-#optimization </span> <span class="text-xs px-2 py-1 bg-gray-100 dark:bg-gray-700 rounded-md text-gray-600 dark:text-gray-300">
-+3 </span> </div> </div>
+      <!-- Especialidades -->
+      <div class="mb-3">
+        <h4 class="text-xs font-semibold tracking-wide mb-2">Especialidades</h4>
+        <div class="flex flex-wrap justify-center sm:justify-start gap-1">
+          <span class="px-2 py-1 text-xs font-medium bg-gray-100 rounded">TypeScript & JavaScript</span>
+          <span class="px-2 py-1 text-xs font-medium bg-gray-100 rounded">React & Next.js</span>
+          <span class="px-2 py-1 text-xs font-medium bg-gray-100 rounded">Node.js & Express</span>
+          <span class="px-2 py-1 text-xs font-medium bg-gray-100 rounded">Astro & Static Sites</span>
+          <span class="px-2 py-1 text-xs font-medium bg-gray-100 rounded">Performance Optimization</span>
+        </div>
+      </div>
 
-articulos relacionados, presente en todos los posts, tambien tiene un content incorrecto
-<div class="flex-1 p-4 flex flex-col"> <!-- Header --> <header class="mb-3"> <h3 class="text-lg font-semibold mb-2 line-clamp-2"> Dark Mode Perfecto: Anti-flicker y Persistencia con Astro </h3> <!-- Meta info --> <div class="flex items-center gap-3 text-sm text-gray-600"> <time datetime="2024-06-02T00:00:00.000Z"> 2 de junio de 2024 </time> <span> 4 min de lectura </span> </div> </header> <!-- Description --> <div class="mb-4 flex-1"> <p class="text-gray-700 line-clamp-3">Implementa un sistema de dark mode sin flash, con persistencia en localStorage y transiciones suaves usando Astro, CSS variables y TypeScript.</p> </div> <!-- Tags --> <div class="flex flex-wrap gap-1 mb-4"> <span class="text-xs px-2 py-1 bg-gray-100 dark:bg-gray-700 rounded-md text-gray-600 dark:text-gray-300">
-#dark-mode </span><span class="text-xs px-2 py-1 bg-gray-100 dark:bg-gray-700 rounded-md text-gray-600 dark:text-gray-300">
-#astro </span><span class="text-xs px-2 py-1 bg-gray-100 dark:bg-gray-700 rounded-md text-gray-600 dark:text-gray-300">
-#ssr </span> <span class="text-xs px-2 py-1 bg-gray-100 dark:bg-gray-700 rounded-md text-gray-600 dark:text-gray-300">
-+2 </span> </div> <!-- Relation reasons (solo en desarrollo) -->  </div>
+      <!-- Logros -->
+      <div class="mb-3">
+        <h4 class="text-xs font-semibold tracking-wide mb-2">Logros destacados</h4>
+        <ul class="grid grid-cols-1 sm:grid-cols-2 gap-y-1 text-xs">
+          <li>• Arquitectura para 100k+ usuarios</li>
+          <li>• Optimización Core Web Vitals</li>
+          <li>• Pipelines CI/CD automatizados</li>
+          <li>• Mentoring de equipos</li>
+        </ul>
+      </div>
 
-
-✅ TAREA COMPLETADA:
-Pensando como un grupo de ingenieros arquitectos de software con especialidad en blog astro tailwind y buenas practicas modernas, esta cantidad de codigo repetida no deberia unificarse??
-
-SOLUCION IMPLEMENTADA:
-
-**🎯 Prompt para IA especializada (como GPT o Claude):**
-
----
-
-**Necesito que me ayudes a unificar y reutilizar una estructura común de contenido de tarjeta en un proyecto Astro con Tailwind CSS.** Actualmente tengo múltiples componentes (`PillarCard.astro`, `BlogPostCard.astro`, `RelatedArticleCard.astro`, etc.) que repiten la misma estructura visual para mostrar una card de artículo o pilar. La única diferencia entre ellas es el dato variable (fecha en artículos, cantidad de artículos en pilares, etc.), pero el layout, estilos y jerarquía de contenido son idénticos o deberían serlo.
-
-**Objetivo:**
-Extraer la parte común de la estructura (header con título, meta info, descripción, tags) en un solo componente reutilizable (por ejemplo, `CardContent.astro`), que acepte props para los valores variables y se pueda usar dentro de cualquier tipo de tarjeta (`BaseCard`, `RelatedArticleCard`, etc.).
-
-**Alcance:**
-
-* Identificar todos los archivos donde se repite esta estructura.
-* Crear un nuevo componente con los slots o props adecuados para recibir:
-
-  * Título
-  * Fecha o cantidad de artículos
-  * Descripción
-  * Lista de tags (clickeables o no)
-* Reemplazar la lógica duplicada en cada tipo de card con este nuevo componente reutilizable.
-* Garantizar que todos los estilos de texto, espaciados, colores, redondeado y comportamiento de los tags sean consistentes, tanto para `span` como para `a`.
-* Asegurar que todos los tags visualmente tengan el mismo diseño aunque algunos sean clickeables y otros no.
-
-**Quiero un paso a paso claro para hacer esta refactorización con buenas prácticas, manteniendo accesibilidad y consistencia visual.**
+      <!-- Stats -->
+      <div class="flex justify-center sm:justify-start items-center gap-4 pt-3">
+        <div class="text-center">
+          <div class="text-lg font-bold">25</div>
+          <div class="text-xs">Artículos</div>
+        </div>
+        <div class="text-center">
+          <div class="text-lg font-bold">50</div>
+          <div class="text-xs">Proyectos</div>
+        </div>
+        <div class="text-center">
+          <div class="text-lg font-bold">8+ años</div>
+          <div class="text-xs">Experiencia</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
