@@ -1,0 +1,64 @@
+---
+/**
+ * BaseCard - Carcaza Reutilizable para Cards
+ * 
+ * Componente base que estandariza la estructura visual de todas las cards
+ * Basado en el estilo de PillarCard como estándar
+ */
+
+interface Props {
+  href?: string;
+  className?: string;
+  variant?: 'default' | 'compact' | 'featured';
+  showBorder?: boolean;
+  showHover?: boolean;
+  ariaLabel?: string;
+}
+
+const {
+  href,
+  className = '',
+  variant = 'default',
+  showBorder = true,
+  showHover = true,
+  ariaLabel
+} = Astro.props;
+
+// Clases base estandarizadas (basadas en PillarCard)
+const baseClasses = [
+  'block',
+  'rounded-lg',
+  'overflow-hidden',
+  'h-full',
+  'flex',
+  'flex-col',
+  showBorder && 'border border-gray-200',
+  showHover && 'transition-all duration-300 hover:shadow-lg hover:border-gray-300',
+  className
+].filter(Boolean).join(' ');
+
+// Variantes específicas
+const variantClasses = {
+  default: '',
+  compact: 'text-sm',
+  featured: 'shadow-md'
+};
+
+const finalClasses = `${baseClasses} ${variantClasses[variant]}`;
+---
+
+{href ? (
+  <!-- Card con enlace -->
+  <a
+    href={href}
+    class={finalClasses}
+    aria-label={ariaLabel}
+  >
+    <slot />
+  </a>
+) : (
+  <!-- Card sin enlace -->
+  <article class={finalClasses}>
+    <slot />
+  </article>
+)}

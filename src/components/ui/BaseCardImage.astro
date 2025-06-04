@@ -1,0 +1,59 @@
+---
+/**
+ * BaseCardImage - Componente de Imagen Estandarizado para Cards
+ * 
+ * Imagen estandarizada con aspect-video y hover effects
+ * Basado en el estilo de PillarCard
+ */
+
+interface Props {
+  src: string;
+  alt: string;
+  loading?: 'lazy' | 'eager';
+  width?: number;
+  height?: number;
+  showHoverEffect?: boolean;
+  aspectRatio?: 'video' | 'square' | 'custom';
+  className?: string;
+}
+
+const {
+  src,
+  alt,
+  loading = 'lazy',
+  width = 300,
+  height = 200,
+  showHoverEffect = true,
+  aspectRatio = 'video',
+  className = ''
+} = Astro.props;
+
+// Clases de aspect ratio
+const aspectClasses = {
+  video: 'aspect-video',
+  square: 'aspect-square',
+  custom: ''
+};
+
+// Clases de imagen estandarizadas
+const imageClasses = [
+  'w-full',
+  'h-full',
+  'object-cover',
+  showHoverEffect && 'transition-transform duration-300 hover:scale-105'
+].filter(Boolean).join(' ');
+
+const containerClasses = `${aspectClasses[aspectRatio]} overflow-hidden ${className}`;
+---
+
+<!-- Imagen estandarizada -->
+<div class={containerClasses}>
+  <img
+    src={src}
+    alt={alt}
+    class={imageClasses}
+    loading={loading}
+    width={width}
+    height={height}
+  />
+</div>
