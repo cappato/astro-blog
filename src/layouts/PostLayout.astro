@@ -203,26 +203,12 @@ const currentPost = {
       </div>
 
       <div class="p-6">
-        <!-- Metadatos del post -->
-        <div class="mb-6 pb-4">
+        <!-- PRIORIDAD 1: Título y metadatos mínimos para SEO -->
+        <header class="mb-6">
           <h1 class="text-3xl font-bold mb-3">{title}</h1>
 
-          <!-- Autor compacto al inicio del artículo -->
-          <div class="mb-4">
-            <AuthorCard
-              variant="compact"
-              layout="horizontal"
-              showBio="short"
-              showStats={false}
-              showAchievements={false}
-              showSkills={false}
-              showSocial={true}
-              maxSocialLinks={3}
-              className="author-byline"
-            />
-          </div>
-
-          <div class="flex flex-wrap items-center text-sm mb-3">
+          <!-- Metadatos críticos mínimos -->
+          <div class="flex flex-wrap items-center text-sm text-secondary mb-4">
             <span class="mr-4 flex items-center">
               <i class="mr-1"></i> {formattedDate}
             </span>
@@ -230,65 +216,64 @@ const currentPost = {
               <i class="mr-1"></i> {readingTimeText}
             </span>
           </div>
+        </header>
 
-          <!-- Barra de compartir horizontal (componente) -->
-          <div class="mb-4">
-            <ShareButtons url={currentUrl} title={title} compact={true} />
-          </div>
+        <!-- PRIORIDAD 2: Contenido principal (crítico para SEO) -->
+        <main class="prose prose-lg max-w-none prose-gray dark:prose-invert mb-8">
+          <slot />
+        </main>
 
-          <!-- Tags -->
+        <!-- PRIORIDAD 3: Metadatos relevantes para SEO -->
+        <aside class="mb-8">
+          <!-- Tags (keywords importantes para SEO) -->
           {tags && tags.length > 0 && (
-            <div class="mt-4">
+            <div class="mb-6">
               <TagList tags={tags} />
             </div>
           )}
-        </div>
+        </aside>
 
-        <!-- Contenido del post -->
-        <div class="prose prose-lg max-w-none prose-gray dark:prose-invert">
-          <slot />
-        </div>
-
-        <!-- Botones para compartir - Movidos después del contenido -->
-        <div class="mt-6 pt-4">
-          <div class="flex items-center justify-between mb-3">
-            <h3 class="text-base font-medium">Compartir Artículo</h3>
+        <!-- PRIORIDAD 4: Engagement y contenido relacionado -->
+        <footer class="space-y-8">
+          <!-- Botones para compartir (una sola vez) -->
+          <div class="pt-4 border-t border-primary">
+            <div class="flex items-center justify-between mb-3">
+              <h3 class="text-base font-medium">Compartir Artículo</h3>
+            </div>
+            <ShareButtons url={currentUrl} title={title} compact={true} showTitle={false} />
           </div>
 
-          <!-- Componente de botones para compartir (versión compacta) -->
-          <ShareButtons url={currentUrl} title={title} compact={true} showTitle={false} />
-        </div>
-
-        <!-- Módulo de Autor Extendido -->
-        <div class="mt-8 pt-6">
-          <h3 class="text-lg font-medium mb-4">Autor</h3>
-          <AuthorCard
-            variant="full"
-            layout="vertical"
-            showBio="extended"
-            showStats={true}
-            showAchievements={true}
-            showSkills={true}
-            showSocial={true}
-            maxSocialLinks={6}
-            className="author-extended"
+          <!-- Artículos Relacionados -->
+          <RelatedArticles
+            currentPost={currentPost}
+            maxArticles={3}
+            variant="grid"
+            cardStyle="standard"
+            showReadingTime={true}
+            showPublishDate={true}
+            showTags={true}
+            showExcerpt={true}
+            showThumbnail={true}
+            title="Artículos Relacionados"
+            className=""
           />
-        </div>
 
-        <!-- Artículos Relacionados -->
-        <RelatedArticles
-          currentPost={currentPost}
-          maxArticles={3}
-          variant="grid"
-          cardStyle="standard"
-          showReadingTime={true}
-          showPublishDate={true}
-          showTags={true}
-          showExcerpt={true}
-          showThumbnail={true}
-          title="Artículos Relacionados"
-          className=""
-        />
+          <!-- Módulo de Autor Extendido (opcional, al final) -->
+          <div class="pt-6 border-t border-primary">
+            <h3 class="text-lg font-medium mb-4">Sobre el Autor</h3>
+            <AuthorCard
+              variant="full"
+              layout="vertical"
+              showBio="extended"
+              showStats={true}
+              showAchievements={true}
+              showSkills={true}
+              showSocial={true}
+              maxSocialLinks={6}
+              className="author-extended"
+            />
+          </div>
+        </footer>
       </div>
       </article>
     </ContentWidth>
