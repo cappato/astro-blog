@@ -33,10 +33,10 @@ const navItems = NAVIGATION_CONFIG.homeNavItems;
   </button>
 
   <!-- Menú móvil usando slot additional -->
-  <div slot="additional" id="mobile-menu" class="fixed inset-0 z-50 hidden">
+  <div slot="additional" id="mobile-menu" class="fixed inset-0 z-50 hidden bg-primary">
   <div class="flex flex-col h-full">
     <div class="flex justify-end p-4">
-      <button id="close-menu" class="p-2">
+      <button id="close-menu" class="p-2 text-primary hover:text-secondary transition-colors">
         <Icon name="close" size={24} />
       </button>
     </div>
@@ -45,7 +45,7 @@ const navItems = NAVIGATION_CONFIG.homeNavItems;
         <NavLink
           href={item.href}
           section={item.section}
-          className="nav-link-mobile px-5 py-3 w-64 text-center"
+          className="nav-link-mobile px-5 py-3 w-64 text-center text-primary hover:text-secondary transition-colors"
         >
           {item.label}
         </NavLink>

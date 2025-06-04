@@ -223,42 +223,23 @@ const currentPost = {
           <slot />
         </main>
 
-        <!-- PRIORIDAD 3: Metadatos relevantes para SEO -->
-        <aside class="mb-8">
-          <!-- Tags (keywords importantes para SEO) -->
+        <!-- PRIORIDAD 3: Metadatos y engagement -->
+        <footer class="space-y-8">
+          <!-- Tags relacionados -->
           {tags && tags.length > 0 && (
-            <div class="mb-6">
+            <div class="pt-4 border-t border-primary">
+              <h3 class="text-base font-medium mb-3">Tags Relacionados</h3>
               <TagList tags={tags} />
             </div>
           )}
-        </aside>
 
-        <!-- PRIORIDAD 4: Engagement y contenido relacionado -->
-        <footer class="space-y-8">
-          <!-- Botones para compartir (una sola vez) -->
+          <!-- Botones para compartir -->
           <div class="pt-4 border-t border-primary">
-            <div class="flex items-center justify-between mb-3">
-              <h3 class="text-base font-medium">Compartir Artículo</h3>
-            </div>
+            <h3 class="text-base font-medium mb-3">Compartir Artículo</h3>
             <ShareButtons url={currentUrl} title={title} compact={true} showTitle={false} />
           </div>
 
-          <!-- Artículos Relacionados -->
-          <RelatedArticles
-            currentPost={currentPost}
-            maxArticles={3}
-            variant="grid"
-            cardStyle="standard"
-            showReadingTime={true}
-            showPublishDate={true}
-            showTags={true}
-            showExcerpt={true}
-            showThumbnail={true}
-            title="Artículos Relacionados"
-            className=""
-          />
-
-          <!-- Módulo de Autor Extendido (opcional, al final) -->
+          <!-- Módulo de Autor -->
           <div class="pt-6 border-t border-primary">
             <h3 class="text-lg font-medium mb-4">Sobre el Autor</h3>
             <AuthorCard
@@ -271,6 +252,23 @@ const currentPost = {
               showSocial={true}
               maxSocialLinks={6}
               className="author-extended"
+            />
+          </div>
+
+          <!-- Artículos Relacionados -->
+          <div class="pt-6 border-t border-primary">
+            <RelatedArticles
+              currentPost={currentPost}
+              maxArticles={3}
+              variant="grid"
+              cardStyle="standard"
+              showReadingTime={true}
+              showPublishDate={true}
+              showTags={true}
+              showExcerpt={true}
+              showThumbnail={true}
+              title="Artículos Relacionados"
+              className=""
             />
           </div>
         </footer>

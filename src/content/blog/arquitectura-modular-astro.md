@@ -239,4 +239,4 @@ La **arquitectura modular** no es solo sobre organización de código, es sobre 
 
 ---
 
-**¿Te gustó este artículo?** Sígueme para más contenido sobre arquitectura web moderna y mejores prácticas de desarrollo.
+
