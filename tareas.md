@@ -1,4 +1,34 @@
-este modulo de autor tiene mucho espacio en blanco por debajo de la imagen comom una columna vacia, sobretodo en movil queda peor, podrias hacer magia y cambiar la estructura para que se vea mucho mejor, podes tomar como ejemplo esto para darle mas flexibiad al modulo de autor?
+## ✅ Mejorar módulo de autor - RESUELTO
+
+**Problema:** El módulo de autor actual tiene espacio en blanco excesivo en móvil y podría usar una estructura más flexible.
+
+**Solución implementada:** ✅ Refactorizado el componente AuthorCard con estructura responsive optimizada.
+
+**Cambios realizados:**
+- ✅ Reemplazado wrapper Card con card-base styling directo para mejor control
+- ✅ Implementado layout flex responsive: columna en móvil, fila en desktop
+- ✅ Contenido centrado en móvil, alineado izquierda en desktop
+- ✅ Avatar optimizado: más grande en móvil (24x24), más pequeño en desktop (20x20)
+- ✅ Gestión de espaciado y gaps responsive mejorada
+- ✅ Links sociales centrados en móvil, alineados derecha en desktop
+- ✅ Texto bio centrado en móvil, izquierda en desktop
+- ✅ Tags de especialidades con centrado responsive
+- ✅ Grid de logros mejorado (1 columna móvil, 2 desktop)
+- ✅ Sección stats con justificación responsive
+- ✅ Eliminado import Card no usado
+- ✅ Agregado tipado TypeScript para funciones map
+- ✅ Cambiado PostLayout a layout horizontal para mejor utilización del espacio
+
+**Beneficios logrados:**
+- ✅ Eliminado problema de espacio en blanco en móvil
+- ✅ Mejor jerarquía de contenido y legibilidad
+- ✅ Consistencia de diseño responsive mejorada
+- ✅ Apariencia profesional en todos los tamaños de pantalla
+- ✅ Experiencia de usuario móvil mejorada
+
+**Commit:** `a39c055` - feat(ui): optimize author module layout for better mobile experience
+
+**Estructura implementada (ejemplo de referencia):**
 <div class="card-base p-4 sm:p-6 author-extended">
   <div class="flex flex-col sm:flex-row sm:items-start sm:gap-4">
     <!-- Avatar -->
