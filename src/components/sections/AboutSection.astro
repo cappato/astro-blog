@@ -6,47 +6,47 @@ import ContentWidth from '../layout/ContentWidth.astro';
 ---
 
 <!-- About Section -->
-<ContentContainer as="section" className="py-10" width="standard">
+<ContentContainer as="section" id="about" className="py-10" width="standard">
     <ContentWidth>
-        <h2 class="text-3xl font-bold text-blue-600 dark:text-blue-400 mb-6 border-b border-card pb-2">About me</h2>
+        <h2 class="text-3xl font-bold mb-6 pb-2">About me</h2>
     </ContentWidth>
 
     <ContentWidth>
         <Card variant="default">
         <div class="flex flex-col md:flex-row items-center md:items-start gap-6">
-            <div class="w-32 h-32 md:w-48 md:h-48 rounded-full overflow-hidden bg-gray-100 dark:bg-gray-700 flex-shrink-0">
+            <div class="w-32 h-32 md:w-48 md:h-48 overflow-hidden flex-shrink-0">
                 <!-- Real profile image -->
                 <img src="/images/profile.webp" alt="Matías Sebastián Cappato" class="w-full h-full object-cover" width="192" height="192" loading="eager">
             </div>
             <div class="flex-1">
-                <h1 class="text-2xl md:text-4xl font-bold text-blue-600 dark:text-blue-400 mb-2 text-center md:text-left">Matías Sebastián Cappato</h1>
-                <h2 class="text-lg md:text-2xl text-green-600 dark:text-green-400 mb-4 text-center md:text-left">System Analyst | Full Stack Developer</h2>
-                <div class="space-y-2 text-content">
+                <h1 class="text-2xl md:text-4xl font-bold mb-2 text-center">Matías Sebastián Cappato</h1>
+                <h2 class="text-lg md:text-2xl mb-4 text-center">System Analyst | Full Stack Developer</h2>
+                <div class="space-y-2">
                     <p class="flex items-center text-sm sm:text-base">
                         <span class="w-6 mr-2"><Icon name="location" size={16} /></span>
                         Mar del Plata, Buenos Aires, Argentina
                     </p>
                     <p class="flex items-center text-sm sm:text-base">
                         <span class="w-6 mr-2"><Icon name="email" size={16} /></span>
-                        <a href="mailto:matias@cappato.dev" class="text-blue-600 dark:text-blue-400 hover:text-blue-700 dark:hover:text-blue-300 hover:underline transition-colors">matias@cappato.dev</a>
+                        <a href="mailto:matias@cappato.dev" >matias@cappato.dev</a>
                     </p>
                     <p class="flex items-center text-sm sm:text-base">
                         <span class="w-6 mr-2"><Icon name="github" size={16} /></span>
-                        <a href="https://github.com/cappato" class="text-blue-600 dark:text-blue-400 hover:text-blue-700 dark:hover:text-blue-300 hover:underline transition-colors">github.com/cappato</a>
+                        <a href="https://github.com/cappato" >github.com/cappato</a>
                     </p>
                     <p class="flex items-center text-sm sm:text-base">
                         <span class="w-6 mr-2"><Icon name="linkedin" size={16} /></span>
-                        <a href="https://www.linkedin.com/in/matiascappato/" class="text-blue-600 dark:text-blue-400 hover:text-blue-700 dark:hover:text-blue-300 hover:underline transition-colors">linkedin.com/in/matiascappato</a>
+                        <a href="https://www.linkedin.com/in/matiascappato/" >linkedin.com/in/matiascappato</a>
                     </p>
                 </div>
                 <div class="mt-6 flex flex-wrap justify-center md:justify-start gap-3">
                     <a href="#"
-                       class="bg-blue-600 dark:bg-blue-500 hover:bg-blue-700 dark:hover:bg-blue-600 text-white px-3 py-2 rounded-lg transition-colors text-sm sm:text-base font-medium"
+                       class="px-3 py-2 text-sm sm:text-base font-medium"
                        aria-label="Descargar currículum">
                        Download Resume
                     </a>
                     <a href="#contact"
-                       class="bg-gray-700 hover:bg-gray-600 text-white px-3 py-2 rounded-lg transition-colors text-sm sm:text-base font-medium">
+                       class="px-3 py-2 text-sm sm:text-base font-medium">
                        Contact
                     </a>
                 </div>
