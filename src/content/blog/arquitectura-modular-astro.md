@@ -10,8 +10,6 @@ tags: ["astro", "arquitectura", "typescript", "modular", "features"]
 draft: false
 ---
 
-# Arquitectura Modular en Astro: Cómo Construir Features Reutilizables
-
 En el desarrollo web moderno, la **modularidad** no es solo una buena práctica, es una necesidad. Después de trabajar en múltiples proyectos con Astro, he desarrollado una arquitectura que permite crear features completamente **self-contained** y **reutilizables** entre proyectos.
 
 ## 🎯 El Problema de las Arquitecturas Monolíticas

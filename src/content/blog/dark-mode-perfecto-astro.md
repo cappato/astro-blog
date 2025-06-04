@@ -10,8 +10,6 @@ tags: ["dark-mode", "astro", "ssr", "css-variables", "theme-system"]
 draft: false
 ---
 
-# Dark Mode Perfecto: Anti-flicker y Persistencia con Astro
-
 El **dark mode** se ha vuelto esencial, pero implementarlo **sin flash** y con **persistencia perfecta** es más complejo de lo que parece. Te muestro cómo crear un sistema de temas profesional.
 
 ## 🎯 El Problema del Flash de Contenido

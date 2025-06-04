@@ -10,8 +10,6 @@ tags: ["testing", "vitest", "performance", "seo-testing", "automation"]
 draft: false
 ---
 
-# Testing Automatizado para Sitios Estáticos: SEO, Performance y Accesibilidad
-
 El **testing manual** de sitios web es lento, propenso a errores y no escala. Te muestro cómo implementar una **suite de testing automática** que valida todo: desde SEO hasta performance.
 
 ## 🎯 El Problema del Testing Manual

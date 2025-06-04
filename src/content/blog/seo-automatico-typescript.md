@@ -10,8 +10,6 @@ tags: ["seo", "typescript", "schema.org", "performance", "meta-tags"]
 draft: false
 ---
 
-# SEO Automático con TypeScript: Meta Tags, Schema.org y Performance
-
 El **SEO manual** es propenso a errores y difícil de mantener. Después de optimizar decenas de sitios web, he desarrollado un sistema **completamente automático** que genera SEO perfecto usando TypeScript.
 
 ## 🎯 El Problema del SEO Manual

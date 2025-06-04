@@ -10,8 +10,6 @@ draft: false
 slug: "bienvenida-a-mi-blog"
 ---
 
-# ¡Este es mi primer post en el blog hecho con Astro!
-
 Estoy comenzando a escribir sobre desarrollo web, inteligencia artificial y más.
 
 ## ¿Por qué un blog técnico?
