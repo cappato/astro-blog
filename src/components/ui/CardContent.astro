@@ -1,0 +1,86 @@
+---
+/**
+ * CardContent - Componente unificado para el contenido de todas las cards
+ * Elimina duplicación de código y garantiza consistencia visual
+ */
+
+import TagList from '../blog/TagList.astro';
+
+interface Props {
+  /** Título de la card */
+  title: string;
+  /** Información meta (fecha, cantidad de artículos, etc.) */
+  metaInfo: string;
+  /** Descripción del contenido */
+  description: string;
+  /** Lista de tags */
+  tags?: string[];
+  /** Máximo número de tags a mostrar */
+  maxTags?: number;
+  /** Si los tags deben ser clickeables */
+  clickableTags?: boolean;
+  /** Clase CSS adicional para el contenedor */
+  className?: string;
+}
+
+const {
+  title,
+  metaInfo,
+  description,
+  tags = [],
+  maxTags = 3,
+  clickableTags = false,
+  className = ''
+} = Astro.props;
+
+// Calcular tags a mostrar y contador de extras
+const displayTags = tags.slice(0, maxTags);
+const extraTagsCount = tags.length > maxTags ? tags.length - maxTags : 0;
+---
+
+<div class={`flex-1 p-4 flex flex-col ${className}`}>
+  <!-- Header -->
+  <header class="mb-3">
+    <h3 class="text-lg font-semibold mb-2 line-clamp-2 text-primary">
+      {title}
+    </h3>
+
+    <!-- Meta info -->
+    <div class="flex items-center justify-between text-sm text-muted">
+      <span class="font-medium">
+        {metaInfo}
+      </span>
+    </div>
+  </header>
+
+  <!-- Description -->
+  <p class="text-secondary mb-4 flex-1 line-clamp-3">
+    {description}
+  </p>
+
+  <!-- Tags -->
+  {tags.length > 0 && (
+    <div class="flex flex-wrap gap-1 mb-4">
+      {displayTags.map(tag => (
+        clickableTags ? (
+          <a 
+            href={`/blog/tag/${tag}`}
+            class="text-xs px-2 py-1 bg-gray-100 dark:bg-gray-700 rounded-md text-gray-600 dark:text-gray-300 inline-block no-underline hover:bg-gray-200 dark:hover:bg-gray-600 transition-colors duration-200 focus:outline-none focus:ring-2 focus:ring-gray-400 focus:ring-offset-2"
+            aria-label={`Ver artículos con la etiqueta ${tag}`}
+          >
+            #{tag}
+          </a>
+        ) : (
+          <span class="text-xs px-2 py-1 bg-gray-100 dark:bg-gray-700 rounded-md text-gray-600 dark:text-gray-300">
+            #{tag}
+          </span>
+        )
+      ))}
+      {extraTagsCount > 0 && (
+        <span class="text-xs px-2 py-1 bg-gray-100 dark:bg-gray-700 rounded-md text-gray-600 dark:text-gray-300">
+          +{extraTagsCount}
+        </span>
+      )}
+    </div>
+  )}
+</div>

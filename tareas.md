@@ -24,3 +24,33 @@ articulos relacionados, presente en todos los posts, tambien tiene un content in
 #astro </span><span class="text-xs px-2 py-1 bg-gray-100 dark:bg-gray-700 rounded-md text-gray-600 dark:text-gray-300">
 #ssr </span> <span class="text-xs px-2 py-1 bg-gray-100 dark:bg-gray-700 rounded-md text-gray-600 dark:text-gray-300">
 +2 </span> </div> <!-- Relation reasons (solo en desarrollo) -->  </div>
+
+
+✅ TAREA COMPLETADA:
+Pensando como un grupo de ingenieros arquitectos de software con especialidad en blog astro tailwind y buenas practicas modernas, esta cantidad de codigo repetida no deberia unificarse??
+
+SOLUCION IMPLEMENTADA:
+
+**🎯 Prompt para IA especializada (como GPT o Claude):**
+
+---
+
+**Necesito que me ayudes a unificar y reutilizar una estructura común de contenido de tarjeta en un proyecto Astro con Tailwind CSS.** Actualmente tengo múltiples componentes (`PillarCard.astro`, `BlogPostCard.astro`, `RelatedArticleCard.astro`, etc.) que repiten la misma estructura visual para mostrar una card de artículo o pilar. La única diferencia entre ellas es el dato variable (fecha en artículos, cantidad de artículos en pilares, etc.), pero el layout, estilos y jerarquía de contenido son idénticos o deberían serlo.
+
+**Objetivo:**
+Extraer la parte común de la estructura (header con título, meta info, descripción, tags) en un solo componente reutilizable (por ejemplo, `CardContent.astro`), que acepte props para los valores variables y se pueda usar dentro de cualquier tipo de tarjeta (`BaseCard`, `RelatedArticleCard`, etc.).
+
+**Alcance:**
+
+* Identificar todos los archivos donde se repite esta estructura.
+* Crear un nuevo componente con los slots o props adecuados para recibir:
+
+  * Título
+  * Fecha o cantidad de artículos
+  * Descripción
+  * Lista de tags (clickeables o no)
+* Reemplazar la lógica duplicada en cada tipo de card con este nuevo componente reutilizable.
+* Garantizar que todos los estilos de texto, espaciados, colores, redondeado y comportamiento de los tags sean consistentes, tanto para `span` como para `a`.
+* Asegurar que todos los tags visualmente tengan el mismo diseño aunque algunos sean clickeables y otros no.
+
+**Quiero un paso a paso claro para hacer esta refactorización con buenas prácticas, manteniendo accesibilidad y consistencia visual.**

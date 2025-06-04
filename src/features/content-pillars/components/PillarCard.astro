@@ -7,6 +7,7 @@
 
 import type { PillarCardProps } from '../types/pillars.types';
 import { generatePillarUrl } from '../utils/pillar-manager';
+import CardContent from '../../../components/ui/CardContent.astro';
 
 interface Props extends PillarCardProps {}
 
@@ -20,6 +21,11 @@ const {
 } = Astro.props;
 
 const pillarUrl = generatePillarUrl(pillar.id);
+
+// Preparar metaInfo para el componente unificado
+const metaInfo = showPostCount && postCount > 0
+  ? `${postCount} ${postCount === 1 ? 'artículo' : 'artículos'}`
+  : '';
 ---
 
 <!-- Pillar Card con estilo similar a artículos relacionados -->
@@ -42,46 +48,25 @@ const pillarUrl = generatePillarUrl(pillar.id);
     </div>
 
     <!-- Content -->
-    <div class="flex-1 p-4 flex flex-col">
-      <!-- Header -->
-      <header class="mb-3">
-        <h3 class="text-lg font-semibold mb-2 line-clamp-2">
-          {pillar.title}
-        </h3>
-
-        <!-- Meta info -->
-        <div class="flex items-center justify-between text-sm text-muted">
-          {showPostCount && postCount > 0 && (
-            <span class="font-medium">
-              {postCount} {postCount === 1 ? 'artículo' : 'artículos'}
-            </span>
-          )}
-        </div>
-      </header>
-
-      <!-- Description -->
-      {showDescription && variant !== 'compact' && (
-        <div class="mb-4 flex-1">
-          <p class="text-sm text-muted line-clamp-3">{pillar.description}</p>
-        </div>
-      )}
-
-      <!-- Tags -->
-      {pillar.tags && pillar.tags.length > 0 && (
-        <div class="flex flex-wrap gap-1 mb-4">
-          {pillar.tags.slice(0, 3).map(tag => (
-            <span class="text-xs px-2 py-1 bg-gray-100 dark:bg-gray-700 rounded-md text-gray-600 dark:text-gray-300">
-              #{tag}
-            </span>
-          ))}
-          {pillar.tags.length > 3 && (
-            <span class="text-xs px-2 py-1 bg-gray-100 dark:bg-gray-700 rounded-md text-gray-600 dark:text-gray-300">
-              +{pillar.tags.length - 3}
-            </span>
-          )}
-        </div>
-      )}
-    </div>
+    {showDescription && variant !== 'compact' ? (
+      <CardContent
+        title={pillar.title}
+        metaInfo={metaInfo}
+        description={pillar.description}
+        tags={pillar.tags}
+        maxTags={3}
+        clickableTags={false}
+      />
+    ) : (
+      <CardContent
+        title={pillar.title}
+        metaInfo={metaInfo}
+        description=""
+        tags={pillar.tags}
+        maxTags={3}
+        clickableTags={false}
+      />
+    )}
 
     <!-- Footer con CTA -->
     <footer class="p-4 pt-0 mt-auto">

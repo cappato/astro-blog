@@ -8,6 +8,7 @@
 
 import type { RelatedArticleCardProps } from '../types/related.types';
 import { getReadingTime, formatReadingTime } from '../../reading-time';
+import CardContent from '../../../components/ui/CardContent.astro';
 
 interface Props extends RelatedArticleCardProps {}
 
@@ -50,6 +51,16 @@ const excerpt = description && description.length > 150
 
 // Tags a mostrar (máximo 3)
 const displayTags = tags ? tags.slice(0, 3) : [];
+
+// Preparar metaInfo para el componente unificado
+let metaInfo = '';
+if (showPublishDate && showReadingTime) {
+  metaInfo = `${formattedDate} • ${formattedReadingTime}`;
+} else if (showPublishDate) {
+  metaInfo = formattedDate;
+} else if (showReadingTime) {
+  metaInfo = formattedReadingTime;
+}
 ---
 
 <!-- Related Article Card - Estructura basada en PillarCard -->
@@ -81,49 +92,24 @@ const displayTags = tags ? tags.slice(0, 3) : [];
 
     <!-- Content -->
     <div class="flex-1 p-4 flex flex-col">
-      <!-- Header -->
-      <header class="mb-3">
-        <h3 class="text-lg font-semibold mb-2 line-clamp-2">
-          {title}
-        </h3>
-
-        <!-- Meta info -->
-        <div class="flex items-center justify-between text-sm text-muted">
-          {showPublishDate && (
-            <time datetime={date.toISOString()}>
-              {formattedDate}
-            </time>
-          )}
-
-          {showReadingTime && (
-            <span>
-              {formattedReadingTime}
-            </span>
-          )}
-        </div>
-      </header>
-
-      <!-- Description -->
-      {showExcerpt && excerpt && variant !== 'minimal' && (
-        <div class="mb-4 flex-1">
-          <p class="text-secondary line-clamp-3">{excerpt}</p>
-        </div>
-      )}
-
-      <!-- Tags -->
-      {showTags && displayTags.length > 0 && (
-        <div class="flex flex-wrap gap-1 mb-4">
-          {displayTags.map(tag => (
-            <span class="text-xs px-2 py-1 bg-gray-100 dark:bg-gray-700 rounded-md text-gray-600 dark:text-gray-300">
-              #{tag}
-            </span>
-          ))}
-          {tags && tags.length > 3 && (
-            <span class="text-xs px-2 py-1 bg-gray-100 dark:bg-gray-700 rounded-md text-gray-600 dark:text-gray-300">
-              +{tags.length - 3}
-            </span>
-          )}
-        </div>
+      {showExcerpt && excerpt && variant !== 'minimal' ? (
+        <CardContent
+          title={title}
+          metaInfo={metaInfo}
+          description={excerpt}
+          tags={showTags ? displayTags : []}
+          maxTags={3}
+          clickableTags={false}
+        />
+      ) : (
+        <CardContent
+          title={title}
+          metaInfo={metaInfo}
+          description=""
+          tags={showTags ? displayTags : []}
+          maxTags={3}
+          clickableTags={false}
+        />
       )}
 
       <!-- Relation reasons (solo en desarrollo) -->
