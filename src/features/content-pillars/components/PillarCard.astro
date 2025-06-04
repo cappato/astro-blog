@@ -7,7 +7,6 @@
 
 import type { PillarCardProps } from '../types/pillars.types';
 import { generatePillarUrl } from '../utils/pillar-manager';
-import Card from '../../../components/ui/Card.astro';
 
 interface Props extends PillarCardProps {}
 
@@ -17,7 +16,6 @@ const {
   variant = 'default',
   showDescription = true,
   showPostCount = true,
-  showIcon = true,
   className = ''
 } = Astro.props;
 
@@ -25,18 +23,18 @@ const pillarUrl = generatePillarUrl(pillar.id);
 ---
 
 <!-- Pillar Card con estilo similar a artículos relacionados -->
-<article class={`pillar-card pillar-card--${variant} ${className}`}>
+<article class={`${className}`}>
   <a
     href={pillarUrl}
-    class="pillar-card__link"
+    class="block rounded-lg overflow-hidden transition-all duration-300 hover:shadow-lg h-full flex flex-col border border-gray-200 hover:border-gray-300"
     aria-label={`Explorar artículos sobre ${pillar.title}`}
   >
     <!-- Thumbnail -->
-    <div class="pillar-card__thumbnail">
+    <div class="aspect-video overflow-hidden">
       <img
         src={pillar.image.src}
         alt={pillar.image.alt}
-        class="pillar-card__image"
+        class="w-full h-full object-cover transition-transform duration-300 hover:scale-105"
         loading="lazy"
         width="300"
         height="200"
@@ -44,24 +42,18 @@ const pillarUrl = generatePillarUrl(pillar.id);
     </div>
 
     <!-- Content -->
-    <div class="pillar-card__content">
+    <div class="flex-1 p-4 flex flex-col">
       <!-- Header -->
-      <header class="pillar-card__header">
-        <h3 class="pillar-card__title">
+      <header class="mb-3">
+        <h3 class="text-lg font-semibold mb-2 line-clamp-2">
           {pillar.title}
         </h3>
 
         <!-- Meta info -->
-        <div class="pillar-card__meta">
+        <div class="flex items-center justify-between text-sm text-gray-600">
           {showPostCount && postCount > 0 && (
-            <span class="pillar-card__post-count">
+            <span class="font-medium">
               {postCount} {postCount === 1 ? 'artículo' : 'artículos'}
-            </span>
-          )}
-
-          {showIcon && pillar.emoji && (
-            <span class="pillar-card__emoji">
-              {pillar.emoji}
             </span>
           )}
         </div>
@@ -69,21 +61,21 @@ const pillarUrl = generatePillarUrl(pillar.id);
 
       <!-- Description -->
       {showDescription && variant !== 'compact' && (
-        <div class="pillar-card__description">
-          <p>{pillar.description}</p>
+        <div class="mb-4 flex-1">
+          <p class="text-sm text-gray-600 line-clamp-3">{pillar.description}</p>
         </div>
       )}
 
       <!-- Tags -->
       {pillar.tags && pillar.tags.length > 0 && (
-        <div class="pillar-card__tags">
+        <div class="flex flex-wrap gap-1 mb-4">
           {pillar.tags.slice(0, 3).map(tag => (
-            <span class="pillar-card__tag">
+            <span class="text-xs px-2 py-1 bg-gray-100 rounded-full text-gray-600">
               #{tag}
             </span>
           ))}
           {pillar.tags.length > 3 && (
-            <span class="pillar-card__tag-more">
+            <span class="text-xs px-2 py-1 bg-gray-100 rounded-full text-gray-600">
               +{pillar.tags.length - 3}
             </span>
           )}
@@ -92,10 +84,10 @@ const pillarUrl = generatePillarUrl(pillar.id);
     </div>
 
     <!-- Footer con CTA -->
-    <footer class="pillar-card__footer">
-      <div class="pillar-card__cta">
+    <footer class="p-4 pt-0 mt-auto">
+      <div class="flex items-center justify-between text-sm font-medium text-blue-600">
         <span>Explorar artículos</span>
-        <svg class="pillar-card__cta-icon" width="16" height="16" viewBox="0 0 16 16" aria-hidden="true">
+        <svg class="w-4 h-4" width="16" height="16" viewBox="0 0 16 16" aria-hidden="true">
           <path d="M6 4l4 4-4 4" stroke="currentColor" stroke-width="2" fill="none"/>
         </svg>
       </div>

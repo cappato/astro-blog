@@ -98,14 +98,14 @@ const imageId = `img-${Math.random().toString(36).substr(2, 9)}`;
 
 <!-- Container con aspect ratio -->
 <div 
-  class={`optimized-image-container ${aspectRatio ? 'has-aspect-ratio' : ''}`}
+  class={`${aspectRatio ? 'has-aspect-ratio' : ''}`}
   style={aspectRatio ? `aspect-ratio: ${aspectRatio}` : undefined}
   data-image-id={imageId}
 >
   <!-- LQIP Background -->
   {showLQIP && (
     <div 
-      class="optimized-image-lqip"
+      
       style={`background-image: url('${sources.lqip}')`}
     ></div>
   )}
@@ -127,8 +127,8 @@ const imageId = `img-${Math.random().toString(36).substr(2, 9)}`;
 
   <!-- Loading indicator -->
   {lazy && !priority && (
-    <div class="optimized-image-loading">
-      <div class="loading-spinner"></div>
+    <div >
+      <div ></div>
     </div>
   )}
 </div>
@@ -160,12 +160,12 @@ const imageId = `img-${Math.random().toString(36).substr(2, 9)}`;
     });
 
     // Observar todas las imágenes lazy
-    document.querySelectorAll('.optimized-image--lazy').forEach(img => {
+    document.querySelectorAll('[data-lazy="true"]').forEach(img => {
       imageObserver.observe(img);
     });
   } else {
     // Fallback para navegadores sin IntersectionObserver
-    document.querySelectorAll('.optimized-image--lazy').forEach(img => {
+    document.querySelectorAll('[data-lazy="true"]').forEach(img => {
       const image = img as HTMLImageElement;
       if (image.dataset.src) {
         image.src = image.dataset.src;
@@ -178,7 +178,7 @@ const imageId = `img-${Math.random().toString(36).substr(2, 9)}`;
   // Manejar eventos de carga de imagen
   document.addEventListener('load', (e) => {
     const target = e.target as HTMLImageElement;
-    if (target.classList.contains('optimized-image')) {
+    if (target.dataset.imageId) {
       target.dataset.loaded = 'true';
     }
   }, true);

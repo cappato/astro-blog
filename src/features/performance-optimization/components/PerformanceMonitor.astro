@@ -31,36 +31,36 @@ const {
   <>
     <!-- Performance Metrics Display -->
     {showMetrics && (
-      <div id="performance-monitor" class="performance-monitor">
-        <div class="performance-monitor__header">
-          <h3>⚡ Performance Monitor</h3>
-          <button id="toggle-monitor" class="performance-monitor__toggle">−</button>
+      <div id="performance-monitor" >
+        <div >
+          <h3>Performance Monitor</h3>
+          <button id="toggle-monitor" >−</button>
         </div>
-        <div class="performance-monitor__content">
-          <div class="performance-monitor__metrics">
-            <div class="metric" id="lcp-metric" title="Largest Contentful Paint - Tiempo hasta que el elemento más grande se carga">
-              <span class="metric__label">LCP:</span>
-              <span class="metric__value">—</span>
+        <div >
+          <div >
+            <div  id="lcp-metric" title="Largest Contentful Paint - Tiempo hasta que el elemento más grande se carga">
+              <span >LCP:</span>
+              <span >—</span>
             </div>
-            <div class="metric" id="fid-metric" title="First Input Delay - Tiempo de respuesta a la primera interacción (haz clic en algo)">
-              <span class="metric__label">FID:</span>
-              <span class="metric__value">—</span>
+            <div  id="fid-metric" title="First Input Delay - Tiempo de respuesta a la primera interacción (haz clic en algo)">
+              <span >FID:</span>
+              <span >—</span>
             </div>
-            <div class="metric" id="cls-metric" title="Cumulative Layout Shift - Estabilidad visual de la página">
-              <span class="metric__label">CLS:</span>
-              <span class="metric__value">—</span>
+            <div  id="cls-metric" title="Cumulative Layout Shift - Estabilidad visual de la página">
+              <span >CLS:</span>
+              <span >—</span>
             </div>
-            <div class="metric" id="ttfb-metric" title="Time to First Byte - Tiempo de respuesta del servidor">
-              <span class="metric__label">TTFB:</span>
-              <span class="metric__value">—</span>
+            <div  id="ttfb-metric" title="Time to First Byte - Tiempo de respuesta del servidor">
+              <span >TTFB:</span>
+              <span >—</span>
             </div>
           </div>
-          <div class="performance-monitor__info">
+          <div >
             <small>💡 En desarrollo local algunas métricas pueden aparecer como "—" debido a la velocidad de localhost</small>
           </div>
-          <div class="performance-monitor__actions">
-            <button id="refresh-metrics" class="btn-small">🔄 Refresh</button>
-            <button id="export-metrics" class="btn-small">📊 Export</button>
+          <div >
+            <button id="refresh-metrics" >🔄 Refresh</button>
+            <button id="export-metrics" >📊 Export</button>
           </div>
         </div>
       </div>

@@ -7,12 +7,13 @@ import type { SocialConfig } from './types';
 import { SocialPlatform } from './types';
 import { SHARE_APIS, POPUP_CONFIG, BREAKPOINTS } from '../../../config/urls';
 
-// Colores directos en lugar de importar archivo eliminado
+// Colores neutros usando clases Tailwind estándar
 const SOCIAL_COLORS = {
-  facebook: { bg: '#699CF9', hover: '#5A8AE0', text: '#FFFFFF' },
-  twitter: { bg: '#699CF9', hover: '#5A8AE0', text: '#FFFFFF' },
-  linkedin: { bg: '#699CF9', hover: '#5A8AE0', text: '#FFFFFF' },
-  whatsapp: { bg: '#6B8E23', hover: '#5A7A1E', text: '#FFFFFF' }
+  facebook: { bg: 'bg-gray-600', hover: 'hover:bg-gray-700', text: 'text-white' },
+  twitter: { bg: 'bg-gray-600', hover: 'hover:bg-gray-700', text: 'text-white' },
+  linkedin: { bg: 'bg-gray-600', hover: 'hover:bg-gray-700', text: 'text-white' },
+  whatsapp: { bg: 'bg-gray-600', hover: 'hover:bg-gray-700', text: 'text-white' },
+  copy: { bg: 'bg-gray-600', hover: 'hover:bg-gray-700', text: 'text-white' }
 };
 
 /** Configuración de colores con mejor contraste para accesibilidad */
@@ -43,11 +44,7 @@ export const SOCIAL_CONFIGS: Record<SocialPlatform, SocialConfig> = {
   },
   copy: {
     name: 'Copiar enlace',
-    colors: {
-      bg: SOCIAL_COLORS.facebook.bg, // Usar el mismo azul consistente
-      hover: SOCIAL_COLORS.facebook.hover,
-      text: SOCIAL_COLORS.facebook.text
-    },
+    colors: SOCIAL_COLORS.copy,
     iconName: 'link',
     ariaLabel: 'Copiar enlace al portapapeles'
   }

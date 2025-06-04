@@ -9,6 +9,8 @@
 import type { RelatedArticleCardProps } from '../types/related.types';
 import OptimizedImage from '../../performance-optimization/components/OptimizedImage.astro';
 import { getReadingTime, formatReadingTime } from '../../reading-time';
+import BaseCard from '../../../components/ui/BaseCard.astro';
+import BaseCardImage from '../../../components/ui/BaseCardImage.astro';
 
 interface Props extends RelatedArticleCardProps {}
 
@@ -49,10 +51,10 @@ const cardClasses = [
 ].filter(Boolean).join(' ');
 
 // Imagen del post o placeholder
-const cardImage = image?.url || image || '/images/blog/seo-cover.webp';
+const cardImage = typeof image === 'string' ? image : image?.url || '/images/blog/seo-cover.webp';
 
 // Extracto del post (primeros 150 caracteres de la descripción)
-const excerpt = description && description.length > 150 
+const excerpt = description && description.length > 150
   ? description.substring(0, 150) + '...'
   : description;
 
@@ -60,108 +62,108 @@ const excerpt = description && description.length > 150
 const displayTags = tags ? tags.slice(0, 3) : [];
 ---
 
-<!-- Related Article Card - Estructura Unificada -->
-<article class={`bg-card border border-card rounded-lg overflow-hidden shadow-lg hover:shadow-xl transition-all duration-300 h-full flex flex-col ${className}`}>
-  <a
-    href={postUrl}
-    class="block h-full flex flex-col"
-    aria-label={`Leer artículo: ${title}`}
-  >
-    <!-- Thumbnail -->
-    {showThumbnail && (
-      <div class="flex-shrink-0 relative">
-        <img
-          src={cardImage}
-          alt={title}
-          class="w-full h-48 object-cover transition-transform duration-300 hover:scale-105"
-          loading="lazy"
-          width="600"
-          height="315"
-        />
+<!-- Related Article Card - Estructura Estandarizada -->
+<BaseCard
+  href={postUrl}
+  className={className}
+  ariaLabel={`Leer artículo: ${title}`}
+>
+  <!-- Thumbnail -->
+  {showThumbnail && (
+    <div class="relative">
+      <BaseCardImage
+        src={cardImage}
+        alt={title}
+        loading="lazy"
+        width={600}
+        height={315}
+        aspectRatio="video"
+        showHoverEffect={true}
+      />
 
-        {showSimilarityScore && import.meta.env.DEV && (
-          <div class="absolute top-2 right-2 bg-blue-600 dark:bg-blue-500 text-white text-xs px-2 py-1 rounded">
-            {Math.round(similarityScore * 100)}%
-          </div>
+      {showSimilarityScore && import.meta.env.DEV && (
+        <div class="absolute top-2 right-2 text-xs px-2 py-1 bg-black bg-opacity-50 text-white rounded">
+          {Math.round(similarityScore * 100)}%
+        </div>
+      )}
+    </div>
+  )}
+
+  <!-- Contenido -->
+  <div class="flex-1 p-4 flex flex-col">
+    <!-- Header -->
+    <header class="mb-4">
+      <h3 class="text-xl font-bold mb-2">
+        {title}
+      </h3>
+
+      <!-- Meta info -->
+      <div class="flex items-center gap-3 text-sm text-gray-600 mb-3">
+        {showPublishDate && (
+          <time datetime={date.toISOString()}>
+            {formattedDate}
+          </time>
+        )}
+
+        {showReadingTime && (
+          <span>
+            {formattedReadingTime}
+          </span>
+        )}
+      </div>
+    </header>
+
+    <!-- Description -->
+    {showExcerpt && excerpt && variant !== 'minimal' && (
+      <div class="mb-4 flex-1">
+        <p class="text-sm text-gray-600 line-clamp-3">{excerpt}</p>
+      </div>
+    )}
+
+    <!-- Tags -->
+    {showTags && displayTags.length > 0 && (
+      <div class="flex flex-wrap gap-1 mb-4">
+        {displayTags.map(tag => (
+          <span class="text-xs px-2 py-1 bg-gray-100 rounded-md text-gray-600">
+            #{tag}
+          </span>
+        ))}
+        {tags && tags.length > 3 && (
+          <span class="text-xs px-2 py-1 bg-gray-100 rounded-md text-gray-600">
+            +{tags.length - 3}
+          </span>
         )}
       </div>
     )}
 
-    <!-- Content -->
-    <div class="p-4 flex-1 flex flex-col">
-      <!-- Header -->
-      <header class="mb-4">
-        <h3 class="text-xl font-bold mb-2 line-clamp-2 text-content">
-          {title}
-        </h3>
-
-        <!-- Meta info -->
-        <div class="flex items-center gap-3 text-sm text-secondary mb-3">
-          {showPublishDate && (
-            <time datetime={date.toISOString()}>
-              {formattedDate}
-            </time>
-          )}
-
-          {showReadingTime && (
-            <span>
-              {formattedReadingTime}
-            </span>
-          )}
-        </div>
-      </header>
-
-      <!-- Excerpt -->
-      {showExcerpt && excerpt && variant !== 'minimal' && (
-        <div class="mb-4 flex-1">
-          <p class="text-secondary line-clamp-3">{excerpt}</p>
-        </div>
-      )}
-
-      <!-- Tags -->
-      {showTags && displayTags.length > 0 && (
-        <div class="flex flex-wrap gap-2 mb-4">
-          {displayTags.map(tag => (
-            <span class={`px-2 py-1 rounded-md text-xs font-medium ${matchedTags.includes(tag) ? 'bg-blue-600 dark:bg-blue-500/20 text-blue-600 dark:text-blue-400' : 'bg-green-600 dark:bg-green-500/20 text-green-600 dark:text-green-400'}`}>
-              #{tag}
-            </span>
-          ))}
-          {tags && tags.length > 3 && (
-            <span class="px-2 py-1 rounded-md text-xs font-medium bg-muted/20 text-secondary">
-              +{tags.length - 3}
-            </span>
-          )}
-        </div>
-      )}
-
-      <!-- Relation reasons (solo en desarrollo) -->
-      {import.meta.env.DEV && reasons.length > 0 && (
-        <div class="mb-4 text-xs text-secondary">
-          <details>
-            <summary class="cursor-pointer">¿Por qué es relacionado?</summary>
-            <ul class="mt-2 space-y-1">
-              {reasons.map(reason => (
-                <li>
-                  <strong>{reason.type}:</strong> {reason.details}
-                  <span class="opacity-75">({Math.round(reason.score * 100)}%)</span>
-                </li>
-              ))}
-            </ul>
-          </details>
-        </div>
-      )}
-
-      <!-- Footer -->
-      <div class="mt-auto">
-        <div class="inline-flex items-center text-blue-600 dark:text-blue-400 hover:text-blue-700 dark:hover:text-blue-300 font-medium text-sm transition-colors group">
-          <span>Leer artículo</span>
-          <svg class="w-4 h-4 ml-1 transition-transform duration-300 group-hover:translate-x-1" viewBox="0 0 16 16" fill="currentColor">
-            <path d="M6 4l4 4-4 4" stroke="currentColor" stroke-width="2" fill="none"/>
-          </svg>
-        </div>
+    <!-- Relation reasons (solo en desarrollo) -->
+    {import.meta.env.DEV && reasons.length > 0 && (
+      <div class="mb-4 text-xs">
+        <details>
+          <summary class="cursor-pointer text-gray-500">¿Por qué es relacionado?</summary>
+          <ul class="mt-2 space-y-1 text-gray-600">
+            {reasons.map(reason => (
+              <li>
+                <strong>{reason.type}:</strong> {reason.details}
+                <span class="text-gray-500">({Math.round(reason.score * 100)}%)</span>
+              </li>
+            ))}
+          </ul>
+        </details>
       </div>
+    )}
+  </div>
+
+    <!-- Footer -->
+    <div class="mt-auto">
+      <span class="inline-flex items-center font-medium text-sm text-blue-600 hover:text-blue-700">
+        Leer artículo
+        <svg class="w-4 h-4 ml-1" viewBox="0 0 16 16" fill="currentColor">
+          <path d="M6 4l4 4-4 4" stroke="currentColor" stroke-width="2" fill="none"/>
+        </svg>
+      </span>
     </div>
-  </a>
-</article>
+  </div>
+</BaseCard>
 
 
