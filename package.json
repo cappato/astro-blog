@@ -36,7 +36,11 @@
     "test:schemas:full": "npm run test:schemas && npm run validate:schemas:dev",
     "test:blog": "vitest run src/tests/blog-*.test.ts",
     "test:blog:images": "vitest run src/tests/blog-images.test.ts",
-    "test:blog:structure": "vitest run src/tests/blog-structure.test.ts"
+    "test:blog:structure": "vitest run src/tests/blog-structure.test.ts",
+    "lessons": "node scripts/lessons-learned.js",
+    "lessons:new": "node scripts/lessons-learned.js",
+    "lessons:list": "echo 'Listing lessons...' && find docs/lessons-learned -name '*.md' -not -path '*/templates/*' | sort",
+    "lessons:search": "echo 'Use: npm run lessons' for interactive search"
   },
   "dependencies": {
     "@tailwindcss/typography": "^0.5.16",
