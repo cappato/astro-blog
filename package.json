@@ -40,7 +40,12 @@
     "lessons": "node scripts/lessons-learned.js",
     "lessons:new": "node scripts/lessons-learned.js",
     "lessons:list": "echo 'Listing lessons...' && find docs/lessons-learned -name '*.md' -not -path '*/templates/*' | sort",
-    "lessons:search": "echo 'Use: npm run lessons' for interactive search"
+    "lessons:search": "echo 'Use: npm run lessons' for interactive search",
+    "blog": "node scripts/blog-automation.js",
+    "blog:new": "node scripts/blog-automation.js",
+    "blog:analyze": "echo 'Use: npm run blog' and select option 3",
+    "blog:images": "echo 'Use: npm run blog' and select option 4",
+    "blog:report": "echo 'Use: npm run blog' and select option 8"
   },
   "dependencies": {
     "@tailwindcss/typography": "^0.5.16",

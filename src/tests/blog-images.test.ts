@@ -64,17 +64,21 @@ describe('Blog Post Images', () => {
       if (postId) {
         const imageDir = path.join(process.cwd(), 'public', 'images', postId);
         
-        // Required image variants
+        // Required image variants (optimized - only essential ones)
         const requiredVariants = [
-          'portada.webp',
-          'portada-avif.avif',
-          'portada-og.webp',
-          'portada-og-jpg.jpeg',
-          'portada-og-avif.avif',
-          'portada-thumb.webp',
-          'portada-lqip.webp',
-          'portada-lqip.txt',
-          'portada-wsp.webp'
+          'portada.webp',           // Post principal
+          'portada-avif.avif',      // Formato moderno
+          'portada-thumb.webp',     // Miniaturas (CRÍTICO)
+          'portada-og.webp'         // Redes sociales (CRÍTICO)
+        ];
+
+        // Optional variants (nice to have but not required)
+        const optionalVariants = [
+          'portada-og-jpg.jpeg',    // JPEG fallback (redundante)
+          'portada-og-avif.avif',   // AVIF para OG (pocas redes lo soportan)
+          'portada-wsp.webp',       // WhatsApp (no se usa)
+          'portada-lqip.webp',      // LQIP (no implementado)
+          'portada-lqip.txt'        // LQIP data (no implementado)
         ];
         
         for (const variant of requiredVariants) {
