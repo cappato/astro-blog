@@ -16,6 +16,7 @@ import {
   getPillarById,
   TAG_TO_PILLAR_MAPPING
 } from '../../../features/content-pillars/config/pillars.config';
+import PillarCard from '../../../features/content-pillars/components/PillarCard.astro';
 import {
   getTagUrl,
   transformPostsToCardData
@@ -182,7 +183,7 @@ const customTitle = pillar.title;
 
     <!-- Related Pillars -->
     <aside class="mt-16 pt-8 border-t border-primary">
-      <h3 class="text-xl font-bold mb-6">
+      <h3 class="text-xl font-bold mb-6 text-primary">
         Otros pilares de contenido
       </h3>
       <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
@@ -190,35 +191,12 @@ const customTitle = pillar.title;
           .filter(p => p.id !== pillar.id)
           .slice(0, 4)
           .map(relatedPillar => (
-            <a
-              href={`/blog/pillar/${relatedPillar.id}`}
-              class="card-base block overflow-hidden no-underline"
-            >
-              <!-- Imagen del pilar -->
-              <div class="aspect-video overflow-hidden">
-                <img
-                  src={relatedPillar.image.src}
-                  alt={relatedPillar.image.alt}
-                  class="w-full h-full object-cover transition-transform duration-300 hover:scale-105"
-                  loading="lazy"
-                  width="300"
-                  height="200"
-                />
-              </div>
-
-              <!-- Contenido -->
-              <div class="p-4 flex flex-col h-full">
-                <div class="font-semibold text-gray-900 mb-2">
-                  {relatedPillar.title}
-                </div>
-                <div class="text-sm text-gray-600 mb-3 flex-1">
-                  {relatedPillar.description}
-                </div>
-                <div class="text-xs text-gray-500 font-medium">
-                  Explorar contenido →
-                </div>
-              </div>
-            </a>
+            <PillarCard
+              pillar={relatedPillar}
+              variant="compact"
+              showDescription={true}
+              showPostCount={false}
+            />
           ))
         }
       </div>
