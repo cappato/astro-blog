@@ -7,8 +7,8 @@ export default defineConfig({
   site: 'https://cappato.dev',
   output: 'static',
   prefetch: {
-    prefetchAll: true,
-    defaultStrategy: 'viewport'
+    prefetchAll: false, // We handle prefetching manually for better control
+    defaultStrategy: 'hover'
   },
   integrations: [
     tailwind({
@@ -19,9 +19,20 @@ export default defineConfig({
   ],
   build: {
     // Mejora: control más granular de inlineStylesheets
-    inlineStylesheets: 'always', // Cambiar a 'always' para CSS crítico
+    inlineStylesheets: 'auto', // Auto para mejor balance performance/cache
     // Mejora: comprimir assets estáticos
-    assets: 'assets',
+    assets: '_astro', // Standard Astro assets folder
+    // Mejora: split chunks para mejor caching
+    rollupOptions: {
+      output: {
+        manualChunks: {
+          'vendor': ['astro/runtime'],
+          'social': ['./src/scripts/social-share.ts'],
+          'ui': ['./src/scripts/ui-interactions.ts'],
+          'prefetch': ['./src/scripts/prefetch.ts']
+        }
+      }
+    }
   },
   vite: {
     build: {

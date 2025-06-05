@@ -1,0 +1,193 @@
+---
+/**
+ * Lazy Section Component
+ * Optimized container for heavy content that loads when visible
+ */
+
+interface Props {
+  id?: string;
+  className?: string;
+  threshold?: number;
+  rootMargin?: string;
+  fallbackHeight?: string;
+  priority?: boolean;
+}
+
+const {
+  id,
+  className = '',
+  threshold = 0.1,
+  rootMargin = '50px 0px',
+  fallbackHeight = '200px',
+  priority = false
+} = Astro.props;
+
+const sectionId = id || `lazy-section-${Math.random().toString(36).substring(2, 9)}`;
+---
+
+<section 
+  id={sectionId}
+  class={`lazy-section ${className}`}
+  data-lazy={priority ? 'false' : 'true'}
+  data-threshold={threshold}
+  data-root-margin={rootMargin}
+  style={priority ? undefined : `min-height: ${fallbackHeight}`}
+>
+  {priority ? (
+    <!-- Load immediately for critical content -->
+    <slot />
+  ) : (
+    <!-- Lazy load placeholder -->
+    <div class="lazy-placeholder" data-section-id={sectionId}>
+      <div class="flex items-center justify-center h-full">
+        <div class="animate-pulse flex space-x-4 w-full max-w-md">
+          <div class="rounded-full bg-gray-200 dark:bg-gray-700 h-10 w-10"></div>
+          <div class="flex-1 space-y-2 py-1">
+            <div class="h-4 bg-gray-200 dark:bg-gray-700 rounded w-3/4"></div>
+            <div class="h-4 bg-gray-200 dark:bg-gray-700 rounded w-1/2"></div>
+          </div>
+        </div>
+      </div>
+    </div>
+    
+    <!-- Actual content (hidden initially) -->
+    <div class="lazy-content hidden" data-section-id={sectionId}>
+      <slot />
+    </div>
+  )}
+</section>
+
+<script>
+  class LazySectionManager {
+    private observer: IntersectionObserver | null = null;
+    private loadedSections = new Set<string>();
+
+    constructor() {
+      this.init();
+    }
+
+    private init(): void {
+      if (!('IntersectionObserver' in window)) {
+        // Fallback: load all content immediately
+        this.loadAllSections();
+        return;
+      }
+
+      this.observer = new IntersectionObserver(
+        (entries) => {
+          entries.forEach((entry) => {
+            if (entry.isIntersecting) {
+              const section = entry.target as HTMLElement;
+              const sectionId = section.id;
+              
+              if (!this.loadedSections.has(sectionId)) {
+                this.loadSection(sectionId);
+                this.observer?.unobserve(section);
+              }
+            }
+          });
+        },
+        {
+          rootMargin: '100px 0px',
+          threshold: 0.1
+        }
+      );
+
+      // Observe all lazy sections
+      this.observeSections();
+    }
+
+    private observeSections(): void {
+      const lazySections = document.querySelectorAll('[data-lazy="true"]');
+      lazySections.forEach((section) => {
+        if (this.observer) {
+          this.observer.observe(section);
+        }
+      });
+    }
+
+    private loadSection(sectionId: string): void {
+      const placeholder = document.querySelector(`[data-section-id="${sectionId}"].lazy-placeholder`) as HTMLElement;
+      const content = document.querySelector(`[data-section-id="${sectionId}"].lazy-content`) as HTMLElement;
+
+      if (placeholder && content) {
+        // Fade out placeholder
+        placeholder.style.opacity = '0';
+        placeholder.style.transition = 'opacity 300ms ease-out';
+
+        setTimeout(() => {
+          // Hide placeholder and show content
+          placeholder.classList.add('hidden');
+          content.classList.remove('hidden');
+          
+          // Fade in content
+          content.style.opacity = '0';
+          content.style.transition = 'opacity 300ms ease-in';
+          
+          requestAnimationFrame(() => {
+            content.style.opacity = '1';
+          });
+
+          // Clean up placeholder after animation
+          setTimeout(() => {
+            placeholder.remove();
+          }, 300);
+        }, 300);
+
+        this.loadedSections.add(sectionId);
+        console.log(`📦 Lazy loaded section: ${sectionId}`);
+      }
+    }
+
+    private loadAllSections(): void {
+      const lazySections = document.querySelectorAll('[data-lazy="true"]');
+      lazySections.forEach((section) => {
+        const sectionId = section.id;
+        this.loadSection(sectionId);
+      });
+    }
+
+    public destroy(): void {
+      if (this.observer) {
+        this.observer.disconnect();
+      }
+    }
+  }
+
+  // Initialize when DOM is ready
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', () => {
+      new LazySectionManager();
+    });
+  } else {
+    new LazySectionManager();
+  }
+</script>
+
+<style>
+  .lazy-section {
+    position: relative;
+    overflow: hidden;
+  }
+
+  .lazy-placeholder {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: var(--color-background);
+  }
+
+  .lazy-content {
+    opacity: 0;
+    transition: opacity 300ms ease-in;
+  }
+
+  .lazy-content:not(.hidden) {
+    opacity: 1;
+  }
+</style>

@@ -13,7 +13,8 @@ const CRITICAL_SCRIPTS = [
 // Non-critical scripts that can be deferred
 const DEFERRED_SCRIPTS = [
   'social-share',
-  'ui-interactions'
+  'ui-interactions',
+  'prefetch'
 ];
 
 class AppManager {
@@ -63,6 +64,9 @@ class AppManager {
             break;
           case 'ui-interactions':
             await import('./ui-interactions.ts');
+            break;
+          case 'prefetch':
+            await import('./prefetch.ts');
             break;
         }
         this.loadedScripts.add(scriptName);
