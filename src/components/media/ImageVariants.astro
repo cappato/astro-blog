@@ -25,7 +25,15 @@ const {
 
 // Determinar el sufijo según el tipo
 const suffix = type === 'default' ? '' : `-${type}`;
-const imagePath = `/images/${postId}/portada${suffix}.webp`;
+
+// Generar rutas para todos los formatos
+const basePath = `/images/${postId}/portada${suffix}`;
+const imagePaths = {
+  avif: `${basePath}-avif.avif`,
+  webp: `${basePath}.webp`,
+  fallback: `${basePath}.webp`,
+  lqip: `/images/${postId}/portada-lqip.webp`
+};
 
 // Determinar si la imagen debe cargarse de forma diferida
 const loading = lazy ? 'lazy' : 'eager';
@@ -55,17 +63,32 @@ switch (type) {
 const altText = alt || `Imagen para el artículo ${postId.replace(/-/g, ' ')}`;
 ---
 
-<img 
-  src={imagePath} 
-  alt={altText} 
-  class={className} 
-  loading={loading} 
-  decoding={decoding}
-  width={width}
-  height={height ? height : undefined}
-  fetchpriority={fetchpriority}
-  onerror="this.onerror=null; this.src='/placeholder-image.webp';"
-/>
+<picture>
+  <!-- AVIF - formato más moderno -->
+  <source
+    srcset={imagePaths.avif}
+    type="image/avif"
+  />
+
+  <!-- WebP - amplio soporte -->
+  <source
+    srcset={imagePaths.webp}
+    type="image/webp"
+  />
+
+  <!-- Fallback - máxima compatibilidad -->
+  <img
+    src={imagePaths.fallback}
+    alt={altText}
+    class={className}
+    loading={loading}
+    decoding={decoding}
+    width={width}
+    height={height ? height : undefined}
+    fetchpriority={fetchpriority}
+    onerror="this.onerror=null; this.src='/images/blog/seo-cover.webp';"
+  />
+</picture>
 
 
 

@@ -40,13 +40,34 @@ const {
   aspectRatio
 } = Astro.props;
 
-// Usar la imagen original directamente (simplificado)
-const sources = {
-  fallback: src,
-  webp: src,
-  avif: src.replace(/\.(webp|jpg|jpeg|png)$/i, '.avif'),
-  lqip: src // Por ahora usar la misma imagen
-};
+// Generar rutas de imágenes optimizadas
+function generateImageSources(originalSrc: string, variant: string) {
+  // Detectar si es una imagen de blog con el nuevo sistema
+  const isBlogImage = originalSrc.includes('/images/') && (originalSrc.includes('/portada') || originalSrc.includes('-cover'));
+
+  if (isBlogImage) {
+    // Para imágenes de blog, usar el sistema de variantes existente
+    const basePath = originalSrc.replace(/\.(webp|jpg|jpeg|png)$/i, '');
+    const suffix = variant !== 'default' ? `-${variant}` : '';
+
+    return {
+      avif: `${basePath}${suffix}-avif.avif`,
+      webp: `${basePath}${suffix}.webp`,
+      fallback: `${basePath}${suffix}.webp`,
+      lqip: `${basePath}-lqip.webp`
+    };
+  } else {
+    // Para otras imágenes, usar conversión simple
+    return {
+      avif: originalSrc.replace(/\.(webp|jpg|jpeg|png)$/i, '.avif'),
+      webp: originalSrc.replace(/\.(jpg|jpeg|png)$/i, '.webp'),
+      fallback: originalSrc,
+      lqip: originalSrc.replace(/\.(webp|jpg|jpeg|png)$/i, '-lqip.webp')
+    };
+  }
+}
+
+const sources = generateImageSources(src, variant);
 
 // Configuración de lazy loading
 const loadingStrategy = priority ? 'eager' : (lazy ? 'lazy' : 'eager');
@@ -61,21 +82,8 @@ const imageClasses = [
   className
 ].filter(Boolean).join(' ');
 
-// Configuración de responsive
-const responsiveConfig = {
-  mobile: { width: 375, quality: 80 },
-  tablet: { width: 768, quality: 85 },
-  desktop: { width: 1200, quality: 90 },
-  large: { width: 1920, quality: 95 }
-};
-
-// Generar srcset simplificado
-function generateSrcSet(imageSrc: string) {
-  return `${imageSrc} 1x`;
-}
-
 // ID único para el componente
-const imageId = `img-${Math.random().toString(36).substr(2, 9)}`;
+const imageId = `img-${Math.random().toString(36).substring(2, 9)}`;
 ---
 
 <!-- Preload para imágenes críticas -->
@@ -104,26 +112,43 @@ const imageId = `img-${Math.random().toString(36).substr(2, 9)}`;
 >
   <!-- LQIP Background -->
   {showLQIP && (
-    <div 
-      
-      style={`background-image: url('${sources.lqip}')`}
+    <div
+      class="absolute inset-0 bg-gray-200 dark:bg-gray-700 bg-cover bg-center transition-opacity duration-300"
+      style={`background-image: url('${sources.lqip}'); filter: blur(5px); transform: scale(1.1);`}
+      data-lqip="true"
     ></div>
   )}
 
-  <!-- Imagen optimizada simplificada -->
-  <img
-    src={sources.fallback}
-    alt={alt}
-    width={width}
-    height={height}
-    loading={loadingStrategy}
-    fetchpriority={fetchPriority}
-    class={imageClasses}
-    sizes={sizes}
-    decoding={priority ? 'sync' : 'async'}
-    data-src={sources.fallback}
-    data-loaded="false"
-  />
+  <!-- Picture element con formatos optimizados -->
+  <picture>
+    <!-- AVIF - formato más moderno -->
+    <source
+      srcset={sources.avif}
+      type="image/avif"
+      sizes={sizes}
+    />
+
+    <!-- WebP - amplio soporte -->
+    <source
+      srcset={sources.webp}
+      type="image/webp"
+      sizes={sizes}
+    />
+
+    <!-- Fallback - máxima compatibilidad -->
+    <img
+      src={sources.fallback}
+      alt={alt}
+      width={width}
+      height={height}
+      loading={loadingStrategy}
+      fetchpriority={fetchPriority}
+      class={imageClasses}
+      decoding={priority ? 'sync' : 'async'}
+      data-lazy={lazy && !priority ? 'true' : 'false'}
+      data-loaded="false"
+    />
+  </picture>
 
   <!-- Loading indicator -->
   {lazy && !priority && (
@@ -136,20 +161,28 @@ const imageId = `img-${Math.random().toString(36).substr(2, 9)}`;
 
 
 <script>
-  // Intersection Observer para lazy loading
+  // Intersection Observer para lazy loading mejorado
   if ('IntersectionObserver' in window) {
     const imageObserver = new IntersectionObserver((entries, observer) => {
       entries.forEach(entry => {
         if (entry.isIntersecting) {
           const img = entry.target as HTMLImageElement;
-          
-          // Cargar imagen
-          if (img.dataset.src) {
-            img.src = img.dataset.src;
+
+          // Manejar carga de imagen
+          if (img.dataset.lazy === 'true') {
             img.dataset.loaded = 'true';
-            
+
+            // Ocultar LQIP cuando la imagen se carga
+            img.addEventListener('load', () => {
+              const container = img.closest('[data-image-id]');
+              const lqip = container?.querySelector('[data-lqip="true"]') as HTMLElement;
+              if (lqip) {
+                lqip.style.opacity = '0';
+                setTimeout(() => lqip.remove(), 300);
+              }
+            }, { once: true });
+
             // Cleanup
-            delete img.dataset.src;
             observer.unobserve(img);
           }
         }
