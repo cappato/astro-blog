@@ -37,6 +37,15 @@ const allPosts = await getCollection('blog');
 // Get posts filtered by tag
 const posts = getPostsByTag(allPosts, tag);
 
+// Validar que el tag existe (tiene posts) - redirigir al blog si no existe
+if (!posts || posts.length === 0) {
+  // Verificar si el tag existe en la lista de todos los tags
+  const allTags = getAllTags(allPosts);
+  if (!allTags.includes(tag)) {
+    return Astro.redirect('/blog', 301);
+  }
+}
+
 // Transform posts to card data
 const postCards = transformPostsToCardData(posts);
 

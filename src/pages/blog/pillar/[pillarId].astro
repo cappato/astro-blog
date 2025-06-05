@@ -41,9 +41,9 @@ const { pillarId } = Astro.params;
 // Obtener el pilar por ID
 const pillar = getPillarById(pillarId as string);
 
-// Validar que el pilar existe
+// Validar que el pilar existe - redirigir al blog si no existe
 if (!pillar) {
-  return Astro.redirect('/404');
+  return Astro.redirect('/blog', 301);
 }
 
 // Obtener todos los posts del blog
