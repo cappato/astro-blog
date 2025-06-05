@@ -8,8 +8,6 @@ postId: "deploy-automatico-wrangler-github-actions"
 imageAlt: "Automatización de despliegues con Wrangler y GitHub Actions - Tutorial completo de CI/CD para desarrolladores"
 ---
 
-# Automatizá tu Deploy con Wrangler y GitHub Actions (Guía Paso a Paso)
-
 ¿Cansado de hacer deploys manuales? ¿Quieres configurar un **flujo CI/CD profesional** para tus proyectos Astro? En este tutorial te enseño cómo implementar **automatización de despliegues** completa usando **Wrangler** y **GitHub Actions**, creando un **deploy continuo con Cloudflare Workers** y resolviendo todos los problemas comunes de WSL.
 
 ## 🎯 Lo que vas a lograr
