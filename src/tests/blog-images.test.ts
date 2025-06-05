@@ -69,7 +69,12 @@ describe('Blog Post Images', () => {
           'portada.webp',
           'portada-avif.avif',
           'portada-og.webp',
-          'portada-og-jpg.jpeg'
+          'portada-og-jpg.jpeg',
+          'portada-og-avif.avif',
+          'portada-thumb.webp',
+          'portada-lqip.webp',
+          'portada-lqip.txt',
+          'portada-wsp.webp'
         ];
         
         for (const variant of requiredVariants) {
@@ -78,10 +83,13 @@ describe('Blog Post Images', () => {
           if (!fs.existsSync(imagePath)) {
             missingImages.push(`${postId}/${variant}`);
           } else {
-            // Check file size (should be > 1KB, not a placeholder)
+            // Check file size (LQIP files are intentionally small)
             const stats = fs.statSync(imagePath);
-            if (stats.size < 1024) {
-              missingImages.push(`${postId}/${variant} (file too small: ${stats.size} bytes)`);
+            const isLQIP = variant.includes('lqip');
+            const minSize = isLQIP ? 50 : 1024; // LQIP can be very small
+
+            if (stats.size < minSize) {
+              missingImages.push(`${postId}/${variant} (file too small: ${stats.size} bytes, min: ${minSize})`);
             }
           }
         }
