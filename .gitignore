@@ -38,3 +38,6 @@ pnpm-debug.log*
 # Wrangler
 .wrangler/
 wrangler.toml.bak
+
+# GitHub Actions (local testing)
+.github/workflows/*.log
