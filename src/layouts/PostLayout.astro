@@ -208,20 +208,18 @@ const currentPost = {
           <h1 class="text-3xl font-bold mb-3">{title}</h1>
 
           <!-- Metadatos críticos mínimos -->
-          <div class="flex flex-wrap items-center justify-between text-sm text-secondary mb-4">
-            <div class="flex flex-wrap items-center">
-              <span class="mr-4 flex items-center">
-                <i class="mr-1"></i> {formattedDate}
-              </span>
-              <span class="flex items-center">
-                <i class="mr-1"></i> {readingTimeText}
-              </span>
-            </div>
+          <div class="flex flex-wrap items-center text-sm text-secondary mb-2">
+            <span class="mr-4 flex items-center">
+              <i class="mr-1"></i> {formattedDate}
+            </span>
+            <span class="flex items-center">
+              <i class="mr-1"></i> {readingTimeText}
+            </span>
+          </div>
 
-            <!-- Botones para compartir - movidos aquí desde el final -->
-            <div class="flex items-center">
-              <ShareButtons url={currentUrl} title={title} compact={true} showTitle={false} />
-            </div>
+          <!-- Botones para compartir - debajo de metadatos, alineados a la izquierda -->
+          <div class="mb-4">
+            <ShareButtons url={currentUrl} title={title} compact={true} showTitle={false} />
           </div>
         </header>
 
@@ -240,7 +238,11 @@ const currentPost = {
             </div>
           )}
 
-
+          <!-- Botones para compartir al final -->
+          <div class="pt-4 border-t border-primary">
+            <h3 class="text-base font-medium mb-3 text-primary">Compartir Artículo</h3>
+            <ShareButtons url={currentUrl} title={title} compact={true} showTitle={false} />
+          </div>
 
           <!-- Módulo de Autor -->
           <div class="pt-6 border-t border-primary">
