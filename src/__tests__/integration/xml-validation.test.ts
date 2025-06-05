@@ -14,11 +14,8 @@ const SITEMAP_FILE = join(DIST_DIR, 'sitemap.xml');
 
 // XML Parser setup
 const parser = new DOMParser({
-  errorHandler: {
-    warning: () => {},
-    error: (msg) => { throw new Error(msg); },
-    fatalError: (msg) => { throw new Error(msg); }
-  }
+  onError: (msg) => { throw new Error(msg); },
+  onWarning: () => {} // Ignore warnings
 });
 
 describe('XML Validation Tests', () => {
