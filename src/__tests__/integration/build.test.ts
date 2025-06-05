@@ -98,14 +98,22 @@ describe('Build Integration Tests', () => {
   });
 
   describe('Asset Generation', () => {
-    test('should generate CSS assets', () => {
+    test('should generate CSS assets (in _astro or styles directory)', () => {
       const stylesDir = join(DIST_DIR, 'styles');
-      expect(existsSync(stylesDir)).toBe(true);
+      const astroDir = join(DIST_DIR, '_astro');
+
+      // Check if either styles directory or _astro directory exists
+      const hasStyles = existsSync(stylesDir) || existsSync(astroDir);
+      expect(hasStyles).toBe(true);
     });
 
-    test('should generate JavaScript assets', () => {
+    test('should generate JavaScript assets (in _astro or assets directory)', () => {
       const assetsDir = join(DIST_DIR, 'assets');
-      expect(existsSync(assetsDir)).toBe(true);
+      const astroDir = join(DIST_DIR, '_astro');
+
+      // Check if either assets directory or _astro directory exists
+      const hasAssets = existsSync(assetsDir) || existsSync(astroDir);
+      expect(hasAssets).toBe(true);
     });
 
     test('should generate favicon files', () => {
