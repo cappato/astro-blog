@@ -34,3 +34,7 @@ pnpm-debug.log*
 
 # Augment AI system files (never version)
 .augment/
+
+# Wrangler
+.wrangler/
+wrangler.toml.bak
