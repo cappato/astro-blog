@@ -33,7 +33,10 @@
     "validate:schemas": "node src/features/schema/scripts/validate-schemas.js",
     "validate:schemas:dev": "npm run validate:schemas -- --dev",
     "validate:schemas:auto": "npm run validate:schemas -- --auto",
-    "test:schemas:full": "npm run test:schemas && npm run validate:schemas:dev"
+    "test:schemas:full": "npm run test:schemas && npm run validate:schemas:dev",
+    "test:blog": "vitest run src/tests/blog-*.test.ts",
+    "test:blog:images": "vitest run src/tests/blog-images.test.ts",
+    "test:blog:structure": "vitest run src/tests/blog-structure.test.ts"
   },
   "dependencies": {
     "@tailwindcss/typography": "^0.5.16",
