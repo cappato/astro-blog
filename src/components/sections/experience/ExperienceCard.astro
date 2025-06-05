@@ -90,11 +90,75 @@ const formattedResponsibilities = formatResponsibilities(experience.responsibili
         <span class="mr-2">🎯</span>
         Responsibilities and Achievements:
       </h5>
-      <ul class="list-disc pl-5 space-y-1 text-secondary">
-        {formattedResponsibilities.map(responsibility => (
-          <li class="leading-relaxed">{responsibility}</li>
-        ))}
-      </ul>
+
+      {formattedResponsibilities.length > 4 ? (
+        <!-- Collapsible version for long lists -->
+        <div class="collapsible-content">
+          <ul class="list-disc pl-5 space-y-1 text-secondary collapsible-list" data-max-items="4">
+            {formattedResponsibilities.map((responsibility, index) => (
+              <li class={`leading-relaxed ${index >= 4 ? 'collapsible-item hidden' : ''}`}>
+                {responsibility}
+              </li>
+            ))}
+          </ul>
+
+          <!-- Gradient overlay and expand button -->
+          <div class="relative mt-2">
+            <div class="collapsible-gradient absolute -top-6 left-0 right-0 h-6 bg-gradient-to-t from-white dark:from-gray-800 to-transparent pointer-events-none"></div>
+            <button
+              class="collapsible-toggle text-sm text-secondary hover:text-primary transition-colors flex items-center gap-1 font-medium focus:outline-none focus:ring-2 focus:ring-gray-500 focus:ring-opacity-50 rounded px-1 py-0.5 underline hover:no-underline"
+              aria-expanded="false"
+            >
+              <span class="toggle-text">Show more ({formattedResponsibilities.length - 4} more)</span>
+              <svg class="toggle-icon w-4 h-4 transition-transform duration-200" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
+              </svg>
+            </button>
+          </div>
+        </div>
+      ) : (
+        <!-- Simple version for short lists -->
+        <ul class="list-disc pl-5 space-y-1 text-secondary">
+          {formattedResponsibilities.map(responsibility => (
+            <li class="leading-relaxed">{responsibility}</li>
+          ))}
+        </ul>
+      )}
     </div>
   )}
 </div>
+
+<script>
+  // Collapsible functionality for experience cards
+  document.addEventListener('DOMContentLoaded', function() {
+    const toggleButtons = document.querySelectorAll('.collapsible-toggle');
+
+    toggleButtons.forEach(button => {
+      button.addEventListener('click', function() {
+        const content = this.closest('.collapsible-content');
+        const items = content.querySelectorAll('.collapsible-item');
+        const gradient = content.querySelector('.collapsible-gradient');
+        const toggleText = this.querySelector('.toggle-text');
+        const toggleIcon = this.querySelector('.toggle-icon');
+        const isExpanded = this.getAttribute('aria-expanded') === 'true';
+
+        if (isExpanded) {
+          // Collapse
+          items.forEach(item => item.classList.add('hidden'));
+          gradient.classList.remove('hidden');
+          const hiddenCount = items.length;
+          toggleText.textContent = `Show more (${hiddenCount} more)`;
+          toggleIcon.style.transform = 'rotate(0deg)';
+          this.setAttribute('aria-expanded', 'false');
+        } else {
+          // Expand
+          items.forEach(item => item.classList.remove('hidden'));
+          gradient.classList.add('hidden');
+          toggleText.textContent = 'Show less';
+          toggleIcon.style.transform = 'rotate(180deg)';
+          this.setAttribute('aria-expanded', 'true');
+        }
+      });
+    });
+  });
+</script>
