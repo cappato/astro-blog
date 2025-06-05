@@ -10,47 +10,66 @@ const navItems = NAVIGATION_CONFIG.homeNavItems;
 
 <BaseNavbar>
   <!-- Navegación principal para página home -->
-  <div slot="navigation" class="hidden md:block">
-    <ul class="flex space-x-4">
+  <nav slot="navigation" class="hidden md:block" aria-label="Main navigation">
+    <ul class="flex space-x-4" role="menubar">
       {navItems.map(item => (
-        <li>
+        <li role="none">
           <NavLink
             href={item.href}
             section={item.section}
-            className="px-3 py-2 flex items-center"
+            className="px-3 py-2 flex items-center focus:outline-none focus:ring-2 focus:ring-accent focus:ring-offset-2 rounded-md"
           >
             {item.label}
           </NavLink>
         </li>
       ))}
     </ul>
-  </div>
+  </nav>
 
   <!-- Botón menú móvil -->
-  <button slot="actions" class="md:hidden p-2" id="mobile-menu-button">
+  <button
+    slot="actions"
+    class="md:hidden p-2 focus:outline-none focus:ring-2 focus:ring-accent focus:ring-offset-2 rounded-md"
+    id="mobile-menu-button"
+    aria-expanded="false"
+    aria-controls="mobile-menu"
+    aria-label="Abrir menú de navegación"
+  >
     <span class="sr-only">Abrir menú de navegación</span>
     <Icon name="menu" size={24} />
   </button>
 
   <!-- Menú móvil usando slot additional -->
-  <div slot="additional" id="mobile-menu" class="fixed inset-0 z-50 hidden bg-primary">
-  <div class="flex flex-col h-full">
-    <div class="flex justify-end p-4">
-      <button id="close-menu" class="p-2 text-primary hover:text-secondary transition-colors">
-        <Icon name="close" size={24} />
-      </button>
-    </div>
-    <div class="flex-1 flex flex-col items-center justify-center space-y-6 text-xl">
-      {navItems.map(item => (
-        <NavLink
-          href={item.href}
-          section={item.section}
-          className="nav-link-mobile px-5 py-3 w-64 text-center text-primary hover:text-secondary transition-colors"
+  <div
+    slot="additional"
+    id="mobile-menu"
+    class="fixed inset-0 z-50 hidden bg-primary"
+    role="dialog"
+    aria-modal="true"
+    aria-labelledby="mobile-menu-title"
+  >
+    <div class="flex flex-col h-full">
+      <div class="flex justify-between items-center p-4">
+        <h2 id="mobile-menu-title" class="text-lg font-semibold sr-only">Menú de navegación</h2>
+        <button
+          id="close-menu"
+          class="p-2 text-primary hover:text-secondary transition-colors focus:outline-none focus:ring-2 focus:ring-accent focus:ring-offset-2 rounded-md ml-auto"
+          aria-label="Cerrar menú de navegación"
         >
-          {item.label}
-        </NavLink>
-      ))}
+          <Icon name="close" size={24} />
+        </button>
+      </div>
+      <nav class="flex-1 flex flex-col items-center justify-center space-y-6 text-xl" aria-label="Mobile navigation">
+        {navItems.map(item => (
+          <NavLink
+            href={item.href}
+            section={item.section}
+            className="nav-link-mobile px-5 py-3 w-64 text-center text-primary hover:text-secondary transition-colors focus:outline-none focus:ring-2 focus:ring-accent focus:ring-offset-2 rounded-md"
+          >
+            {item.label}
+          </NavLink>
+        ))}
+      </nav>
     </div>
-  </div>
   </div>
 </BaseNavbar>

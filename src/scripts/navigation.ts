@@ -14,7 +14,8 @@ const CRITICAL_SCRIPTS = [
 const DEFERRED_SCRIPTS = [
   'social-share',
   'ui-interactions',
-  'prefetch'
+  'prefetch',
+  'accessibility'
 ];
 
 class AppManager {
@@ -67,6 +68,9 @@ class AppManager {
             break;
           case 'prefetch':
             await import('./prefetch.ts');
+            break;
+          case 'accessibility':
+            await import('./accessibility.ts');
             break;
         }
         this.loadedScripts.add(scriptName);
