@@ -231,10 +231,10 @@ export const BLOG_POST_CONFIG = {
     image: 'w-full h-48 object-cover',
     content: 'p-4',
     title: 'text-xl font-bold mb-2',
-    titleLink: 'text-blue-600 dark:text-blue-400 hover:underline',
+    titleLink: 'text-link hover:underline',
     date: 'text-gray-900 dark:text-white text-sm mb-3 opacity-75',
     description: 'text-gray-900 dark:text-white mb-4 line-clamp-3 opacity-90',
-    readMore: 'mt-4 inline-block text-blue-600 dark:text-blue-400 hover:underline text-sm font-medium'
+    readMore: 'mt-4 inline-block text-link-accent hover:underline text-sm font-medium'
   },
 
   /** SEO configuration */

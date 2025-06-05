@@ -82,6 +82,15 @@
     @apply text-gray-900 dark:text-white;
   }
 
+  /* Links y elementos interactivos */
+  .text-link {
+    @apply text-gray-700 dark:text-gray-300 hover:text-gray-900 dark:hover:text-white transition-colors;
+  }
+
+  .text-link-accent {
+    @apply text-gray-600 dark:text-gray-400 hover:text-gray-800 dark:hover:text-gray-200 transition-colors;
+  }
+
   /* Bordes */
   .border-primary {
     @apply border-gray-200 dark:border-gray-700;
