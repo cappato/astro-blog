@@ -1,135 +1,71 @@
-## ✅ Revertir implementación SPA - RESUELTO
+# TAREAS PENDIENTES
 
-**Problema:** La implementación de SPA añadió complejidad innecesaria al blog estático, causando potenciales problemas de compatibilidad y mantenimiento.
+## ✅ RESUELTAS
 
-**Solución implementada:** ✅ Revertidos todos los commits relacionados con SPA y vuelto al estado estable anterior.
+### Unificación de Cards de Pilares
+**RESUELTO** - encontre esta seccion que no coincide con el resto de secciones que muestran cards seaan de articulos pilares tags, todas tratan de reutilizar la misma carcaza, pero esta esta desalineada por su cuenta, la podemos incluir con el resto?
 
-**Cambios realizados:**
-- ✅ Eliminada toda la funcionalidad SPA (7 commits revertidos)
-- ✅ Removido directorio `src/features/spa-navigation/`
-- ✅ Eliminados archivos `public/sw.js` y `public/manifest.json`
-- ✅ Revertida configuración de Astro a estado anterior
-- ✅ Restaurados breadcrumbs a implementación original
-- ✅ Eliminados scripts de inicialización SPA
-- ✅ Force push exitoso para sincronizar repositorio remoto
-
-**Beneficios logrados:**
-- ✅ Sitio más simple y confiable
-- ✅ Mejor compatibilidad con navegadores
-- ✅ Menos complejidad en el código
-- ✅ Eliminación de posibles bugs relacionados con SPA
-- ✅ Vuelta a navegación tradicional que funciona perfectamente para blogs
-
-**Estado actual:** Sitio estático normal de Astro funcionando correctamente
-**Build status:** ✅ Exitoso sin errores
-**Commit de reversión:** `c36b724` - fix(navbar): correct pillar pages to use BlogNavbar instead of HomeNavbar
+<aside class="mt-16 pt-8 border-t border-primary"> <h3 class="text-xl font-bold mb-6">
+Otros pilares de contenido
+</h3> <div class="grid grid-cols-1 md:grid-cols-2 gap-6"> <a href="/blog/pillar/astro-performance" class="card-base block overflow-hidden no-underline"> <!-- Imagen del pilar --> <div class="aspect-video overflow-hidden"> <img src="/images/blog/darkmode-cover.webp" alt="Astro y optimización de performance" class="w-full h-full object-cover transition-transform duration-300 hover:scale-105" loading="lazy" width="300" height="200"> </div> <!-- Contenido --> <div class="p-4 flex flex-col h-full"> <div class="font-semibold text-gray-900 mb-2"> Astro &amp; Performance </div> <div class="text-sm text-gray-600 mb-3 flex-1"> Desarrollo moderno con Astro, optimización de performance y arquitecturas escalables para la web del futuro. </div> <div class="text-xs text-gray-500 font-medium">
+Explorar contenido →
+</div> </div> </a><a href="/blog/pillar/typescript-architecture" class="card-base block overflow-hidden no-underline"> <!-- Imagen del pilar --> <div class="aspect-video overflow-hidden"> <img src="/images/blog/architecture-cover.webp" alt="TypeScript y arquitectura de software" class="w-full h-full object-cover transition-transform duration-300 hover:scale-105" loading="lazy" width="300" height="200"> </div> <!-- Contenido --> <div class="p-4 flex flex-col h-full"> <div class="font-semibold text-gray-900 mb-2"> TypeScript &amp; Architecture </div> <div class="text-sm text-gray-600 mb-3 flex-1"> TypeScript avanzado, patrones de diseño, arquitecturas escalables y mejores prácticas para proyectos enterprise. </div> <div class="text-xs text-gray-500 font-medium">
+Explorar contenido →
+</div> </div> </a><a href="/blog/pillar/seo-optimization" class="card-base block overflow-hidden no-underline"> <!-- Imagen del pilar --> <div class="aspect-video overflow-hidden"> <img src="/images/blog/seo-cover.webp" alt="SEO y optimización web" class="w-full h-full object-cover transition-transform duration-300 hover:scale-105" loading="lazy" width="300" height="200"> </div> <!-- Contenido --> <div class="p-4 flex flex-col h-full"> <div class="font-semibold text-gray-900 mb-2"> SEO &amp; Optimization </div> <div class="text-sm text-gray-600 mb-3 flex-1"> SEO técnico, optimización automática, Schema.org, meta tags y estrategias para mejorar el ranking. </div> <div class="text-xs text-gray-500 font-medium">
+Explorar contenido →
+</div> </div> </a> </div> </aside>
 
 ---
 
-## ✅ Mejorar módulo de autor - RESUELTO
+## 🚀 NUEVA TAREA COMPLEJA
 
-**Problema:** El módulo de autor actual tiene espacio en blanco excesivo en móvil y podría usar una estructura más flexible.
+### Configuración de SPA (Single Page Application) Progresiva
 
-**Solución implementada:** ✅ Refactorizado el componente AuthorCard con estructura responsive optimizada.
+**Objetivo:** Convertir el sitio estático actual en una SPA progresiva que mantenga los beneficios de SSG pero agregue navegación fluida del lado del cliente.
 
-**Cambios realizados:**
-- ✅ Reemplazado wrapper Card con card-base styling directo para mejor control
-- ✅ Implementado layout flex responsive: columna en móvil, fila en desktop
-- ✅ Contenido centrado en móvil, alineado izquierda en desktop
-- ✅ Avatar optimizado: más grande en móvil (24x24), más pequeño en desktop (20x20)
-- ✅ Gestión de espaciado y gaps responsive mejorada
-- ✅ Links sociales centrados en móvil, alineados derecha en desktop
-- ✅ Texto bio centrado en móvil, izquierda en desktop
-- ✅ Tags de especialidades con centrado responsive
-- ✅ Grid de logros mejorado (1 columna móvil, 2 desktop)
-- ✅ Sección stats con justificación responsive
-- ✅ Eliminado import Card no usado
-- ✅ Agregado tipado TypeScript para funciones map
-- ✅ Cambiado PostLayout a layout horizontal para mejor utilización del espacio
+**Contexto:** El sitio actual es completamente estático (SSG) con Astro. Queremos agregar capacidades de SPA para mejorar la experiencia de usuario con transiciones suaves entre páginas, manteniendo el SEO y performance.
 
-**Beneficios logrados:**
-- ✅ Eliminado problema de espacio en blanco en móvil
-- ✅ Mejor jerarquía de contenido y legibilidad
-- ✅ Consistencia de diseño responsive mejorada
-- ✅ Apariencia profesional en todos los tamaños de pantalla
-- ✅ Experiencia de usuario móvil mejorada
+**Requisitos técnicos:**
 
-**Commit:** `a39c055` - feat(ui): optimize author module layout for better mobile experience
+1. **Navegación del lado del cliente:**
+   - Implementar router client-side para navegación sin recargas
+   - Mantener URLs limpias y navegación con botones del navegador
+   - Preservar funcionalidad de enlaces externos normales
 
-**Estructura implementada (ejemplo de referencia):**
-<div class="card-base p-4 sm:p-6 author-extended">
-  <div class="flex flex-col sm:flex-row sm:items-start sm:gap-4">
-    <!-- Avatar -->
-    <div class="flex justify-center sm:justify-start mb-4 sm:mb-0">
-      <div class="rounded-full overflow-hidden border-2 w-24 h-24 sm:w-20 sm:h-20">
-        <img src="/images/author/profile.webp" alt="Foto de Matías Sebastián Cappato" class="w-full h-full object-cover" loading="lazy">
-      </div>
-    </div>
+2. **Transiciones de página:**
+   - Animaciones suaves entre páginas (fade, slide, etc.)
+   - Loading states durante la carga de contenido
+   - Mantener estado de scroll en navegación hacia atrás
 
-    <!-- Content -->
-    <div class="flex-1 min-w-0">
-      <!-- Header -->
-      <div class="flex flex-col sm:flex-row sm:items-start sm:justify-between gap-2 mb-3">
-        <div class="flex-1 min-w-0">
-          <h3 class="text-lg font-bold mb-1 text-center sm:text-left">Matías Sebastián Cappato</h3>
-          <p class="text-sm font-medium mb-1 text-center sm:text-left">Full Stack Developer &amp; Tech Lead</p>
-          <div class="flex flex-wrap justify-center sm:justify-start gap-3 text-xs">
-            <span class="flex items-center gap-1">📍 Argentina</span>
-            <span class="flex items-center gap-1">💼 8+ experiencia</span>
-          </div>
-        </div>
+3. **Optimización de carga:**
+   - Prefetch de páginas en hover de links
+   - Lazy loading de rutas no críticas
+   - Cache inteligente de páginas visitadas
 
-        <!-- Social Links -->
-        <div class="flex justify-center sm:justify-end items-center gap-2">
-          <a href="https://github.com/cappato" target="_blank" rel="noopener noreferrer" class="w-8 h-8 flex items-center justify-center" aria-label="GitHub de Matías">🔗</a>
-          <a href="https://www.linkedin.com/in/matiascappato/" target="_blank" rel="noopener noreferrer" class="w-8 h-8 flex items-center justify-center" aria-label="LinkedIn de Matías">🔗</a>
-          <a href="mailto:matias@cappato.dev" class="w-8 h-8 flex items-center justify-center" aria-label="Email de Matías">📧</a>
-        </div>
-      </div>
+4. **Compatibilidad híbrida:**
+   - Mantener SSG para SEO y primera carga
+   - Hidratación progresiva solo donde sea necesario
+   - Fallback a navegación tradicional si JS falla
 
-      <!-- Bio -->
-      <div class="mb-3 text-sm leading-relaxed text-center sm:text-left">
-        Desarrollador Full Stack con más de 8 años de experiencia construyendo aplicaciones web escalables y de alto rendimiento...
-      </div>
+5. **Consideraciones especiales:**
+   - Preservar todas las funcionalidades actuales (dark mode, share buttons, etc.)
+   - Mantener performance scores actuales
+   - No romper el sistema de meta tags y schemas
+   - Compatibilidad con el sistema de breadcrumbs
 
-      <!-- Especialidades -->
-      <div class="mb-3">
-        <h4 class="text-xs font-semibold tracking-wide mb-2">Especialidades</h4>
-        <div class="flex flex-wrap justify-center sm:justify-start gap-1">
-          <span class="px-2 py-1 text-xs font-medium bg-gray-100 rounded">TypeScript & JavaScript</span>
-          <span class="px-2 py-1 text-xs font-medium bg-gray-100 rounded">React & Next.js</span>
-          <span class="px-2 py-1 text-xs font-medium bg-gray-100 rounded">Node.js & Express</span>
-          <span class="px-2 py-1 text-xs font-medium bg-gray-100 rounded">Astro & Static Sites</span>
-          <span class="px-2 py-1 text-xs font-medium bg-gray-100 rounded">Performance Optimization</span>
-        </div>
-      </div>
+**Implementación sugerida:**
+- Usar Astro View Transitions API o implementar router custom
+- Configurar service worker para cache estratégico
+- Implementar sistema de estados para componentes que lo requieran
+- Mantener arquitectura modular actual
 
-      <!-- Logros -->
-      <div class="mb-3">
-        <h4 class="text-xs font-semibold tracking-wide mb-2">Logros destacados</h4>
-        <ul class="grid grid-cols-1 sm:grid-cols-2 gap-y-1 text-xs">
-          <li>• Arquitectura para 100k+ usuarios</li>
-          <li>• Optimización Core Web Vitals</li>
-          <li>• Pipelines CI/CD automatizados</li>
-          <li>• Mentoring de equipos</li>
-        </ul>
-      </div>
+**Criterios de éxito:**
+- Navegación fluida sin recargas de página
+- Tiempo de transición < 200ms entre páginas
+- Mantener Lighthouse scores actuales
+- Funcionalidad completa con y sin JavaScript
+- Experiencia de usuario notablemente mejorada
 
-      <!-- Stats -->
-      <div class="flex justify-center sm:justify-start items-center gap-4 pt-3">
-        <div class="text-center">
-          <div class="text-lg font-bold">25</div>
-          <div class="text-xs">Artículos</div>
-        </div>
-        <div class="text-center">
-          <div class="text-lg font-bold">50</div>
-          <div class="text-xs">Proyectos</div>
-        </div>
-        <div class="text-center">
-          <div class="text-lg font-bold">8+ años</div>
-          <div class="text-xs">Experiencia</div>
-        </div>
-      </div>
-    </div>
-  </div>
-</div>
+**Prioridad:** Alta - Mejora significativa de UX
+**Complejidad:** Alta - Requiere cambios arquitectónicos importantes
+**Tiempo estimado:** 2-3 sesiones de desarrollo

@@ -3,7 +3,7 @@ import BaseLayout from '../components/layout/BaseLayout.astro';
 import BlogNavbar from '../components/layout/navbar/BlogNavbar.astro';
 import Footer from '../components/layout/footer/Footer.astro';
 import ImageVariants from '../components/media/ImageVariants.astro';
-import { ShareButtons, ShareMessage, SidebarShareButtons, CopyToast } from '../features/social-share';
+import { ShareButtons, CopyToast } from '../features/social-share';
 import TagList from '../components/blog/TagList.astro';
 import { getReadingTime, formatReadingTime } from '../features/reading-time';
 import AuthorCard from '../features/blog-enhancements/components/AuthorCard.astro';
@@ -208,18 +208,25 @@ const currentPost = {
           <h1 class="text-3xl font-bold mb-3">{title}</h1>
 
           <!-- Metadatos críticos mínimos -->
-          <div class="flex flex-wrap items-center text-sm text-secondary mb-4">
-            <span class="mr-4 flex items-center">
-              <i class="mr-1"></i> {formattedDate}
-            </span>
-            <span class="flex items-center">
-              <i class="mr-1"></i> {readingTimeText}
-            </span>
+          <div class="flex flex-wrap items-center justify-between text-sm text-secondary mb-4">
+            <div class="flex flex-wrap items-center">
+              <span class="mr-4 flex items-center">
+                <i class="mr-1"></i> {formattedDate}
+              </span>
+              <span class="flex items-center">
+                <i class="mr-1"></i> {readingTimeText}
+              </span>
+            </div>
+
+            <!-- Botones para compartir - movidos aquí desde el final -->
+            <div class="flex items-center">
+              <ShareButtons url={currentUrl} title={title} compact={true} showTitle={false} />
+            </div>
           </div>
         </header>
 
         <!-- PRIORIDAD 2: Contenido principal (crítico para SEO) -->
-        <main class="prose prose-lg max-w-none prose-gray dark:prose-invert mb-8">
+        <main class="prose prose-lg max-w-none prose-gray dark:prose-invert mb-8 text-content dark:text-secondary">
           <slot />
         </main>
 
@@ -233,11 +240,7 @@ const currentPost = {
             </div>
           )}
 
-          <!-- Botones para compartir -->
-          <div class="pt-4 border-t border-primary">
-            <h3 class="text-base font-medium mb-3">Compartir Artículo</h3>
-            <ShareButtons url={currentUrl} title={title} compact={true} showTitle={false} />
-          </div>
+
 
           <!-- Módulo de Autor -->
           <div class="pt-6 border-t border-primary">
@@ -282,8 +285,7 @@ const currentPost = {
   <!-- Componente de toast para notificaciones de copia -->
   <CopyToast />
 
-  <!-- Barra lateral de compartir (solo desktop) -->
-  <SidebarShareButtons url={currentUrl} title={title} topOffset={200} />
+
 </BaseLayout>
 
 
