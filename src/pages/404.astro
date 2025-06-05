@@ -1,0 +1,176 @@
+---
+/**
+ * 404 Error Page with Smart Redirects
+ * Redirects blog URLs to /blog and others to home
+ */
+
+import BaseLayout from '../components/layout/BaseLayout.astro';
+import BlogNavbar from '../components/layout/navbar/BlogNavbar.astro';
+import HomeNavbar from '../components/layout/navbar/HomeNavbar.astro';
+import Footer from '../components/layout/footer/Footer.astro';
+import ContentContainer from '../components/layout/ContentContainer.astro';
+import ContentWidth from '../components/layout/ContentWidth.astro';
+import Card from '../components/ui/Card.astro';
+
+// Detect if this is a blog-related 404
+const currentPath = Astro.url.pathname;
+const isBlogPath = currentPath.startsWith('/blog/');
+
+// SEO metadata
+const seoData = {
+  title: 'Página No Encontrada - 404',
+  description: 'La página que buscas no existe. Te ayudamos a encontrar lo que necesitas.',
+  keywords: ['404', 'página no encontrada', 'error'],
+  type: 'website' as const
+};
+
+// Determine redirect destination
+const redirectDestination = isBlogPath ? '/blog' : '/';
+const redirectMessage = isBlogPath 
+  ? 'Te redirigiremos al blog principal donde podrás encontrar todo el contenido disponible.'
+  : 'Te redirigiremos a la página principal donde podrás navegar por todo el sitio.';
+---
+
+<BaseLayout
+  title={seoData.title}
+  description={seoData.description}
+  keywords={seoData.keywords}
+  type={seoData.type}
+>
+  {isBlogPath ? (
+    <BlogNavbar currentPath="/blog" slot="header" />
+  ) : (
+    <HomeNavbar slot="header" />
+  )}
+
+  <!-- 404 Content -->
+  <ContentContainer as="main" className="py-16">
+    <ContentWidth width="standard">
+      <div class="text-center">
+        <!-- 404 Icon -->
+        <div class="mb-8">
+          <div class="text-8xl font-bold text-gray-300 dark:text-gray-600 mb-4">
+            404
+          </div>
+          <div class="text-2xl text-gray-500 dark:text-gray-400">
+            Página no encontrada
+          </div>
+        </div>
+
+        <!-- Error Message -->
+        <Card variant="default" className="max-w-2xl mx-auto p-8 mb-8">
+          <h1 class="text-3xl font-bold mb-4">
+            ¡Oops! Esta página no existe
+          </h1>
+          <p class="text-lg mb-6 text-gray-600 dark:text-gray-300">
+            La página que estás buscando no se encuentra disponible. 
+            Puede que haya sido movida, eliminada o que la URL sea incorrecta.
+          </p>
+          
+          <!-- Smart Redirect Message -->
+          <div class="bg-blue-50 dark:bg-blue-900/20 border border-blue-200 dark:border-blue-800 rounded-lg p-4 mb-6">
+            <p class="text-blue-800 dark:text-blue-200">
+              <strong>🚀 Redirección automática:</strong><br>
+              {redirectMessage}
+            </p>
+          </div>
+
+          <!-- Manual Navigation -->
+          <div class="flex flex-col sm:flex-row gap-4 justify-center">
+            <a
+              href={redirectDestination}
+              class="inline-flex items-center justify-center px-6 py-3 rounded-lg font-semibold no-underline transition-all duration-200 bg-blue-600 dark:bg-blue-500 text-white hover:bg-blue-700 dark:hover:bg-blue-600 hover:-translate-y-0.5 hover:shadow-lg"
+            >
+              {isBlogPath ? '📚 Ir al Blog' : '🏠 Ir al Inicio'}
+            </a>
+            
+            {isBlogPath ? (
+              <a
+                href="/"
+                class="inline-flex items-center justify-center px-6 py-3 rounded-lg font-semibold no-underline transition-all duration-200 border-2 border-gray-300 dark:border-gray-600 text-gray-700 dark:text-gray-300 hover:border-gray-400 dark:hover:border-gray-500 hover:-translate-y-0.5"
+              >
+                🏠 Página Principal
+              </a>
+            ) : (
+              <a
+                href="/blog"
+                class="inline-flex items-center justify-center px-6 py-3 rounded-lg font-semibold no-underline transition-all duration-200 border-2 border-gray-300 dark:border-gray-600 text-gray-700 dark:text-gray-300 hover:border-gray-400 dark:hover:border-gray-500 hover:-translate-y-0.5"
+              >
+                📚 Ver Blog
+              </a>
+            )}
+          </div>
+        </Card>
+
+        <!-- Helpful Links -->
+        <div class="grid md:grid-cols-2 gap-6 max-w-4xl mx-auto">
+          {isBlogPath ? (
+            <>
+              <!-- Blog-specific suggestions -->
+              <Card variant="default" className="p-6">
+                <h3 class="text-xl font-semibold mb-3">📝 Contenido del Blog</h3>
+                <ul class="space-y-2 text-left">
+                  <li><a href="/blog" class="text-blue-600 dark:text-blue-400 hover:underline">Todos los artículos</a></li>
+                  <li><a href="/blog/pillars" class="text-blue-600 dark:text-blue-400 hover:underline">Pilares de contenido</a></li>
+                  <li><a href="/blog/tag/astro" class="text-blue-600 dark:text-blue-400 hover:underline">Artículos sobre Astro</a></li>
+                  <li><a href="/blog/tag/typescript" class="text-blue-600 dark:text-blue-400 hover:underline">Artículos sobre TypeScript</a></li>
+                </ul>
+              </Card>
+              
+              <Card variant="default" className="p-6">
+                <h3 class="text-xl font-semibold mb-3">🔍 Buscar Contenido</h3>
+                <ul class="space-y-2 text-left">
+                  <li><a href="/blog/tag/seo" class="text-blue-600 dark:text-blue-400 hover:underline">SEO y Optimización</a></li>
+                  <li><a href="/blog/tag/performance" class="text-blue-600 dark:text-blue-400 hover:underline">Performance</a></li>
+                  <li><a href="/blog/tag/automation" class="text-blue-600 dark:text-blue-400 hover:underline">Automatización</a></li>
+                  <li><a href="/blog/tag/testing" class="text-blue-600 dark:text-blue-400 hover:underline">Testing</a></li>
+                </ul>
+              </Card>
+            </>
+          ) : (
+            <>
+              <!-- General site suggestions -->
+              <Card variant="default" className="p-6">
+                <h3 class="text-xl font-semibold mb-3">🧭 Navegación</h3>
+                <ul class="space-y-2 text-left">
+                  <li><a href="/" class="text-blue-600 dark:text-blue-400 hover:underline">Página principal</a></li>
+                  <li><a href="/blog" class="text-blue-600 dark:text-blue-400 hover:underline">Blog completo</a></li>
+                  <li><a href="/blog/pillars" class="text-blue-600 dark:text-blue-400 hover:underline">Pilares de contenido</a></li>
+                  <li><a href="/rss.xml" class="text-blue-600 dark:text-blue-400 hover:underline">Feed RSS</a></li>
+                </ul>
+              </Card>
+              
+              <Card variant="default" className="p-6">
+                <h3 class="text-xl font-semibold mb-3">📚 Contenido Popular</h3>
+                <ul class="space-y-2 text-left">
+                  <li><a href="/blog/seo-automatico-typescript" class="text-blue-600 dark:text-blue-400 hover:underline">SEO Automático con TypeScript</a></li>
+                  <li><a href="/blog/dark-mode-perfecto-astro" class="text-blue-600 dark:text-blue-400 hover:underline">Dark Mode Perfecto en Astro</a></li>
+                  <li><a href="/blog/arquitectura-modular-astro" class="text-blue-600 dark:text-blue-400 hover:underline">Arquitectura Modular</a></li>
+                  <li><a href="/blog/testing-automatizado-sitios-estaticos" class="text-blue-600 dark:text-blue-400 hover:underline">Testing Automatizado</a></li>
+                </ul>
+              </Card>
+            </>
+          )}
+        </div>
+      </div>
+    </ContentWidth>
+  </ContentContainer>
+
+  <Footer slot="footer" />
+</BaseLayout>
+
+<!-- Auto-redirect script -->
+<script define:vars={{ redirectDestination, isBlogPath }}>
+  // Auto-redirect after 5 seconds
+  setTimeout(() => {
+    window.location.href = redirectDestination;
+  }, 5000);
+
+  // Announce to screen readers
+  if (window.__accessibilityManager) {
+    const message = isBlogPath 
+      ? 'Página no encontrada en el blog. Redirigiendo al índice del blog en 5 segundos.'
+      : 'Página no encontrada. Redirigiendo a la página principal en 5 segundos.';
+    window.__accessibilityManager.announce(message);
+  }
+</script>

@@ -14,5 +14,17 @@ https://www.cappato.dev/* https://cappato.dev/:splat 301!
 # Force HTTPS for any HTTP requests
 http://cappato.dev/* https://cappato.dev/:splat 301!
 
-# Mantener SPA routing (debe ser la última regla)
+# Specific blog URL patterns that should redirect to blog index
+/blog/post/* /blog 301
+/blog/posts/* /blog 301
+/blog/article/* /blog 301
+/blog/articles/* /blog 301
+/blog/category/* /blog 301
+/blog/categories/* /blog 301
+/blog/author/* /blog 301
+/blog/authors/* /blog 301
+/blog/archive/* /blog 301
+/blog/search/* /blog 301
+
+# Catch-all for other non-existent pages (SPA fallback)
 /* /index.html 200
