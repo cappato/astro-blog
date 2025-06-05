@@ -1,125 +1,199 @@
 ---
-title: "Automatizá tu Deploy con Wrangler y GitHub Actions (Guía Paso a Paso)"
-description: "Tutorial completo para configurar automatización de despliegues con Wrangler y GitHub Actions. Implementa CI/CD profesional, resuelve problemas WSL y crea deploy continuo con Cloudflare Workers."
+title: "Deploy Automático con Wrangler y GitHub Actions: Serie Completa"
+description: "Serie completa para automatizar deploys con Wrangler y GitHub Actions. Desde configuración inicial hasta troubleshooting avanzado. Guía paso a paso para CI/CD profesional."
 date: "2024-12-19"
 author: "Matías Cappato"
-tags: ["astro", "cloudflare", "wrangler", "github-actions", "deploy", "automation", "devops", "ci-cd", "automatización", "despliegues", "integración-continua"]
+tags: ["wrangler", "github-actions", "deploy", "automation", "ci-cd", "cloudflare", "serie", "tutorial"]
 postId: "deploy-automatico-wrangler-github-actions"
-imageAlt: "Automatización de despliegues con Wrangler y GitHub Actions - Tutorial completo de CI/CD para desarrolladores"
+imageAlt: "Serie completa de Deploy Automático con Wrangler y GitHub Actions"
 ---
 
-¿Cansado de hacer deploys manuales? ¿Quieres configurar un **flujo CI/CD profesional** para tus proyectos Astro? En este tutorial te enseño cómo implementar **automatización de despliegues** completa usando **Wrangler** y **GitHub Actions**, creando un **deploy continuo con Cloudflare Workers** y resolviendo todos los problemas comunes de WSL.
+¿Quieres dominar el **deploy automático con Wrangler y GitHub Actions**? Esta serie completa te lleva desde la configuración inicial hasta el troubleshooting avanzado, creando un **sistema CI/CD profesional** paso a paso.
 
-## 🎯 Lo que vas a lograr
+## 🎯 Lo que vas a dominar
 
-Al final de este tutorial tendrás un **sistema de integración continua** completo:
+Esta serie completa te enseña a crear un **sistema de deploy automático profesional**:
 
-- ✅ **Automatización de despliegues** en cada push a main
-- ✅ **Deploy manual** para desarrollo rápido y testing
-- ✅ **Pipeline CI/CD con GitHub Actions** completamente configurado
-- ✅ **Integración con Cloudflare Workers** optimizada
-- ✅ **Resolución de problemas WSL** implementada
-- ✅ **Flujo de trabajo DevOps** profesional
-- ✅ **Documentación completa** para tu equipo
+- ✅ **Configuración inicial** de Wrangler y Cloudflare Pages
+- ✅ **GitHub Actions CI/CD** para deploy automático
+- ✅ **Troubleshooting avanzado** para WSL y problemas comunes
+- ✅ **Workflow completo** de desarrollo profesional
+- ✅ **Mejores prácticas** de DevOps y automatización
 
-## 📋 Prerrequisitos
+## 📚 Serie Completa: 3 Guías Especializadas
 
-Antes de empezar con este **tutorial de automatización DevOps**, asegúrate de tener:
+### **Parte 1: Configuración Inicial**
+**[Configurar Wrangler y Cloudflare Pages: Guía Completa 2024](/blog/configurar-wrangler-cloudflare-pages-2024)**
 
-- Proyecto Astro funcionando localmente ([ver nuestra guía de arquitectura modular](/blog/arquitectura-modular-astro))
-- Cuenta de Cloudflare activa
+Aprende la configuración base:
+- ✅ Instalación y autenticación de Wrangler
+- ✅ Creación de proyectos en Cloudflare Pages
+- ✅ Configuración de `wrangler.toml`
+- ✅ Primer deploy manual
+- ✅ Soluciones para WSL
+
+**Tiempo:** ~5 minutos de lectura | **Nivel:** Principiante
+
+### **Parte 2: Automatización CI/CD**
+**[GitHub Actions para Deploy Automático: CI/CD con Wrangler](/blog/github-actions-deploy-automatico-wrangler)**
+
+Automatiza tus deploys:
+- ✅ Creación de API tokens en Cloudflare
+- ✅ Configuración de GitHub Secrets
+- ✅ Workflow de GitHub Actions
+- ✅ Deploy automático en push
+- ✅ Monitoreo y verificación
+
+**Tiempo:** ~6 minutos de lectura | **Nivel:** Intermedio
+
+### **Parte 3: Troubleshooting Avanzado**
+**[Troubleshooting Wrangler: Soluciones para WSL y Deploy Issues](/blog/troubleshooting-wrangler-wsl-deploy)**
+
+Resuelve problemas comunes:
+- ✅ Errores de binarios en WSL
+- ✅ Problemas de autenticación
+- ✅ Issues en GitHub Actions
+- ✅ Errores de deploy y configuración
+- ✅ Herramientas de diagnóstico
+
+**Tiempo:** ~4 minutos de lectura | **Nivel:** Avanzado
+
+## 🚀 Ruta de Aprendizaje Recomendada
+
+### **Para Principiantes**
+1. **[Parte 1: Configuración](/blog/configurar-wrangler-cloudflare-pages-2024)** - Empieza aquí
+2. **[Parte 2: CI/CD](/blog/github-actions-deploy-automatico-wrangler)** - Automatiza
+3. **[Parte 3: Troubleshooting](/blog/troubleshooting-wrangler-wsl-deploy)** - Domina
+
+### **Para Desarrolladores con Experiencia**
+- ¿Ya tienes Wrangler? → **[Parte 2: CI/CD](/blog/github-actions-deploy-automatico-wrangler)**
+- ¿Tienes problemas? → **[Parte 3: Troubleshooting](/blog/troubleshooting-wrangler-wsl-deploy)**
+
+## 📋 Prerrequisitos para la Serie
+
+- Proyecto web funcionando localmente (Astro, React, Vue, etc.)
+- Cuenta de Cloudflare (gratuita está bien)
 - Repositorio en GitHub
 - Node.js y npm instalados
-- Entorno WSL (cubrimos todos los problemas de **integración continua**)
+- Conocimientos básicos de Git y terminal
 
-💡 **Tip**: Si aún no tienes configurado tu proyecto Astro con las mejores prácticas, te recomiendo leer primero sobre [arquitectura modular en Astro](/blog/arquitectura-modular-astro) para optimizar tu **flujo de desarrollo**.
+## 🎯 Resumen de la Serie
 
-## 🚀 FASE 1: Configuración Inicial de Cloudflare
+### **Parte 1: Configuración Base**
+**[Configurar Wrangler y Cloudflare Pages](/blog/configurar-wrangler-cloudflare-pages-2024)**
 
-### 1.1 Autenticación con Cloudflare
+**Lo que aprenderás:**
+- Instalación y autenticación de Wrangler
+- Creación de proyectos en Cloudflare Pages
+- Configuración de `wrangler.toml`
+- Primer deploy manual exitoso
+- Soluciones específicas para WSL
 
-El primer paso es autenticarte con Cloudflare. **Importante**: Si estás en WSL, siempre usa `npx wrangler` para evitar problemas de binarios.
+**Puntos clave:**
+- ✅ Usar `npx wrangler` en WSL para evitar problemas
+- ✅ Guardar Account ID para GitHub Actions
+- ✅ Configurar `pages_build_output_dir` correctamente
 
-```bash
-# IMPORTANTE: Usar npx para evitar problemas de WSL
-npx wrangler login
-```
+### **Parte 2: Automatización CI/CD**
+**[GitHub Actions para Deploy Automático](/blog/github-actions-deploy-automatico-wrangler)**
 
-💡 **Consejo**: Si estás en WSL, SIEMPRE usa `npx wrangler` en lugar de instalación global para evitar conflictos de binarios Windows/Linux.
+**Lo que aprenderás:**
+- Crear API tokens con permisos correctos
+- Configurar GitHub Secrets de forma segura
+- Crear workflows de GitHub Actions
+- Deploy automático en cada push
+- Monitoreo y verificación de deploys
 
-### 1.2 Verificar Autenticación
+**Puntos clave:**
+- ✅ API tokens con permisos mínimos necesarios
+- ✅ Secrets seguros en GitHub
+- ✅ Cache de npm para builds rápidos
 
-```bash
-# Verificar que estás autenticado correctamente
-npx wrangler whoami
-```
+### **Parte 3: Troubleshooting**
+**[Soluciones para WSL y Deploy Issues](/blog/troubleshooting-wrangler-wsl-deploy)**
 
-**Salida esperada**:
-```
-Getting User settings...
-👤 You are logged in with an OAuth Token, associated with the email 'tu-email@gmail.com'.
-┌─────────────────────────────────────┬──────────────────────────────────┐
-│ Account Name                        │ Account ID                       │
-├─────────────────────────────────────┼──────────────────────────────────┤
-│ Tu Nombre's Account                 │ 64411aa1bd74d6cc23e75f67e32bd6c0 │
-└─────────────────────────────────────┴──────────────────────────────────┘
-```
+**Lo que aprenderás:**
+- Resolver errores de binarios cruzados
+- Solucionar problemas de autenticación
+- Debuggear issues en GitHub Actions
+- Herramientas de diagnóstico
+- Mejores prácticas de desarrollo
 
-⚠️ **IMPORTANTE**: Guarda el Account ID, lo necesitarás más adelante.
+**Puntos clave:**
+- ✅ Checklist completo de troubleshooting
+- ✅ Comandos de diagnóstico útiles
+- ✅ Workflow optimizado de desarrollo
 
-### 1.3 Crear Proyecto en Cloudflare Pages
+## 💡 Beneficios de Completar la Serie
 
-```bash
-# Crear proyecto (reemplaza 'tu-proyecto' con el nombre real)
-npx wrangler pages project create tu-proyecto
-```
+### **Para Desarrolladores**
+- ⚡ **Deploy en 1-2 minutos** desde push hasta producción
+- 🔒 **Seguridad profesional** con tokens y secrets apropiados
+- 📊 **Monitoreo completo** con GitHub Actions
+- 🌍 **CDN global** de Cloudflare automático
+- 🔄 **Rollback fácil** si algo falla
 
-### 1.4 Configurar wrangler.toml
+### **Para Equipos**
+- 👥 **Workflow estandarizado** para todo el equipo
+- 📚 **Documentación completa** para onboarding
+- 🚀 **Productividad aumentada** con automatización
+- 🛡️ **Menos errores** con proceso automatizado
+- 📈 **Escalabilidad** para proyectos grandes
 
-Crea el archivo `wrangler.toml` en la raíz de tu proyecto:
+### **Para Proyectos**
+- 🏗️ **Infraestructura como código** con GitHub Actions
+- 🔧 **Mantenimiento simplificado** con configuración centralizada
+- 📊 **Métricas de deploy** y monitoreo integrado
+- 🌐 **Performance global** con Cloudflare Edge Network
 
-```toml
-name = "tu-proyecto"
-compatibility_date = "2024-01-01"
-pages_build_output_dir = "dist"
-```
+## 🚀 Comienza tu Journey de Deploy Automático
 
-💡 **Consejo**: El `pages_build_output_dir` debe coincidir con el directorio de salida de Astro (por defecto `dist`).
+### **¿Por dónde empezar?**
 
-## 🔧 FASE 2: Resolución de Problemas WSL
+**Si eres nuevo en Wrangler:**
+👉 **[Parte 1: Configurar Wrangler y Cloudflare Pages](/blog/configurar-wrangler-cloudflare-pages-2024)**
 
-### 2.1 El Problema Común en WSL
+**Si ya tienes Wrangler configurado:**
+👉 **[Parte 2: GitHub Actions para Deploy Automático](/blog/github-actions-deploy-automatico-wrangler)**
 
-⚠️ **PROBLEMA**: Al usar Wrangler en WSL, es común encontrar este error:
+**Si tienes problemas o errores:**
+👉 **[Parte 3: Troubleshooting Wrangler](/blog/troubleshooting-wrangler-wsl-deploy)**
 
-```
-Error: You installed workerd on another platform than the one you're currently using.
-Specifically the "@cloudflare/workerd-windows-64" package is present but this platform
-needs the "@cloudflare/workerd-linux-64" package instead.
-```
+## 🎯 Lo que lograrás al completar la serie
 
-### 2.2 La Solución Definitiva
+### **Infraestructura Profesional**
+- ⚡ Deploy automático en 1-2 minutos
+- 🔒 Seguridad con tokens y secrets
+- 📊 Monitoreo completo con GitHub Actions
+- 🌍 CDN global de Cloudflare
+- 🔄 Rollback fácil si algo falla
 
-✅ **SOLUCIÓN**: Usar `npx wrangler` en lugar de instalación global.
+### **Workflow Optimizado**
+- 🚀 Push to deploy automático
+- 🧪 Testing integrado en CI/CD
+- 📱 Preview deployments para PRs
+- 📈 Métricas y logs detallados
 
-```bash
-# Si tienes problemas de binarios cruzados
-rm -rf node_modules package-lock.json
-npm install
+## 💡 Conceptos Clave de la Serie
 
-# Verificar que npx funciona
-npx wrangler --version
-```
+### **Wrangler + WSL**
+- Usar `npx wrangler` para evitar problemas de binarios
+- Configuración correcta de `wrangler.toml`
+- Autenticación y gestión de proyectos
 
-### 2.3 Por qué npx es la Solución Perfecta
+### **GitHub Actions CI/CD**
+- API tokens con permisos mínimos
+- Secrets seguros en GitHub
+- Workflows optimizados con cache
+- Deploy automático en push a main
 
-1. **Descarga automática**: npx descarga la versión correcta para la plataforma actual
-2. **Sin conflictos**: Evita completamente los conflictos Windows/Linux
-3. **Sin instalación global**: No requiere instalación global problemática
-4. **Siempre actualizado**: Usa la versión más reciente disponible
-5. **Funciona en cualquier entorno**: WSL, Linux nativo, macOS, Windows
+### **Troubleshooting**
+- Diagnóstico de errores comunes
+- Herramientas de debugging
+- Mejores prácticas de desarrollo
+- Checklist completo de verificación
 
-## 🤖 FASE 3: Configuración de GitHub Actions
+## 🔗 Próximos Pasos en tu Journey DevOps
 
 ### 3.1 Crear el Workflow
 
