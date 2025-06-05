@@ -1,162 +1,339 @@
-# 📋 **Resumen: Implementación de Deploys con Wrangler**
+# 📚 **Tutorial: Deploy Automático con Wrangler y GitHub Actions**
 
-## 🎯 **Contexto del Proyecto**
-- **Proyecto**: Estilo Sushi (sitio web de restaurante)
-- **Stack**: Astro + Tailwind CSS + Cloudflare Pages/Workers
-- **Objetivo**: Implementar sistema de deploy automatizado con Wrangler CLI
+## 🎯 **Objetivo**
+Configurar deploy automático para proyectos Astro en Cloudflare Pages, resolviendo problemas de WSL y estableciendo CI/CD profesional.
 
-## 🔧 **Pasos de Implementación**
+## 📋 **Prerrequisitos**
+- Proyecto Astro funcionando
+- Cuenta de Cloudflare
+- Repositorio en GitHub
+- Entorno WSL (opcional, pero cubierto)
 
-### **1. Configuración Inicial de Wrangler**
+---
+
+## 🚀 **Paso 1: Configuración Inicial de Cloudflare**
+
+### **1.1 Crear Proyecto en Cloudflare Pages**
 ```bash
-# Instalación de Wrangler CLI
-npm install -g wrangler
+# Instalar Wrangler (usar npx para evitar problemas WSL)
+npx wrangler login
 
-# Autenticación con Cloudflare
-wrangler login
+# Crear proyecto
+npx wrangler pages project create tu-proyecto
 ```
 
-### **2. Configuración del Proyecto**
-- **Archivo `wrangler.toml`**: Configuración principal del proyecto
+### **1.2 Configurar wrangler.toml**
 ```toml
-name = "estilo-sushi"
+name = "tu-proyecto"
 compatibility_date = "2024-01-01"
 pages_build_output_dir = "dist"
 
 [env.production]
-name = "estilo-sushi"
+name = "tu-proyecto"
 ```
 
-### **3. Scripts de Deploy en package.json**
+---
+
+## 🔧 **Paso 2: Scripts de Deploy en package.json**
+
+### **2.1 Agregar Scripts Optimizados**
 ```json
 {
   "scripts": {
     "build": "astro build",
-    "deploy": "npm run build && wrangler pages deploy dist",
-    "deploy:production": "npm run build && wrangler pages deploy dist --env production"
+    "deploy": "npm run build && npx wrangler pages deploy dist --project-name=tu-proyecto --commit-dirty=true",
+    "deploy:clean": "npm run build && npx wrangler pages deploy dist --project-name=tu-proyecto",
+    "deploy:ci": "wrangler pages deploy dist --project-name=tu-proyecto",
+    "deploy:preview": "npm run build && npx wrangler pages deploy dist --project-name=tu-proyecto-preview --commit-dirty=true",
+    "pages:create": "npx wrangler pages project create tu-proyecto",
+    "pages:list": "npx wrangler pages project list",
+    "wrangler:login": "npx wrangler login"
   }
 }
 ```
 
-### **4. Proceso de Deploy**
-```bash
-# Build del proyecto Astro
-npm run build
+### **2.2 Explicación de Scripts**
+- **`deploy`**: Desarrollo rápido (permite cambios sin commit)
+- **`deploy:clean`**: Producción (requiere commits limpios)
+- **`deploy:ci`**: Para GitHub Actions (sin npx)
+- **`deploy:preview`**: Entorno de pruebas
 
-# Deploy a Cloudflare Pages
-wrangler pages deploy dist
+---
 
-# Deploy a producción específica
-npm run deploy:production
+## 🤖 **Paso 3: GitHub Actions CI/CD**
+
+### **3.1 Crear .github/workflows/deploy.yml**
+```yaml
+name: Deploy to Cloudflare Pages
+
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout
+      uses: actions/checkout@v4
+
+    - name: Setup Node.js
+      uses: actions/setup-node@v4
+      with:
+        node-version: '20'
+        cache: 'npm'
+
+    - name: Install dependencies
+      run: npm ci
+
+    - name: Build project
+      run: npm run build
+
+    - name: Deploy to Cloudflare Pages
+      uses: cloudflare/pages-action@v1
+      with:
+        apiToken: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+        accountId: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
+        projectName: tu-proyecto
+        directory: dist
 ```
 
-### **5. Configuración de Cloudflare Pages**
-- **Proyecto conectado**: `estilo-sushi` en Cloudflare Dashboard
-- **Dominio personalizado**: Configurado en Cloudflare Pages
-- **Build settings**: Configurados para Astro (comando: `npm run build`, output: `dist`)
+### **3.2 Configurar Secrets en GitHub**
+1. Ir a Settings → Secrets and variables → Actions
+2. Agregar:
+   - `CLOUDFLARE_API_TOKEN`: Token de Cloudflare
+   - `CLOUDFLARE_ACCOUNT_ID`: ID de tu cuenta
 
-### **6. Verificación de Deploy**
-- **Script de verificación**: `deploy-info.js` (posteriormente removido)
-- **Console logs**: Para confirmar que el deploy está activo
-- **URL de producción**: Verificación manual del sitio
-
-### **7. Automatización y Workflow**
+### **3.3 Obtener Tokens de Cloudflare**
 ```bash
-# Workflow típico de deploy
+# Ver Account ID
+npx wrangler whoami
+
+# Crear API Token en Cloudflare Dashboard:
+# My Profile → API Tokens → Create Token
+# Template: "Custom token"
+# Permissions: Zone:Zone:Read, Account:Cloudflare Pages:Edit
+```
+
+---
+
+## 🛠️ **Paso 4: Resolver Problemas de WSL**
+
+### **4.1 El Problema Común**
+```
+Error: You installed workerd on another platform than the one you're currently using.
+Specifically the "@cloudflare/workerd-windows-64" package is present but this platform
+needs the "@cloudflare/workerd-linux-64" package instead.
+```
+
+### **4.2 Solución Definitiva**
+```bash
+# Limpiar instalaciones cruzadas
+rm -rf node_modules package-lock.json
+
+# Reinstalar en WSL
+npm install
+
+# USAR npx en lugar de instalación global
+npx wrangler --version  # ✅ Funciona
+wrangler --version      # ❌ Falla en WSL
+```
+
+### **4.3 Por qué npx Funciona**
+- Descarga binarios correctos para la plataforma actual
+- Evita conflictos Windows/Linux
+- No requiere instalación global problemática
+
+---
+
+## 📝 **Paso 5: Documentación del Proyecto**
+
+### **5.1 Crear DEPLOY.md**
+```markdown
+# 🚀 Deploy Guide
+
+## Scripts Disponibles
+- `npm run deploy` - Deploy rápido (desarrollo)
+- `npm run deploy:clean` - Deploy limpio (producción)
+- `npm run deploy:preview` - Deploy a preview
+
+## Workflow
+1. Desarrollo: `npm run dev`
+2. Deploy rápido: `npm run deploy`
+3. Producción: Push a main (GitHub Actions)
+
+## Troubleshooting WSL
+Si tienes errores de binarios, usar `npx wrangler` siempre.
+```
+
+---
+
+## 🔄 **Paso 6: Workflow Completo**
+
+### **6.1 Desarrollo Local**
+```bash
+# 1. Hacer cambios
+git checkout -b feature/nueva-funcionalidad
+
+# 2. Probar localmente
+npm run dev
+
+# 3. Deploy rápido para testing
+npm run deploy
+
+# 4. Verificar en URL temporal
+```
+
+### **6.2 Producción**
+```bash
+# 1. Commit limpio
 git add .
 git commit -m "feat: nueva funcionalidad"
-npm run deploy
+
+# 2. Push a main
+git checkout main
+git merge feature/nueva-funcionalidad
+git push origin main
+
+# 3. GitHub Actions hace deploy automático
+# 4. Verificar en producción
 ```
 
-### **8. Configuración de Analytics Worker**
-- **Worker separado**: `estilo-sushi-analytics.kapato.workers.dev`
-- **Deploy del worker**: `wrangler deploy` desde directorio del worker
-- **Integración**: Conectado con el sitio principal para analytics
+---
 
-## 🚀 **Comandos Principales Utilizados**
+## ✅ **Paso 7: Verificación y Testing**
 
-### **Deploy Básico**
+### **7.1 Probar Deploy Manual**
 ```bash
-wrangler pages deploy dist
+npm run deploy:clean
 ```
 
-### **Deploy con Configuración Específica**
+### **7.2 Probar GitHub Actions**
 ```bash
-wrangler pages deploy dist --project-name estilo-sushi
+git push origin main
+# Verificar en GitHub → Actions tab
 ```
 
-### **Deploy de Worker (Analytics)**
-```bash
-wrangler deploy
-```
+### **7.3 Verificar URLs**
+- **Producción**: https://tu-proyecto.pages.dev
+- **Preview**: URLs temporales en cada deploy
 
-### **Verificación de Proyectos**
-```bash
-wrangler pages project list
-```
-
-## 📁 **Estructura de Archivos Clave**
-
-```
-estilo-sushi/
-├── wrangler.toml          # Configuración de Wrangler
-├── package.json           # Scripts de deploy
-├── astro.config.mjs       # Configuración de Astro
-├── dist/                  # Output de build (generado)
-└── src/                   # Código fuente
-```
-
-## ⚙️ **Configuraciones Importantes**
-
-### **wrangler.toml**
-- Define el nombre del proyecto
-- Especifica el directorio de output (`dist`)
-- Configura entornos (development/production)
-
-### **astro.config.mjs**
-- Configurado para generar sitio estático
-- Output en directorio `dist`
-- Optimizaciones para Cloudflare Pages
-
-## 🔄 **Workflow de Deploy Establecido**
-
-1. **Desarrollo local**: `npm run dev`
-2. **Testing**: Verificar funcionalidad
-3. **Build**: `npm run build`
-4. **Deploy**: `npm run deploy`
-5. **Verificación**: Revisar sitio en producción
-
-## 🛠️ **Troubleshooting Común**
-
-### **Problemas Resueltos**
-- **Rutas**: Configuración correcta de rutas estáticas en Astro
-- **Assets**: Optimización de imágenes y recursos
-- **Analytics**: Integración con Worker de Cloudflare
-- **Performance**: Optimizaciones para Core Web Vitals
-
-### **Comandos de Debug**
-```bash
-# Ver logs de deploy
-wrangler pages deployment list
-
-# Debug de configuración
-wrangler pages project show estilo-sushi
-```
-
-## 📊 **Beneficios Obtenidos**
-
-1. **Deploy automatizado**: Un comando para subir a producción
-2. **Integración con Git**: Posibilidad de CI/CD futuro
-3. **Performance**: CDN global de Cloudflare
-4. **Analytics**: Worker dedicado para tracking
-5. **Escalabilidad**: Infraestructura serverless
+---
 
 ## 🎯 **Resultado Final**
 
-- ✅ **Deploy funcional** con `wrangler pages deploy dist`
-- ✅ **Sitio en producción** accesible y optimizado
-- ✅ **Analytics integrado** con Worker de Cloudflare
-- ✅ **Workflow establecido** para futuros deploys
-- ✅ **Código limpio** sin scripts de debug en producción
+### **✅ Lo que Obtienes**
+- Deploy automático en cada push a main
+- Deploy manual rápido para desarrollo
+- Resolución de problemas WSL
+- Workflow profesional y escalable
+- Documentación clara para el equipo
 
-Este setup permite deploys rápidos y confiables, manteniendo el sitio siempre actualizado con los últimos cambios del código.
+### **📊 Comandos Clave**
+```bash
+# Desarrollo
+npm run deploy
+
+# Producción manual
+npm run deploy:clean
+
+# Ver proyectos
+npm run pages:list
+
+# Re-autenticar
+npm run wrangler:login
+```
+
+### **🚀 Próximos Pasos**
+1. Configurar dominios personalizados
+2. Agregar Workers para funcionalidades avanzadas
+3. Implementar preview deployments por PR
+4. Configurar notificaciones de deploy
+
+---
+
+## 🔧 **Troubleshooting Común**
+
+### **Error de Binarios WSL**
+```bash
+# Síntoma
+Error: You installed workerd on another platform...
+
+# Solución
+rm -rf node_modules package-lock.json
+npm install
+# Usar siempre npx wrangler
+```
+
+### **Error de Autenticación**
+```bash
+# Síntoma
+Error: Authentication required
+
+# Solución
+npx wrangler login
+```
+
+### **Error de Proyecto No Encontrado**
+```bash
+# Síntoma
+Error: Project not found
+
+# Solución
+npm run pages:create
+npm run pages:list
+```
+
+### **Error en GitHub Actions**
+```bash
+# Verificar secrets configurados:
+# - CLOUDFLARE_API_TOKEN
+# - CLOUDFLARE_ACCOUNT_ID
+
+# Verificar permisos del token:
+# Account:Cloudflare Pages:Edit
+# Zone:Zone:Read
+```
+
+---
+
+## 💡 **Tips y Mejores Prácticas**
+
+### **🔒 Seguridad**
+- Nunca commitear tokens en el código
+- Usar secrets de GitHub para tokens
+- Rotar tokens periódicamente
+- Usar permisos mínimos necesarios
+
+### **⚡ Performance**
+- Usar `npm ci` en CI/CD (más rápido que `npm install`)
+- Cachear `node_modules` en GitHub Actions
+- Usar `--commit-dirty=true` solo en desarrollo
+
+### **📝 Documentación**
+- Mantener DEPLOY.md actualizado
+- Documentar secrets necesarios
+- Incluir troubleshooting común
+- Explicar workflow al equipo
+
+### **🔄 Workflow**
+- Usar branches para features
+- Deploy manual para testing rápido
+- GitHub Actions para producción
+- Preview deployments para PRs
+
+---
+
+**💡 Tip Final**: Siempre usar `npx wrangler` en WSL para evitar problemas de binarios. Esta configuración funciona de manera consistente y profesional en cualquier proyecto Astro + Cloudflare Pages.
+
+---
+
+## 📚 **Recursos Adicionales**
+
+- [Documentación oficial de Wrangler](https://developers.cloudflare.com/workers/wrangler/)
+- [Cloudflare Pages GitHub Action](https://github.com/cloudflare/pages-action)
+- [Astro Deploy Guide](https://docs.astro.build/en/guides/deploy/cloudflare/)
+- [GitHub Actions Documentation](https://docs.github.com/en/actions)

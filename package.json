@@ -33,14 +33,7 @@
     "validate:schemas": "node src/features/schema/scripts/validate-schemas.js",
     "validate:schemas:dev": "npm run validate:schemas -- --dev",
     "validate:schemas:auto": "npm run validate:schemas -- --auto",
-    "test:schemas:full": "npm run test:schemas && npm run validate:schemas:dev",
-    "deploy": "npm run build && wrangler pages deploy dist",
-    "deploy:production": "npm run build && wrangler pages deploy dist --env production",
-    "deploy:dev": "npm run build && wrangler pages deploy dist --env development",
-    "wrangler:login": "wrangler login",
-    "wrangler:list": "wrangler pages project list",
-    "wrangler:info": "wrangler pages project show cappato-blog",
-    "wrangler:setup": "node scripts/setup-wrangler.js"
+    "test:schemas:full": "npm run test:schemas && npm run validate:schemas:dev"
   },
   "dependencies": {
     "@tailwindcss/typography": "^0.5.16",
@@ -61,7 +54,6 @@
     "tailwindcss": "^3.4.0",
     "tsx": "^4.19.4",
     "vitest": "^3.1.4",
-    "wrangler": "^3.78.12",
     "yargs": "^17.7.2"
   }
 }
