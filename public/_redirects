@@ -11,9 +11,6 @@ https://www.cappato.dev/* https://cappato.dev/:splat 301!
 /blog/tags/ /blog 301
 /blog/tags /blog 301
 
-# Remove trailing slashes for consistency
-/blog/pillars/ /blog/pillars 301
-
 # Force HTTPS for any HTTP requests
 http://cappato.dev/* https://cappato.dev/:splat 301!
 
