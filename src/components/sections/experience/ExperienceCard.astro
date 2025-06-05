@@ -128,37 +128,4 @@ const formattedResponsibilities = formatResponsibilities(experience.responsibili
   )}
 </div>
 
-<script>
-  // Collapsible functionality for experience cards
-  document.addEventListener('DOMContentLoaded', function() {
-    const toggleButtons = document.querySelectorAll('.collapsible-toggle');
-
-    toggleButtons.forEach(button => {
-      button.addEventListener('click', function() {
-        const content = this.closest('.collapsible-content');
-        const items = content.querySelectorAll('.collapsible-item');
-        const gradient = content.querySelector('.collapsible-gradient');
-        const toggleText = this.querySelector('.toggle-text');
-        const toggleIcon = this.querySelector('.toggle-icon');
-        const isExpanded = this.getAttribute('aria-expanded') === 'true';
-
-        if (isExpanded) {
-          // Collapse
-          items.forEach(item => item.classList.add('hidden'));
-          gradient.classList.remove('hidden');
-          const hiddenCount = items.length;
-          toggleText.textContent = `Show more (${hiddenCount} more)`;
-          toggleIcon.style.transform = 'rotate(0deg)';
-          this.setAttribute('aria-expanded', 'false');
-        } else {
-          // Expand
-          items.forEach(item => item.classList.remove('hidden'));
-          gradient.classList.add('hidden');
-          toggleText.textContent = 'Show less';
-          toggleIcon.style.transform = 'rotate(180deg)';
-          this.setAttribute('aria-expanded', 'true');
-        }
-      });
-    });
-  });
-</script>
+<!-- Collapsible functionality now handled by consolidated ui-interactions.ts -->

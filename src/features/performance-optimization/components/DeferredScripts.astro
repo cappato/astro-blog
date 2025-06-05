@@ -16,17 +16,45 @@ const {
 } = Astro.props;
 ---
 
-<!-- Performance Script Loader -->
-<script type="module">
-  // Simple performance optimizations
-  console.log('⚡ Performance optimizations loaded');
+<!-- Performance Script Loader - Optimized -->
+<script type="module" is:inline>
+  // Performance monitoring and optimization
+  console.log('⚡ Performance optimizations active');
 
-  // Defer non-critical scripts
-  if ('requestIdleCallback' in window) {
-    requestIdleCallback(() => {
-      console.log('📦 Loading deferred scripts...');
-    }, { timeout: 2000 });
+  // Monitor Core Web Vitals
+  if ('web-vital' in window || 'PerformanceObserver' in window) {
+    // Monitor LCP (Largest Contentful Paint)
+    new PerformanceObserver((entryList) => {
+      for (const entry of entryList.getEntries()) {
+        if (entry.entryType === 'largest-contentful-paint') {
+          console.log('📊 LCP:', entry.startTime);
+        }
+      }
+    }).observe({ entryTypes: ['largest-contentful-paint'] });
+
+    // Monitor CLS (Cumulative Layout Shift)
+    new PerformanceObserver((entryList) => {
+      for (const entry of entryList.getEntries()) {
+        if (!entry.hadRecentInput) {
+          console.log('📊 CLS:', entry.value);
+        }
+      }
+    }).observe({ entryTypes: ['layout-shift'] });
   }
+
+  // Prefetch critical resources on hover
+  const prefetchLinks = document.querySelectorAll('a[href^="/blog/"]');
+  prefetchLinks.forEach(link => {
+    link.addEventListener('mouseenter', () => {
+      const href = link.getAttribute('href');
+      if (href && !document.querySelector(`link[href="${href}"]`)) {
+        const prefetchLink = document.createElement('link');
+        prefetchLink.rel = 'prefetch';
+        prefetchLink.href = href;
+        document.head.appendChild(prefetchLink);
+      }
+    }, { once: true });
+  });
 </script>
 
 
