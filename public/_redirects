@@ -14,8 +14,11 @@ https://www.cappato.dev/* https://cappato.dev/:splat 301!
 # Force HTTPS for any HTTP requests
 http://cappato.dev/* https://cappato.dev/:splat 301!
 
-# Blog 404s - redirect any non-existent blog URL to blog index
-/blog/* /blog 301!
+# Blog 404s - redirect specific malformed URLs to blog index
+# Note: Draft posts are intentionally not generated in production
+/blog/undefined /blog 301
+/blog/null /blog 301
+/blog/page/ /blog 301
 
 # General 404s - redirect any non-existent URL to home
 /* / 301!

@@ -4,11 +4,10 @@ import PostLayout from '../../layouts/PostLayout.astro';
 
 // Genera las rutas para todos los posts
 export async function getStaticPaths() {
-  const blogEntries = await getCollection('blog', ({ data }: CollectionEntry<'blog'>) => {
-    // En producción, filtra los borradores
-    return import.meta.env.PROD ? !data.draft : true;
-  });
-  
+  // En desarrollo: incluir todos los posts
+  // En producción: incluir todos los posts (drafts se manejan en el componente)
+  const blogEntries = await getCollection('blog');
+
   return blogEntries.map((entry: CollectionEntry<'blog'>) => ({
     // Usa el slug personalizado si existe, de lo contrario usa el slug automático
     params: { slug: entry.data.slug || entry.slug },
@@ -36,6 +35,7 @@ const { Content } = await entry.render();
   imageAlt={entry.data.imageAlt}
   tags={entry.data.tags}
   entry={entry}
+  draft={entry.data.draft}
 >
   <Content />
 </PostLayout>

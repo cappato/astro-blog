@@ -11,6 +11,7 @@ import RelatedArticles from '../features/related-articles/components/RelatedArti
 import OptimizedImage from '../features/performance-optimization/components/OptimizedImage.astro';
 import ContentContainer from '../components/layout/ContentContainer.astro';
 import ContentWidth from '../components/layout/ContentWidth.astro';
+import DraftNotice from '../components/blog/DraftNotice.astro';
 
 import type { CollectionEntry } from 'astro:content';
 
@@ -31,10 +32,19 @@ interface Props {
   tags?: string[];
   // Para el nuevo sistema de schemas
   entry?: CollectionEntry<'blog'>;
+  draft?: boolean;
 }
 
 // Props que recibe el componente
-const { title, description, date, author, image, postId, imageAlt, tags, entry } = Astro.props;
+const { title, description, date, author, image, postId, imageAlt, tags, entry, draft } = Astro.props;
+
+// Verificar si es draft y estamos en producción
+const isDraft = draft || entry?.data.draft || false;
+const isProduction = import.meta.env.PROD;
+const isDevelopment = import.meta.env.DEV;
+
+// Si es draft en producción, mostrar página especial
+const showDraftNotice = isDraft && isProduction;
 
 // Determinar qué sistema de imágenes usar
 const useNewImageSystem = !!postId;
@@ -161,10 +171,24 @@ const currentPost = {
 
   <BlogNavbar currentPath={Astro.url.pathname} slot="header" />
 
-
-
-  <ContentContainer as="main" id="main-content" className="py-4">
+  {showDraftNotice ? (
+    <DraftNotice
+      title={title}
+      description={description}
+      isDevelopment={isDevelopment}
+    />
+  ) : (
+    <ContentContainer as="main" id="main-content" className="py-4">
     <ContentWidth width="standard">
+      <!-- Notificación de draft en desarrollo -->
+      {isDraft && isDevelopment && (
+        <DraftNotice
+          title={title}
+          description={description}
+          isDevelopment={true}
+        />
+      )}
+
       <!-- Contenido del artículo -->
       <article>
       <!-- Imagen destacada optimizada -->
@@ -280,13 +304,13 @@ const currentPost = {
       </div>
       </article>
     </ContentWidth>
-  </ContentContainer>
+    </ContentContainer>
+  )}
 
   <Footer slot="footer" />
 
   <!-- Componente de toast para notificaciones de copia -->
   <CopyToast />
-
 
 </BaseLayout>
 
