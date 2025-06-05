@@ -89,6 +89,22 @@ const currentUrl = Astro.url.pathname;
 
   <!-- Slot para estilos adicionales específicos de página -->
   <slot name="head" />
+
+  <!-- Service Worker Registration -->
+  <script>
+    // Register service worker for performance caching
+    if ('serviceWorker' in navigator) {
+      window.addEventListener('load', () => {
+        navigator.serviceWorker.register('/sw.js')
+          .then(registration => {
+            console.log('[SW] Service worker registered successfully:', registration.scope);
+          })
+          .catch(error => {
+            console.log('[SW] Service worker registration failed:', error);
+          });
+      });
+    }
+  </script>
 </head>
 <body class="container-primary min-h-screen flex flex-col pt-20">
   <!-- Mejora: Skip to content para accesibilidad -->

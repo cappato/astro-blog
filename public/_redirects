@@ -5,5 +5,17 @@ https://www.matiascappato.com/* https://cappato.dev/:splat 301!
 # Asegurar que www.cappato.dev redirija a cappato.dev (sin www)
 https://www.cappato.dev/* https://cappato.dev/:splat 301!
 
-# Mantener SPA routing
+# Blog URL cleanup - redirect malformed URLs to blog index
+/blog/pillar/ /blog 301
+/blog/tag/ /blog 301
+/blog/tags/ /blog 301
+/blog/tags /blog 301
+
+# Remove trailing slashes for consistency
+/blog/pillars/ /blog/pillars 301
+
+# Force HTTPS for any HTTP requests
+http://cappato.dev/* https://cappato.dev/:splat 301!
+
+# Mantener SPA routing (debe ser la última regla)
 /* /index.html 200
