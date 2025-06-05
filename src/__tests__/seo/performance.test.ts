@@ -150,12 +150,20 @@ describe('Performance SEO Tests', () => {
       const preconnects = document.querySelectorAll('link[rel="preconnect"]');
       const dnsPrefetch = document.querySelectorAll('link[rel="dns-prefetch"]');
       
-      // For static sites with no external resources, this is acceptable
-      if (homeAnalysis.scripts.length > 0 || homeAnalysis.stylesheets.length > 0) {
+      // Check if we have external resources that would benefit from resource hints
+      const externalScripts = homeAnalysis.scripts.filter(script =>
+        script.startsWith('http') && !script.includes('cappato.dev')
+      );
+      const externalStylesheets = homeAnalysis.stylesheets.filter(stylesheet =>
+        stylesheet.startsWith('http') && !stylesheet.includes('cappato.dev')
+      );
+
+      if (externalScripts.length > 0 || externalStylesheets.length > 0) {
+        // Only require resource hints if there are truly external resources
         expect(preconnects.length + dnsPrefetch.length).toBeGreaterThan(0);
       } else {
-        // Static site with no external resources - this is actually good for performance
-        expect(homeAnalysis.scripts.length + homeAnalysis.stylesheets.length).toBe(0);
+        // No external resources - resource hints not required
+        console.log('No external resources found - resource hints not required');
       }
     });
 
