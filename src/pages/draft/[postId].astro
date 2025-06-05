@@ -1,0 +1,68 @@
+---
+import { getCollection, type CollectionEntry } from 'astro:content';
+import BaseLayout from '../../components/layout/BaseLayout.astro';
+import BlogNavbar from '../../components/layout/navbar/BlogNavbar.astro';
+import Footer from '../../components/layout/footer/Footer.astro';
+import DraftNotice from '../../components/blog/DraftNotice.astro';
+import ContentContainer from '../../components/layout/ContentContainer.astro';
+import ContentWidth from '../../components/layout/ContentWidth.astro';
+
+// Genera las rutas para todos los posts draft
+export async function getStaticPaths() {
+  const blogEntries = await getCollection('blog', ({ data }: CollectionEntry<'blog'>) => {
+    // Solo posts con draft: true y que tengan postId
+    return data.draft && data.postId;
+  });
+  
+  return blogEntries.map((entry: CollectionEntry<'blog'>) => ({
+    params: { postId: entry.data.postId },
+    props: { entry },
+  }));
+}
+
+// Definir el tipo para la entrada
+interface Props {
+  entry: CollectionEntry<'blog'>;
+}
+
+const { entry } = Astro.props;
+
+// Datos del post para SEO y display
+const { title, description, date, author, postId, imageAlt } = entry.data;
+
+// Imagen para compartir (aunque sea draft)
+const shareImage = postId 
+  ? {
+      url: `/images/${postId}/portada-og.webp`,
+      alt: imageAlt || title,
+      width: 1200,
+      height: 630
+    }
+  : null;
+---
+
+<BaseLayout
+  title={`${title} (Borrador) | Matías Cappato`}
+  description={`Borrador: ${description}`}
+  image={shareImage?.url}
+  imageAlt={shareImage?.alt}
+  type="article"
+  publishedDate={date.toISOString()}
+  modifiedDate={date.toISOString()}
+  customTitle={`${title} (Borrador)`}
+  noindex={true}
+>
+  <BlogNavbar currentPath={Astro.url.pathname} slot="header" />
+
+  <ContentContainer as="main" id="main-content" className="py-4">
+    <ContentWidth width="standard">
+      <DraftNotice 
+        title={title} 
+        description={description}
+        isDevelopment={false}
+      />
+    </ContentWidth>
+  </ContentContainer>
+
+  <Footer slot="footer" />
+</BaseLayout>

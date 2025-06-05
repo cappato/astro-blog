@@ -14,64 +14,82 @@ const { title, description, isDevelopment = false } = Astro.props;
 ---
 
 {!isDevelopment && (
-  <div class="min-h-screen bg-background flex items-center justify-center px-4">
-    <div class="max-w-2xl mx-auto text-center">
-      <!-- Icon -->
-      <div class="mb-8">
-        <div class="w-24 h-24 mx-auto bg-yellow-100 dark:bg-yellow-900/20 rounded-full flex items-center justify-center">
-          <svg class="w-12 h-12 text-yellow-600 dark:text-yellow-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+  <div class="space-y-8">
+    <!-- Imagen de header similar a posts normales -->
+    <div class="w-full h-64 md:h-80 overflow-hidden bg-gradient-to-br from-yellow-400 via-orange-500 to-red-500 flex items-center justify-center">
+      <div class="text-center text-white">
+        <div class="w-24 h-24 mx-auto bg-white/20 backdrop-blur-sm rounded-full flex items-center justify-center mb-4">
+          <svg class="w-12 h-12" fill="none" stroke="currentColor" viewBox="0 0 24 24">
             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-2.5L13.732 4c-.77-.833-1.964-.833-2.732 0L4.082 16.5c-.77.833.192 2.5 1.732 2.5z"></path>
           </svg>
         </div>
+        <h1 class="text-3xl font-bold mb-2">Contenido en Revisión</h1>
+        <p class="text-lg opacity-90">Este artículo está siendo preparado para publicación</p>
       </div>
+    </div>
 
-      <!-- Title -->
-      <h1 class="text-3xl font-bold text-primary mb-4">
-        Contenido en Revisión
-      </h1>
+    <!-- Contenido principal con el mismo padding que posts normales -->
+    <div class="p-6">
+      <div class="max-w-4xl mx-auto">
 
-      <!-- Description -->
-      <div class="text-lg text-secondary mb-8 space-y-4">
-        <p>
-          El artículo <strong>"{title}"</strong> está actualmente en modo borrador y no es visible públicamente.
-        </p>
-        
-        {description && (
-          <p class="text-base italic">
-            {description}
+        <!-- Título del artículo -->
+        <header class="mb-8 text-center">
+          <h2 class="text-2xl font-bold text-primary mb-4">
+            {title}
+          </h2>
+
+          {description && (
+            <p class="text-lg text-secondary mb-4 italic">
+              {description}
+            </p>
+          )}
+
+          <div class="inline-flex items-center px-4 py-2 bg-yellow-100 dark:bg-yellow-900/30 text-yellow-800 dark:text-yellow-200 rounded-full text-sm font-medium">
+            <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01"></path>
+            </svg>
+            Estado: En Revisión
+          </div>
+        </header>
+
+        <!-- Explicación del sistema -->
+        <div class="prose prose-lg max-w-none prose-gray dark:prose-invert mb-8">
+          <p class="text-center text-secondary">
+            Este artículo está actualmente en modo borrador y no es visible públicamente.
+            El contenido está siendo revisado y será publicado próximamente.
           </p>
-        )}
-        
-        <p class="text-sm">
-          Este contenido está siendo revisado y será publicado próximamente.
-        </p>
-      </div>
-
-      <!-- Actions -->
-      <div class="space-y-4">
-        <a 
-          href="/blog" 
-          class="inline-flex items-center px-6 py-3 bg-primary text-white rounded-lg hover:bg-primary/90 transition-colors"
-        >
-          <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18"></path>
-          </svg>
-          Volver al Blog
-        </a>
-        
-        <div class="text-sm text-secondary">
-          <p>¿Eres el autor? Cambia <code class="bg-gray-100 dark:bg-gray-800 px-2 py-1 rounded">draft: false</code> para publicar.</p>
         </div>
-      </div>
 
-      <!-- Development Info -->
-      <div class="mt-12 p-4 bg-gray-50 dark:bg-gray-800/50 rounded-lg text-left">
-        <h3 class="font-semibold text-primary mb-2">ℹ️ Información del Sistema Draft</h3>
-        <div class="text-sm text-secondary space-y-2">
-          <p><strong>Estado:</strong> Draft (borrador)</p>
-          <p><strong>Visible en:</strong> Solo por URL directa</p>
-          <p><strong>No aparece en:</strong> Listados, RSS, Sitemap</p>
-          <p><strong>Para publicar:</strong> Cambiar <code>draft: false</code> en el frontmatter</p>
+        <!-- Actions -->
+        <div class="text-center space-y-6">
+          <a
+            href="/blog"
+            class="inline-flex items-center px-6 py-3 bg-primary text-white rounded-lg hover:bg-primary/90 transition-colors"
+          >
+            <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18"></path>
+            </svg>
+            Volver al Blog
+          </a>
+
+          <div class="text-sm text-secondary">
+            <p>¿Eres el autor? Cambia <code class="bg-gray-100 dark:bg-gray-800 px-2 py-1 rounded">draft: false</code> para publicar.</p>
+          </div>
+        </div>
+
+        <!-- Development Info -->
+        <div class="mt-12 p-6 bg-gray-50 dark:bg-gray-800/50 rounded-lg">
+          <h3 class="font-semibold text-primary mb-4 text-center">ℹ️ Información del Sistema Draft</h3>
+          <div class="grid grid-cols-1 md:grid-cols-2 gap-4 text-sm text-secondary">
+            <div>
+              <p><strong>Estado:</strong> Draft (borrador)</p>
+              <p><strong>Visible en:</strong> Solo por URL directa</p>
+            </div>
+            <div>
+              <p><strong>No aparece en:</strong> Listados, RSS, Sitemap</p>
+              <p><strong>Para publicar:</strong> Cambiar <code>draft: false</code></p>
+            </div>
+          </div>
         </div>
       </div>
     </div>
