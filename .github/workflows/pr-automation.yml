@@ -27,7 +27,7 @@ jobs:
   pr-validation:
     name: PR Validation
     runs-on: ubuntu-latest
-    if: github.event.pull_request.draft == false
+    if: github.event_name == 'pull_request' && github.event.pull_request && github.event.pull_request.draft == false
 
     steps:
     - name: Checkout
@@ -37,6 +37,22 @@ jobs:
       uses: actions/github-script@v7
       with:
         script: |
+          // Multiple safety checks
+          if (context.eventName !== 'pull_request') {
+            console.log(`Event is ${context.eventName}, not pull_request. Skipping validation.`);
+            return;
+          }
+
+          if (!context.payload || !context.payload.pull_request) {
+            console.log('No pull_request in payload, skipping validation');
+            return;
+          }
+
+          if (!context.payload.pull_request.title) {
+            console.log('No title in pull_request, skipping validation');
+            return;
+          }
+
           const title = context.payload.pull_request.title.trim();
           const validPrefixes = ['feat:', 'fix:', 'docs:', 'style:', 'refactor:', 'test:', 'chore:', 'perf:', 'ci:', 'build:'];
 
