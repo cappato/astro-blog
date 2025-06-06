@@ -10,34 +10,34 @@ imageAlt: "Optimización de Performance en Astro: Técnicas Avanzadas para Sitio
 
 Domina técnicas avanzadas de optimización en Astro: lazy loading, code splitting, image optimization y más para sitios web ultrarrápidos.
 
-## 🎯 Lo que vas a lograr
+## Lo que vas a lograr
 
 Al final de esta guía tendrás:
 
-- ✅ [Objetivo 1]
-- ✅ [Objetivo 2]
-- ✅ [Objetivo 3]
+- [Objetivo 1]
+- [Objetivo 2]
+- [Objetivo 3]
 
-## 📋 Prerrequisitos
+## Prerrequisitos
 
 Antes de empezar necesitas:
 
 - [Prerrequisito 1]
 - [Prerrequisito 2]
 
-## 🚀 Paso 1: [Primer Paso]
+## Paso 1: [Primer Paso]
 
 [Contenido del primer paso]
 
-## 🔧 Paso 2: [Segundo Paso]
+## Paso 2: [Segundo Paso]
 
 [Contenido del segundo paso]
 
-## ✅ Verificación
+## Verificación
 
 [Cómo verificar que todo funciona]
 
-## 🎯 Próximos Pasos
+## Próximos Pasos
 
 [Qué hacer después]
 
