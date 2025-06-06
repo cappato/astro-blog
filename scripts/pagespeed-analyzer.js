@@ -2,7 +2,7 @@
 
 /**
  * PageSpeed Insights Analyzer
- * 
+ *
  * Automatiza el análisis de performance usando PageSpeed Insights
  * Espera el tiempo necesario para obtener informes completos
  * Soporta múltiples URLs y dispositivos (desktop/mobile)
@@ -17,23 +17,23 @@ import path from 'path';
 const CONFIG = {
   // Tiempo de espera para que PageSpeed complete el análisis
   ANALYSIS_WAIT_TIME: 30000, // 30 segundos
-  
+
   // Tiempo adicional de buffer
   BUFFER_TIME: 5000, // 5 segundos extra
-  
+
   // Reintentos en caso de fallo
   MAX_RETRIES: 3,
   RETRY_DELAY: 10000, // 10 segundos entre reintentos
-  
+
   // URLs base de PageSpeed
   PAGESPEED_BASE: 'https://pagespeed.web.dev/analysis',
-  
+
   // Dispositivos soportados
   FORM_FACTORS: {
     DESKTOP: 'desktop',
     MOBILE: 'mobile'
   },
-  
+
   // Directorio de reportes
   REPORTS_DIR: 'reports/pagespeed'
 };
@@ -54,49 +54,49 @@ const PREDEFINED_URLS = {
  * Clase principal del analizador
  */
 class PageSpeedAnalyzer {
-  
+
   /**
    * Analizar una URL específica
    */
   async analyzeUrl(url, formFactor = CONFIG.FORM_FACTORS.DESKTOP, apiKey = null) {
-    console.log(`🔍 Analizando: ${url} (${formFactor})`);
+    console.log(` Analizando: ${url} (${formFactor})`);
     console.log(`⏱️  Esperando ${CONFIG.ANALYSIS_WAIT_TIME / 1000}s para análisis completo...`);
-    
+
     try {
       // Construir URL de PageSpeed
       const pageSpeedUrl = this.buildPageSpeedUrl(url, formFactor, apiKey);
-      
+
       // Iniciar análisis
-      console.log(`🚀 Iniciando análisis en PageSpeed Insights...`);
+      console.log(` Iniciando análisis en PageSpeed Insights...`);
       const startTime = Date.now();
-      
+
       // Hacer request inicial para iniciar el análisis
       const initialResponse = await fetch(pageSpeedUrl);
       if (!initialResponse.ok) {
         throw new Error(`HTTP ${initialResponse.status}: ${initialResponse.statusText}`);
       }
-      
-      console.log(`✅ Análisis iniciado, esperando resultados...`);
-      
+
+      console.log(` Análisis iniciado, esperando resultados...`);
+
       // Esperar el tiempo necesario para que complete
       await this.waitWithProgress(CONFIG.ANALYSIS_WAIT_TIME);
-      
+
       // Obtener resultados finales
-      console.log(`📊 Obteniendo resultados finales...`);
+      console.log(` Obteniendo resultados finales...`);
       const finalResponse = await fetch(pageSpeedUrl);
-      
+
       if (!finalResponse.ok) {
         throw new Error(`HTTP ${finalResponse.status}: ${finalResponse.statusText}`);
       }
-      
+
       const htmlContent = await finalResponse.text();
       const totalTime = Date.now() - startTime;
-      
-      console.log(`✅ Análisis completado en ${(totalTime / 1000).toFixed(1)}s`);
-      
+
+      console.log(` Análisis completado en ${(totalTime / 1000).toFixed(1)}s`);
+
       // Extraer métricas del HTML
       const metrics = this.extractMetrics(htmlContent);
-      
+
       // Crear reporte
       const report = {
         url,
@@ -107,11 +107,11 @@ class PageSpeedAnalyzer {
         metrics,
         rawHtml: htmlContent
       };
-      
+
       return report;
-      
+
     } catch (error) {
-      console.error(`❌ Error analizando ${url}:`, error.message);
+      console.error(` Error analizando ${url}:`, error.message);
       return {
         url,
         formFactor,
@@ -121,73 +121,73 @@ class PageSpeedAnalyzer {
       };
     }
   }
-  
+
   /**
    * Analizar múltiples URLs
    */
   async analyzeMultipleUrls(urls, formFactor = CONFIG.FORM_FACTORS.DESKTOP, apiKey = null) {
-    console.log(`🎯 Analizando ${urls.length} URLs en ${formFactor}...`);
-    
+    console.log(` Analizando ${urls.length} URLs en ${formFactor}...`);
+
     const results = [];
     let successCount = 0;
     let failCount = 0;
-    
+
     for (let i = 0; i < urls.length; i++) {
       const url = urls[i];
-      console.log(`\n📍 [${i + 1}/${urls.length}] ${url}`);
-      
+      console.log(`\n [${i + 1}/${urls.length}] ${url}`);
+
       const result = await this.analyzeUrl(url, formFactor, apiKey);
       results.push(result);
-      
+
       if (result.error) {
         failCount++;
       } else {
         successCount++;
       }
-      
+
       // Pausa entre análisis para no sobrecargar
       if (i < urls.length - 1) {
         console.log(`⏸️  Pausa de 5s antes del siguiente análisis...`);
         await this.sleep(5000);
       }
     }
-    
-    console.log(`\n📊 RESUMEN: ${successCount} exitosos, ${failCount} fallidos`);
+
+    console.log(`\n RESUMEN: ${successCount} exitosos, ${failCount} fallidos`);
     return results;
   }
-  
+
   /**
    * Analizar URLs predefinidas
    */
   async analyzePredefinedUrls(urlKeys = null, formFactor = CONFIG.FORM_FACTORS.DESKTOP, apiKey = null) {
-    const urlsToAnalyze = urlKeys 
+    const urlsToAnalyze = urlKeys
       ? urlKeys.map(key => ({ key, url: PREDEFINED_URLS[key] })).filter(item => item.url)
       : Object.entries(PREDEFINED_URLS).map(([key, url]) => ({ key, url }));
-    
+
     if (urlsToAnalyze.length === 0) {
       throw new Error('No se encontraron URLs válidas para analizar');
     }
-    
-    console.log(`🎯 Analizando URLs predefinidas: ${urlsToAnalyze.map(item => item.key).join(', ')}`);
-    
+
+    console.log(` Analizando URLs predefinidas: ${urlsToAnalyze.map(item => item.key).join(', ')}`);
+
     const results = [];
-    
+
     for (const { key, url } of urlsToAnalyze) {
-      console.log(`\n📍 Analizando: ${key} (${url})`);
+      console.log(`\n Analizando: ${key} (${url})`);
       const result = await this.analyzeUrl(url, formFactor, apiKey);
       result.urlKey = key;
       results.push(result);
-      
+
       // Pausa entre análisis
       if (urlsToAnalyze.indexOf({ key, url }) < urlsToAnalyze.length - 1) {
         console.log(`⏸️  Pausa de 5s antes del siguiente análisis...`);
         await this.sleep(5000);
       }
     }
-    
+
     return results;
   }
-  
+
   /**
    * Construir URL de PageSpeed Insights
    */
@@ -197,14 +197,14 @@ class PageSpeedAnalyzer {
       // Usar la clave de la URL de ejemplo: ps42rq6fq8
       apiKey = 'ps42rq6fq8';
     }
-    
+
     // Codificar la URL
     const encodedUrl = encodeURIComponent(url);
-    
+
     // Construir URL completa
     return `${CONFIG.PAGESPEED_BASE}/${encodedUrl}/${apiKey}?form_factor=${formFactor}`;
   }
-  
+
   /**
    * Extraer métricas del HTML de PageSpeed
    */
@@ -300,39 +300,39 @@ class PageSpeedAnalyzer {
       metrics.extracted = true;
 
     } catch (error) {
-      console.warn(`⚠️  No se pudieron extraer todas las métricas: ${error.message}`);
+      console.warn(`️  No se pudieron extraer todas las métricas: ${error.message}`);
       metrics.debug.error = error.message;
     }
 
     return metrics;
   }
-  
+
   /**
    * Guardar reporte en archivo
    */
   async saveReport(report, filename = null) {
     await fs.mkdir(CONFIG.REPORTS_DIR, { recursive: true });
-    
+
     if (!filename) {
       const urlKey = report.urlKey || 'unknown';
       const timestamp = new Date().toISOString().replace(/[:.]/g, '-');
       filename = `${urlKey}-${report.formFactor}-${timestamp}.json`;
     }
-    
+
     const filepath = path.join(CONFIG.REPORTS_DIR, filename);
     await fs.writeFile(filepath, JSON.stringify(report, null, 2));
-    
-    console.log(`💾 Reporte guardado: ${filepath}`);
+
+    console.log(` Reporte guardado: ${filepath}`);
     return filepath;
   }
-  
+
   /**
    * Esperar con indicador de progreso
    */
   async waitWithProgress(ms) {
     const totalSteps = 10;
     const stepTime = ms / totalSteps;
-    
+
     for (let i = 0; i < totalSteps; i++) {
       const progress = Math.round((i / totalSteps) * 100);
       const progressBar = '█'.repeat(Math.floor(progress / 10)) + '░'.repeat(10 - Math.floor(progress / 10));
@@ -341,7 +341,7 @@ class PageSpeedAnalyzer {
     }
     process.stdout.write(`\r⏳ Progreso: [${'█'.repeat(10)}] 100%\n`);
   }
-  
+
   /**
    * Función sleep
    */
@@ -364,10 +364,10 @@ function parseArgs() {
     save: false,
     help: false
   };
-  
+
   for (let i = 0; i < args.length; i++) {
     const arg = args[i];
-    
+
     switch (arg) {
       case '--url':
         options.url = args[++i];
@@ -396,13 +396,13 @@ function parseArgs() {
         break;
     }
   }
-  
+
   return options;
 }
 
 function showHelp() {
   console.log(`
-🚀 PageSpeed Insights Analyzer
+ PageSpeed Insights Analyzer
 
 USAGE:
   node scripts/pagespeed-analyzer.js [options]
@@ -440,62 +440,62 @@ EJEMPLOS:
  */
 async function main() {
   const options = parseArgs();
-  
+
   if (options.help) {
     showHelp();
     return;
   }
-  
+
   const analyzer = new PageSpeedAnalyzer();
   let results = [];
-  
+
   try {
     if (options.url) {
       // Analizar URL única
       const result = await analyzer.analyzeUrl(options.url, options.formFactor, options.apiKey);
       results = [result];
-      
+
     } else if (options.urls.length > 0) {
       // Analizar múltiples URLs
       results = await analyzer.analyzeMultipleUrls(options.urls, options.formFactor, options.apiKey);
-      
+
     } else if (options.predefined !== null) {
       // Analizar URLs predefinidas
       results = await analyzer.analyzePredefinedUrls(options.predefined, options.formFactor, options.apiKey);
-      
+
     } else {
       // Default: analizar homepage
-      console.log('🎯 No se especificó URL, analizando homepage por defecto...');
+      console.log(' No se especificó URL, analizando homepage por defecto...');
       const result = await analyzer.analyzeUrl(PREDEFINED_URLS.homepage, options.formFactor, options.apiKey);
       results = [result];
     }
-    
+
     // Mostrar resumen
-    console.log('\n📊 RESUMEN DE RESULTADOS:');
+    console.log('\n RESUMEN DE RESULTADOS:');
     results.forEach((result, index) => {
       console.log(`\n${index + 1}. ${result.urlKey || result.url} (${result.formFactor})`);
       if (result.error) {
-        console.log(`   ❌ Error: ${result.error}`);
+        console.log(`    Error: ${result.error}`);
       } else if (result.metrics.extracted) {
-        console.log(`   🎯 Performance: ${result.metrics.performance || 'N/A'}`);
-        console.log(`   ♿ Accessibility: ${result.metrics.accessibility || 'N/A'}`);
-        console.log(`   ✅ Best Practices: ${result.metrics.bestPractices || 'N/A'}`);
-        console.log(`   🔍 SEO: ${result.metrics.seo || 'N/A'}`);
+        console.log(`    Performance: ${result.metrics.performance || 'N/A'}`);
+        console.log(`    Accessibility: ${result.metrics.accessibility || 'N/A'}`);
+        console.log(`    Best Practices: ${result.metrics.bestPractices || 'N/A'}`);
+        console.log(`    SEO: ${result.metrics.seo || 'N/A'}`);
       } else {
-        console.log(`   ⚠️  Métricas no extraídas (análisis puede estar incompleto)`);
+        console.log(`   ️  Métricas no extraídas (análisis puede estar incompleto)`);
       }
     });
-    
+
     // Guardar reportes si se solicita
     if (options.save) {
-      console.log('\n💾 Guardando reportes...');
+      console.log('\n Guardando reportes...');
       for (const result of results) {
         await analyzer.saveReport(result);
       }
     }
-    
+
   } catch (error) {
-    console.error('❌ Error fatal:', error.message);
+    console.error(' Error fatal:', error.message);
     process.exit(1);
   }
 }

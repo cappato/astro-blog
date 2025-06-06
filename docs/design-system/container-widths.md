@@ -21,9 +21,9 @@ Los componentes están en `src/components/layout/`:
 - `ContentContainer.astro` - Contenedor principal
 - `ContentWidth.astro` - Control de ancho
 
-### ⚠️ IMPORTANTE: Evitar Anidamiento Problemático
+### ️ IMPORTANTE: Evitar Anidamiento Problemático
 
-**❌ INCORRECTO** - Anidamiento que causa problemas:
+** INCORRECTO** - Anidamiento que causa problemas:
 ```astro
 <div class="max-w-4xl mx-auto">
   <div class="max-w-4xl mx-auto">  <!-- ¡Problemático! -->
@@ -32,7 +32,7 @@ Los componentes están en `src/components/layout/`:
 </div>
 ```
 
-**✅ CORRECTO** - Jerarquía clara:
+** CORRECTO** - Jerarquía clara:
 ```astro
 <ContentContainer>  <!-- Solo container + padding -->
   <ContentWidth width="standard">  <!-- Solo max-width -->

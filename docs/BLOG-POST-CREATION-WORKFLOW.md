@@ -1,16 +1,16 @@
-# 📝 Flujo de Creación de Posts del Blog
+#  Flujo de Creación de Posts del Blog
 
-## 🎯 Propósito
+##  Propósito
 
 Este documento define el **flujo completo y correcto** para crear posts del blog, asegurando que todas las imágenes, tests y optimizaciones funcionen correctamente.
 
-## ⚠️ Problema Identificado
+## ️ Problema Identificado
 
-**Fecha:** 2024-12-19  
-**Issue:** Las miniaturas de posts nuevos no se mostraban correctamente porque faltaban variantes de imagen requeridas.  
+**Fecha:** 2024-12-19
+**Issue:** Las miniaturas de posts nuevos no se mostraban correctamente porque faltaban variantes de imagen requeridas.
 **Causa:** No seguimos el flujo completo de optimización de imágenes al crear posts nuevos.
 
-## ✅ Flujo Correcto de Creación de Posts
+##  Flujo Correcto de Creación de Posts
 
 ### **Paso 1: Crear el Post Markdown**
 
@@ -45,7 +45,7 @@ mkdir -p images/raw/mi-nuevo-post
 cp mi-imagen-principal.jpg images/raw/mi-nuevo-post/portada.webp
 ```
 
-⚠️ **CRÍTICO:** La imagen DEBE llamarse `portada.webp` (o .jpg/.png) para que el sistema la reconozca.
+️ **CRÍTICO:** La imagen DEBE llamarse `portada.webp` (o .jpg/.png) para que el sistema la reconozca.
 
 ### **Paso 3: Generar Variantes de Imagen (OBLIGATORIO)**
 
@@ -55,15 +55,15 @@ npm run optimize-images -- --postId=mi-nuevo-post --force --debug
 ```
 
 **Esto genera automáticamente:**
-- ✅ `portada.webp` - Imagen principal
-- ✅ `portada-avif.avif` - Formato AVIF moderno
-- ✅ `portada-og.webp` - Open Graph para redes sociales
-- ✅ `portada-og-jpg.jpeg` - JPEG para compatibilidad
-- ✅ `portada-og-avif.avif` - AVIF para Open Graph
-- ✅ `portada-thumb.webp` - **Miniatura para listados** ← CRÍTICO
-- ✅ `portada-lqip.webp` - Low Quality Image Placeholder
-- ✅ `portada-lqip.txt` - Datos del LQIP
-- ✅ `portada-wsp.webp` - Versión para WhatsApp/Social
+-  `portada.webp` - Imagen principal
+-  `portada-avif.avif` - Formato AVIF moderno
+-  `portada-og.webp` - Open Graph para redes sociales
+-  `portada-og-jpg.jpeg` - JPEG para compatibilidad
+-  `portada-og-avif.avif` - AVIF para Open Graph
+-  `portada-thumb.webp` - **Miniatura para listados** ← CRÍTICO
+-  `portada-lqip.webp` - Low Quality Image Placeholder
+-  `portada-lqip.txt` - Datos del LQIP
+-  `portada-wsp.webp` - Versión para WhatsApp/Social
 
 ### **Paso 4: Verificar con Tests (OBLIGATORIO)**
 
@@ -98,16 +98,16 @@ npm run dev
 git add .
 git commit -m "feat(blog): add new post - [título]
 
-✅ Post content created
-✅ All image variants generated  
-✅ Tests passing
-✅ Build successful
-✅ Local verification completed"
+ Post content created
+ All image variants generated
+ Tests passing
+ Build successful
+ Local verification completed"
 
 git push origin main
 ```
 
-## 🚨 Checklist de Verificación
+##  Checklist de Verificación
 
 ### **Antes del Commit:**
 - [ ] **Frontmatter completo** con `postId` único
@@ -123,7 +123,7 @@ git push origin main
 - [ ] **Imágenes cargando** correctamente
 - [ ] **SEO tags** funcionando (Open Graph, etc.)
 
-## 🔧 Comandos de Troubleshooting
+##  Comandos de Troubleshooting
 
 ### **Si faltan imágenes:**
 ```bash
@@ -155,7 +155,7 @@ ls -la public/images/mi-post/portada-thumb.webp
 npm run optimize-images -- --postId=mi-post --force
 ```
 
-## 📊 Variantes de Imagen Explicadas
+##  Variantes de Imagen Explicadas
 
 ### **Para Listados de Blog:**
 - `portada-thumb.webp` - **Miniatura principal** (600x315px)
@@ -173,7 +173,7 @@ npm run optimize-images -- --postId=mi-post --force
 ### **Para WhatsApp/Stories:**
 - `portada-wsp.webp` - Formato cuadrado (1080x1080px)
 
-## 🎯 Mejores Prácticas
+##  Mejores Prácticas
 
 ### **Naming Convention:**
 - **PostId:** Usar kebab-case, descriptivo pero conciso
@@ -190,7 +190,7 @@ npm run optimize-images -- --postId=mi-post --force
 - **Descripción:** 120-160 caracteres ideal
 - **ImageAlt:** Descriptivo y específico
 
-## 🔄 Automatización Futura
+##  Automatización Futura
 
 ### **Scripts a Crear:**
 ```bash
@@ -206,7 +206,7 @@ npm run verify-post -- --postId="mi-post"
 - Validar que todas las imágenes existen
 - Bloquear merge si faltan variantes
 
-## 📚 Referencias
+##  Referencias
 
 - [Sistema de Optimización de Imágenes](../src/features/image-optimization/README.md)
 - [Tests del Blog](../src/tests/blog-images.test.ts)

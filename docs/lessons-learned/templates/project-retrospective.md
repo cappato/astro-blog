@@ -1,23 +1,23 @@
 # Retrospectiva: [Nombre del Proyecto/Sprint/Milestone]
 
-**Fecha:** YYYY-MM-DD  
-**Facilitador:** [Nombre]  
-**Participantes:** [Lista de participantes]  
-**Duración:** [X semanas/meses]  
+**Fecha:** YYYY-MM-DD
+**Facilitador:** [Nombre]
+**Participantes:** [Lista de participantes]
+**Duración:** [X semanas/meses]
 **Tags:** #retrospective #[proyecto] #[tipo]
 
-## 📋 Resumen Ejecutivo
+##  Resumen Ejecutivo
 
-**Objetivo del proyecto:** [Descripción breve del objetivo]  
-**Estado final:** ✅ Completado | 🔄 En progreso | ❌ Cancelado  
+**Objetivo del proyecto:** [Descripción breve del objetivo]
+**Estado final:**  Completado |  En progreso |  Cancelado
 **Satisfacción general:** [Escala 1-10 o descripción]
 
-## 🎯 Objetivos y Resultados
+##  Objetivos y Resultados
 
 ### Objetivos Iniciales
-1. [Objetivo 1]: ✅ Logrado | ⚠️ Parcial | ❌ No logrado
-2. [Objetivo 2]: ✅ Logrado | ⚠️ Parcial | ❌ No logrado
-3. [Objetivo 3]: ✅ Logrado | ⚠️ Parcial | ❌ No logrado
+1. [Objetivo 1]:  Logrado | ️ Parcial |  No logrado
+2. [Objetivo 2]:  Logrado | ️ Parcial |  No logrado
+3. [Objetivo 3]:  Logrado | ️ Parcial |  No logrado
 
 ### Métricas Clave
 
@@ -27,7 +27,7 @@
 | [Métrica 2] | [Valor objetivo] | [Valor real] | [+/-X%] |
 | [Métrica 3] | [Valor objetivo] | [Valor real] | [+/-X%] |
 
-## 🌟 Lo que Funcionó Bien (Keep)
+##  Lo que Funcionó Bien (Keep)
 
 ### Procesos y Metodologías
 - **[Proceso 1]**: [Por qué funcionó bien]
@@ -45,10 +45,10 @@
 - **[Decisión 1]**: [Por qué fue acertada]
 - **[Decisión 2]**: [Por qué fue acertada]
 
-## 🔧 Lo que Necesita Mejora (Change)
+##  Lo que Necesita Mejora (Change)
 
 ### Procesos
-- **[Proceso problemático]**: 
+- **[Proceso problemático]**:
   - Problema: [Descripción del problema]
   - Impacto: [Cómo afectó al proyecto]
   - Propuesta: [Cómo mejorarlo]
@@ -65,7 +65,7 @@
   - Impacto: [Consecuencias]
   - Mejora: [Cómo mejorar]
 
-## 🚀 Nuevas Iniciativas (Start)
+##  Nuevas Iniciativas (Start)
 
 ### Procesos Nuevos
 - **[Proceso nuevo 1]**: [Por qué implementarlo]
@@ -79,7 +79,7 @@
 - **[Práctica nueva 1]**: [Justificación]
 - **[Práctica nueva 2]**: [Beneficio esperado]
 
-## 📊 Análisis de Timeline
+##  Análisis de Timeline
 
 ### Hitos Principales
 - **[Hito 1]**: Planificado [fecha] | Real [fecha] | Variación [+/-X días]
@@ -108,7 +108,7 @@
 1. **[Lección de equipo 1]**: [Descripción y aplicabilidad futura]
 2. **[Lección de equipo 2]**: [Descripción y aplicabilidad futura]
 
-## 🎯 Decisiones Arquitectónicas
+##  Decisiones Arquitectónicas
 
 ### Decisiones Acertadas
 - **[Decisión 1]**: [Por qué fue buena] - [Impacto positivo]
@@ -118,7 +118,7 @@
 - **[Decisión 1]**: [Por qué reconsiderar] - [Alternativa propuesta]
 - **[Decisión 2]**: [Por qué reconsiderar] - [Alternativa propuesta]
 
-## 📈 Impacto en el Producto
+##  Impacto en el Producto
 
 ### Mejoras de Performance
 - [Mejora 1]: [Métrica específica]
@@ -132,7 +132,7 @@
 - **Reducida**: [Qué se mejoró]
 - **Agregada**: [Qué se debe abordar después]
 
-## 🔄 Plan de Acción
+##  Plan de Acción
 
 ### Acciones Inmediatas (Próximas 2 semanas)
 - [ ] [Acción 1]: [Responsable] - [Fecha límite]
@@ -146,7 +146,7 @@
 - [ ] [Acción 1]: [Responsable] - [Fecha límite]
 - [ ] [Acción 2]: [Responsable] - [Fecha límite]
 
-## 🔗 Referencias y Recursos
+##  Referencias y Recursos
 
 ### Documentación Generada
 - [Documento 1](ruta/archivo.md): [Descripción]
@@ -160,7 +160,7 @@
 - [Recurso 1](URL): [Por qué fue útil]
 - [Recurso 2](URL): [Por qué fue útil]
 
-## 💡 Recomendaciones para Proyectos Futuros
+##  Recomendaciones para Proyectos Futuros
 
 ### Qué Repetir
 1. [Práctica exitosa 1]: [Por qué repetir]
@@ -176,5 +176,5 @@
 
 ---
 
-**Próxima retrospectiva programada:** YYYY-MM-DD  
+**Próxima retrospectiva programada:** YYYY-MM-DD
 **Responsable de seguimiento:** [Nombre]

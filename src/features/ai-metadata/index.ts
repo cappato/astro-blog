@@ -1,21 +1,21 @@
 /**
  * AI Metadata Feature - Public API
- * 
+ *
  * Centralized exports for AI metadata system with
  * plug & play architecture and comprehensive TypeScript support.
- * 
+ *
  * @example Basic usage:
  * ```typescript
  * import { AIMetadata, AIMetadataManager } from '../features/ai-metadata';
  * ```
- * 
+ *
  * @example Advanced usage:
  * ```typescript
- * import { 
- *   AIMetadata, 
+ * import {
+ *   AIMetadata,
  *   AIMetadataManager,
  *   generateAIMetadataEndpoint,
- *   type AIMetadataProps 
+ *   type AIMetadataProps
  * } from '../features/ai-metadata';
  * ```
  */
@@ -110,8 +110,8 @@ export const AI_METADATA_FEATURE = {
   name: 'ai-metadata',
   version: '1.0.0',
   description: 'AI-optimized metadata system with Schema.org support',
-  author: 'Augment Agent',
-  
+  author: '',
+
   /** Main exports for easy access */
   exports: {
     components: ['AIMetadata'],
@@ -127,13 +127,13 @@ export const AI_METADATA_FEATURE = {
       'StructuredData'
     ]
   },
-  
+
   /** Dependencies */
   dependencies: ['astro', 'typescript'],
-  
+
   /** Peer dependencies */
   peerDependencies: [],
-  
+
   /** Feature capabilities */
   capabilities: [
     'AI-optimized metadata generation',
@@ -145,14 +145,14 @@ export const AI_METADATA_FEATURE = {
     'Cache optimization',
     'Error handling'
   ],
-  
+
   /** Integration points */
   integrations: {
     layouts: ['MainLayout', 'PostLayout'],
     endpoints: ['/ai-metadata.json'],
     components: ['AIMetadata.astro']
   },
-  
+
   /** Configuration */
   configuration: {
     required: ['title', 'description', 'type', 'url'],

@@ -10,11 +10,11 @@ imageAlt: "El Problema de los Protocolos que se Olvidan: Cómo Diseñé un Siste
 
 ¿Te ha pasado que trabajas con IA y al principio responde como un arquitecto senior, pero después de un rato vuelve a dar respuestas básicas? Yo diseñé un sistema para resolver exactamente este problema.
 
-## 🎯 El Problema Real
+##  El Problema Real
 
 Trabajando en mi blog con IA, me di cuenta de un patrón frustrante:
 
-### **Inicio de Sesión: IA Brillante** ✨
+### **Inicio de Sesión: IA Brillante**
 ```
 YO: "Agregá un botón"
 IA: "Revisé componentes existentes, ya hay 3 tipos de botones.
@@ -22,7 +22,7 @@ IA: "Revisé componentes existentes, ya hay 3 tipos de botones.
 Aplicando TypeScript + Tailwind expert + testing automático"
 ```
 
-### **Después de 2 Horas: IA Básica** 😞
+### **Después de 2 Horas: IA Básica**
 ```
 YO: "Agregá un botón"
 IA: "Ok, creo Button.astro"
@@ -35,12 +35,12 @@ RESULTADO: Código duplicado, sin criterio, sin cuestionamiento
 
 La IA tenía la capacidad, pero **se "olvidaba" de los protocolos** durante el trabajo. Necesitaba un sistema que:
 
-- ✅ Mantuviera criterio arquitectónico **sin depender de memoria**
-- ✅ Permitiera comunicación **casual y relajada**
-- ✅ Generara respuestas **profesionales automáticamente**
-- ✅ Aplicara protocolos **sin sobrecarga cognitiva**
+-  Mantuviera criterio arquitectónico **sin depender de memoria**
+-  Permitiera comunicación **casual y relajada**
+-  Generara respuestas **profesionales automáticamente**
+-  Aplicara protocolos **sin sobrecarga cognitiva**
 
-## 🏗️ La Solución: Sistema .augment
+## ️ La Solución: Sistema .augment
 
 Diseñé un sistema de protocolos automáticos con tres componentes clave:
 
@@ -76,7 +76,7 @@ docs/.augment/protocols/
 # START-HERE.md - Punto de entrada obligatorio
 ```
 
-## 🎯 Mi Visión Original
+##  Mi Visión Original
 
 Quería poder decir:
 
@@ -86,7 +86,7 @@ Y que automáticamente se "dispararan" protocolos que enriquecieran esa comunica
 
 > **"Revisé el proyecto y encontré sistema de analytics existente en src/features/ai-metadata/. Aplicando tu regla 'Reutilización Sobre Creación', sugiero extenderlo en lugar de duplicar. ¿Querés que extienda el sistema existente?"**
 
-## ⚠️ Por Qué Falló en la Práctica
+## ️ Por Qué Falló en la Práctica
 
 Aunque el concepto era brillante, tenía problemas de implementación:
 
@@ -105,16 +105,16 @@ Aunque el concepto era brillante, tenía problemas de implementación:
 - No había refuerzo continuo
 - Violaciones se descubrían tarde
 
-## 🚀 La Evolución: Sistema Multi-Agente
+##  La Evolución: Sistema Multi-Agente
 
 Migré los elementos valiosos a un framework automatizado que SÍ funciona:
 
 ### **Scripts que "Adornan" Comunicación Casual**
 ```bash
 # Tu comunicación casual se enriquece automáticamente:
-npm run multi-agent:check        # ¿Ya existe implementación?
-npm run multi-agent:protocols    # ¿Cumple reglas aprendidas?
-npm run multi-agent:analyze      # ¿Qué lecciones aplican?
+npm run multi-        # ¿Ya existe implementación?
+npm run multi-    # ¿Cumple reglas aprendidas?
+npm run multi-      # ¿Qué lecciones aplican?
 ```
 
 ### **Validación Automática de Protocolos**
@@ -129,11 +129,11 @@ if (jsFiles.length > 0) {
 ### **Captura Automática de Lecciones**
 ```bash
 # Cada conflicto resuelto genera nueva regla automáticamente:
-npm run multi-agent:learn    # Captura lección aprendida
-npm run multi-agent:analyze  # Analiza patrones y tendencias
+npm run multi-    # Captura lección aprendida
+npm run multi-  # Analiza patrones y tendencias
 ```
 
-## 🎉 Resultado Final
+##  Resultado Final
 
 **Ahora SÍ funciona como quería:**
 
@@ -141,22 +141,22 @@ npm run multi-agent:analyze  # Analiza patrones y tendencias
 YO: "che, necesito share buttons en posts"
 
 SISTEMA: [Se dispara automáticamente]
-├── Revisa src/features/social-share/ ✅ Ya existe
-├── Aplica regla "Reutilización Sobre Creación" ✅
-├── Revisa lecciones: "dual share button placement" ✅
-└── Aplica TypeScript + Tailwind expert ✅
+├── Revisa src/features/social-share/  Ya existe
+├── Aplica regla "Reutilización Sobre Creación"
+├── Revisa lecciones: "dual share button placement"
+└── Aplica TypeScript + Tailwind expert
 
 IA: "Perfecto! Revisé el proyecto y tenemos sistema de social-share
 existente. Según tus lecciones aprendidas, preferís dual placement.
 ¿Extiendo el componente actual con prop 'position'?"
 ```
 
-## 💡 Lecciones Clave
+##  Lecciones Clave
 
 ### **1. La Visión Era Correcta**
-- Comunicación casual → Respuesta profesional ✅
-- Protocolos automáticos sin sobrecarga ✅
-- Criterio arquitectónico mantenido ✅
+- Comunicación casual → Respuesta profesional
+- Protocolos automáticos sin sobrecarga
+- Criterio arquitectónico mantenido
 
 ### **2. Faltaba la Automatización**
 - Scripts que apliquen reglas sin "olvidos"
@@ -168,7 +168,7 @@ existente. Según tus lecciones aprendidas, preferís dual placement.
 - Se adapta a diferentes tipos de proyectos
 - Evoluciona con lecciones aprendidas
 
-## 🔄 Próximos Posts de la Serie
+##  Próximos Posts de la Serie
 
 1. **"Anatomía de un Sistema de Protocolos Automáticos"** - Implementación técnica detallada
 2. **"Auto-Merge Inteligente: UX sobre Control"** - Optimización de workflow sin fricción

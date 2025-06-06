@@ -42,9 +42,9 @@ const IMPACT_LEVELS = ['critical', 'important', 'nice-to-know'];
  */
 async function main() {
   console.log('🧠 Lessons Learned Management Tool\n');
-  
+
   const action = await askQuestion('¿Qué quieres hacer?\n1. Crear nueva lección\n2. Listar lecciones\n3. Buscar lecciones\n4. Actualizar índices\nElige (1-4): ');
-  
+
   switch(action) {
     case '1':
       await createLesson();
@@ -61,7 +61,7 @@ async function main() {
     default:
       console.log('Opción no válida');
   }
-  
+
   rl.close();
 }
 
@@ -69,47 +69,47 @@ async function main() {
  * Crear nueva lección
  */
 async function createLesson() {
-  console.log('\n📝 Creando nueva lección...\n');
-  
+  console.log('\n Creando nueva lección...\n');
+
   // Seleccionar tipo de plantilla
   console.log('Tipos de lección disponibles:');
   Object.keys(TEMPLATES).forEach((key, index) => {
     console.log(`${index + 1}. ${key}`);
   });
-  
+
   const templateChoice = await askQuestion('Selecciona tipo (1-3): ');
   const templateKey = Object.keys(TEMPLATES)[parseInt(templateChoice) - 1];
-  
+
   if (!templateKey) {
     console.log('Tipo no válido');
     return;
   }
-  
+
   // Recopilar información
   const title = await askQuestion('Título de la lección: ');
   const slug = title.toLowerCase()
     .replace(/[^a-z0-9\s-]/g, '')
     .replace(/\s+/g, '-')
     .substring(0, 50);
-  
+
   const category = await askQuestion(`Categoría (${Object.keys(CATEGORIES).join(', ')}): `);
   const impact = await askQuestion(`Nivel de impacto (${IMPACT_LEVELS.join(', ')}): `);
   const context = await askQuestion('Contexto/Proyecto: ');
-  
+
   // Crear archivo
   const templatePath = path.join(LESSONS_DIR, 'templates', TEMPLATES[templateKey]);
   const lessonPath = path.join(LESSONS_DIR, CURRENT_YEAR.toString(), CURRENT_QUARTER, `${slug}.md`);
-  
+
   // Asegurar que el directorio existe
   const lessonDir = path.dirname(lessonPath);
   if (!fs.existsSync(lessonDir)) {
     fs.mkdirSync(lessonDir, { recursive: true });
   }
-  
+
   // Leer plantilla y personalizar
   let template = fs.readFileSync(templatePath, 'utf8');
   const today = new Date().toISOString().split('T')[0];
-  
+
   template = template
     .replace(/\[Título.*?\]/g, title)
     .replace(/YYYY-MM-DD/g, today)
@@ -118,48 +118,48 @@ async function createLesson() {
     .replace(/#\[tipo\]/g, `#${templateKey}`)
     .replace(/\[Proyecto\/.*?\]/g, context)
     .replace(/#critical \| #important \| #nice-to-know/g, `#${impact}`);
-  
+
   // Escribir archivo
   fs.writeFileSync(lessonPath, template);
-  
-  console.log(`\n✅ Lección creada: ${lessonPath}`);
-  console.log(`📝 Edita el archivo para completar los detalles`);
-  console.log(`🔗 No olvides actualizar el índice de categoría: ${LESSONS_DIR}/categories/${CATEGORIES[category]}`);
+
+  console.log(`\n Lección creada: ${lessonPath}`);
+  console.log(` Edita el archivo para completar los detalles`);
+  console.log(` No olvides actualizar el índice de categoría: ${LESSONS_DIR}/categories/${CATEGORIES[category]}`);
 }
 
 /**
  * Listar lecciones
  */
 async function listLessons() {
-  console.log('\n📚 Lecciones disponibles:\n');
-  
+  console.log('\n Lecciones disponibles:\n');
+
   const yearDir = path.join(LESSONS_DIR, CURRENT_YEAR.toString());
-  
+
   if (!fs.existsSync(yearDir)) {
     console.log('No hay lecciones para este año');
     return;
   }
-  
-  const quarters = fs.readdirSync(yearDir).filter(item => 
+
+  const quarters = fs.readdirSync(yearDir).filter(item =>
     fs.statSync(path.join(yearDir, item)).isDirectory()
   );
-  
+
   quarters.forEach(quarter => {
-    console.log(`\n📅 ${quarter}:`);
+    console.log(`\n ${quarter}:`);
     const quarterDir = path.join(yearDir, quarter);
     const lessons = fs.readdirSync(quarterDir).filter(file => file.endsWith('.md'));
-    
+
     lessons.forEach(lesson => {
       const lessonPath = path.join(quarterDir, lesson);
       const content = fs.readFileSync(lessonPath, 'utf8');
       const titleMatch = content.match(/^# (.+)$/m);
       const dateMatch = content.match(/\*\*Fecha:\*\* (.+)$/m);
       const tagsMatch = content.match(/\*\*Tags:\*\* (.+)$/m);
-      
-      console.log(`  📄 ${titleMatch ? titleMatch[1] : lesson}`);
-      if (dateMatch) console.log(`     📅 ${dateMatch[1]}`);
-      if (tagsMatch) console.log(`     🏷️  ${tagsMatch[1]}`);
-      console.log(`     📁 ${lessonPath}`);
+
+      console.log(`   ${titleMatch ? titleMatch[1] : lesson}`);
+      if (dateMatch) console.log(`      ${dateMatch[1]}`);
+      if (tagsMatch) console.log(`     ️  ${tagsMatch[1]}`);
+      console.log(`      ${lessonPath}`);
     });
   });
 }
@@ -168,24 +168,24 @@ async function listLessons() {
  * Buscar lecciones
  */
 async function searchLessons() {
-  const query = await askQuestion('\n🔍 Buscar por palabra clave: ');
+  const query = await askQuestion('\n Buscar por palabra clave: ');
   console.log(`\nBuscando "${query}"...\n`);
-  
+
   const results = [];
   const yearDir = path.join(LESSONS_DIR, CURRENT_YEAR.toString());
-  
+
   if (!fs.existsSync(yearDir)) {
     console.log('No hay lecciones para buscar');
     return;
   }
-  
+
   function searchInDirectory(dir) {
     const items = fs.readdirSync(dir);
-    
+
     items.forEach(item => {
       const itemPath = path.join(dir, item);
       const stat = fs.statSync(itemPath);
-      
+
       if (stat.isDirectory()) {
         searchInDirectory(itemPath);
       } else if (item.endsWith('.md')) {
@@ -201,16 +201,16 @@ async function searchLessons() {
       }
     });
   }
-  
+
   searchInDirectory(yearDir);
-  
+
   if (results.length === 0) {
     console.log('No se encontraron resultados');
   } else {
     results.forEach(result => {
-      console.log(`📄 ${result.title}`);
-      console.log(`📁 ${result.path}`);
-      console.log(`💬 ${result.preview}\n`);
+      console.log(` ${result.title}`);
+      console.log(` ${result.path}`);
+      console.log(` ${result.preview}\n`);
     });
   }
 }
@@ -219,12 +219,12 @@ async function searchLessons() {
  * Actualizar índices
  */
 async function updateIndexes() {
-  console.log('\n🔄 Actualizando índices...\n');
-  
+  console.log('\n Actualizando índices...\n');
+
   // Aquí se podría implementar lógica para actualizar automáticamente
   // los índices de categorías y años basado en las lecciones existentes
-  
-  console.log('📝 Recuerda actualizar manualmente:');
+
+  console.log(' Recuerda actualizar manualmente:');
   console.log(`   - ${LESSONS_DIR}/${CURRENT_YEAR}/index.md`);
   console.log(`   - ${LESSONS_DIR}/categories/*.md`);
   console.log('   - README.md principal si es necesario');
@@ -236,7 +236,7 @@ async function updateIndexes() {
 function getPreview(content, query) {
   const lines = content.split('\n');
   const queryLower = query.toLowerCase();
-  
+
   for (let i = 0; i < lines.length; i++) {
     if (lines[i].toLowerCase().includes(queryLower)) {
       const start = Math.max(0, i - 1);
@@ -244,7 +244,7 @@ function getPreview(content, query) {
       return lines.slice(start, end).join(' ').substring(0, 100) + '...';
     }
   }
-  
+
   return content.substring(0, 100) + '...';
 }
 

@@ -1,18 +1,18 @@
-# 📚 Sistema de Lecciones Aprendidas
+#  Sistema de Lecciones Aprendidas
 
-## 🎯 Propósito
+##  Propósito
 
 Este sistema captura, organiza y hace accesible el conocimiento adquirido durante el desarrollo del proyecto, permitiendo:
 
-- ✅ **Evitar repetir errores** del pasado
-- ✅ **Acelerar la toma de decisiones** con experiencia previa
-- ✅ **Mejorar procesos** continuamente
-- ✅ **Compartir conocimiento** entre desarrolladores
-- ✅ **Documentar el "por qué"** detrás de las decisiones
+-  **Evitar repetir errores** del pasado
+-  **Acelerar la toma de decisiones** con experiencia previa
+-  **Mejorar procesos** continuamente
+-  **Compartir conocimiento** entre desarrolladores
+-  **Documentar el "por qué"** detrás de las decisiones
 
-## 🏗️ Estructura del Sistema
+## ️ Estructura del Sistema
 
-### **📁 Organización por Tiempo**
+### ** Organización por Tiempo**
 ```
 2024/
 ├── Q4/                         # Trimestre actual
@@ -22,7 +22,7 @@ Este sistema captura, organiza y hace accesible el conocimiento adquirido durant
 └── index.md                   # Resumen del año
 ```
 
-### **📁 Organización por Categoría**
+### ** Organización por Categoría**
 ```
 categories/
 ├── seo-content.md             # Lecciones de SEO y contenido
@@ -31,7 +31,7 @@ categories/
 └── user-experience.md         # UX y diseño
 ```
 
-### **📁 Plantillas**
+### ** Plantillas**
 ```
 templates/
 ├── project-retrospective.md   # Para retrospectivas de proyecto
@@ -39,7 +39,7 @@ templates/
 └── process-improvement.md     # Para mejoras de proceso
 ```
 
-## 🔄 Flujo de Trabajo
+##  Flujo de Trabajo
 
 ### **1. Captura Inmediata**
 Cuando ocurre algo significativo:
@@ -62,33 +62,33 @@ cp docs/lessons-learned/templates/technical-lesson.md \
 - **Mensual**: Actualizar índices de categorías
 - **Trimestral**: Crear resumen ejecutivo del trimestre
 
-## 📝 Tipos de Lecciones
+##  Tipos de Lecciones
 
-### **🔧 Técnicas**
+### ** Técnicas**
 - Problemas de código y sus soluciones
 - Decisiones de arquitectura
 - Herramientas y configuraciones
 - Performance y optimización
 
-### **📊 Proceso**
+### ** Proceso**
 - Mejoras en workflow de desarrollo
 - Optimizaciones de CI/CD
 - Estrategias de testing
 - Metodologías de trabajo
 
-### **🎯 Producto**
+### ** Producto**
 - Decisiones de UX/UI
 - Estrategias de contenido
 - SEO y marketing
 - Feedback de usuarios
 
-### **👥 Equipo**
+### ** Equipo**
 - Comunicación y colaboración
 - Onboarding y documentación
 - Herramientas de productividad
 - Gestión de conocimiento
 
-## 🏷️ Sistema de Tags
+## ️ Sistema de Tags
 
 ### **Nivel de Impacto**
 - `#critical` - Lecciones críticas que evitan problemas graves
@@ -105,7 +105,7 @@ cp docs/lessons-learned/templates/technical-lesson.md \
 - `#decision-record` - Decisiones arquitectónicas importantes
 - `#process-improvement` - Mejoras de proceso
 
-## 🔍 Cómo Buscar Lecciones
+##  Cómo Buscar Lecciones
 
 ### **Por Fecha**
 ```bash
@@ -128,7 +128,7 @@ cat docs/lessons-learned/categories/technical-architecture.md
 grep -r "#critical" docs/lessons-learned/
 ```
 
-## 📊 Métricas y KPIs
+##  Métricas y KPIs
 
 ### **Indicadores de Éxito**
 - **Tiempo de resolución** de problemas similares
@@ -142,14 +142,14 @@ grep -r "#critical" docs/lessons-learned/
 - Lecciones más referenciadas
 - Tiempo entre problema y documentación
 
-## 🚀 Plantillas Rápidas
+##  Plantillas Rápidas
 
 ### **Lección Técnica Rápida**
 ```markdown
 # [Título Descriptivo]
 
-**Fecha:** YYYY-MM-DD  
-**Tags:** #technical #problem-solution  
+**Fecha:** YYYY-MM-DD
+**Tags:** #technical #problem-solution
 **Contexto:** [Proyecto/Feature]
 
 ## Problema
@@ -166,8 +166,8 @@ grep -r "#critical" docs/lessons-learned/
 ```markdown
 # [Decisión Tomada]
 
-**Fecha:** YYYY-MM-DD  
-**Tags:** #architecture #decision-record  
+**Fecha:** YYYY-MM-DD
+**Tags:** #architecture #decision-record
 **Stakeholders:** [Quién participó]
 
 ## Contexto
@@ -184,7 +184,7 @@ grep -r "#critical" docs/lessons-learned/
 [Resultados observados]
 ```
 
-## 🔗 Integración con Desarrollo
+##  Integración con Desarrollo
 
 ### **Scripts Automatizados**
 ```bash
