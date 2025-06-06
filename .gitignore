@@ -34,7 +34,6 @@ pnpm-debug.log*
 
 # Augment AI system files (never version)
 .augment/
-docs/
 
 # Wrangler
 .wrangler/
