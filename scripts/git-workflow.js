@@ -70,9 +70,10 @@ const validateNotOnMainBranch = () => {
   const protectedBranches = ['main', 'master', 'develop'];
 
   if (protectedBranches.includes(currentBranch)) {
-    console.error(`🚨 CARLOS PROTECTION: Cannot work directly on ${currentBranch} branch!`);
-    console.error('🤖 Carlos must always work on feature branches.');
+    console.error(`🚨 WORKFLOW PROTECTION: Cannot work directly on ${currentBranch} branch!`);
+    console.error('🔒 All developers must work on feature branches.');
     console.error('✅ Use: npm run git:branch to create a feature branch');
+    console.error('📋 Or manually: git checkout -b feat/your-feature-name');
     process.exit(1);
   }
 
@@ -179,7 +180,7 @@ async function createBranch() {
 async function commitChanges() {
   console.log('\n📝 Committing changes...\n');
 
-  // CARLOS PROTECTION: Validate not on main branch
+  // WORKFLOW PROTECTION: Validate not on main branch
   validateNotOnMainBranch();
 
   // Check for changes
@@ -233,7 +234,7 @@ function getBranchInfo() {
 async function pushChanges() {
   console.log('\n🚀 Pushing changes...\n');
 
-  // CARLOS PROTECTION: Validate not on main branch
+  // WORKFLOW PROTECTION: Validate not on main branch
   const currentBranch = validateNotOnMainBranch();
 
   // Push to remote

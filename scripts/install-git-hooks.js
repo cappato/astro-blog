@@ -14,8 +14,8 @@ import { join } from 'path';
 const createPrePushHook = () => {
   const hookContent = `#!/bin/bash
 
-# Pre-push hook created by Carlos (Carlitos) - Astro Blog Agent
-# Prevents direct pushes to protected branches
+# Pre-push hook - Universal Workflow Protection
+# Prevents direct pushes to protected branches for ALL developers
 
 protected_branches="main master develop"
 current_branch=$(git symbolic-ref HEAD | sed -e 's,.*/\\(.*\\),\\1,')
@@ -24,8 +24,8 @@ current_branch=$(git symbolic-ref HEAD | sed -e 's,.*/\\(.*\\),\\1,')
 for branch in $protected_branches; do
     if [ "$current_branch" = "$branch" ]; then
         echo ""
-        echo "🚨 CARLOS PROTECTION: Direct push to '$branch' branch is not allowed!"
-        echo "🤖 Carlos must work through feature branches and Pull Requests."
+        echo "🚨 WORKFLOW PROTECTION: Direct push to '$branch' branch is not allowed!"
+        echo "🔒 All developers must work through feature branches and Pull Requests."
         echo ""
         echo "✅ Correct workflow:"
         echo "   1. git checkout -b feat/your-feature"
@@ -67,15 +67,15 @@ exit 0
 const createCommitMsgHook = () => {
   const hookContent = `#!/bin/bash
 
-# Commit message hook created by Carlos (Carlitos) - Astro Blog Agent
-# Validates conventional commit format
+# Commit message hook - Universal Workflow Protection
+# Validates conventional commit format for ALL developers
 
 commit_regex='^(feat|fix|docs|style|refactor|test|chore|perf|ci|build|revert)(\\(.+\\))?: .{1,50}'
 
 if ! grep -qE "$commit_regex" "$1"; then
     echo ""
-    echo "🚨 CARLOS PROTECTION: Invalid commit message format!"
-    echo "🤖 Carlos uses conventional commit format."
+    echo "🚨 WORKFLOW PROTECTION: Invalid commit message format!"
+    echo "🔒 All developers must use conventional commit format."
     echo ""
     echo "✅ Correct format:"
     echo "   feat: add new feature"
@@ -112,8 +112,8 @@ exit 0
 const createPreCommitHook = () => {
   const hookContent = `#!/bin/bash
 
-# Pre-commit hook created by Carlos (Carlitos) - Astro Blog Agent
-# Additional validations before commit
+# Pre-commit hook - Universal Workflow Protection
+# Additional validations before commit for ALL developers
 
 protected_branches="main master develop"
 current_branch=$(git symbolic-ref HEAD | sed -e 's,.*/\\(.*\\),\\1,')
@@ -122,8 +122,8 @@ current_branch=$(git symbolic-ref HEAD | sed -e 's,.*/\\(.*\\),\\1,')
 for branch in $protected_branches; do
     if [ "$current_branch" = "$branch" ]; then
         echo ""
-        echo "🚨 CARLOS PROTECTION: Direct commit to '$branch' branch is not allowed!"
-        echo "🤖 Carlos must work on feature branches."
+        echo "🚨 WORKFLOW PROTECTION: Direct commit to '$branch' branch is not allowed!"
+        echo "🔒 All developers must work on feature branches."
         echo ""
         echo "🔧 Switch to feature branch first:"
         echo "   npm run git:branch"
@@ -136,7 +136,7 @@ done
 large_files=$(git diff --cached --name-only | xargs -I {} find {} -size +50M 2>/dev/null)
 if [ -n "$large_files" ]; then
     echo ""
-    echo "🚨 CARLOS PROTECTION: Large files detected!"
+    echo "🚨 WORKFLOW PROTECTION: Large files detected!"
     echo "📁 Files larger than 50MB:"
     echo "$large_files"
     echo ""
