@@ -1,11 +1,8 @@
 #!/usr/bin/env node
 
 /**
- * Carlos Auto PR Creator
- * Created by Carlos (Carlitos) - Astro Blog Agent
- * 
+ * Auto PR Creator
  * Creates Pull Requests automatically using GitHub API
- * No user interaction required - fully automated
  */
 
 import { execSync } from 'child_process';
@@ -54,7 +51,7 @@ const createPRWithCurl = async () => {
   const currentBranch = getCurrentBranch();
   const branchInfo = getBranchInfo();
   
-  console.log(`🤖 Carlos creating PR for branch: ${currentBranch}`);
+  console.log(`🔄 Creating PR for branch: ${currentBranch}`);
   
   // Determine PR type and template
   const branchType = currentBranch.split('/')[0];
@@ -67,14 +64,14 @@ const createPRWithCurl = async () => {
     `${branchType}: ${currentBranch.split('/').slice(1).join(' ')}`;
   
   // Create PR body
-  const prBody = `## 🤖 Automated PR by Carlos (Carlitos)
+  const prBody = `## Pull Request
 
 **Branch:** \`${currentBranch}\`
 **Type:** ${branchType}
 **Base:** ${CONFIG.defaultBaseBranch}
 
 ### 📋 Changes:
-${branchInfo ? branchInfo.description : 'Automated changes by Carlos'}
+${branchInfo ? branchInfo.description : 'Automated changes'}
 
 ### 🧪 Testing:
 - [x] Automated tests will run
@@ -82,17 +79,11 @@ ${branchInfo ? branchInfo.description : 'Automated changes by Carlos'}
 - [x] Quality checks included
 
 ### 🔄 Automation:
-- [x] Created automatically by Carlos
 - [x] Will auto-merge when tests pass
-- [x] Branch will be deleted after merge
-
----
-
-**🤖 This PR was created automatically by Carlos (Carlitos) - Astro Blog Agent**
-**⚡ Auto-merge enabled when all checks pass**`;
+- [x] Branch will be deleted after merge`;
 
   // Prepare labels
-  const labels = ['carlos:automated'];
+  const labels = [];
   if (isFeature) labels.push('type:feature');
   if (isFix) labels.push('type:bugfix');
   labels.push('auto-merge');
@@ -158,8 +149,8 @@ ${branchInfo ? branchInfo.description : 'Automated changes by Carlos'}
 };
 
 const main = async () => {
-  console.log('🤖 Carlos (Carlitos) - Automatic PR Creator\n');
-  
+  console.log('🔄 Automatic PR Creator\n');
+
   try {
     await createPRWithCurl();
     console.log('\n✅ PR creation process completed');

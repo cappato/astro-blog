@@ -23,27 +23,36 @@ jobs:
     - name: Validate commit messages
       uses: actions/github-script@v7
       with:
-        github-token: ${{ secrets.PAT_TOKEN || github.token }}
         script: |
-          const commits = await github.rest.repos.listCommits({
+          // Get only the commits that are new in this PR
+          const { data: commits } = await github.rest.pulls.listCommits({
             owner: context.repo.owner,
             repo: context.repo.repo,
-            sha: context.payload.pull_request.head.sha,
-            per_page: 100
+            pull_number: context.payload.pull_request.number
           });
-          
+
           const conventionalPattern = /^(feat|fix|docs|style|refactor|test|chore|perf|ci|build)(\(.+\))?: .{1,50}/;
+          const mergePattern = /^Merge (pull request|branch)/;
+
           const analysis = {
-            total: commits.data.length,
+            total: 0,
             conventional: 0,
             issues: []
           };
-          
+
           const commitTypes = {};
-          
-          for (const commit of commits.data) {
+
+          // Only validate commits that are actually new in this PR
+          for (const commit of commits) {
             const message = commit.commit.message.split('\n')[0];
-            
+            analysis.total++;
+
+            // Skip merge commits - they're automatically generated
+            if (mergePattern.test(message)) {
+              analysis.conventional++;
+              continue;
+            }
+
             if (conventionalPattern.test(message)) {
               analysis.conventional++;
               const type = message.split(':')[0].split('(')[0];
@@ -64,17 +73,11 @@ jobs:
             .map(issue => `- \`${issue.sha}\`: ${issue.message}`)
             .join('\n');
           
-          const commentBody = `## 📊 Commit Message Analysis\n\n**Summary:**\n- Total commits: ${analysis.total}\n- Conventional commits: ${analysis.conventional}\n- Compliance rate: ${Math.round((analysis.conventional / analysis.total) * 100)}%\n\n**Commit types:**\n${typesList || 'None'}\n\n${analysis.issues.length > 0 ? `**Non-conventional commits:**\n${issuesList}\n\n**Examples of correct format:**\n- \`feat: add new blog post feature\`\n- \`fix: resolve navigation bug\`\n- \`docs: update README\`\n` : '**✅ All commits follow conventional format!**'}`;
-          
-          try {
-            await github.rest.issues.createComment({
-              owner: context.repo.owner,
-              repo: context.repo.repo,
-              issue_number: context.payload.pull_request.number,
-              body: commentBody
-            });
-            console.log('✅ Commit analysis comment posted successfully');
-          } catch (error) {
-            console.log('⚠️ Could not post comment (insufficient permissions):', error.message);
-            console.log('💡 Consider adding a PAT_TOKEN secret for full functionality');
+          // Only fail if there are non-conventional commits in this PR
+          if (analysis.issues.length > 0) {
+            const failureMessage = `❌ Found ${analysis.issues.length} non-conventional commits in this PR:\n${issuesList}`;
+            console.log(failureMessage);
+            core.setFailed('Some commits in this PR do not follow conventional commit format');
+          } else {
+            console.log(`✅ All ${analysis.total} commits in this PR follow conventional format`);
           }
