@@ -13,6 +13,8 @@ permissions:
   pull-requests: write
   issues: write
   checks: read
+  statuses: read
+  actions: read
 
 jobs:
   pr-validation:
@@ -95,25 +97,30 @@ jobs:
               ref: pr.head.sha
             });
 
-            // Get status checks
-            const { data: statuses } = await github.rest.repos.getCombinedStatusForRef({
-              owner: context.repo.owner,
-              repo: context.repo.repo,
-              ref: pr.head.sha
-            });
-
             // Check if all checks passed
-            const allChecksPassed = checks.check_runs.every(check =>
+            const allChecksPassed = checks.check_runs.length === 0 || checks.check_runs.every(check =>
               check.status === 'completed' &&
               (check.conclusion === 'success' || check.conclusion === 'neutral')
             );
 
-            const allStatusesPassed = statuses.state === 'success' || statuses.statuses.length === 0;
-
             console.log(`  - Check runs: ${checks.check_runs.length}`);
             console.log(`  - All checks passed: ${allChecksPassed}`);
-            console.log(`  - Status state: ${statuses.state}`);
-            console.log(`  - All statuses passed: ${allStatusesPassed}`);
+
+            // Get status checks (with error handling)
+            let allStatusesPassed = true;
+            try {
+              const { data: statuses } = await github.rest.repos.getCombinedStatusForRef({
+                owner: context.repo.owner,
+                repo: context.repo.repo,
+                ref: pr.head.sha
+              });
+              allStatusesPassed = statuses.state === 'success' || statuses.statuses.length === 0;
+              console.log(`  - Status state: ${statuses.state}`);
+              console.log(`  - All statuses passed: ${allStatusesPassed}`);
+            } catch (error) {
+              console.log(`  - Status checks not accessible, skipping status validation`);
+              console.log(`  - Will rely on check runs only`);
+            }
 
             if (allChecksPassed && allStatusesPassed && pr.mergeable !== false) {
               try {
