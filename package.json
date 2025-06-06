@@ -54,7 +54,8 @@
     "multi-agent:status": "node scripts/multi-agent-manager.js status",
     "multi-agent:learn": "node scripts/multi-agent-manager.js learn",
     "multi-agent:analyze": "node scripts/multi-agent-manager.js analyze",
-    "multi-agent:pr": "node scripts/multi-agent-manager.js pr"
+    "multi-agent:pr": "node scripts/multi-agent-manager.js pr",
+    "multi-agent:last-pr": "node scripts/multi-agent-manager.js last-pr"
   },
   "dependencies": {
     "@tailwindcss/typography": "^0.5.16",

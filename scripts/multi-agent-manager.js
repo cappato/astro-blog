@@ -191,10 +191,98 @@ class MultiAgentManager {
     }
   }
 
+  async getLastPR() {
+    console.log('🔍 Consultando último PR creado...');
+
+    try {
+      // Intentar con GitHub CLI primero
+      try {
+        const { execSync } = await import('child_process');
+        const result = execSync('gh pr list --limit 1 --json number,url,title,author --state open', {
+          encoding: 'utf-8',
+          timeout: 10000
+        });
+
+        const prs = JSON.parse(result);
+        if (prs && prs.length > 0) {
+          const lastPR = prs[0];
+          console.log(`✅ Último PR encontrado: #${lastPR.number}`);
+          console.log(`   Título: ${lastPR.title}`);
+          console.log(`   Autor: ${lastPR.author.login}`);
+          console.log(`   URL: ${lastPR.url}`);
+
+          return {
+            number: lastPR.number,
+            url: lastPR.url,
+            title: lastPR.title,
+            author: lastPR.author.login
+          };
+        }
+      } catch (ghError) {
+        console.log('⚠️ GitHub CLI no disponible, intentando método alternativo...');
+      }
+
+      // Método alternativo: buscar en git log
+      try {
+        const { execSync } = await import('child_process');
+        const branches = execSync('git branch -r --format="%(refname:short)"', {
+          encoding: 'utf-8',
+          timeout: 5000
+        });
+
+        // Buscar ramas que parezcan PRs
+        const prBranches = branches.split('\n')
+          .filter(branch => branch.includes('origin/') && !branch.includes('main'))
+          .map(branch => branch.trim())
+          .filter(Boolean);
+
+        if (prBranches.length > 0) {
+          console.log(`📋 Ramas encontradas que podrían ser PRs:`);
+          prBranches.forEach((branch, index) => {
+            console.log(`   ${index + 1}. ${branch}`);
+          });
+
+          return {
+            method: 'git-branches',
+            branches: prBranches,
+            suggestion: `Última rama: ${prBranches[0]}`
+          };
+        }
+      } catch (gitError) {
+        console.log('⚠️ Error consultando git branches');
+      }
+
+      console.log('❌ No se pudo determinar el último PR automáticamente');
+      return null;
+
+    } catch (error) {
+      console.error('❌ Error consultando último PR:', error.message);
+      return null;
+    }
+  }
+
   async reportPR(agentName, prData) {
     console.log(`🔗 Reporting PR for ${agentName}...`);
 
     try {
+      // Si no se proporciona link, intentar obtener el último PR
+      if (!prData.link) {
+        console.log('🔍 No se proporcionó link, consultando último PR...');
+        const lastPR = await this.getLastPR();
+
+        if (lastPR && lastPR.url) {
+          prData.link = lastPR.url;
+          if (!prData.title && lastPR.title) {
+            prData.title = lastPR.title;
+          }
+          console.log(`✅ Usando último PR: ${prData.link}`);
+        } else {
+          console.error('❌ No se pudo obtener el último PR automáticamente');
+          console.error('💡 Proporciona el link manualmente: npm run multi-agent:pr "Agent" "PR_URL" "Title"');
+          return null;
+        }
+      }
+
       // Validate required PR data
       if (!prData.link || !prData.title) {
         console.error('❌ PR link and title are required');
@@ -676,20 +764,45 @@ async function main() {
       const prLink = process.argv[4];
       const prTitle = process.argv[5];
 
-      if (!prAgentName || !prLink || !prTitle) {
-        console.error('❌ Usage: npm run multi-agent pr "Agent Name" "PR_Link" "PR Title"');
-        console.error('Example: npm run multi-agent pr "Ganzo" "https://github.com/user/repo/pull/123" "Fix SEO meta tags"');
+      if (!prAgentName) {
+        console.error('❌ Usage: npm run multi-agent pr "Agent Name" ["PR_Link"] ["PR Title"]');
+        console.error('Examples:');
+        console.error('  npm run multi-agent pr "ganzo"  # Auto-detect last PR');
+        console.error('  npm run multi-agent pr "ganzo" "https://github.com/user/repo/pull/123" "Fix SEO meta tags"');
         process.exit(1);
       }
 
       await manager.reportPR(prAgentName, {
-        link: prLink,
-        title: prTitle,
+        link: prLink, // Can be undefined for auto-detection
+        title: prTitle, // Can be undefined for auto-detection
         changes: ['Changes via CLI - please update manually'],
         testsStatus: '⚠️ Please verify tests',
         docsStatus: '⚠️ Please verify docs',
         impact: 'To be specified'
       });
+      break;
+
+    case 'last-pr':
+      const lastPR = await manager.getLastPR();
+      if (lastPR) {
+        if (lastPR.url) {
+          console.log('\n🔗 ÚLTIMO PR ENCONTRADO:');
+          console.log(`   Número: #${lastPR.number}`);
+          console.log(`   Título: ${lastPR.title}`);
+          console.log(`   Autor: ${lastPR.author}`);
+          console.log(`   URL: ${lastPR.url}`);
+          console.log('\n💡 Para reportar este PR:');
+          console.log(`   npm run multi-agent:pr "tu_nombre" "${lastPR.url}" "${lastPR.title}"`);
+        } else if (lastPR.branches) {
+          console.log('\n📋 RAMAS ENCONTRADAS (posibles PRs):');
+          lastPR.branches.forEach((branch, index) => {
+            console.log(`   ${index + 1}. ${branch}`);
+          });
+          console.log('\n💡 Verifica manualmente cuál es tu PR en GitHub');
+        }
+      } else {
+        console.log('❌ No se encontraron PRs recientes');
+      }
       break;
 
     default:
@@ -704,6 +817,7 @@ async function main() {
       console.log('  analyze   - Analyze lesson patterns');
       console.log('  status    - Update agent status');
       console.log('  pr        - Report PR creation (follows protocol)');
+      console.log('  last-pr   - Get last PR info for easy reporting');
       console.log('');
       console.log('Usage examples:');
       console.log('  node scripts/multi-agent-manager.js check');
@@ -713,7 +827,9 @@ async function main() {
       console.log('  node scripts/multi-agent-manager.js learn');
       console.log('  node scripts/multi-agent-manager.js analyze');
       console.log('  node scripts/multi-agent-manager.js status "Frontend Agent"');
-      console.log('  node scripts/multi-agent-manager.js pr "Ganzo" "https://github.com/user/repo/pull/123" "Fix SEO meta tags"');
+      console.log('  node scripts/multi-agent-manager.js pr "ganzo"  # Auto-detect last PR');
+      console.log('  node scripts/multi-agent-manager.js pr "ganzo" "https://github.com/user/repo/pull/123" "Fix SEO meta tags"');
+      console.log('  node scripts/multi-agent-manager.js last-pr  # Show last PR info');
   }
 }
 
