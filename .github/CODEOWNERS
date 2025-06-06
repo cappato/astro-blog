@@ -1,0 +1,30 @@
+# CODEOWNERS file
+# Created by Carlos (Carlitos) - Astro Blog Agent
+# Defines who must review changes to specific files/directories
+
+# Global ownership - all files require review
+* @cappato
+
+# Critical system files require admin approval
+/.github/ @cappato
+/.github/workflows/ @cappato
+/scripts/ @cappato
+
+# Configuration files
+package.json @cappato
+package-lock.json @cappato
+astro.config.mjs @cappato
+tailwind.config.js @cappato
+tsconfig.json @cappato
+vitest.config.ts @cappato
+
+# Source code
+/src/ @cappato
+
+# Documentation
+/docs/ @cappato
+README.md @cappato
+
+# Tests
+/src/__tests__/ @cappato
+/src/tests/ @cappato
