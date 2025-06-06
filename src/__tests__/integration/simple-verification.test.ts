@@ -26,6 +26,6 @@ describe('Simple Verification Tests', () => {
 
   test('should verify basic math works', () => {
     expect(2 + 2).toBe(4);
-    expect('hello'.length).toBe(5);
+    expect(''.length).toBe(5);
   });
 });

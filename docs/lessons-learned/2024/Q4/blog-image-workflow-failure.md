@@ -1,16 +1,16 @@
 # Falla en Workflow de Creación de Posts: Imágenes Faltantes
 
-**Fecha:** 2024-12-19  
-**Autor:** Matías Cappato  
-**Tags:** #critical #workflow #images #testing #process-failure  
-**Contexto:** Blog cappato.dev - Posts de serie Wrangler  
+**Fecha:** 2024-12-19
+**Autor:** Matías Cappato
+**Tags:** #critical #workflow #images #testing #process-failure
+**Contexto:** Blog cappato.dev - Posts de serie Wrangler
 **Nivel de Impacto:** #critical
 
-## 📋 Resumen Ejecutivo
+##  Resumen Ejecutivo
 
 Los tests no detectaron que las miniaturas de posts nuevos no se mostraban en `/blog` porque faltaban variantes de imagen críticas. El flujo de creación de posts no estaba claramente definido ni automatizado.
 
-## 🎯 Contexto
+##  Contexto
 
 ### Situación
 Al crear 3 posts nuevos para la serie de Wrangler, las miniaturas no aparecían en la página principal del blog (`/blog`), mostrando imágenes rotas o fallbacks.
@@ -23,14 +23,14 @@ Crear posts con todas las variantes de imagen necesarias para que se muestren co
 - **Herramientas:** Sharp, tests automatizados con Vitest
 - **Versiones:** Node.js 20, npm scripts
 
-## 🚨 Problema Identificado
+##  Problema Identificado
 
 ### Descripción del Problema
 Los posts nuevos solo tenían 4 variantes de imagen básicas, pero faltaban **5 variantes críticas** necesarias para el funcionamiento completo:
 
 **Faltantes:**
 - `portada-thumb.webp` - **Miniatura para listados** ← CRÍTICO
-- `portada-lqip.webp` - Low Quality Image Placeholder  
+- `portada-lqip.webp` - Low Quality Image Placeholder
 - `portada-lqip.txt` - Datos del LQIP
 - `portada-wsp.webp` - Versión WhatsApp/Social
 - `portada-og-avif.avif` - AVIF para Open Graph
@@ -46,7 +46,7 @@ Los posts nuevos solo tenían 4 variantes de imagen básicas, pero faltaban **5 
 - **SEO afectado:** Meta tags sin imágenes correctas
 - **Confianza en tests:** Los tests no detectaron el problema
 
-## 🔍 Investigación y Diagnóstico
+##  Investigación y Diagnóstico
 
 ### Proceso de Investigación
 1. **Verificación visual:** Detectado problema en `/blog`
@@ -65,7 +65,7 @@ Los posts nuevos solo tenían 4 variantes de imagen básicas, pero faltaban **5 
 3. **Sistema existente:** Ya había herramientas, pero no las usamos
 4. **Workflow manual:** Proceso propenso a errores humanos
 
-## ✅ Solución Implementada
+##  Solución Implementada
 
 ### Solución Elegida
 1. **Actualizar tests** para verificar TODAS las variantes
@@ -78,7 +78,7 @@ Los posts nuevos solo tenían 4 variantes de imagen básicas, pero faltaban **5 
 // Test actualizado para verificar todas las variantes
 const requiredVariants = [
   'portada.webp',
-  'portada-avif.avif', 
+  'portada-avif.avif',
   'portada-og.webp',
   'portada-og-jpg.jpeg',
   'portada-og-avif.avif',    // ← Agregado
@@ -97,10 +97,10 @@ const requiredVariants = [
 5. **Documentar flujo** completo en `BLOG-POST-CREATION-WORKFLOW.md`
 
 ### Verificación
-- ✅ Tests actualizados detectan el problema
-- ✅ Todas las variantes generadas correctamente
-- ✅ Miniaturas aparecen en `/blog`
-- ✅ Flujo documentado completamente
+-  Tests actualizados detectan el problema
+-  Todas las variantes generadas correctamente
+-  Miniaturas aparecen en `/blog`
+-  Flujo documentado completamente
 
 ## 🧠 Lección Aprendida
 
@@ -119,7 +119,7 @@ const requiredVariants = [
 3. **Documentar procesos:** Crear workflows claros y obligatorios
 4. **Automatizar más:** Crear scripts que hagan todo el proceso
 
-## 🔄 Prevención Futura
+##  Prevención Futura
 
 ### Checks Preventivos
 - [ ] **Test completo:** Verificar que tests cubren TODOS los requisitos
@@ -137,7 +137,7 @@ const requiredVariants = [
 - **Tests actualizados:** Verificación exhaustiva de imágenes
 - **Esta lección:** Para evitar repetir el error
 
-## 🔗 Referencias
+##  Referencias
 
 ### Archivos Relacionados
 - [Flujo de Creación de Posts](../../BLOG-POST-CREATION-WORKFLOW.md)
@@ -148,19 +148,19 @@ const requiredVariants = [
 - **Commit:** feat(testing): implement comprehensive blog quality tests
 - **Commit:** feat(content): split deploy tutorial into comprehensive 3-part series
 
-## 📊 Métricas de Impacto
+##  Métricas de Impacto
 
 ### Antes de la Solución
-- **Tests pasando:** ✅ (falsa confianza)
-- **Imágenes funcionando:** ❌ (4/9 variantes)
-- **UX del blog:** ❌ (miniaturas rotas)
+- **Tests pasando:**  (falsa confianza)
+- **Imágenes funcionando:**  (4/9 variantes)
+- **UX del blog:**  (miniaturas rotas)
 
 ### Después de la Solución
-- **Tests detectando problemas:** ✅ (exhaustivos)
-- **Imágenes funcionando:** ✅ (9/9 variantes)
-- **UX del blog:** ✅ (miniaturas perfectas)
+- **Tests detectando problemas:**  (exhaustivos)
+- **Imágenes funcionando:**  (9/9 variantes)
+- **UX del blog:**  (miniaturas perfectas)
 
-## 💡 Aplicabilidad
+##  Aplicabilidad
 
 ### Proyectos Donde Aplica
 - **Cualquier blog:** Con sistema de imágenes optimizadas
@@ -180,7 +180,7 @@ const requiredVariants = [
 
 ---
 
-**Última actualización:** 2024-12-19  
+**Última actualización:** 2024-12-19
 **Próxima revisión:** 2025-01-19
 
-**🎯 Acción:** Implementar script automatizado de creación de posts que ejecute todo el flujo correctamente.
+** Acción:** Implementar script automatizado de creación de posts que ejecute todo el flujo correctamente.

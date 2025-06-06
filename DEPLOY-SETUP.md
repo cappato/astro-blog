@@ -1,6 +1,6 @@
-# 🚀 Deploy Setup - Cappato.dev Blog
+#  Deploy Setup - Cappato.dev Blog
 
-## 📋 **Secrets de GitHub que necesitas crear**
+##  **Secrets de GitHub que necesitas crear**
 
 Ve a: **GitHub Repository > Settings > Secrets and variables > Actions**
 
@@ -12,14 +12,14 @@ Ve a: **GitHub Repository > Settings > Secrets and variables > Actions**
 
 ### **2. CLOUDFLARE_ACCOUNT_ID**
 - **Valor:** Tu Account ID de Cloudflare
-- **Dónde encontrarlo:** 
+- **Dónde encontrarlo:**
   - Ve a Cloudflare Dashboard
-  - Lado derecho, sección "API" 
+  - Lado derecho, sección "API"
   - Copia el "Account ID"
 
 ---
 
-## 🔐 **Cómo crear el Token en Cloudflare**
+##  **Cómo crear el Token en Cloudflare**
 
 ### **Paso 1: Ir a API Tokens**
 https://dash.cloudflare.com/profile/api-tokens
@@ -46,7 +46,7 @@ Zone resources: Include - All zones
 
 ---
 
-## 🌐 **Configuración del Dominio**
+##  **Configuración del Dominio**
 
 ### **Después del primer deploy:**
 
@@ -64,11 +64,11 @@ Zone resources: Include - All zones
 
 ---
 
-## ⚡ **Workflow Automático**
+##  **Workflow Automático**
 
 ### **Triggers:**
-- ✅ **Push a main:** Deploy automático a producción
-- ✅ **Pull Request:** Deploy de preview para testing
+-  **Push a main:** Deploy automático a producción
+-  **Pull Request:** Deploy de preview para testing
 
 ### **Proceso:**
 1. Checkout del código
@@ -100,7 +100,7 @@ npm run preview
 
 ---
 
-## 🔧 **Troubleshooting**
+##  **Troubleshooting**
 
 ### **Error: Invalid API Token**
 - Verificar que el token tenga los permisos correctos
@@ -120,9 +120,9 @@ npm run preview
 
 ---
 
-## 📊 **Estado del Setup**
+##  **Estado del Setup**
 
-### **✅ Completado:**
+### ** Completado:**
 - [x] Workflow de GitHub Actions configurado
 - [x] Configuración de Wrangler lista
 - [x] Build process verificado
@@ -135,7 +135,7 @@ npm run preview
 
 ---
 
-## 🎉 **Una vez configurado:**
+##  **Una vez configurado:**
 
 ¡El deploy será completamente automático! Cada push a `main` deployará automáticamente a https://cappato.dev
 
@@ -144,15 +144,15 @@ npm run preview
 git add .
 git commit -m "feat: nueva funcionalidad"
 git push origin main
-# 🚀 Deploy automático en ~2-3 minutos
+#  Deploy automático en ~2-3 minutos
 ```
 
 ---
 
-## ✅ **Status: SECRETS CONFIGURADOS**
+##  **Status: SECRETS CONFIGURADOS**
 
 Los secrets de GitHub han sido creados correctamente:
-- ✅ CLOUDFLARE_API_TOKEN
-- ✅ CLOUDFLARE_ACCOUNT_ID
+-  CLOUDFLARE_API_TOKEN
+-  CLOUDFLARE_ACCOUNT_ID
 
-**¡Listo para el primer deploy automático!** 🚀
+**¡Listo para el primer deploy automático!**

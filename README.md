@@ -1,16 +1,16 @@
-# Astro Starter Kit: Minimal
+# Technical Blog Platform
 
-```sh
-npm create astro@latest -- --template minimal
-```
+A professional blog platform built with Astro, TypeScript, and modern web technologies.
 
-[![Open in StackBlitz](https://developer.stackblitz.com/img/open_in_stackblitz.svg)](https://stackblitz.com/github/withastro/astro/tree/latest/examples/minimal)
-[![Open with CodeSandbox](https://assets.codesandbox.io/github/button-edit-lime.svg)](https://codesandbox.io/p/sandbox/github/withastro/astro/tree/latest/examples/minimal)
-[![Open in GitHub Codespaces](https://github.com/codespaces/badge.svg)](https://codespaces.new/withastro/astro?devcontainer_path=.devcontainer/minimal/devcontainer.json)
+## Professional Standards
 
-> 🧑‍🚀 **Seasoned astronaut?** Delete this file. Have fun!
+This project maintains strict professional standards:
+- No emojis in code, commits, or documentation
+- Technical content only
+- Professional commit messages and PR descriptions
+- Automated validation of content standards
 
-## 🚀 Project Structure
+##  Project Structure
 
 Inside of your Astro project, you'll see the following folders and files:
 
@@ -29,9 +29,9 @@ There's nothing special about `src/components/`, but that's where we like to put
 
 Any static assets, like images, can be placed in the `public/` directory.
 
-## 🧞 Commands
+## Commands
 
-All commands are run from the root of the project, from a terminal:
+All commands are run from the root of the project:
 
 | Command                   | Action                                           |
 | :------------------------ | :----------------------------------------------- |
@@ -39,13 +39,27 @@ All commands are run from the root of the project, from a terminal:
 | `npm run dev`             | Starts local dev server at `localhost:4321`      |
 | `npm run build`           | Build your production site to `./dist/`          |
 | `npm run preview`         | Preview your build locally, before deploying     |
-| `npm run astro ...`       | Run CLI commands like `astro add`, `astro check` |
-| `npm run astro -- --help` | Get help using the Astro CLI                     |
+| `npm run test`            | Run test suite                                   |
+| `npm run clean:professional` | Remove unprofessional content                 |
+| `npm run test:professional` | Validate professional standards               |
 
-## 👀 Want to learn more?
+## Quality Assurance
 
-Feel free to check [our documentation](https://docs.astro.build) or jump into our [Discord server](https://astro.build/chat).
+### Professional Standards Validation
+- Automated tests prevent emojis and casual language
+- Pre-commit hooks enforce professional standards
+- Content validation ensures technical focus
+
+### Testing
+- Unit tests for components and utilities
+- Integration tests for blog functionality
+- Professional standards validation
+- Build verification
+
+## Documentation
+
+Technical documentation is available in the `docs/` directory.
 
 ---
 
-**CI/CD Status:** Testing improved workflow reliability - 2024-12-19 🚀
+**CI/CD Status:** Testing improved workflow reliability - 2024-12-19

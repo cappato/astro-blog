@@ -1,6 +1,6 @@
 /**
  * Image Optimization Feature - Logger System
- * 
+ *
  * Comprehensive logging system with levels, colors,
  * and progress tracking for CLI operations.
  */
@@ -73,7 +73,7 @@ export class Logger implements ILogger {
   public error(message: string, error?: Error | any): void {
     if (this.shouldLog('error')) {
       const errorMessage = this.formatMessage('ERROR', message, CLI_CONFIG.COLORS.ERROR);
-      
+
       if (error) {
         if (error instanceof Error) {
           console.error(errorMessage, '\n', error.message);
@@ -97,12 +97,12 @@ export class Logger implements ILogger {
       const percentage = Math.round((current / total) * 100);
       const progressBar = this.createProgressBar(percentage);
       const contextStr = context ? ` (${context})` : '';
-      
+
       // Use carriage return to overwrite the same line
       process.stdout.write(
         `\r${CLI_CONFIG.COLORS.INFO}Progress: ${progressBar} ${percentage}% (${current}/${total})${contextStr}${CLI_CONFIG.COLORS.RESET}`
       );
-      
+
       // Add newline when complete
       if (current === total) {
         process.stdout.write('\n');
@@ -125,7 +125,7 @@ export class Logger implements ILogger {
   public timestamped(level: LogLevel, message: string, ...args: any[]): void {
     const timestamp = new Date().toISOString();
     const timestampedMessage = `[${timestamp}] ${message}`;
-    
+
     switch (level) {
       case 'debug':
         this.debug(timestampedMessage, ...args);
@@ -159,11 +159,11 @@ export class Logger implements ILogger {
       console.log(`  Processed: ${CLI_CONFIG.COLORS.SUCCESS}${stats.processed}${CLI_CONFIG.COLORS.RESET}`);
       console.log(`  Skipped: ${CLI_CONFIG.COLORS.WARNING}${stats.skipped}${CLI_CONFIG.COLORS.RESET}`);
       console.log(`  Errors: ${CLI_CONFIG.COLORS.ERROR}${stats.errors}${CLI_CONFIG.COLORS.RESET}`);
-      
+
       if (stats.duration) {
         console.log(`  Duration: ${this.formatDuration(stats.duration)}`);
       }
-      
+
       console.log(CLI_CONFIG.COLORS.INFO + '='.repeat(50) + CLI_CONFIG.COLORS.RESET);
     }
   }
@@ -173,7 +173,7 @@ export class Logger implements ILogger {
    */
   public fileOperation(operation: 'read' | 'write' | 'delete', filePath: string, success: boolean): void {
     if (this.shouldLog('debug')) {
-      const status = success ? '✅' : '❌';
+      const status = success ? '' : '';
       const color = success ? CLI_CONFIG.COLORS.SUCCESS : CLI_CONFIG.COLORS.ERROR;
       console.log(`${color}${status} ${operation.toUpperCase()}: ${filePath}${CLI_CONFIG.COLORS.RESET}`);
     }

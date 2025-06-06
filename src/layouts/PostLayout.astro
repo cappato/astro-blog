@@ -74,8 +74,6 @@ const readingTimeText = formatReadingTime(readingTime);
 // URL actual para compartir
 const currentUrl = Astro.url.href;
 
-
-
 // Crear objeto currentPost para RelatedArticles
 const currentPost = {
   slug: Astro.url.pathname.replace('/blog/', '').replace('/', ''),
@@ -231,7 +229,7 @@ const currentPost = {
           />
         ) : (
           <div class="w-full h-full flex items-center justify-center">
-            <span class="text-lg font-medium">📄 {title}</span>
+            <span class="text-lg font-medium"> {title}</span>
           </div>
         )}
       </div>
@@ -322,5 +320,4 @@ const currentPost = {
   <CopyToast />
 
 </BaseLayout>
-
 

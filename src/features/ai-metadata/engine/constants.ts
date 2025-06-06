@@ -1,6 +1,6 @@
 /**
  * AI Metadata Feature - Constants and Configuration
- * 
+ *
  * Centralized configuration for AI metadata system
  * with default values and validation rules.
  */
@@ -61,25 +61,25 @@ export const META_TAG_NAMES = {
 export const VALIDATION_RULES = {
   /** Minimum title length */
   MIN_TITLE_LENGTH: 1,
-  
+
   /** Maximum title length */
   MAX_TITLE_LENGTH: 200,
-  
+
   /** Minimum description length */
   MIN_DESCRIPTION_LENGTH: 1,
-  
+
   /** Maximum description length */
   MAX_DESCRIPTION_LENGTH: 500,
-  
+
   /** Maximum tags count */
   MAX_TAGS_COUNT: 20,
-  
+
   /** Maximum tag length */
   MAX_TAG_LENGTH: 50,
-  
+
   /** Valid URL pattern */
   URL_PATTERN: /^(https?:\/\/|\/)/,
-  
+
   /** Valid content types */
   VALID_CONTENT_TYPES: ['website', 'article', 'profile', 'blog'] as const
 } as const;
@@ -112,13 +112,13 @@ export const ERROR_MESSAGES = {
 export const CACHE_CONFIG = {
   /** Default cache duration for successful responses (1 hour) */
   SUCCESS_CACHE_DURATION: 3600,
-  
+
   /** Cache duration for error responses (5 minutes) */
   ERROR_CACHE_DURATION: 300,
-  
+
   /** Cache control header for public caching */
   PUBLIC_CACHE_CONTROL: 'public',
-  
+
   /** Access control headers */
   ACCESS_CONTROL_ALLOW_ORIGIN: '*'
 } as const;
@@ -159,7 +159,7 @@ export const FEATURE_METADATA = {
   name: 'ai-metadata',
   version: '1.0.0',
   description: 'AI-optimized metadata system with Schema.org support',
-  author: 'Augment Agent',
+  author: '',
   dependencies: ['astro', 'typescript'],
   exports: ['AIMetadata', 'AIMetadataManager', 'generateAIMetadataEndpoint']
 } as const;

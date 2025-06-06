@@ -9,10 +9,10 @@ Este documento describe los tests automatizados para prevenir problemas comunes 
 **Propósito:** Prevenir imágenes rotas y problemas de visualización.
 
 **Verifica:**
-- ✅ Todas las variantes de imagen requeridas existen
-- ✅ Archivos tienen tamaño apropiado (>1KB, no placeholders)
-- ✅ Referencias de imagen en markdown son válidas
-- ✅ Posts tienen `imageAlt` definido
+-  Todas las variantes de imagen requeridas existen
+-  Archivos tienen tamaño apropiado (>1KB, no placeholders)
+-  Referencias de imagen en markdown son válidas
+-  Posts tienen `imageAlt` definido
 
 **Variantes requeridas para posts con `postId`:**
 ```
@@ -28,12 +28,12 @@ Este documento describe los tests automatizados para prevenir problemas comunes 
 **Propósito:** Mantener estructura SEO correcta y consistencia.
 
 **Verifica:**
-- ✅ No hay H1 en contenido markdown (solo en layout)
-- ✅ Jerarquía de headings correcta (H2 → H3 → H4)
-- ✅ Frontmatter tiene campos requeridos
-- ✅ Títulos y descripciones en rangos apropiados
+-  No hay H1 en contenido markdown (solo en layout)
+-  Jerarquía de headings correcta (H2 → H3 → H4)
+-  Frontmatter tiene campos requeridos
+-  Títulos y descripciones en rangos apropiados
 
-## 🚀 Ejecutar Tests
+##  Ejecutar Tests
 
 ```bash
 # Todos los tests de blog
@@ -46,9 +46,9 @@ npm run test:blog:images
 npm run test:blog:structure
 ```
 
-## 📝 Reglas de Estructura
+##  Reglas de Estructura
 
-### ✅ Estructura Correcta
+###  Estructura Correcta
 
 ```markdown
 ---
@@ -76,7 +76,7 @@ Contenido de subsección.
 Más contenido.
 ```
 
-### ❌ Estructura Incorrecta
+###  Estructura Incorrecta
 
 ```markdown
 ---
@@ -94,7 +94,7 @@ description: "Muy corto"
 ##### H5 sin H4 (jerarquía rota)
 ```
 
-## 🔧 Solución de Problemas Comunes
+##  Solución de Problemas Comunes
 
 ### Problema: Imágenes faltantes
 
@@ -111,43 +111,43 @@ cp mi-imagen.webp public/images/mi-post/portada-og-jpg.jpeg
 ### Problema: H1 en markdown
 
 ```markdown
-<!-- ❌ Incorrecto -->
+<!--  Incorrecto -->
 # Mi Título
 
 ## Sección
 
-<!-- ✅ Correcto -->
+<!--  Correcto -->
 ## Mi Primera Sección
 ```
 
 ### Problema: Frontmatter inválido
 
 ```yaml
-# ❌ Incorrecto
+#  Incorrecto
 title: "Título Súper Extremadamente Largo Que Supera Los Límites Recomendados Para SEO"
 description: "Muy corto"
 
-# ✅ Correcto  
+#  Correcto
 title: "Título Conciso y Descriptivo"
 description: "Descripción clara y completa que explica el contenido del post de manera efectiva y atractiva para los lectores."
 ```
 
-## 🎯 Arquitectura H1
+##  Arquitectura H1
 
 **Decisión:** El layout maneja el H1, no el markdown.
 
 **Razones:**
-- ✅ Garantiza un solo H1 por página (SEO)
-- ✅ Consistencia visual en todos los posts
-- ✅ Control centralizado del diseño
-- ✅ Previene errores humanos
+-  Garantiza un solo H1 por página (SEO)
+-  Consistencia visual en todos los posts
+-  Control centralizado del diseño
+-  Previene errores humanos
 
 **Flujo:**
 1. Frontmatter define `title`
 2. Layout renderiza `<h1>{title}</h1>`
 3. Markdown empieza con H2 (`##`)
 
-## 🔄 Integración CI/CD
+##  Integración CI/CD
 
 Agregar a `.github/workflows/`:
 
@@ -161,7 +161,7 @@ Esto previene que se mergeen PRs con:
 - Estructura H1 incorrecta
 - Frontmatter inválido
 
-## 📊 Métricas de Calidad
+##  Métricas de Calidad
 
 Los tests ayudan a mantener:
 - **SEO Score:** Estructura semántica correcta

@@ -1,6 +1,6 @@
 /**
  * Breadcrumbs Feature - Route Configuration
- * 
+ *
  * Configuración centralizada de rutas y sus breadcrumbs correspondientes
  * Sistema modular y escalable para navegación jerárquica
  */
@@ -21,13 +21,13 @@ export interface RoutePattern {
  * Iconos para diferentes tipos de páginas
  */
 export const BREADCRUMB_ICONS = {
-  home: '🏠',
-  blog: '📝',
-  article: '📄',
-  pillars: '📚',
-  pillar: '📖',
-  tag: '🏷️',
-  category: '📂',
+  home: '',
+  blog: '',
+  article: '',
+  pillars: '',
+  pillar: '',
+  tag: '️',
+  category: '',
 } as const;
 
 /**
@@ -49,7 +49,7 @@ export const ROUTE_PATTERNS: RoutePattern[] = [
     generator: (pathname, customTitle) => {
       const pillarSlug = pathname.match(/^\/blog\/pillar\/(.+)$/)?.[1];
       const pillarName = customTitle || formatSlug(pillarSlug || '');
-      
+
       return [
         { label: 'Inicio', href: '/', icon: BREADCRUMB_ICONS.home },
         { label: 'Blog', href: '/blog', icon: BREADCRUMB_ICONS.blog },
@@ -74,7 +74,7 @@ export const ROUTE_PATTERNS: RoutePattern[] = [
     pattern: /^\/blog\/tag\/(.+)$/,
     generator: (pathname) => {
       const tagName = pathname.match(/^\/blog\/tag\/(.+)$/)?.[1];
-      
+
       return [
         { label: 'Inicio', href: '/', icon: BREADCRUMB_ICONS.home },
         { label: 'Blog', href: '/blog', icon: BREADCRUMB_ICONS.blog },
@@ -97,7 +97,7 @@ export const ROUTE_PATTERNS: RoutePattern[] = [
     pattern: /^\/blog\/(.+)$/,
     generator: (pathname, customTitle) => {
       const postTitle = customTitle || 'Artículo';
-      
+
       return [
         { label: 'Inicio', href: '/', icon: BREADCRUMB_ICONS.home },
         { label: 'Blog', href: '/blog', icon: BREADCRUMB_ICONS.blog },

@@ -1,4 +1,4 @@
-📝 Tareas para mejorar tus metadatos y AI metadata
+ Tareas para mejorar tus metadatos y AI metadata
 Eliminar duplicados
 
 Quitar la segunda línea repetida de <link rel="ai-metadata" href="/ai-metadata.json"> para evitar redundancia.

@@ -12,20 +12,20 @@ class UIInteractionsManager {
 
   private init(): void {
     if (this.initialized) return;
-    
+
     // Initialize all UI interactions
     this.initCollapsibleContent();
     this.initKeyboardNavigation();
     this.initAccessibilityFeatures();
-    
+
     this.initialized = true;
-    console.log('🎛️ UI interactions manager initialized');
+    console.log('️ UI interactions manager initialized');
   }
 
   private initCollapsibleContent(): void {
     // Experience cards collapsible functionality
     const toggleButtons = document.querySelectorAll('.collapsible-toggle');
-    
+
     toggleButtons.forEach(button => {
       button.addEventListener('click', () => {
         const content = button.closest('.collapsible-content');
@@ -36,7 +36,7 @@ class UIInteractionsManager {
         const toggleText = button.querySelector('.toggle-text') as HTMLElement;
         const toggleIcon = button.querySelector('.toggle-icon') as HTMLElement;
         const isExpanded = button.getAttribute('aria-expanded') === 'true';
-        
+
         if (isExpanded) {
           // Collapse
           items.forEach(item => item.classList.add('hidden'));
@@ -77,7 +77,7 @@ class UIInteractionsManager {
     // Skip to content functionality
     const skipLink = document.querySelector('a[href="#main-content"]');
     const mainContent = document.getElementById('main-content');
-    
+
     if (skipLink && mainContent) {
       skipLink.addEventListener('click', (e) => {
         e.preventDefault();
@@ -90,12 +90,12 @@ class UIInteractionsManager {
   private initAccessibilityFeatures(): void {
     // Add focus indicators for better accessibility
     const interactiveElements = document.querySelectorAll('button, a, input, textarea, select');
-    
+
     interactiveElements.forEach(element => {
       element.addEventListener('focus', () => {
         element.classList.add('focus-visible');
       });
-      
+
       element.addEventListener('blur', () => {
         element.classList.remove('focus-visible');
       });
@@ -108,7 +108,7 @@ class UIInteractionsManager {
   private setupAriaLiveRegions(): void {
     // Create aria-live region for dynamic announcements
     let liveRegion = document.getElementById('aria-live-region');
-    
+
     if (!liveRegion) {
       liveRegion = document.createElement('div');
       liveRegion.id = 'aria-live-region';
@@ -131,10 +131,10 @@ class UIInteractionsManager {
 
   // Public method to handle dynamic content updates
   public handleContentUpdate(type: 'expand' | 'collapse', itemCount?: number): void {
-    const message = type === 'expand' 
+    const message = type === 'expand'
       ? `Content expanded, showing all items`
       : `Content collapsed, showing first 4 of ${itemCount} items`;
-    
+
     (window as any).announceToScreenReader?.(message);
   }
 }

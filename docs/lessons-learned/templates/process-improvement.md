@@ -1,16 +1,16 @@
 # [Título de la Mejora de Proceso]
 
-**Fecha:** YYYY-MM-DD  
-**Autor:** [Nombre]  
-**Tags:** #process #improvement #[área]  
-**Contexto:** [Proyecto/Equipo/Área]  
+**Fecha:** YYYY-MM-DD
+**Autor:** [Nombre]
+**Tags:** #process #improvement #[área]
+**Contexto:** [Proyecto/Equipo/Área]
 **Nivel de Impacto:** #critical | #important | #nice-to-know
 
-## 📋 Resumen Ejecutivo
+##  Resumen Ejecutivo
 
 [Resumen de 1-2 líneas de la mejora implementada y su impacto]
 
-## 🎯 Contexto y Motivación
+##  Contexto y Motivación
 
 ### Situación Anterior
 [Descripción del proceso/situación antes de la mejora]
@@ -23,7 +23,7 @@
 ### Trigger del Cambio
 [Qué específicamente motivó la búsqueda de una mejora]
 
-## 📊 Análisis de la Situación
+##  Análisis de la Situación
 
 ### Métricas del Proceso Anterior
 - **Tiempo promedio:** [X horas/días]
@@ -40,7 +40,7 @@
    - Frecuencia: [Qué tan seguido ocurre]
    - Impacto: [Cómo afecta al equipo/proyecto]
 
-## 🔍 Investigación y Opciones
+##  Investigación y Opciones
 
 ### Opciones Consideradas
 
@@ -67,7 +67,7 @@
 - [Criterio 2]: [Peso/importancia]
 - [Criterio 3]: [Peso/importancia]
 
-## ✅ Solución Implementada
+##  Solución Implementada
 
 ### Descripción de la Mejora
 [Descripción detallada del nuevo proceso/mejora implementada]
@@ -95,7 +95,7 @@
 - **[Herramienta 2]**: [Para qué se usa]
 - **[Recurso 1]**: [Cómo ayuda]
 
-## 🚀 Implementación
+##  Implementación
 
 ### Plan de Rollout
 1. **Fase 1:** [Descripción y timeline]
@@ -110,7 +110,7 @@
 - **Resistencias identificadas:** [Qué resistencias hubo]
 - **Estrategias de adopción:** [Cómo se manejaron]
 
-## 📈 Resultados y Métricas
+##  Resultados y Métricas
 
 ### Métricas del Nuevo Proceso
 - **Tiempo promedio:** [X horas/días] (vs [Y] anterior)
@@ -145,7 +145,7 @@
 - [Error potencial 1]: [Cómo se evitó]
 - [Error potencial 2]: [Cómo se evitó]
 
-## 🔄 Mejora Continua
+##  Mejora Continua
 
 ### Próximos Pasos
 - [ ] [Acción 1]: [Timeline]
@@ -159,7 +159,7 @@
 ### Fecha de Revisión
 **Próxima revisión programada:** YYYY-MM-DD
 
-## 🔗 Referencias
+##  Referencias
 
 ### Procesos Relacionados
 - [Proceso 1](../ruta/archivo.md): [Relación]
@@ -173,7 +173,7 @@
 - [Documento 1]: [Qué se actualizó]
 - [Documento 2]: [Qué se actualizó]
 
-## 💡 Aplicabilidad
+##  Aplicabilidad
 
 ### Otros Equipos/Proyectos
 - [Equipo/Proyecto 1]: [Cómo podría aplicar]
@@ -184,5 +184,5 @@
 
 ---
 
-**Última actualización:** YYYY-MM-DD  
+**Última actualización:** YYYY-MM-DD
 **Próxima revisión:** YYYY-MM-DD

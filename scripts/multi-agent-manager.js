@@ -35,15 +35,15 @@ class MultiAgentManager {
       this.workStatus = await fs.readFile(statusPath, 'utf8');
       this.conflictLog = await fs.readFile(conflictPath, 'utf8');
 
-      console.log('✅ Current state loaded');
+      console.log(' Current state loaded');
     } catch (error) {
-      console.error('❌ Error loading current state:', error.message);
+      console.error(' Error loading current state:', error.message);
     }
   }
 
   async checkConflicts() {
-    console.log('🔍 Checking for potential conflicts...');
-    
+    console.log(' Checking for potential conflicts...');
+
     try {
       // Get current git status
       const gitStatus = execSync('git status --porcelain', { encoding: 'utf8' });
@@ -54,22 +54,22 @@ class MultiAgentManager {
 
       // Parse work status to find active agents
       const activeAgents = this.parseActiveAgents();
-      
+
       // Check for file conflicts
       const conflicts = this.detectFileConflicts(modifiedFiles, activeAgents);
-      
+
       if (conflicts.length > 0) {
-        console.log('⚠️  Potential conflicts detected:');
+        console.log('️  Potential conflicts detected:');
         conflicts.forEach(conflict => {
           console.log(`   - ${conflict.file}: ${conflict.agents.join(' vs ')}`);
         });
         return conflicts;
       } else {
-        console.log('✅ No conflicts detected');
+        console.log(' No conflicts detected');
         return [];
       }
     } catch (error) {
-      console.error('❌ Error checking conflicts:', error.message);
+      console.error(' Error checking conflicts:', error.message);
       return [];
     }
   }
@@ -78,7 +78,7 @@ class MultiAgentManager {
     // Simple parser for active agents from work-status.md
     const lines = this.workStatus.split('\n');
     const agents = [];
-    
+
     let currentAgent = null;
     for (const line of lines) {
       if (line.startsWith('### Agent')) {
@@ -107,14 +107,14 @@ class MultiAgentManager {
         currentAgent = null;
       }
     }
-    
+
     return agents;
   }
 
   detectFileConflicts(modifiedFiles, activeAgents) {
     const conflicts = [];
     const fileAgentMap = new Map();
-    
+
     // Map files to agents
     activeAgents.forEach(agent => {
       agent.files.forEach(file => {
@@ -124,7 +124,7 @@ class MultiAgentManager {
         fileAgentMap.get(file).push(agent.name);
       });
     });
-    
+
     // Check for conflicts
     modifiedFiles.forEach(file => {
       const agents = fileAgentMap.get(file);
@@ -135,40 +135,40 @@ class MultiAgentManager {
         });
       }
     });
-    
+
     return conflicts;
   }
 
   async createTaskAssignment(agentName, taskData) {
-    console.log(`📋 Creating task assignment for ${agentName}...`);
-    
+    console.log(` Creating task assignment for ${agentName}...`);
+
     try {
       const template = await fs.readFile(`${TEMPLATES_DIR}/task-assignment.md`, 'utf8');
-      
+
       // Replace template placeholders
       let taskAssignment = template
         .replace(/\[AGENT_NAME\]/g, agentName)
         .replace(/\[YYYY-MM-DD\]/g, new Date().toISOString().split('T')[0])
         .replace(/\[Task title\]/g, taskData.title || 'New Task')
         .replace(/\[Detailed description of what needs to be done\]/g, taskData.description || 'Task description');
-      
+
       // Save task assignment
       const filename = `task-${agentName.toLowerCase().replace(/\s+/g, '-')}-${Date.now()}.md`;
       const filepath = `${DOCS_DIR}/tasks/${filename}`;
-      
+
       // Ensure tasks directory exists
       await fs.mkdir(`${DOCS_DIR}/tasks`, { recursive: true });
       await fs.writeFile(filepath, taskAssignment);
-      
-      console.log(`✅ Task assignment created: ${filepath}`);
+
+      console.log(` Task assignment created: ${filepath}`);
       return filepath;
     } catch (error) {
-      console.error('❌ Error creating task assignment:', error.message);
+      console.error(' Error creating task assignment:', error.message);
     }
   }
 
   async updateAgentStatus(agentName, statusData) {
-    console.log(`📊 Updating status for ${agentName}...`);
+    console.log(` Updating status for ${agentName}...`);
 
     try {
       // Create status update from template
@@ -182,17 +182,17 @@ class MultiAgentManager {
         .replace(/\[X\]% complete/g, `${statusData.progress || 0}% complete`)
         .replace(/\[Time estimate\]/g, statusData.eta || 'TBD');
 
-      console.log('📝 Status update prepared:');
+      console.log(' Status update prepared:');
       console.log(statusUpdate.substring(0, 200) + '...');
 
       return statusUpdate;
     } catch (error) {
-      console.error('❌ Error updating agent status:', error.message);
+      console.error(' Error updating agent status:', error.message);
     }
   }
 
   async getLastPR() {
-    console.log('🔍 Consultando último PR creado...');
+    console.log(' Consultando último PR creado...');
 
     try {
       // Intentar con GitHub CLI primero
@@ -206,7 +206,7 @@ class MultiAgentManager {
         const prs = JSON.parse(result);
         if (prs && prs.length > 0) {
           const lastPR = prs[0];
-          console.log(`✅ Último PR encontrado: #${lastPR.number}`);
+          console.log(` Último PR encontrado: #${lastPR.number}`);
           console.log(`   Título: ${lastPR.title}`);
           console.log(`   Autor: ${lastPR.author.login}`);
           console.log(`   URL: ${lastPR.url}`);
@@ -219,7 +219,7 @@ class MultiAgentManager {
           };
         }
       } catch (ghError) {
-        console.log('⚠️ GitHub CLI no disponible, intentando método alternativo...');
+        console.log('️ GitHub CLI no disponible, intentando método alternativo...');
       }
 
       // Método alternativo: buscar en git log
@@ -237,7 +237,7 @@ class MultiAgentManager {
           .filter(Boolean);
 
         if (prBranches.length > 0) {
-          console.log(`📋 Ramas encontradas que podrían ser PRs:`);
+          console.log(` Ramas encontradas que podrían ser PRs:`);
           prBranches.forEach((branch, index) => {
             console.log(`   ${index + 1}. ${branch}`);
           });
@@ -249,25 +249,25 @@ class MultiAgentManager {
           };
         }
       } catch (gitError) {
-        console.log('⚠️ Error consultando git branches');
+        console.log('️ Error consultando git branches');
       }
 
-      console.log('❌ No se pudo determinar el último PR automáticamente');
+      console.log(' No se pudo determinar el último PR automáticamente');
       return null;
 
     } catch (error) {
-      console.error('❌ Error consultando último PR:', error.message);
+      console.error(' Error consultando último PR:', error.message);
       return null;
     }
   }
 
   async reportPR(agentName, prData) {
-    console.log(`🔗 Reporting PR for ${agentName}...`);
+    console.log(` Reporting PR for ${agentName}...`);
 
     try {
       // Si no se proporciona link, intentar obtener el último PR
       if (!prData.link) {
-        console.log('🔍 No se proporcionó link, consultando último PR...');
+        console.log(' No se proporcionó link, consultando último PR...');
         const lastPR = await this.getLastPR();
 
         if (lastPR && lastPR.url) {
@@ -275,17 +275,17 @@ class MultiAgentManager {
           if (!prData.title && lastPR.title) {
             prData.title = lastPR.title;
           }
-          console.log(`✅ Usando último PR: ${prData.link}`);
+          console.log(` Usando último PR: ${prData.link}`);
         } else {
-          console.error('❌ No se pudo obtener el último PR automáticamente');
-          console.error('💡 Proporciona el link manualmente: npm run multi-agent:pr "Agent" "PR_URL" "Title"');
+          console.error(' No se pudo obtener el último PR automáticamente');
+          console.error(' Proporciona el link manualmente: npm run multi- "Agent" "PR_URL" "Title"');
           return null;
         }
       }
 
       // Validate required PR data
       if (!prData.link || !prData.title) {
-        console.error('❌ PR link and title are required');
+        console.error(' PR link and title are required');
         return null;
       }
 
@@ -309,8 +309,8 @@ class MultiAgentManager {
         prReport = prReport.replace(/- \[Cambio principal 1\]\n- \[Cambio principal 2\]\n- \[Cambio principal 3\]/, changesList);
       }
 
-      console.log('🔗 PR report generated from template');
-      console.log('📋 Please complete the checklist items manually');
+      console.log(' PR report generated from template');
+      console.log(' Please complete the checklist items manually');
 
       // Append to work status
       const workStatusPath = `${DOCS_DIR}/work-status.md`;
@@ -318,23 +318,23 @@ class MultiAgentManager {
       const updatedStatus = currentStatus + '\n' + prReport + '\n';
       await fs.writeFile(workStatusPath, updatedStatus);
 
-      console.log('✅ PR report added to work-status.md');
-      console.log('🎯 Next: Complete the checklist and update status as needed');
+      console.log(' PR report added to work-status.md');
+      console.log(' Next: Complete the checklist and update status as needed');
 
       return prReport;
     } catch (error) {
-      console.error('❌ Error reporting PR:', error.message);
+      console.error(' Error reporting PR:', error.message);
       return null;
     }
   }
 
   async generateReport() {
-    console.log('📊 Generating multi-agent coordination report...');
-    
+    console.log(' Generating multi-agent coordination report...');
+
     try {
       const activeAgents = this.parseActiveAgents();
       const conflicts = await this.checkConflicts();
-      
+
       const report = {
         timestamp: new Date().toISOString(),
         activeAgents: activeAgents.length,
@@ -346,25 +346,25 @@ class MultiAgentManager {
         })),
         conflicts: conflicts
       };
-      
+
       // Save report
       const reportPath = `reports/multi-agent-${Date.now()}.json`;
       await fs.mkdir('reports', { recursive: true });
       await fs.writeFile(reportPath, JSON.stringify(report, null, 2));
-      
-      console.log('✅ Report generated:', reportPath);
-      console.log('📈 Summary:');
+
+      console.log(' Report generated:', reportPath);
+      console.log(' Summary:');
       console.log(`   - Active Agents: ${report.activeAgents}`);
       console.log(`   - Active Conflicts: ${report.totalConflicts}`);
-      
+
       return report;
     } catch (error) {
-      console.error('❌ Error generating report:', error.message);
+      console.error(' Error generating report:', error.message);
     }
   }
 
   async validateSetup() {
-    console.log('🔧 Validating multi-agent setup...');
+    console.log(' Validating multi-agent setup...');
 
     const requiredFiles = [
       `${DOCS_DIR}/agent-assignments.md`,
@@ -383,9 +383,9 @@ class MultiAgentManager {
     for (const file of requiredFiles) {
       try {
         await fs.access(file);
-        console.log(`✅ ${file}`);
+        console.log(` ${file}`);
       } catch {
-        console.log(`❌ ${file} - Missing`);
+        console.log(` ${file} - Missing`);
         issues.push(`Missing file: ${file}`);
       }
     }
@@ -395,9 +395,9 @@ class MultiAgentManager {
     issues.push(...protocolIssues);
 
     if (issues.length === 0) {
-      console.log('🎉 Multi-agent setup is valid!');
+      console.log(' Multi-agent setup is valid!');
     } else {
-      console.log('⚠️  Setup issues found:');
+      console.log('️  Setup issues found:');
       issues.forEach(issue => console.log(`   - ${issue}`));
     }
 
@@ -405,7 +405,7 @@ class MultiAgentManager {
   }
 
   async validateProtocolCompliance() {
-    console.log('📋 Validating protocol compliance...');
+    console.log(' Validating protocol compliance...');
     const issues = [];
 
     try {
@@ -420,12 +420,12 @@ class MultiAgentManager {
 
         // Check if agent is updating status regularly
         // This would require timestamp parsing - simplified for now
-        console.log(`✅ Agent ${agent.name}: Basic compliance check passed`);
+        console.log(` Agent ${agent.name}: Basic compliance check passed`);
       }
 
-      console.log('✅ Protocol compliance validated');
+      console.log(' Protocol compliance validated');
     } catch (error) {
-      console.error('❌ Error validating protocol compliance:', error.message);
+      console.error(' Error validating protocol compliance:', error.message);
       issues.push('Protocol compliance validation failed');
     }
 
@@ -433,7 +433,7 @@ class MultiAgentManager {
   }
 
   async checkProtocolCompliance() {
-    console.log('📋 Checking protocol compliance...');
+    console.log(' Checking protocol compliance...');
 
     try {
       const activeAgents = this.parseActiveAgents();
@@ -459,15 +459,15 @@ class MultiAgentManager {
       }
 
       if (violations.length === 0) {
-        console.log('✅ All agents following protocols');
+        console.log(' All agents following protocols');
       } else {
-        console.log('⚠️  Protocol violations detected:');
+        console.log('️  Protocol violations detected:');
         violations.forEach(violation => console.log(`   - ${violation}`));
       }
 
       return violations;
     } catch (error) {
-      console.error('❌ Error checking protocol compliance:', error.message);
+      console.error(' Error checking protocol compliance:', error.message);
       return [];
     }
   }
@@ -515,15 +515,15 @@ class MultiAgentManager {
 
         // Write updated file
         await fs.writeFile(conflictLogPath, conflictLog);
-        console.log('✅ Lesson captured and integrated');
+        console.log(' Lesson captured and integrated');
 
         return true;
       } else {
-        console.error('❌ Could not find insertion point in conflict-log.md');
+        console.error(' Could not find insertion point in conflict-log.md');
         return false;
       }
     } catch (error) {
-      console.error('❌ Error capturing lesson:', error.message);
+      console.error(' Error capturing lesson:', error.message);
       return false;
     }
   }
@@ -541,7 +541,7 @@ class MultiAgentManager {
   }
 
   async interactiveLessonCapture() {
-    console.log('🎓 Interactive Lesson Capture');
+    console.log(' Interactive Lesson Capture');
     console.log('');
     console.log('Describe the lesson learned:');
     console.log('');
@@ -560,7 +560,7 @@ class MultiAgentManager {
     console.log(JSON.stringify(exampleLesson, null, 2));
     console.log('');
     console.log('To capture a lesson, use:');
-    console.log('npm run multi-agent:learn');
+    console.log('npm run multi-');
     console.log('');
     console.log('Or integrate lesson capture into conflict resolution workflow');
 
@@ -568,7 +568,7 @@ class MultiAgentManager {
   }
 
   async analyzePatterns() {
-    console.log('📊 Analyzing conflict and lesson patterns...');
+    console.log(' Analyzing conflict and lesson patterns...');
 
     try {
       // Read conflict log to analyze patterns
@@ -596,17 +596,17 @@ class MultiAgentManager {
       await fs.mkdir('reports', { recursive: true });
       await fs.writeFile(analysisPath, JSON.stringify(analysis, null, 2));
 
-      console.log('✅ Pattern analysis completed');
-      console.log(`📄 Analysis saved: ${analysisPath}`);
+      console.log(' Pattern analysis completed');
+      console.log(` Analysis saved: ${analysisPath}`);
       console.log('');
-      console.log('📈 Key Findings:');
+      console.log(' Key Findings:');
       console.log(`   - Total lessons: ${lessons.length}`);
       console.log(`   - Patterns identified: ${patterns.length}`);
       console.log(`   - Recommendations: ${recommendations.length}`);
 
       return analysis;
     } catch (error) {
-      console.error('❌ Error analyzing patterns:', error.message);
+      console.error(' Error analyzing patterns:', error.message);
       return null;
     }
   }
@@ -749,7 +749,7 @@ async function main() {
     case 'status':
       const agentName = process.argv[3];
       if (!agentName) {
-        console.error('❌ Please provide agent name: npm run multi-agent status "Agent Name"');
+        console.error(' Please provide agent name: npm run multi-agent status "Agent Name"');
         process.exit(1);
       }
       await manager.updateAgentStatus(agentName, {
@@ -765,10 +765,10 @@ async function main() {
       const prTitle = process.argv[5];
 
       if (!prAgentName) {
-        console.error('❌ Usage: npm run multi-agent pr "Agent Name" ["PR_Link"] ["PR Title"]');
+        console.error(' Usage: npm run multi-agent pr "Agent Name" ["PR_Link"] ["PR Title"]');
         console.error('Examples:');
-        console.error('  npm run multi-agent pr "ganzo"  # Auto-detect last PR');
-        console.error('  npm run multi-agent pr "ganzo" "https://github.com/user/repo/pull/123" "Fix SEO meta tags"');
+        console.error('  npm run multi-agent pr ""  # Auto-detect last PR');
+        console.error('  npm run multi-agent pr "" "https://github.com/user/repo/pull/123" "Fix SEO meta tags"');
         process.exit(1);
       }
 
@@ -776,8 +776,8 @@ async function main() {
         link: prLink, // Can be undefined for auto-detection
         title: prTitle, // Can be undefined for auto-detection
         changes: ['Changes via CLI - please update manually'],
-        testsStatus: '⚠️ Please verify tests',
-        docsStatus: '⚠️ Please verify docs',
+        testsStatus: '️ Please verify tests',
+        docsStatus: '️ Please verify docs',
         impact: 'To be specified'
       });
       break;
@@ -786,22 +786,22 @@ async function main() {
       const lastPR = await manager.getLastPR();
       if (lastPR) {
         if (lastPR.url) {
-          console.log('\n🔗 ÚLTIMO PR ENCONTRADO:');
+          console.log('\n ÚLTIMO PR ENCONTRADO:');
           console.log(`   Número: #${lastPR.number}`);
           console.log(`   Título: ${lastPR.title}`);
           console.log(`   Autor: ${lastPR.author}`);
           console.log(`   URL: ${lastPR.url}`);
-          console.log('\n💡 Para reportar este PR:');
-          console.log(`   npm run multi-agent:pr "tu_nombre" "${lastPR.url}" "${lastPR.title}"`);
+          console.log('\n Para reportar este PR:');
+          console.log(`   npm run multi- "tu_nombre" "${lastPR.url}" "${lastPR.title}"`);
         } else if (lastPR.branches) {
-          console.log('\n📋 RAMAS ENCONTRADAS (posibles PRs):');
+          console.log('\n RAMAS ENCONTRADAS (posibles PRs):');
           lastPR.branches.forEach((branch, index) => {
             console.log(`   ${index + 1}. ${branch}`);
           });
-          console.log('\n💡 Verifica manualmente cuál es tu PR en GitHub');
+          console.log('\n Verifica manualmente cuál es tu PR en GitHub');
         }
       } else {
-        console.log('❌ No se encontraron PRs recientes');
+        console.log(' No se encontraron PRs recientes');
       }
       break;
 
@@ -827,8 +827,8 @@ async function main() {
       console.log('  node scripts/multi-agent-manager.js learn');
       console.log('  node scripts/multi-agent-manager.js analyze');
       console.log('  node scripts/multi-agent-manager.js status "Frontend Agent"');
-      console.log('  node scripts/multi-agent-manager.js pr "ganzo"  # Auto-detect last PR');
-      console.log('  node scripts/multi-agent-manager.js pr "ganzo" "https://github.com/user/repo/pull/123" "Fix SEO meta tags"');
+      console.log('  node scripts/multi-agent-manager.js pr ""  # Auto-detect last PR');
+      console.log('  node scripts/multi-agent-manager.js pr "" "https://github.com/user/repo/pull/123" "Fix SEO meta tags"');
       console.log('  node scripts/multi-agent-manager.js last-pr  # Show last PR info');
   }
 }

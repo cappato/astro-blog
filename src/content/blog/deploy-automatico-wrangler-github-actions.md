@@ -10,27 +10,27 @@ imageAlt: "Serie completa de Deploy Automático con Wrangler y GitHub Actions"
 
 ¿Quieres dominar el **deploy automático con Wrangler y GitHub Actions**? Esta serie completa te lleva desde la configuración inicial hasta el troubleshooting avanzado, creando un **sistema CI/CD profesional** paso a paso.
 
-## 🎯 Lo que vas a dominar
+##  Lo que vas a dominar
 
 Esta serie completa te enseña a crear un **sistema de deploy automático profesional**:
 
-- ✅ **Configuración inicial** de Wrangler y Cloudflare Pages
-- ✅ **GitHub Actions CI/CD** para deploy automático
-- ✅ **Troubleshooting avanzado** para WSL y problemas comunes
-- ✅ **Workflow completo** de desarrollo profesional
-- ✅ **Mejores prácticas** de DevOps y automatización
+-  **Configuración inicial** de Wrangler y Cloudflare Pages
+-  **GitHub Actions CI/CD** para deploy automático
+-  **Troubleshooting avanzado** para WSL y problemas comunes
+-  **Workflow completo** de desarrollo profesional
+-  **Mejores prácticas** de DevOps y automatización
 
-## 📚 Serie Completa: 3 Guías Especializadas
+##  Serie Completa: 3 Guías Especializadas
 
 ### **Parte 1: Configuración Inicial**
 **[Configurar Wrangler y Cloudflare Pages: Guía Completa 2024](/blog/configurar-wrangler-cloudflare-pages-2024)**
 
 Aprende la configuración base:
-- ✅ Instalación y autenticación de Wrangler
-- ✅ Creación de proyectos en Cloudflare Pages
-- ✅ Configuración de `wrangler.toml`
-- ✅ Primer deploy manual
-- ✅ Soluciones para WSL
+-  Instalación y autenticación de Wrangler
+-  Creación de proyectos en Cloudflare Pages
+-  Configuración de `wrangler.toml`
+-  Primer deploy manual
+-  Soluciones para WSL
 
 **Tiempo:** ~5 minutos de lectura | **Nivel:** Principiante
 
@@ -38,11 +38,11 @@ Aprende la configuración base:
 **[GitHub Actions para Deploy Automático: CI/CD con Wrangler](/blog/github-actions-deploy-automatico-wrangler)**
 
 Automatiza tus deploys:
-- ✅ Creación de API tokens en Cloudflare
-- ✅ Configuración de GitHub Secrets
-- ✅ Workflow de GitHub Actions
-- ✅ Deploy automático en push
-- ✅ Monitoreo y verificación
+-  Creación de API tokens en Cloudflare
+-  Configuración de GitHub Secrets
+-  Workflow de GitHub Actions
+-  Deploy automático en push
+-  Monitoreo y verificación
 
 **Tiempo:** ~6 minutos de lectura | **Nivel:** Intermedio
 
@@ -50,15 +50,15 @@ Automatiza tus deploys:
 **[Troubleshooting Wrangler: Soluciones para WSL y Deploy Issues](/blog/troubleshooting-wrangler-wsl-deploy)**
 
 Resuelve problemas comunes:
-- ✅ Errores de binarios en WSL
-- ✅ Problemas de autenticación
-- ✅ Issues en GitHub Actions
-- ✅ Errores de deploy y configuración
-- ✅ Herramientas de diagnóstico
+-  Errores de binarios en WSL
+-  Problemas de autenticación
+-  Issues en GitHub Actions
+-  Errores de deploy y configuración
+-  Herramientas de diagnóstico
 
 **Tiempo:** ~4 minutos de lectura | **Nivel:** Avanzado
 
-## 🚀 Ruta de Aprendizaje Recomendada
+##  Ruta de Aprendizaje Recomendada
 
 ### **Para Principiantes**
 1. **[Parte 1: Configuración](/blog/configurar-wrangler-cloudflare-pages-2024)** - Empieza aquí
@@ -69,7 +69,7 @@ Resuelve problemas comunes:
 - ¿Ya tienes Wrangler? → **[Parte 2: CI/CD](/blog/github-actions-deploy-automatico-wrangler)**
 - ¿Tienes problemas? → **[Parte 3: Troubleshooting](/blog/troubleshooting-wrangler-wsl-deploy)**
 
-## 📋 Prerrequisitos para la Serie
+##  Prerrequisitos para la Serie
 
 - Proyecto web funcionando localmente (Astro, React, Vue, etc.)
 - Cuenta de Cloudflare (gratuita está bien)
@@ -77,7 +77,7 @@ Resuelve problemas comunes:
 - Node.js y npm instalados
 - Conocimientos básicos de Git y terminal
 
-## 🎯 Resumen de la Serie
+##  Resumen de la Serie
 
 ### **Parte 1: Configuración Base**
 **[Configurar Wrangler y Cloudflare Pages](/blog/configurar-wrangler-cloudflare-pages-2024)**
@@ -90,9 +90,9 @@ Resuelve problemas comunes:
 - Soluciones específicas para WSL
 
 **Puntos clave:**
-- ✅ Usar `npx wrangler` en WSL para evitar problemas
-- ✅ Guardar Account ID para GitHub Actions
-- ✅ Configurar `pages_build_output_dir` correctamente
+-  Usar `npx wrangler` en WSL para evitar problemas
+-  Guardar Account ID para GitHub Actions
+-  Configurar `pages_build_output_dir` correctamente
 
 ### **Parte 2: Automatización CI/CD**
 **[GitHub Actions para Deploy Automático](/blog/github-actions-deploy-automatico-wrangler)**
@@ -105,9 +105,9 @@ Resuelve problemas comunes:
 - Monitoreo y verificación de deploys
 
 **Puntos clave:**
-- ✅ API tokens con permisos mínimos necesarios
-- ✅ Secrets seguros en GitHub
-- ✅ Cache de npm para builds rápidos
+-  API tokens con permisos mínimos necesarios
+-  Secrets seguros en GitHub
+-  Cache de npm para builds rápidos
 
 ### **Parte 3: Troubleshooting**
 **[Soluciones para WSL y Deploy Issues](/blog/troubleshooting-wrangler-wsl-deploy)**
@@ -120,61 +120,61 @@ Resuelve problemas comunes:
 - Mejores prácticas de desarrollo
 
 **Puntos clave:**
-- ✅ Checklist completo de troubleshooting
-- ✅ Comandos de diagnóstico útiles
-- ✅ Workflow optimizado de desarrollo
+-  Checklist completo de troubleshooting
+-  Comandos de diagnóstico útiles
+-  Workflow optimizado de desarrollo
 
-## 💡 Beneficios de Completar la Serie
+##  Beneficios de Completar la Serie
 
 ### **Para Desarrolladores**
-- ⚡ **Deploy en 1-2 minutos** desde push hasta producción
-- 🔒 **Seguridad profesional** con tokens y secrets apropiados
-- 📊 **Monitoreo completo** con GitHub Actions
-- 🌍 **CDN global** de Cloudflare automático
-- 🔄 **Rollback fácil** si algo falla
+-  **Deploy en 1-2 minutos** desde push hasta producción
+-  **Seguridad profesional** con tokens y secrets apropiados
+-  **Monitoreo completo** con GitHub Actions
+-  **CDN global** de Cloudflare automático
+-  **Rollback fácil** si algo falla
 
 ### **Para Equipos**
-- 👥 **Workflow estandarizado** para todo el equipo
-- 📚 **Documentación completa** para onboarding
-- 🚀 **Productividad aumentada** con automatización
-- 🛡️ **Menos errores** con proceso automatizado
-- 📈 **Escalabilidad** para proyectos grandes
+-  **Workflow estandarizado** para todo el equipo
+-  **Documentación completa** para onboarding
+-  **Productividad aumentada** con automatización
+- ️ **Menos errores** con proceso automatizado
+-  **Escalabilidad** para proyectos grandes
 
 ### **Para Proyectos**
-- 🏗️ **Infraestructura como código** con GitHub Actions
-- 🔧 **Mantenimiento simplificado** con configuración centralizada
-- 📊 **Métricas de deploy** y monitoreo integrado
-- 🌐 **Performance global** con Cloudflare Edge Network
+- ️ **Infraestructura como código** con GitHub Actions
+-  **Mantenimiento simplificado** con configuración centralizada
+-  **Métricas de deploy** y monitoreo integrado
+-  **Performance global** con Cloudflare Edge Network
 
-## 🚀 Comienza tu Journey de Deploy Automático
+##  Comienza tu Journey de Deploy Automático
 
 ### **¿Por dónde empezar?**
 
 **Si eres nuevo en Wrangler:**
-👉 **[Parte 1: Configurar Wrangler y Cloudflare Pages](/blog/configurar-wrangler-cloudflare-pages-2024)**
+ **[Parte 1: Configurar Wrangler y Cloudflare Pages](/blog/configurar-wrangler-cloudflare-pages-2024)**
 
 **Si ya tienes Wrangler configurado:**
-👉 **[Parte 2: GitHub Actions para Deploy Automático](/blog/github-actions-deploy-automatico-wrangler)**
+ **[Parte 2: GitHub Actions para Deploy Automático](/blog/github-actions-deploy-automatico-wrangler)**
 
 **Si tienes problemas o errores:**
-👉 **[Parte 3: Troubleshooting Wrangler](/blog/troubleshooting-wrangler-wsl-deploy)**
+ **[Parte 3: Troubleshooting Wrangler](/blog/troubleshooting-wrangler-wsl-deploy)**
 
-## 🎯 Lo que lograrás al completar la serie
+##  Lo que lograrás al completar la serie
 
 ### **Infraestructura Profesional**
-- ⚡ Deploy automático en 1-2 minutos
-- 🔒 Seguridad con tokens y secrets
-- 📊 Monitoreo completo con GitHub Actions
-- 🌍 CDN global de Cloudflare
-- 🔄 Rollback fácil si algo falla
+-  Deploy automático en 1-2 minutos
+-  Seguridad con tokens y secrets
+-  Monitoreo completo con GitHub Actions
+-  CDN global de Cloudflare
+-  Rollback fácil si algo falla
 
 ### **Workflow Optimizado**
-- 🚀 Push to deploy automático
+-  Push to deploy automático
 - 🧪 Testing integrado en CI/CD
-- 📱 Preview deployments para PRs
-- 📈 Métricas y logs detallados
+-  Preview deployments para PRs
+-  Métricas y logs detallados
 
-## 💡 Conceptos Clave de la Serie
+##  Conceptos Clave de la Serie
 
 ### **Wrangler + WSL**
 - Usar `npx wrangler` para evitar problemas de binarios
@@ -193,7 +193,7 @@ Resuelve problemas comunes:
 - Mejores prácticas de desarrollo
 - Checklist completo de verificación
 
-## 🔗 Próximos Pasos en tu Journey DevOps
+##  Próximos Pasos en tu Journey DevOps
 
 ### 3.1 Crear el Workflow
 
@@ -260,7 +260,7 @@ jobs:
 #### Paso 3: Crear y Copiar Token
 - Click "Continue to summary"
 - Click "Create Token"
-- ⚠️ **CRÍTICO**: Copia el token INMEDIATAMENTE (solo se muestra una vez)
+- ️ **CRÍTICO**: Copia el token INMEDIATAMENTE (solo se muestra una vez)
 
 ### 3.3 Configurar Secrets en GitHub
 
@@ -282,7 +282,7 @@ jobs:
 
 *Así se ven los secrets correctamente configurados en GitHub. Ambos secrets son necesarios para el deploy automático.*
 
-## 🚀 FASE 4: Scripts de Deploy Optimizados
+##  FASE 4: Scripts de Deploy Optimizados
 
 Agrega estos scripts a tu `package.json`:
 
@@ -307,7 +307,7 @@ Agrega estos scripts a tu `package.json`:
 - **`pages:list`**: Listar proyectos existentes
 - **`wrangler:login`**: Re-autenticación cuando sea necesario
 
-## ✅ FASE 5: Primer Deploy y Verificación
+##  FASE 5: Primer Deploy y Verificación
 
 ### 5.1 Probar Deploy Manual
 
@@ -318,11 +318,11 @@ npm run deploy
 
 **Salida esperada**:
 ```
-✨ Compiled successfully.
-🌍 Uploading... (X files)
-✨ Success! Uploaded X files (X.XX sec)
-🌍 Deploying...
-✨ Deployment complete! Take a peek over at https://xxxxxxxx.tu-proyecto.pages.dev
+ Compiled successfully.
+ Uploading... (X files)
+ Success! Uploaded X files (X.XX sec)
+ Deploying...
+ Deployment complete! Take a peek over at https://xxxxxxxx.tu-proyecto.pages.dev
 ```
 
 ### 5.2 Activar Deploy Automático
@@ -330,12 +330,12 @@ npm run deploy
 ```bash
 # Commit y push para activar GitHub Actions
 git add .
-git commit -m "🚀 Configure deploy automation
+git commit -m " Configure deploy automation
 
-✅ Added wrangler.toml configuration
-✅ Added GitHub Actions workflow
-✅ Added deploy scripts to package.json
-✅ Ready for automatic deployment"
+ Added wrangler.toml configuration
+ Added GitHub Actions workflow
+ Added deploy scripts to package.json
+ Ready for automatic deployment"
 
 git push origin main
 ```
@@ -345,17 +345,17 @@ git push origin main
 1. Ir a: `https://github.com/tu-usuario/tu-proyecto/actions`
 2. Ver el workflow ejecutándose
 3. Verificar cada paso:
-   - ✅ Checkout
-   - ✅ Setup Node.js
-   - ✅ Install dependencies
-   - ✅ Build project
-   - ✅ Deploy to Cloudflare Pages
+   -  Checkout
+   -  Setup Node.js
+   -  Install dependencies
+   -  Build project
+   -  Deploy to Cloudflare Pages
 
 ![GitHub Actions workflow ejecutándose exitosamente](/images/deploy-automatico-wrangler-github-actions/github-actions-success.webp)
 
 *El workflow de GitHub Actions ejecutándose correctamente. Puedes ver el estado "Deploy automático configurado" y el tiempo de ejecución (~1m 5s).*
 
-## 🛠️ Troubleshooting Completo
+## ️ Troubleshooting Completo
 
 ### Error de Binarios WSL
 
@@ -371,8 +371,8 @@ rm -rf node_modules package-lock.json
 npm install
 
 # Usar siempre npx
-npx wrangler --version  # ✅ Funciona
-wrangler --version      # ❌ Puede fallar
+npx wrangler --version  #  Funciona
+wrangler --version      #  Puede fallar
 ```
 
 ### Error de Autenticación
@@ -405,7 +405,7 @@ npx wrangler whoami
 # GitHub → Settings → Secrets → Actions
 ```
 
-## 📊 Workflow Completo de Desarrollo
+##  Workflow Completo de Desarrollo
 
 ### Para Desarrollo Diario
 
@@ -438,7 +438,7 @@ git merge feature/nueva-funcionalidad
 git push origin main  # Deploy automático
 ```
 
-## 📊 Verificación Visual del Setup
+##  Verificación Visual del Setup
 
 ### Secrets Configurados Correctamente
 Como puedes ver en la primera imagen, los secrets de GitHub deben estar configurados exactamente así:
@@ -447,41 +447,41 @@ Como puedes ver en la primera imagen, los secrets de GitHub deben estar configur
 
 ### Workflow Funcionando
 La segunda imagen muestra el workflow ejecutándose exitosamente:
-- ✅ Estado: **Deploy automático configurado**
+-  Estado: **Deploy automático configurado**
 - ⏱️ Tiempo: **~1m 5s** (muy rápido!)
-- 🔄 Trigger: **Push a main branch**
-- 📝 Commit: Mensaje descriptivo del deploy
+-  Trigger: **Push a main branch**
+-  Commit: Mensaje descriptivo del deploy
 
-## 🎯 Beneficios Obtenidos
+##  Beneficios Obtenidos
 
 ### Infraestructura Completa
-- ✅ **Deploy automático** en cada push a main
-- ✅ **Deploy manual** para desarrollo rápido
-- ✅ **GitHub Actions CI/CD** completamente configurado
-- ✅ **Resolución de problemas WSL** implementada
+-  **Deploy automático** en cada push a main
+-  **Deploy manual** para desarrollo rápido
+-  **GitHub Actions CI/CD** completamente configurado
+-  **Resolución de problemas WSL** implementada
 
 ### Workflow Profesional
-- ⚡ **Deploy en ~1-2 minutos** desde push
-- 🔒 **Seguridad** con tokens y secrets apropiados
-- 📊 **Monitoreo** completo con GitHub Actions
-- 🌍 **CDN global** de Cloudflare automático
-- 🔄 **Rollback fácil** si algo falla
+-  **Deploy en ~1-2 minutos** desde push
+-  **Seguridad** con tokens y secrets apropiados
+-  **Monitoreo** completo con GitHub Actions
+-  **CDN global** de Cloudflare automático
+-  **Rollback fácil** si algo falla
 
-## 🚀 Próximos Pasos
+##  Próximos Pasos
 
 1. **Configurar dominio personalizado** en Cloudflare Pages
 2. **Implementar preview deployments** para Pull Requests
 3. **Agregar notificaciones** de deploy (Slack, Discord)
 4. **Configurar métricas** y monitoreo avanzado
 
-## 💡 Lecciones Clave
+##  Lecciones Clave
 
 1. **WSL + Wrangler**: Siempre usar `npx wrangler` para evitar problemas
 2. **Secrets Management**: Usar GitHub Secrets, nunca commitear credenciales
 3. **CI/CD Optimization**: `npm ci` + cache acelera builds significativamente
 4. **Documentation**: Documentación clara es esencial para mantenimiento
 
-## 🎉 Conclusión
+##  Conclusión
 
 Has implementado exitosamente un **sistema de automatización de despliegues** profesional que:
 
@@ -491,23 +491,23 @@ Has implementado exitosamente un **sistema de automatización de despliegues** p
 - Está completamente documentado para futuro mantenimiento
 - Proporciona un **flujo CI/CD robusto** y confiable
 
-**Este setup de integración continua te servirá como base para cualquier proyecto futuro con Astro y Cloudflare Pages.** 🚀
+**Este setup de integración continua te servirá como base para cualquier proyecto futuro con Astro y Cloudflare Pages.**
 
-## 🔗 Próximos Pasos en tu Journey DevOps
+##  Próximos Pasos en tu Journey DevOps
 
 ¿Te gustó este tutorial de **automatización de despliegues**? Continuá optimizando tu flujo de trabajo:
 
-### 📚 **Tutoriales Relacionados:**
+###  **Tutoriales Relacionados:**
 - **[Arquitectura Modular en Astro](/blog/arquitectura-modular-astro)** - Organiza tu código para máxima escalabilidad
 - **[Testing Automatizado para Sitios Estáticos](/blog/testing-automatizado-sitios-estaticos)** - Automatiza también tu testing con CI/CD
 - **[SEO Automático con TypeScript](/blog/seo-automatico-typescript)** - Optimiza tu SEO en el pipeline
 
-### 🏷️ **Explora más sobre Automatización DevOps:**
+### ️ **Explora más sobre Automatización DevOps:**
 - **[Ver todos los posts de Automation & DevOps](/blog/pillar/automation-devops)** - Hub completo de automatización
 - **[Posts sobre GitHub Actions](/blog/tag/github-actions)** - Más workflows y automatizaciones
 - **[Guías de Cloudflare](/blog/tag/cloudflare)** - Aprovecha al máximo la plataforma
 
-### 💬 **¿Qué automatizar después?**
+###  **¿Qué automatizar después?**
 - **Testing automático** con Vitest y GitHub Actions
 - **Optimización de imágenes** en el pipeline CI/CD
 - **Notificaciones** de deploy en Slack/Discord

@@ -10,16 +10,16 @@ imageAlt: "Anatomía de un Sistema de Protocolos Automáticos - Guía completa"
 
 En el [post anterior](/blog/protocolos-automaticos-ia-arquitectura) vimos el problema y la visión. Ahora vamos a la implementación técnica completa del sistema que hace que funcione.
 
-## 🎯 Lo que vas a lograr
+##  Lo que vas a lograr
 
 Al final de esta guía tendrás:
 
-- ✅ **Sistema multi-agente funcionando** con coordinación automática
-- ✅ **Scripts de automatización** que aplican protocolos sin fallas
-- ✅ **Validación continua** de compliance en tiempo real
-- ✅ **Captura automática** de lecciones aprendidas
+-  **Sistema multi-agente funcionando** con coordinación automática
+-  **Scripts de automatización** que aplican protocolos sin fallas
+-  **Validación continua** de compliance en tiempo real
+-  **Captura automática** de lecciones aprendidas
 
-## 📋 Prerrequisitos
+##  Prerrequisitos
 
 Antes de empezar necesitas:
 
@@ -27,7 +27,7 @@ Antes de empezar necesitas:
 - Conocimiento básico de sistemas de archivos y git
 - Entender el [problema original](/blog/protocolos-automaticos-ia-arquitectura)
 
-## 🏗️ Arquitectura del Sistema
+## ️ Arquitectura del Sistema
 
 ### **Componentes Principales**
 
@@ -64,14 +64,14 @@ graph TD
     H --> C
 ```
 
-## 🔧 Implementación del Motor Principal
+##  Implementación del Motor Principal
 
 ### **multi-agent-manager.js: El Cerebro del Sistema**
 
 ```javascript
 class MultiAgentManager {
   async checkProtocolCompliance() {
-    console.log('📋 Checking protocol compliance...');
+    console.log(' Checking protocol compliance...');
 
     const activeAgents = this.parseActiveAgents();
     const violations = [];
@@ -105,7 +105,7 @@ class MultiAgentManager {
 
     // ALERTA INMEDIATA si hay violaciones
     if (violations.length > 0) {
-      console.log('⚠️ Protocol violations detected:');
+      console.log('️ Protocol violations detected:');
       violations.forEach(violation => console.log(`   - ${violation}`));
     }
 
@@ -133,11 +133,11 @@ async captureLesson(lessonData) {
                 conflictLog.slice(insertionPoint);
 
   await fs.writeFile(conflictLogPath, conflictLog);
-  console.log('✅ Lesson captured and integrated');
+  console.log(' Lesson captured and integrated');
 }
 ```
 
-## 🎯 Protocolos Específicos por Agente
+##  Protocolos Específicos por Agente
 
 ### **Frontend Agent Protocols**
 
@@ -171,35 +171,35 @@ async captureLesson(lessonData) {
 - **Validación**: Scripts cuentan links y sugieren relacionados
 ```
 
-## 🚀 Comandos de Automatización
+##  Comandos de Automatización
 
 ### **Validación Continua**
 
 ```bash
 # Valida setup completo + protocolos
-npm run multi-agent:validate
+npm run multi-
 
 # Detecta conflictos entre agentes
-npm run multi-agent:check
+npm run multi-
 
 # Verifica compliance de protocolos
-npm run multi-agent:protocols
+npm run multi-
 
 # Genera reportes de coordinación
-npm run multi-agent:report
+npm run multi-
 ```
 
 ### **Sistema de Aprendizaje**
 
 ```bash
 # Captura nueva lección aprendida
-npm run multi-agent:learn
+npm run multi-
 
 # Analiza patrones en lecciones
-npm run multi-agent:analyze
+npm run multi-
 ```
 
-## 🔍 Detección Automática de Conflictos
+##  Detección Automática de Conflictos
 
 ### **Algoritmo de Detección**
 
@@ -234,13 +234,13 @@ async checkConflicts() {
 ### **Alertas Inmediatas**
 
 ```bash
-$ npm run multi-agent:check
-⚠️ Potential conflicts detected:
+$ npm run multi-
+️ Potential conflicts detected:
    - src/components/Button.astro: Frontend Agent vs Backend Agent
    - src/utils/helpers.ts: Frontend Agent vs Content Agent
 ```
 
-## 📊 Sistema de Métricas y Análisis
+##  Sistema de Métricas y Análisis
 
 ### **Análisis de Patrones Automático**
 
@@ -285,40 +285,40 @@ async analyzePatterns() {
 }
 ```
 
-## ✅ Validación del Sistema
+##  Validación del Sistema
 
 ### **Tests Automáticos**
 
 ```bash
 # El sistema se valida a sí mismo:
-npm run multi-agent:validate
-✅ docs/multi-agent/agent-assignments.md
-✅ docs/multi-agent/work-status.md
-✅ docs/multi-agent/conflict-log.md
-✅ docs/multi-agent/protocols/shared-protocols.md
-✅ Protocol compliance validated
-🎉 Multi-agent setup is valid!
+npm run multi-
+ docs/multi-agent/agent-assignments.md
+ docs/multi-agent/work-status.md
+ docs/multi-agent/conflict-log.md
+ docs/multi-agent/protocols/shared-protocols.md
+ Protocol compliance validated
+ Multi-agent setup is valid!
 ```
 
 ### **Compliance en Tiempo Real**
 
 ```bash
-npm run multi-agent:protocols
-📋 Checking protocol compliance...
-✅ Agent Frontend Specialist: Basic compliance check passed
-✅ Agent Content Manager: Basic compliance check passed
-✅ All agents following protocols
+npm run multi-
+ Checking protocol compliance...
+ Agent Frontend Specialist: Basic compliance check passed
+ Agent Content Manager: Basic compliance check passed
+ All agents following protocols
 ```
 
-## 🎯 Próximos Pasos
+##  Próximos Pasos
 
 En el siguiente post veremos **"Auto-Merge Inteligente: UX sobre Control"** - cómo optimizar el workflow para 0 clicks y máxima fluidez.
 
 ### **Serie Completa:**
-1. ✅ [El Problema de los Protocolos que se Olvidan](/blog/protocolos-automaticos-ia-arquitectura)
-2. ✅ **Anatomía de un Sistema de Protocolos Automáticos** (este post)
-3. 🔄 Auto-Merge Inteligente: UX sobre Control (próximo)
-4. 🔄 Migración de Sistemas: Preservando la Visión
+1.  [El Problema de los Protocolos que se Olvidan](/blog/protocolos-automaticos-ia-arquitectura)
+2.  **Anatomía de un Sistema de Protocolos Automáticos** (este post)
+3.  Auto-Merge Inteligente: UX sobre Control (próximo)
+4.  Migración de Sistemas: Preservando la Visión
 
 ---
 

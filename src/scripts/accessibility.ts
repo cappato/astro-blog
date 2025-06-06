@@ -51,7 +51,7 @@ class AccessibilityManager {
     this.enhanceFormAccessibility();
     this.setupReducedMotion();
 
-    console.log('♿ Accessibility manager initialized');
+    console.log(' Accessibility manager initialized');
   }
 
   private setupAriaLiveRegions(): void {
@@ -74,7 +74,7 @@ class AccessibilityManager {
 
   private enhanceSkipLinks(): void {
     const skipLinks = document.querySelectorAll('a[href^="#"]');
-    
+
     skipLinks.forEach((link) => {
       const href = link.getAttribute('href');
       if (!href) return;
@@ -85,7 +85,7 @@ class AccessibilityManager {
       if (target) {
         link.addEventListener('click', (e) => {
           e.preventDefault();
-          
+
           // Make target focusable if it isn't already
           if (!target.hasAttribute('tabindex')) {
             target.setAttribute('tabindex', '-1');
@@ -95,9 +95,9 @@ class AccessibilityManager {
           target.focus();
 
           // Scroll to target with smooth behavior
-          target.scrollIntoView({ 
-            behavior: 'smooth', 
-            block: 'start' 
+          target.scrollIntoView({
+            behavior: 'smooth',
+            block: 'start'
           });
 
           // Announce the navigation
@@ -132,7 +132,7 @@ class AccessibilityManager {
           mutation.addedNodes.forEach((node) => {
             if (node.nodeType === Node.ELEMENT_NODE) {
               const element = node as HTMLElement;
-              
+
               // Auto-focus first focusable element in new content
               const firstFocusable = element.querySelector(this.focusableElements) as HTMLElement;
               if (firstFocusable && element.hasAttribute('data-auto-focus')) {
@@ -242,10 +242,10 @@ class AccessibilityManager {
   private enhanceFormAccessibility(): void {
     // Auto-enhance form fields
     const forms = document.querySelectorAll('form');
-    
+
     forms.forEach((form) => {
       const inputs = form.querySelectorAll('input, textarea, select');
-      
+
       inputs.forEach((input) => {
         // Add required indicator to labels
         if (input.hasAttribute('required')) {
@@ -270,7 +270,7 @@ class AccessibilityManager {
   private setupReducedMotion(): void {
     // Respect user's motion preferences
     const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)');
-    
+
     const handleMotionPreference = (mediaQuery: MediaQueryList) => {
       if (mediaQuery.matches) {
         document.documentElement.classList.add('reduce-motion');
@@ -288,10 +288,10 @@ class AccessibilityManager {
   public announce(message: string, priority: 'polite' | 'assertive' = 'polite'): void {
     const regionId = priority === 'assertive' ? 'aria-live-assertive' : 'aria-live-region';
     const region = document.getElementById(regionId);
-    
+
     if (region) {
       region.textContent = message;
-      
+
       // Clear after announcement
       setTimeout(() => {
         region.textContent = '';
@@ -303,7 +303,7 @@ class AccessibilityManager {
   public enhanceContent(container: HTMLElement): void {
     // Add focus management to new content
     const focusableElements = container.querySelectorAll(this.focusableElements);
-    
+
     focusableElements.forEach((element) => {
       if (!element.hasAttribute('tabindex') && element.tagName !== 'A' && element.tagName !== 'BUTTON') {
         element.setAttribute('tabindex', '0');

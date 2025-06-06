@@ -1,0 +1,27 @@
+#!/usr/bin/env sh
+. "$(dirname -- "$0")/_/husky.sh"
+
+echo "Running professional standards validation..."
+
+# Run professional standards tests
+npm run test:professional
+
+if [ $? -ne 0 ]; then
+  echo ""
+  echo "❌ COMMIT BLOCKED: Professional standards validation failed"
+  echo ""
+  echo "The following issues were detected:"
+  echo "- Emojis found in code or documentation"
+  echo "- Agent names or references found"
+  echo "- Casual language detected"
+  echo ""
+  echo "To fix these issues:"
+  echo "1. Run: npm run clean:professional"
+  echo "2. Review changes: git diff"
+  echo "3. Commit again: git commit"
+  echo ""
+  echo "All content must maintain professional technical standards."
+  exit 1
+fi
+
+echo "✅ Professional standards validation passed"
