@@ -59,6 +59,7 @@
     "git:install-hooks": "node scripts/install-git-hooks.js",
     "git:demo": "node scripts/demo-workflow.js",
     "git:demo-cleanup": "node scripts/demo-workflow.js --cleanup",
+    "test:professional": "vitest run src/tests/professional-standards.test.ts",
     "multi-agent": "node scripts/multi-agent-manager.js",
     "multi-agent:check": "node scripts/multi-agent-manager.js check",
     "multi-agent:report": "node scripts/multi-agent-manager.js report",
