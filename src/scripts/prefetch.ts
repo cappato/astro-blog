@@ -40,7 +40,7 @@ class PrefetchManager {
       this.initHoverPrefetch();
     }
 
-    console.log('🚀 Prefetch manager initialized');
+    console.log(' Prefetch manager initialized');
   }
 
   private initViewportPrefetch(): void {
@@ -55,7 +55,7 @@ class PrefetchManager {
           if (entry.isIntersecting) {
             const link = entry.target as HTMLAnchorElement;
             const href = link.getAttribute('href');
-            
+
             if (href && this.shouldPrefetch(href)) {
               this.prefetchUrl(href, 'viewport');
               this.intersectionObserver?.unobserve(link);
@@ -77,7 +77,7 @@ class PrefetchManager {
     document.addEventListener('mouseover', (event) => {
       const target = event.target as HTMLElement;
       const link = target.closest('a[href]') as HTMLAnchorElement;
-      
+
       if (!link) return;
 
       const href = link.getAttribute('href');
@@ -101,7 +101,7 @@ class PrefetchManager {
     document.addEventListener('mouseout', (event) => {
       const target = event.target as HTMLElement;
       const link = target.closest('a[href]') as HTMLAnchorElement;
-      
+
       if (!link) return;
 
       const href = link.getAttribute('href');
@@ -175,11 +175,11 @@ class PrefetchManager {
       // Track success
       link.addEventListener('load', () => {
         this.prefetchedUrls.add(href);
-        console.log(`✅ Prefetched (${trigger}): ${href}`);
+        console.log(` Prefetched (${trigger}): ${href}`);
       });
 
       link.addEventListener('error', () => {
-        console.warn(`❌ Failed to prefetch: ${href}`);
+        console.warn(` Failed to prefetch: ${href}`);
       });
 
     } catch (error) {
@@ -222,13 +222,13 @@ function initPrefetch(): void {
   // Only enable on fast connections
   const connection = (navigator as any).connection;
   const isSlowConnection = connection && (
-    connection.effectiveType === 'slow-2g' || 
+    connection.effectiveType === 'slow-2g' ||
     connection.effectiveType === '2g' ||
     connection.saveData
   );
 
   if (isSlowConnection) {
-    console.log('🐌 Slow connection detected, disabling prefetch');
+    console.log(' Slow connection detected, disabling prefetch');
     return;
   }
 

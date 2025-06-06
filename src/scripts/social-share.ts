@@ -19,26 +19,26 @@ class SocialShareManager {
 
   private init(): void {
     if (this.initialized) return;
-    
+
     // Initialize toast element
     this.toastElement = document.getElementById('copy-toast');
-    
+
     // Bind event listeners
     this.bindCopyButtons();
     this.bindShareButtons();
     this.bindMessageCopy();
-    
+
     this.initialized = true;
-    console.log('📤 Social share manager initialized');
+    console.log(' Social share manager initialized');
   }
 
   private bindCopyButtons(): void {
     const copyButtons = document.querySelectorAll('[data-action="copy"], .copy-link-btn');
-    
+
     copyButtons.forEach(button => {
       button.addEventListener('click', async (event) => {
         event.preventDefault();
-        
+
         const url = button.getAttribute('data-url') || window.location.href;
         await this.copyToClipboard(url);
       });
@@ -47,15 +47,15 @@ class SocialShareManager {
 
   private bindShareButtons(): void {
     const shareButtons = document.querySelectorAll('[data-action="share"]');
-    
+
     shareButtons.forEach(button => {
       button.addEventListener('click', (event) => {
         event.preventDefault();
-        
+
         const url = button.getAttribute('data-url') || window.location.href;
         const title = button.getAttribute('data-title') || document.title;
         const platform = button.getAttribute('data-platform');
-        
+
         if (platform) {
           this.shareToSocial(platform, { url, title });
         }
@@ -66,7 +66,7 @@ class SocialShareManager {
   private bindMessageCopy(): void {
     const copyMessageButton = document.getElementById('copy-message');
     const messageTextarea = document.getElementById('share-message') as HTMLTextAreaElement;
-    
+
     if (copyMessageButton && messageTextarea) {
       copyMessageButton.addEventListener('click', async () => {
         await this.copyToClipboard(messageTextarea.value, 'Mensaje copiado al portapapeles');
@@ -91,7 +91,7 @@ class SocialShareManager {
         document.execCommand('copy');
         textArea.remove();
       }
-      
+
       this.showToast(message);
     } catch (error) {
       console.error('Failed to copy to clipboard:', error);

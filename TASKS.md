@@ -1,6 +1,6 @@
 # TASKS - Blog Development
 
-## COMPLETED TASKS ✅
+## COMPLETED TASKS
 
 ### UI/UX Improvements
 - [x] **Featured Pillars Layout** - Fixed responsive grid (2 cols desktop, 1 mobile)
@@ -18,7 +18,7 @@
 - [x] **PillarGrid Empty State** - Removed emoji and improved styling
 - [x] **Performance Monitor** - Removed emoji from title
 
-## PENDING TASKS 📋
+## PENDING TASKS
 
 ### High Priority
 - [ ] **Test All Components** - Comprehensive testing of all fixed components
@@ -35,7 +35,7 @@
 - [ ] **TypeScript Fixes** - Address remaining type issues
 - [ ] **SEO Optimization** - Review meta tags and schema warnings
 
-## NOTES 📝
+## NOTES
 
 - All builds are passing successfully
 - Server running on http://localhost:4321/
@@ -43,7 +43,7 @@
 - All other emojis removed for cleaner design
 - Neutral color scheme implemented across components
 
-## NEXT STEPS 🎯
+## NEXT STEPS
 
 1. User verification of current changes
 2. Address any new issues found

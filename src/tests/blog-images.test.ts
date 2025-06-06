@@ -59,7 +59,7 @@ describe('Blog Post Images', () => {
     const missingImages: string[] = [];
     const postsWithPostId = posts.filter(post => post.data.postId);
 
-    console.log(`\n🔍 Checking images for ${postsWithPostId.length} posts with postId...`);
+    console.log(`\n Checking images for ${postsWithPostId.length} posts with postId...`);
 
     for (const post of postsWithPostId) {
       const { postId } = post.data;
@@ -68,7 +68,7 @@ describe('Blog Post Images', () => {
       // Check if image directory exists
       if (!fs.existsSync(imageDir)) {
         missingImages.push(`${postId}/[DIRECTORY_MISSING]`);
-        console.error(`❌ Missing image directory: ${postId}`);
+        console.error(` Missing image directory: ${postId}`);
         continue;
       }
 
@@ -100,19 +100,19 @@ describe('Blog Post Images', () => {
       }
 
       if (postHasErrors) {
-        console.error(`❌ Post with missing images: ${postId} (${post.data.title})`);
+        console.error(` Post with missing images: ${postId} (${post.data.title})`);
       } else {
-        console.log(`✅ ${postId}: All required images present`);
+        console.log(` ${postId}: All required images present`);
       }
     }
 
     if (missingImages.length > 0) {
-      console.error('\n🚨 MISSING OR INVALID IMAGES DETECTED:');
+      console.error('\n MISSING OR INVALID IMAGES DETECTED:');
       console.error('This will cause 404 errors in the blog!');
       console.error('');
       missingImages.forEach(img => console.error(`  - ${img}`));
       console.error('');
-      console.error('💡 To fix: Run image generation for affected posts');
+      console.error(' To fix: Run image generation for affected posts');
       console.error('   npm run optimize-images -- --postId=POST_ID --force');
     }
 
@@ -122,56 +122,56 @@ describe('Blog Post Images', () => {
   it('should have valid image references in markdown content', async () => {
     const posts = await getBlogPosts();
     const brokenImageRefs: string[] = [];
-    
+
     for (const post of posts) {
       const { postId } = post.data;
       const content = post.body;
-      
+
       // Find all image references in markdown
       const imageRegex = /!\[.*?\]\((.*?)\)/g;
       let match;
-      
+
       while ((match = imageRegex.exec(content)) !== null) {
         const imagePath = match[1];
-        
+
         // Skip external URLs
         if (imagePath.startsWith('http')) continue;
-        
+
         // Convert to file system path
         const fullPath = path.join(process.cwd(), 'public', imagePath);
-        
+
         if (!fs.existsSync(fullPath)) {
           brokenImageRefs.push(`${post.slug}: ${imagePath}`);
         }
       }
     }
-    
+
     if (brokenImageRefs.length > 0) {
       console.error('Broken image references in markdown:');
       brokenImageRefs.forEach(ref => console.error(`  - ${ref}`));
     }
-    
+
     expect(brokenImageRefs).toHaveLength(0);
   });
 
   it('should have proper image alt text', async () => {
     const posts = await getBlogPosts();
     const missingAltText: string[] = [];
-    
+
     for (const post of posts) {
       const { postId, imageAlt, title } = post.data;
-      
+
       if (postId && !imageAlt) {
         missingAltText.push(`${postId}: Missing imageAlt (using title as fallback)`);
       }
     }
-    
+
     // This is a warning, not a failure
     if (missingAltText.length > 0) {
       console.warn('Posts without explicit imageAlt:');
       missingAltText.forEach(msg => console.warn(`  - ${msg}`));
     }
-    
+
     // Don't fail the test, just warn
     expect(true).toBe(true);
   });

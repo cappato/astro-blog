@@ -52,7 +52,7 @@ const allPosts = await getCollection('blog');
 // Filtrar posts que pertenecen a este pilar
 const pillarPosts = allPosts.filter(post => {
   const postTags = post.data.tags || [];
-  
+
   // Verificar si algún tag del post pertenece a este pilar
   return postTags.some(tag => {
     const tagPillarId = TAG_TO_PILLAR_MAPPING[tag];
@@ -61,7 +61,7 @@ const pillarPosts = allPosts.filter(post => {
 });
 
 // Ordenar posts por fecha (más recientes primero)
-const sortedPosts = pillarPosts.sort((a, b) => 
+const sortedPosts = pillarPosts.sort((a, b) =>
   new Date(b.data.date).getTime() - new Date(a.data.date).getTime()
 );
 
@@ -91,7 +91,7 @@ const seoData = {
 
 // DEBUG: Verificar que la página se ejecuta
 if (import.meta.env.DEV) {
-  console.log('📄 PILLAR PAGE DEBUG:', { pathname: Astro.url.pathname, pillarId, pillarTitle: pillar.title });
+  console.log(' PILLAR PAGE DEBUG:', { pathname: Astro.url.pathname, pillarId, pillarTitle: pillar.title });
 }
 
 // Breadcrumb personalizado - Nombre específico del pilar
@@ -110,7 +110,7 @@ const customTitle = pillar.title;
   <!-- Main Content -->
   <ContentContainer className="py-8">
     <ContentWidth width="standard">
-    
+
     <!-- Pillar Header -->
     <header class="mb-12">
       <div class="flex items-center gap-4 mb-6">
@@ -124,7 +124,7 @@ const customTitle = pillar.title;
           </div>
         </div>
       </div>
-      
+
       <p class="text-lg leading-relaxed mb-8">
         {pillar.description}
       </p>
@@ -150,7 +150,7 @@ const customTitle = pillar.title;
     {totalPosts > 0 ? (
       <section>
         <h2 class="text-2xl font-bold mb-8">
-          📚 Artículos de {pillar.title}
+           Artículos de {pillar.title}
         </h2>
 
         <!-- Grid Unificado - 2 columnas desktop, 1 móvil -->
@@ -206,5 +206,4 @@ const customTitle = pillar.title;
 
   <Footer slot="footer" />
 </BaseLayout>
-
 

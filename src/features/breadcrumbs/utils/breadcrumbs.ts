@@ -1,6 +1,6 @@
 /**
  * Breadcrumbs Feature - Core Utilities
- * 
+ *
  * Lógica principal para generar breadcrumbs basada en configuración de rutas
  * Sistema limpio y escalable
  */
@@ -15,8 +15,8 @@ import { ROUTE_PATTERNS, type BreadcrumbItem } from '../config/routes';
  */
 export function generateBreadcrumbs(pathname: string, customTitle?: string): BreadcrumbItem[] {
   // Normalizar pathname
-  const normalizedPath = pathname.endsWith('/') && pathname !== '/' 
-    ? pathname.slice(0, -1) 
+  const normalizedPath = pathname.endsWith('/') && pathname !== '/'
+    ? pathname.slice(0, -1)
     : pathname;
 
   // Buscar el primer patrón que coincida
@@ -28,7 +28,7 @@ export function generateBreadcrumbs(pathname: string, customTitle?: string): Bre
 
   // Fallback: si no hay coincidencia, mostrar solo Home
   return [
-    { label: 'Inicio', href: '/', icon: '🏠' }
+    { label: 'Inicio', href: '/', icon: '' }
   ];
 }
 

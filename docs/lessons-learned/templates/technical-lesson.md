@@ -1,16 +1,16 @@
 # [Título Descriptivo de la Lección Técnica]
 
-**Fecha:** YYYY-MM-DD  
-**Autor:** [Nombre del desarrollador]  
-**Tags:** #technical #[área] #[tipo]  
-**Contexto:** [Proyecto/Feature/Sprint]  
+**Fecha:** YYYY-MM-DD
+**Autor:** [Nombre del desarrollador]
+**Tags:** #technical #[área] #[tipo]
+**Contexto:** [Proyecto/Feature/Sprint]
 **Nivel de Impacto:** #critical | #important | #nice-to-know
 
-## 📋 Resumen Ejecutivo
+##  Resumen Ejecutivo
 
 [Resumen de 1-2 líneas de la lección principal]
 
-## 🎯 Contexto
+##  Contexto
 
 ### Situación
 [Descripción de la situación que llevó al problema/descubrimiento]
@@ -23,7 +23,7 @@
 - **Herramientas:** [Herramientas específicas]
 - **Versiones:** [Versiones relevantes]
 
-## 🚨 Problema Identificado
+##  Problema Identificado
 
 ### Descripción del Problema
 [Descripción detallada del problema encontrado]
@@ -38,7 +38,7 @@
 - **Funcionalidad afectada:** [Qué se vio afectado]
 - **Usuarios impactados:** [Si aplica]
 
-## 🔍 Investigación y Diagnóstico
+##  Investigación y Diagnóstico
 
 ### Proceso de Investigación
 [Pasos seguidos para diagnosticar el problema]
@@ -52,7 +52,7 @@
 2. [Hallazgo 2]
 3. [Hallazgo 3]
 
-## ✅ Solución Implementada
+##  Solución Implementada
 
 ### Solución Elegida
 [Descripción de la solución implementada]
@@ -86,7 +86,7 @@
 - [Acción 2]
 - [Acción 3]
 
-## 🔄 Prevención Futura
+##  Prevención Futura
 
 ### Checks Preventivos
 - [ ] [Check 1]
@@ -100,7 +100,7 @@
 - [Documento 1]: [Qué se actualizó]
 - [Documento 2]: [Qué se actualizó]
 
-## 🔗 Referencias
+##  Referencias
 
 ### Lecciones Relacionadas
 - [Lección relacionada 1](../ruta/archivo.md)
@@ -114,7 +114,7 @@
 - [Issue #123](URL): [Descripción]
 - [PR #456](URL): [Descripción]
 
-## 📊 Métricas de Impacto
+##  Métricas de Impacto
 
 ### Antes de la Solución
 - **Tiempo de resolución:** [X horas/días]
@@ -124,7 +124,7 @@
 - **Tiempo de resolución:** [X minutos/horas]
 - **Frecuencia del problema:** [Eliminado/Reducido a X]
 
-## 💡 Aplicabilidad
+##  Aplicabilidad
 
 ### Proyectos Donde Aplica
 - [Proyecto 1]: [Por qué aplica]
@@ -136,5 +136,5 @@
 
 ---
 
-**Última actualización:** YYYY-MM-DD  
+**Última actualización:** YYYY-MM-DD
 **Próxima revisión:** YYYY-MM-DD

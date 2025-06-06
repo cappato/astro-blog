@@ -1,6 +1,6 @@
 /**
  * Content Pillars Feature - Configuration
- * 
+ *
  * Configuración de los pilares de contenido del blog
  * Define categorías estratégicas, colores, iconos y metadatos
  */
@@ -39,14 +39,14 @@ export const CONTENT_PILLARS: Record<string, ContentPillar> = {
       alt: 'Astro y optimización de performance'
     },
     icon: 'rocket',
-    emoji: '🚀',
+    emoji: '',
     keywords: ['astro', 'performance', 'web vitals', 'optimization', 'modern web'],
     tags: ['astro', 'performance', 'optimization', 'web-vitals', 'ssr', 'static-site'],
     priority: 1,
     featured: true,
     seoMetadata: {
       title: 'Astro & Performance - Desarrollo Web Moderno',
-      description: 'Aprende Astro, optimización de performance y arquitecturas modernas para crear sitios web ultra-rápidos.',
+      description: 'Aprende Astro, optimización de performance y arquitecturas modernas para crear sitios web advanced-rápidos.',
       keywords: ['astro framework', 'web performance', 'optimización web', 'desarrollo moderno', 'static site generator']
     }
   },
@@ -60,7 +60,7 @@ export const CONTENT_PILLARS: Record<string, ContentPillar> = {
       alt: 'TypeScript y arquitectura de software'
     },
     icon: 'code',
-    emoji: '🏗️',
+    emoji: '️',
     keywords: ['typescript', 'architecture', 'design patterns', 'scalability', 'enterprise'],
     tags: ['typescript', 'architecture', 'design-patterns', 'scalability', 'enterprise', 'clean-code'],
     priority: 2,
@@ -81,7 +81,7 @@ export const CONTENT_PILLARS: Record<string, ContentPillar> = {
       alt: 'Automatización y DevOps'
     },
     icon: 'cog',
-    emoji: '⚙️',
+    emoji: '️',
     keywords: ['automation', 'devops', 'ci/cd', 'testing', 'deployment'],
     tags: ['automation', 'devops', 'ci-cd', 'testing', 'deployment', 'docker', 'github-actions'],
     priority: 3,
@@ -102,7 +102,7 @@ export const CONTENT_PILLARS: Record<string, ContentPillar> = {
       alt: 'SEO y optimización web'
     },
     icon: 'search',
-    emoji: '🔍',
+    emoji: '',
     keywords: ['seo', 'optimization', 'schema.org', 'meta tags', 'search ranking'],
     tags: ['seo', 'optimization', 'schema.org', 'meta-tags', 'search-ranking', 'google'],
     priority: 4,

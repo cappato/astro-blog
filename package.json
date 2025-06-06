@@ -46,6 +46,7 @@
     "blog:analyze": "echo 'Use: npm run blog' and select option 3",
     "blog:images": "echo 'Use: npm run blog' and select option 4",
     "blog:report": "echo 'Use: npm run blog' and select option 8",
+<<<<<<< HEAD
     "git:branch": "node scripts/git-workflow.js create-branch",
     "git:commit": "node scripts/git-workflow.js commit",
     "git:push": "node scripts/git-workflow.js push",
@@ -59,6 +60,20 @@
     "git:install-hooks": "node scripts/install-git-hooks.js",
     "git:demo": "node scripts/demo-workflow.js",
     "git:demo-cleanup": "node scripts/demo-workflow.js --cleanup",
+    "clean:professional": "node scripts/clean-unprofessional-content.js",
+    "test:professional": "vitest run src/tests/professional-standards.test.ts",
+=======
+    "multi-agent": "node scripts/multi-agent-manager.js",
+    "multi-": "node scripts/multi-agent-manager.js check",
+    "multi-": "node scripts/multi-agent-manager.js report",
+    "multi-": "node scripts/multi-agent-manager.js validate",
+    "multi-": "node scripts/multi-agent-manager.js protocols",
+    "multi-": "node scripts/multi-agent-manager.js status",
+    "multi-": "node scripts/multi-agent-manager.js learn",
+    "multi-": "node scripts/multi-agent-manager.js analyze",
+    "multi-": "node scripts/multi-agent-manager.js pr",
+    "multi--pr": "node scripts/multi-agent-manager.js last-pr",
+>>>>>>> 2814278 (Implement strict professional standards enforcement)
     "clean:professional": "node scripts/clean-unprofessional-content.js",
     "test:professional": "vitest run src/tests/professional-standards.test.ts"
   },

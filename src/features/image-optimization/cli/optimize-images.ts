@@ -1,7 +1,7 @@
 #!/usr/bin/env node
 /**
  * Image Optimization Feature - CLI Interface
- * 
+ *
  * Modular CLI for image optimization with comprehensive
  * argument parsing and processing workflow.
  */
@@ -94,7 +94,7 @@ export class ImageOptimizationCLI {
         setLogLevel('debug');
       }
 
-      logger.info('🖼️  Image Optimization CLI - Modular Feature');
+      logger.info('️  Image Optimization CLI - Modular Feature');
       logger.separator();
 
       // Ensure required directories exist
@@ -111,7 +111,7 @@ export class ImageOptimizationCLI {
 
       // Finalize stats and show summary
       this.finalizeStats();
-      
+
       if (argv.stats) {
         this.showDetailedStats();
       }
@@ -140,7 +140,7 @@ export class ImageOptimizationCLI {
     }
 
     const resolution = fileUtils.resolveFilePath(filePath);
-    
+
     if (!resolution.exists) {
       logger.error(`File not found: ${filePath}`);
       process.exit(1);
@@ -151,7 +151,7 @@ export class ImageOptimizationCLI {
     }
 
     const validation = await imageProcessor.validateImage(resolution.absolutePath);
-    
+
     if (!validation.valid) {
       logger.error(`Invalid image file: ${validation.error}`);
       process.exit(1);
@@ -168,10 +168,10 @@ export class ImageOptimizationCLI {
     );
 
     if (result.success) {
-      logger.info(`✅ Generated: ${result.outputPath} (${this.formatFileSize(result.size)})`);
+      logger.info(` Generated: ${result.outputPath} (${this.formatFileSize(result.size)})`);
       this.stats.processedImages++;
     } else {
-      logger.error(`❌ Failed to process: ${result.error}`);
+      logger.error(` Failed to process: ${result.error}`);
       this.stats.errorImages++;
     }
 
@@ -185,7 +185,7 @@ export class ImageOptimizationCLI {
     logger.info(`Processing post: ${postId}`);
 
     const images = fileUtils.getPostImages(postId);
-    
+
     if (images.coverImages.length === 0 && images.otherImages.length === 0) {
       logger.warn(`No images found for post: ${postId}`);
       return;
@@ -197,11 +197,11 @@ export class ImageOptimizationCLI {
     // Process cover images with all presets
     if (images.coverImages.length > 0) {
       logger.info(`Processing ${images.coverImages.length} cover image(s)`);
-      
+
       for (const image of images.coverImages) {
         const imagePath = path.join(images.directory, image);
         const presets = getCoverImagePresets();
-        
+
         this.stats.totalImages += presets.length;
 
         for (const presetName of presets) {
@@ -220,7 +220,7 @@ export class ImageOptimizationCLI {
         if (!argv['dry-run']) {
           const lqipResult = await imageProcessor.generateLQIP(imagePath, outputDir, 'portada');
           if (lqipResult.success) {
-            logger.debug(`✅ Generated LQIP: ${lqipResult.lqipPath}`);
+            logger.debug(` Generated LQIP: ${lqipResult.lqipPath}`);
           }
         }
       }
@@ -233,17 +233,17 @@ export class ImageOptimizationCLI {
 
       for (const image of images.otherImages) {
         const imagePath = path.join(images.directory, image);
-        
+
         if (argv['dry-run']) {
           logger.debug(`DRY RUN: Would process ${image} with default preset`);
           continue;
         }
 
         const success = await this.processImage(
-          imagePath, 
-          outputDir, 
-          image, 
-          IMAGE_OPTIMIZATION_CONFIG.defaultPreset, 
+          imagePath,
+          outputDir,
+          image,
+          IMAGE_OPTIMIZATION_CONFIG.defaultPreset,
           argv.force || false
         );
         if (success) processedCount++;
@@ -310,7 +310,7 @@ export class ImageOptimizationCLI {
     // Validate image
     const validation = await imageProcessor.validateImage(imagePath);
     if (!validation.valid) {
-      logger.error(`❌ Invalid image ${fileName}: ${validation.error}`);
+      logger.error(` Invalid image ${fileName}: ${validation.error}`);
       this.stats.errorImages++;
       return false;
     }
@@ -324,11 +324,11 @@ export class ImageOptimizationCLI {
     );
 
     if (result.success) {
-      logger.debug(`✅ Generated: ${outputFileName} (${this.formatFileSize(result.size)})`);
+      logger.debug(` Generated: ${outputFileName} (${this.formatFileSize(result.size)})`);
       this.stats.processedImages++;
       return true;
     } else {
-      logger.error(`❌ Failed ${fileName} [${presetName}]: ${result.error}`);
+      logger.error(` Failed ${fileName} [${presetName}]: ${result.error}`);
       this.stats.errorImages++;
       return false;
     }

@@ -410,10 +410,10 @@ async function processDirectory(dirPath) {
   try {
     const entries = await fs.readdir(dirPath, { withFileTypes: true });
     const results = [];
-    
+
     for (const entry of entries) {
       const fullPath = path.join(dirPath, entry.name);
-      
+
       if (entry.isDirectory()) {
         // Procesar subdirectorio recursivamente
         const subResults = await processDirectory(fullPath);
@@ -429,7 +429,7 @@ async function processDirectory(dirPath) {
         }
       }
     }
-    
+
     return results;
   } catch (error) {
     console.error(`Error procesando directorio ${dirPath}:`, error.message);
@@ -455,7 +455,7 @@ async function main() {
 
     try {
       await fs.access(dirPath);
-      console.log(`📁 Procesando: ${dir}`);
+      console.log(` Procesando: ${dir}`);
 
       const changedFiles = await processDirectory(dirPath);
       allChangedFiles.push(...changedFiles);
@@ -463,24 +463,24 @@ async function main() {
       console.log(`   ${changedFiles.length} archivos purgados`);
       console.log('');
     } catch (error) {
-      console.log(`⚠️  Directorio no encontrado: ${dir}`);
+      console.log(`️  Directorio no encontrado: ${dir}`);
     }
   }
 
-  console.log('🎯 PURGA COMPLETADA');
+  console.log(' PURGA COMPLETADA');
   console.log('===================');
-  console.log(`📊 Total de archivos purgados: ${allChangedFiles.length}`);
+  console.log(` Total de archivos purgados: ${allChangedFiles.length}`);
   console.log('');
 
   if (allChangedFiles.length > 0) {
-    console.log('📝 Archivos modificados:');
+    console.log(' Archivos modificados:');
     allChangedFiles.forEach(file => {
       const relativePath = path.relative(projectRoot, file);
       console.log(`   - ${relativePath}`);
     });
 
     console.log('');
-    console.log('🗑️ Tipos de clases eliminadas:');
+    console.log('️ Tipos de clases eliminadas:');
     console.log('   - Colores de texto y fondo');
     console.log('   - Bordes y sombras');
     console.log('   - Border radius y efectos');
@@ -488,7 +488,7 @@ async function main() {
     console.log('   - Transiciones y animaciones');
 
     console.log('');
-    console.log('✅ Clases estructurales mantenidas:');
+    console.log(' Clases estructurales mantenidas:');
     console.log('   - Layout (flex, grid, container)');
     console.log('   - Espaciado (padding, margin, gap)');
     console.log('   - Tipografía estructural (tamaños, peso)');
@@ -496,7 +496,7 @@ async function main() {
   }
 
   console.log('');
-  console.log('🎨 ¡Proyecto listo para nuevo sistema de diseño!');
+  console.log(' ¡Proyecto listo para nuevo sistema de diseño!');
 }
 
 // Ejecutar el script

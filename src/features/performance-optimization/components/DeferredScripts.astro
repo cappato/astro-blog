@@ -19,7 +19,7 @@ const {
 <!-- Performance Script Loader - Optimized -->
 <script type="module" is:inline>
   // Performance monitoring and optimization
-  console.log('⚡ Performance optimizations active');
+  console.log(' Performance optimizations active');
 
   // Monitor Core Web Vitals
   if ('web-vital' in window || 'PerformanceObserver' in window) {
@@ -27,7 +27,7 @@ const {
     new PerformanceObserver((entryList) => {
       for (const entry of entryList.getEntries()) {
         if (entry.entryType === 'largest-contentful-paint') {
-          console.log('📊 LCP:', entry.startTime);
+          console.log(' LCP:', entry.startTime);
         }
       }
     }).observe({ entryTypes: ['largest-contentful-paint'] });
@@ -36,7 +36,7 @@ const {
     new PerformanceObserver((entryList) => {
       for (const entry of entryList.getEntries()) {
         if (!entry.hadRecentInput) {
-          console.log('📊 CLS:', entry.value);
+          console.log(' CLS:', entry.value);
         }
       }
     }).observe({ entryTypes: ['layout-shift'] });
@@ -56,5 +56,4 @@ const {
     }, { once: true });
   });
 </script>
-
 

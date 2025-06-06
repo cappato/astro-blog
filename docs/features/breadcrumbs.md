@@ -36,8 +36,8 @@ Sistema basado en patrones de rutas configurables que permite escalabilidad sin 
 {
   pattern: /^\/nueva-seccion$/,
   generator: () => [
-    { label: 'Inicio', href: '/', icon: '🏠' },
-    { label: 'Nueva Sección', current: true, icon: '📄' }
+    { label: 'Inicio', href: '/', icon: '' },
+    { label: 'Nueva Sección', current: true, icon: '' }
   ]
 }
 ```
@@ -64,9 +64,9 @@ import { generateBreadcrumbs } from '../features/breadcrumbs';
 
 const breadcrumbs = generateBreadcrumbs('/blog/mi-post', 'Mi Post');
 // Returns: [
-//   { label: 'Inicio', href: '/', icon: '🏠' },
-//   { label: 'Blog', href: '/blog', icon: '📝' },
-//   { label: 'Mi Post', current: true, icon: '📄' }
+//   { label: 'Inicio', href: '/', icon: '' },
+//   { label: 'Blog', href: '/blog', icon: '' },
+//   { label: 'Mi Post', current: true, icon: '' }
 // ]
 ```
 

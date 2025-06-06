@@ -1,6 +1,6 @@
 /**
  * Image Optimization Feature - Constants and Configuration
- * 
+ *
  * Centralized configuration for image optimization system
  * with presets, paths, and validation rules.
  */
@@ -11,16 +11,16 @@ import type { ImageOptimizationConfig, ProjectPaths } from './types.ts';
 export const IMAGE_OPTIMIZATION_CONFIG: ImageOptimizationConfig = {
   /** Default preset name */
   defaultPreset: 'default',
-  
+
   /** Minimum image dimensions for validation */
   minDimensions: {
     width: 100,
     height: 100
   },
-  
+
   /** Maximum file size in bytes (10MB) */
   maxFileSize: 10 * 1024 * 1024,
-  
+
   /** LQIP generation settings */
   lqip: {
     width: 20,
@@ -42,10 +42,10 @@ export const SUPPORTED_EXTENSIONS = /\.(jpg|jpeg|png|webp|avif|gif|tiff)$/i;
 export const SPECIAL_FILES = {
   /** Cover image pattern */
   COVER_PATTERN: /^portada\.(jpg|jpeg|png|webp)$/i,
-  
+
   /** LQIP file suffix */
   LQIP_SUFFIX: '-lqip',
-  
+
   /** Base64 file suffix */
   BASE64_SUFFIX: '-lqip.txt'
 } as const;
@@ -80,20 +80,20 @@ export const ERROR_MESSAGES = {
 export const VALIDATION_RULES = {
   /** Minimum image width */
   MIN_WIDTH: 100,
-  
+
   /** Minimum image height */
   MIN_HEIGHT: 100,
-  
+
   /** Maximum image width */
   MAX_WIDTH: 8000,
-  
+
   /** Maximum image height */
   MAX_HEIGHT: 8000,
-  
+
   /** Quality range */
   MIN_QUALITY: 1,
   MAX_QUALITY: 100,
-  
+
   /** Supported formats for validation */
   SUPPORTED_FORMATS: ['jpeg', 'jpg', 'png', 'webp', 'avif', 'gif', 'tiff'] as const
 } as const;
@@ -102,10 +102,10 @@ export const VALIDATION_RULES = {
 export const CLI_CONFIG = {
   /** Default log level */
   DEFAULT_LOG_LEVEL: 'info' as const,
-  
+
   /** Progress update interval */
   PROGRESS_INTERVAL: 100,
-  
+
   /** CLI colors */
   COLORS: {
     SUCCESS: '\x1b[32m',
@@ -120,10 +120,10 @@ export const CLI_CONFIG = {
 export const PERFORMANCE_CONFIG = {
   /** Concurrent processing limit */
   MAX_CONCURRENT: 4,
-  
+
   /** Memory limit for Sharp operations */
   MEMORY_LIMIT: 512 * 1024 * 1024, // 512MB
-  
+
   /** Timeout for individual image processing (30 seconds) */
   PROCESSING_TIMEOUT: 30 * 1000
 } as const;
@@ -132,10 +132,10 @@ export const PERFORMANCE_CONFIG = {
 export const CACHE_CONFIG = {
   /** Enable file modification time checking */
   CHECK_MTIME: true,
-  
+
   /** Cache directory for temporary files */
   TEMP_DIR: '.image-cache',
-  
+
   /** Cache cleanup interval (24 hours) */
   CLEANUP_INTERVAL: 24 * 60 * 60 * 1000
 } as const;
@@ -145,7 +145,7 @@ export const FEATURE_METADATA = {
   name: 'image-optimization',
   version: '1.0.0',
   description: 'Complete image optimization system with CLI and component integration',
-  author: 'Augment Agent',
+  author: '',
   dependencies: ['sharp', 'fs-extra', 'yargs', 'astro'],
   exports: {
     components: ['OptimizedImage'],
@@ -177,25 +177,25 @@ export const SHARP_DEFAULTS = {
     withoutEnlargement: true,
     fastShrinkOnLoad: true
   },
-  
+
   /** Default WebP options */
   webp: {
     effort: 4,
     smartSubsample: true
   },
-  
+
   /** Default AVIF options */
   avif: {
     effort: 4,
     chromaSubsampling: '4:2:0'
   },
-  
+
   /** Default JPEG options */
   jpeg: {
     progressive: true,
     mozjpeg: true
   },
-  
+
   /** Default PNG options */
   png: {
     compressionLevel: 9,
@@ -207,7 +207,7 @@ export const SHARP_DEFAULTS = {
 export const NAMING_CONVENTIONS = {
   /** Preset suffix separator */
   PRESET_SEPARATOR: '-',
-  
+
   /** Output file extensions by format */
   EXTENSIONS: {
     webp: '.webp',
@@ -215,7 +215,7 @@ export const NAMING_CONVENTIONS = {
     jpeg: '.jpeg',
     png: '.png'
   },
-  
+
   /** Reserved filenames */
   RESERVED_NAMES: ['lqip', 'base64', 'metadata']
 } as const;

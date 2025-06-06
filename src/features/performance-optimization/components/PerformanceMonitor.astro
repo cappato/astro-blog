@@ -1,7 +1,7 @@
 ---
 /**
  * Performance Optimization Feature - Performance Monitor
- * 
+ *
  * Componente para monitorear métricas de performance en tiempo real
  * Solo activo en desarrollo para debugging
  */
@@ -56,11 +56,11 @@ const {
             </div>
           </div>
           <div >
-            <small>💡 En desarrollo local algunas métricas pueden aparecer como "—" debido a la velocidad de localhost</small>
+            <small> En desarrollo local algunas métricas pueden aparecer como "—" debido a la velocidad de localhost</small>
           </div>
           <div >
-            <button id="refresh-metrics" >🔄 Refresh</button>
-            <button id="export-metrics" >📊 Export</button>
+            <button id="refresh-metrics" > Refresh</button>
+            <button id="export-metrics" > Export</button>
           </div>
         </div>
       </div>
@@ -78,17 +78,17 @@ const {
             trackTTFB: {trackTTFB},
             ...options
           };
-          
+
           this.metrics = {};
           this.observers = [];
-          
+
           this.init();
         }
 
         init() {
-          console.log('🚀 Performance Monitor initialized');
-          console.log('📊 PerformanceObserver support:', 'PerformanceObserver' in window);
-          console.log('📊 Navigation API support:', 'PerformanceNavigationTiming' in window);
+          console.log(' Performance Monitor initialized');
+          console.log(' PerformanceObserver support:', 'PerformanceObserver' in window);
+          console.log(' Navigation API support:', 'PerformanceNavigationTiming' in window);
 
           // Medir métricas básicas primero
           this.measureBasicMetrics();
@@ -130,7 +130,7 @@ const {
 
         observeLCP() {
           if (!('PerformanceObserver' in window)) {
-            console.warn('⚠️ PerformanceObserver not supported - LCP measurement disabled');
+            console.warn('️ PerformanceObserver not supported - LCP measurement disabled');
             return;
           }
 
@@ -143,21 +143,21 @@ const {
               this.updateUI('lcp', `${this.metrics.lcp}ms`);
               this.logMetric('LCP', this.metrics.lcp, 'ms');
 
-              console.log('🎯 LCP Element:', lastEntry.element);
-              console.log('🎯 LCP URL:', lastEntry.url);
+              console.log(' LCP Element:', lastEntry.element);
+              console.log(' LCP URL:', lastEntry.url);
             });
 
             observer.observe({ entryTypes: ['largest-contentful-paint'] });
             this.observers.push(observer);
-            console.log('✅ LCP Observer initialized');
+            console.log(' LCP Observer initialized');
           } catch (error) {
-            console.error('❌ Error initializing LCP observer:', error);
+            console.error(' Error initializing LCP observer:', error);
           }
         }
 
         observeFID() {
           if (!('PerformanceObserver' in window)) return;
-          
+
           const observer = new PerformanceObserver((list) => {
             const entries = list.getEntries();
             entries.forEach(entry => {
@@ -166,16 +166,16 @@ const {
               this.logMetric('FID', this.metrics.fid, 'ms');
             });
           });
-          
+
           observer.observe({ entryTypes: ['first-input'] });
           this.observers.push(observer);
         }
 
         observeCLS() {
           if (!('PerformanceObserver' in window)) return;
-          
+
           let clsValue = 0;
-          
+
           const observer = new PerformanceObserver((list) => {
             const entries = list.getEntries();
             entries.forEach(entry => {
@@ -183,19 +183,19 @@ const {
                 clsValue += entry.value;
               }
             });
-            
+
             this.metrics.cls = Math.round(clsValue * 1000) / 1000;
             this.updateUI('cls', this.metrics.cls.toFixed(3));
             this.logMetric('CLS', this.metrics.cls);
           });
-          
+
           observer.observe({ entryTypes: ['layout-shift'] });
           this.observers.push(observer);
         }
 
         measureTTFB() {
           if (!('PerformanceObserver' in window)) return;
-          
+
           const observer = new PerformanceObserver((list) => {
             const entries = list.getEntries();
             entries.forEach(entry => {
@@ -206,7 +206,7 @@ const {
               }
             });
           });
-          
+
           observer.observe({ entryTypes: ['navigation'] });
           this.observers.push(observer);
         }
@@ -219,12 +219,12 @@ const {
               this.logMetric('DCL', Math.round(this.metrics.dcl), 'ms');
             });
           }
-          
+
           // Load event
           window.addEventListener('load', () => {
             this.metrics.load = performance.now();
             this.logMetric('Load', Math.round(this.metrics.load), 'ms');
-            
+
             // Medir recursos
             this.measureResourceMetrics();
           });
@@ -235,7 +235,7 @@ const {
           const imageResources = resources.filter(r => r.initiatorType === 'img');
           const scriptResources = resources.filter(r => r.initiatorType === 'script');
           const cssResources = resources.filter(r => r.initiatorType === 'link');
-          
+
           this.metrics.resources = {
             total: resources.length,
             images: imageResources.length,
@@ -243,7 +243,7 @@ const {
             css: cssResources.length,
             totalSize: resources.reduce((sum, r) => sum + (r.transferSize || 0), 0)
           };
-          
+
           this.logMetric('Resources', this.metrics.resources);
         }
 
@@ -253,7 +253,7 @@ const {
             const valueElement = element.querySelector('.metric__value');
             if (valueElement) {
               valueElement.textContent = value;
-              
+
               // Agregar clase de color según el valor
               this.updateMetricColor(element, metric, value);
             }
@@ -262,9 +262,9 @@ const {
 
         updateMetricColor(element, metric, value) {
           element.classList.remove('metric--good', 'metric--needs-improvement', 'metric--poor');
-          
+
           const numericValue = parseFloat(value);
-          
+
           switch (metric) {
             case 'lcp':
               if (numericValue <= 2500) element.classList.add('metric--good');
@@ -291,18 +291,18 @@ const {
 
         logMetric(name, value, unit = '') {
           if (this.options.logToConsole) {
-            console.log(`📊 ${name}: ${value}${unit}`);
+            console.log(` ${name}: ${value}${unit}`);
           }
         }
 
         setupUI() {
           const monitor = document.getElementById('performance-monitor');
           if (!monitor) return;
-          
+
           // Toggle visibility
           const toggleBtn = document.getElementById('toggle-monitor');
           const content = monitor.querySelector('.performance-monitor__content');
-          
+
           if (toggleBtn && content) {
             toggleBtn.addEventListener('click', () => {
               const isVisible = content.style.display !== 'none';
@@ -310,7 +310,7 @@ const {
               toggleBtn.textContent = isVisible ? '+' : '−';
             });
           }
-          
+
           // Refresh metrics
           const refreshBtn = document.getElementById('refresh-metrics');
           if (refreshBtn) {
@@ -318,7 +318,7 @@ const {
               this.refreshMetrics();
             });
           }
-          
+
           // Export metrics
           const exportBtn = document.getElementById('export-metrics');
           if (exportBtn) {
@@ -332,7 +332,7 @@ const {
           // Limpiar observadores existentes
           this.observers.forEach(observer => observer.disconnect());
           this.observers = [];
-          
+
           // Reinicializar
           this.metrics = {};
           this.init();
@@ -345,7 +345,7 @@ const {
             userAgent: navigator.userAgent,
             metrics: this.metrics
           };
-          
+
           const blob = new Blob([JSON.stringify(data, null, 2)], { type: 'application/json' });
           const url = URL.createObjectURL(blob);
           const a = document.createElement('a');
@@ -363,7 +363,7 @@ const {
 
       // Inicializar monitor
       const monitor = new PerformanceMonitor();
-      
+
       // Cleanup al salir de la página
       window.addEventListener('beforeunload', () => {
         monitor.destroy();
@@ -387,7 +387,7 @@ const {
     min-width: 200px;
     backdrop-filter: blur(10px);
   }
-  
+
   .performance-monitor__header {
     display: flex;
     justify-content: space-between;
@@ -396,13 +396,13 @@ const {
     border-bottom: 1px solid rgba(255, 255, 255, 0.2);
     padding-bottom: 8px;
   }
-  
+
   .performance-monitor__header h3 {
     margin: 0;
     font-size: 14px;
     font-weight: 600;
   }
-  
+
   .performance-monitor__toggle {
     background: none;
     border: none;
@@ -416,7 +416,7 @@ const {
     align-items: center;
     justify-content: center;
   }
-  
+
   .performance-monitor__metrics {
     display: grid;
     grid-template-columns: repeat(2, 1fr);
@@ -438,40 +438,40 @@ const {
     line-height: 1.3;
     display: block;
   }
-  
+
   .metric {
     display: flex;
     justify-content: space-between;
     padding: 2px 0;
   }
-  
+
   .metric__label {
     font-weight: 600;
   }
-  
+
   .metric__value {
     font-family: monospace;
   }
-  
+
   .metric--good .metric__value {
     color: #4ade80;
   }
-  
+
   .metric--needs-improvement .metric__value {
     color: #fbbf24;
   }
-  
+
   .metric--poor .metric__value {
     color: #f87171;
   }
-  
+
   .performance-monitor__actions {
     display: flex;
     gap: 8px;
     padding-top: 8px;
     border-top: 1px solid rgba(255, 255, 255, 0.2);
   }
-  
+
   .btn-small {
     background: rgba(255, 255, 255, 0.1);
     border: 1px solid rgba(255, 255, 255, 0.2);
@@ -482,17 +482,17 @@ const {
     font-size: 10px;
     transition: background 0.2s ease;
   }
-  
+
   .btn-small:hover {
     background: rgba(255, 255, 255, 0.2);
   }
-  
+
   /* Dark mode adjustments */
   :global(.dark) .performance-monitor {
     background: rgba(255, 255, 255, 0.1);
     color: white;
   }
-  
+
   /* Mobile adjustments */
   @media (max-width: 768px) {
     .performance-monitor {
