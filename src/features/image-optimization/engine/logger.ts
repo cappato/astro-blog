@@ -173,7 +173,7 @@ export class Logger implements ILogger {
    */
   public fileOperation(operation: 'read' | 'write' | 'delete', filePath: string, success: boolean): void {
     if (this.shouldLog('debug')) {
-      const status = success ? '✅' : '❌';
+      const status = success ? '' : '';
       const color = success ? CLI_CONFIG.COLORS.SUCCESS : CLI_CONFIG.COLORS.ERROR;
       console.log(`${color}${status} ${operation.toUpperCase()}: ${filePath}${CLI_CONFIG.COLORS.RESET}`);
     }

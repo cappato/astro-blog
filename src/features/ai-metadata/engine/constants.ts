@@ -159,7 +159,7 @@ export const FEATURE_METADATA = {
   name: 'ai-metadata',
   version: '1.0.0',
   description: 'AI-optimized metadata system with Schema.org support',
-  author: 'Augment Agent',
+  author: 'system developer',
   dependencies: ['astro', 'typescript'],
   exports: ['AIMetadata', 'AIMetadataManager', 'generateAIMetadataEndpoint']
 } as const;

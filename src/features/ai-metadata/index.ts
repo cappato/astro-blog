@@ -110,7 +110,7 @@ export const AI_METADATA_FEATURE = {
   name: 'ai-metadata',
   version: '1.0.0',
   description: 'AI-optimized metadata system with Schema.org support',
-  author: 'Augment Agent',
+  author: 'system developer',
   
   /** Main exports for easy access */
   exports: {

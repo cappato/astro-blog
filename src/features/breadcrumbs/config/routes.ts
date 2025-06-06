@@ -21,13 +21,13 @@ export interface RoutePattern {
  * Iconos para diferentes tipos de páginas
  */
 export const BREADCRUMB_ICONS = {
-  home: '🏠',
-  blog: '📝',
-  article: '📄',
-  pillars: '📚',
-  pillar: '📖',
-  tag: '🏷️',
-  category: '📂',
+  home: '',
+  blog: '',
+  article: '',
+  pillars: '',
+  pillar: '',
+  tag: '️',
+  category: '',
 } as const;
 
 /**

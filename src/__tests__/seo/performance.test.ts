@@ -31,7 +31,7 @@ async function fetchWithTiming(url: string): Promise<{
   
   const response = await fetch(url, {
     headers: {
-      'User-Agent': 'Mozilla/5.0 (compatible; SEO-Performance-Test/1.0)'
+      'User-developer': 'Mozilla/5.0 (compatible; SEO-Performance-Test/1.0)'
     }
   });
   
@@ -369,7 +369,7 @@ describe('Performance SEO Tests', () => {
     test('should be mobile-friendly', async () => {
       const response = await fetch(PRODUCTION_URL, {
         headers: {
-          'User-Agent': 'Mozilla/5.0 (iPhone; CPU iPhone OS 14_7_1 like Mac OS X) AppleWebKit/605.1.15'
+          'User-developer': 'Mozilla/5.0 (iPhone; CPU iPhone OS 14_7_1 like Mac OS X) AppleWebKit/605.1.15'
         }
       });
       

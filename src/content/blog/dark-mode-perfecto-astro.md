@@ -13,12 +13,12 @@ draft: false
 
 El **dark mode** se ha vuelto esencial, pero implementarlo **sin flash** y con **persistencia perfecta** es más complejo de lo que parece. Te muestro cómo crear un sistema de temas profesional.
 
-## 🎯 El Problema del Flash de Contenido
+##  El Problema del Flash de Contenido
 
 La mayoría de implementaciones de dark mode sufren del **temido flash**:
 
 ```javascript
-// ❌ Implementación típica con flash
+//  Implementación típica con flash
 useEffect(() => {
   const theme = localStorage.getItem('theme');
   if (theme === 'dark') {
@@ -28,13 +28,13 @@ useEffect(() => {
 ```
 
 **Problemas comunes:**
-- ❌ **Flash** de tema incorrecto al cargar
-- ❌ **Inconsistencia** entre servidor y cliente
-- ❌ **Pérdida** de preferencia del usuario
-- ❌ **Transiciones** bruscas o inexistentes
-- ❌ **Performance** impactada por re-renders
+-  **Flash** de tema incorrecto al cargar
+-  **Inconsistencia** entre servidor y cliente
+-  **Pérdida** de preferencia del usuario
+-  **Transiciones** bruscas o inexistentes
+-  **Performance** impactada por re-renders
 
-## 🚀 La Solución: SSR Script + CSS Variables
+##  La Solución: SSR Script + CSS Variables
 
 Mi sistema elimina **completamente** el flash usando un script SSR que se ejecuta **antes** del render:
 
@@ -71,7 +71,7 @@ export class ThemeManager {
 }
 ```
 
-## 🔧 Arquitectura Anti-Flicker
+##  Arquitectura Anti-Flicker
 
 ### **1. Script SSR: Ejecución Inmediata**
 
@@ -223,7 +223,7 @@ const sizeClasses = {
 </script>
 ```
 
-## 🎨 Hooks para Reactividad
+##  Hooks para Reactividad
 
 ### **Hook useTheme: API Simple**
 
@@ -326,32 +326,32 @@ describe('Dark Light Mode Feature', () => {
 });
 ```
 
-## 📊 Performance y Resultados
+##  Performance y Resultados
 
 ### **Métricas de Performance**
 
 ```bash
-✅ Flash Elimination: 100% (0ms flash)
-✅ Theme Switch Speed: <50ms
-✅ Bundle Size Impact: +2KB gzipped
-✅ Lighthouse Performance: No impact
-✅ Accessibility Score: 100/100
-✅ User Experience: Seamless
+ Flash Elimination: 100% (0ms flash)
+ Theme Switch Speed: <50ms
+ Bundle Size Impact: +2KB gzipped
+ Lighthouse Performance: No impact
+ Accessibility Score: 100/100
+ User Experience: Seamless
 ```
 
 ### **Compatibilidad**
 
 ```typescript
 // Soporte completo para:
-✅ Astro SSR/SSG
-✅ Todos los navegadores modernos
-✅ Safari (incluye iOS)
-✅ Chrome/Firefox/Edge
-✅ Modo incógnito
-✅ Usuarios sin JavaScript
+ Astro SSR/SSG
+ Todos los navegadores modernos
+ Safari (incluye iOS)
+ Chrome/Firefox/Edge
+ Modo incógnito
+ Usuarios sin JavaScript
 ```
 
-## 🔄 Integración en Layouts
+##  Integración en Layouts
 
 ### **Layout Principal**
 
@@ -387,16 +387,16 @@ import { ThemeToggle } from '../features/dark-light-mode/components';
 </html>
 ```
 
-## 💡 Conclusión
+##  Conclusión
 
 Un **dark mode perfecto** requiere:
 
-- ✅ **Script SSR** para eliminar flash
-- ✅ **CSS Variables** para transiciones suaves  
-- ✅ **Persistencia** en localStorage
-- ✅ **Reactividad** con hooks
-- ✅ **Testing** comprehensivo
-- ✅ **Accesibilidad** completa
+-  **Script SSR** para eliminar flash
+-  **CSS Variables** para transiciones suaves  
+-  **Persistencia** en localStorage
+-  **Reactividad** con hooks
+-  **Testing** comprehensivo
+-  **Accesibilidad** completa
 
 El resultado es una **experiencia de usuario impecable** que respeta las preferencias y funciona perfectamente en todos los escenarios.
 

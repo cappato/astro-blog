@@ -29,7 +29,7 @@ class SocialShareManager {
     this.bindMessageCopy();
     
     this.initialized = true;
-    console.log('📤 Social share manager initialized');
+    console.log(' Social share manager initialized');
   }
 
   private bindCopyButtons(): void {

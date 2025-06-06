@@ -10,17 +10,17 @@ imageAlt: "GitHub Actions y Wrangler - Configuración de CI/CD para deploy autom
 
 ¿Ya tienes **Wrangler configurado** y quieres automatizar tus deploys? En esta guía te enseño cómo configurar **GitHub Actions para deploy automático** con Wrangler, creando un pipeline CI/CD profesional.
 
-## 🎯 Lo que vas a lograr
+##  Lo que vas a lograr
 
 Al final de esta guía tendrás:
 
-- ✅ **GitHub Actions workflow** configurado para deploy automático
-- ✅ **API Token de Cloudflare** creado con permisos correctos
-- ✅ **Secrets de GitHub** configurados de forma segura
-- ✅ **Deploy automático** en cada push a main
-- ✅ **Pipeline CI/CD** funcionando profesionalmente
+-  **GitHub Actions workflow** configurado para deploy automático
+-  **API Token de Cloudflare** creado con permisos correctos
+-  **Secrets de GitHub** configurados de forma segura
+-  **Deploy automático** en cada push a main
+-  **Pipeline CI/CD** funcionando profesionalmente
 
-## 📋 Prerrequisitos
+##  Prerrequisitos
 
 Antes de empezar necesitas:
 
@@ -29,9 +29,9 @@ Antes de empezar necesitas:
 - Proyecto en Cloudflare Pages creado
 - Account ID de Cloudflare a mano
 
-💡 **Tip**: Si no completaste la configuración inicial, revisa primero la [guía de configuración de Wrangler](/blog/configurar-wrangler-cloudflare-pages-2024).
+ **Tip**: Si no completaste la configuración inicial, revisa primero la [guía de configuración de Wrangler](/blog/configurar-wrangler-cloudflare-pages-2024).
 
-## 🔑 Paso 1: Crear API Token en Cloudflare
+##  Paso 1: Crear API Token en Cloudflare
 
 ### 1.1 Acceder al Dashboard de API Tokens
 
@@ -59,14 +59,14 @@ Selecciona **"Custom token"** y configura:
 1. Click **"Continue to summary"**
 2. Revisa los permisos
 3. Click **"Create Token"**
-4. ⚠️ **CRÍTICO**: Copia el token INMEDIATAMENTE (solo se muestra una vez)
+4. ️ **CRÍTICO**: Copia el token INMEDIATAMENTE (solo se muestra una vez)
 
 ```
 Ejemplo de token:
 aBcDeFgHiJkLmNoPqRsTuVwXyZ1234567890abcdef
 ```
 
-## 🔒 Paso 2: Configurar Secrets en GitHub
+##  Paso 2: Configurar Secrets en GitHub
 
 ### 2.1 Navegar a Repository Secrets
 
@@ -89,8 +89,8 @@ aBcDeFgHiJkLmNoPqRsTuVwXyZ1234567890abcdef
 ### 2.4 Verificar Secrets Configurados
 
 Deberías ver ambos secrets listados:
-- ✅ `CLOUDFLARE_ACCOUNT_ID`
-- ✅ `CLOUDFLARE_API_TOKEN`
+-  `CLOUDFLARE_ACCOUNT_ID`
+-  `CLOUDFLARE_API_TOKEN`
 
 ## 🤖 Paso 3: Crear GitHub Actions Workflow
 
@@ -153,7 +153,7 @@ jobs:
 - Ajusta `directory: dist` si tu build output es diferente
 - Modifica `node-version` si usas una versión específica
 
-## 🚀 Paso 4: Primer Deploy Automático
+##  Paso 4: Primer Deploy Automático
 
 ### 4.1 Commit y Push del Workflow
 
@@ -162,12 +162,12 @@ jobs:
 git add .github/workflows/deploy.yml
 
 # Commit con mensaje descriptivo
-git commit -m "🚀 Add GitHub Actions workflow for automatic deployment
+git commit -m " Add GitHub Actions workflow for automatic deployment
 
-✅ Added deploy.yml workflow
-✅ Configured Cloudflare Pages deployment
-✅ Set up CI/CD pipeline with Node.js 20
-✅ Ready for automatic deployment on push to main"
+ Added deploy.yml workflow
+ Configured Cloudflare Pages deployment
+ Set up CI/CD pipeline with Node.js 20
+ Ready for automatic deployment on push to main"
 
 # Push para activar el workflow
 git push origin main
@@ -180,20 +180,20 @@ git push origin main
 3. Click en el workflow para ver detalles
 
 **Pasos que verás**:
-- ✅ **Checkout** - Descarga el código
-- ✅ **Setup Node.js** - Configura Node.js 20 con cache
-- ✅ **Install dependencies** - Ejecuta `npm ci`
-- ✅ **Build project** - Ejecuta `npm run build`
-- ✅ **Deploy to Cloudflare Pages** - Despliega a Cloudflare
+-  **Checkout** - Descarga el código
+-  **Setup Node.js** - Configura Node.js 20 con cache
+-  **Install dependencies** - Ejecuta `npm ci`
+-  **Build project** - Ejecuta `npm run build`
+-  **Deploy to Cloudflare Pages** - Despliega a Cloudflare
 
 ### 4.3 Verificar Deploy Exitoso
 
 **Indicadores de éxito**:
-- ✅ Workflow completado sin errores
-- ✅ Deploy URL mostrada en los logs
-- ✅ Sitio accesible en la URL de Cloudflare Pages
+-  Workflow completado sin errores
+-  Deploy URL mostrada en los logs
+-  Sitio accesible en la URL de Cloudflare Pages
 
-## 📊 Paso 5: Optimizar el Workflow
+##  Paso 5: Optimizar el Workflow
 
 ### 5.1 Agregar Scripts Optimizados
 
@@ -277,16 +277,16 @@ jobs:
         gitHubToken: ${{ secrets.GITHUB_TOKEN }}
 ```
 
-## 🔍 Verificación del Pipeline CI/CD
+##  Verificación del Pipeline CI/CD
 
 ### Checklist de CI/CD Completo
 
-- ✅ API Token creado con permisos correctos
-- ✅ Secrets configurados en GitHub
-- ✅ Workflow file creado y commiteado
-- ✅ Deploy automático funcionando
-- ✅ URL de producción accesible
-- ✅ Logs de deploy sin errores
+-  API Token creado con permisos correctos
+-  Secrets configurados en GitHub
+-  Workflow file creado y commiteado
+-  Deploy automático funcionando
+-  URL de producción accesible
+-  Logs de deploy sin errores
 
 ### Comandos para Verificar Localmente
 
@@ -301,7 +301,7 @@ ls -la dist/
 npx wrangler pages project list
 ```
 
-## 🎯 Workflow de Desarrollo Completo
+##  Workflow de Desarrollo Completo
 
 ### Para Desarrollo Diario
 
@@ -321,18 +321,18 @@ git push origin main  # ← Deploy automático se activa
 
 El workflow también se ejecuta en PRs para verificar que el build funciona, pero no despliega a producción.
 
-## 🚀 Próximos Pasos
+##  Próximos Pasos
 
 ¡Excelente! Ya tienes **deploy automático con GitHub Actions** funcionando. Ahora puedes:
 
-### 📚 **Siguiente en la Serie:**
+###  **Siguiente en la Serie:**
 - **[Troubleshooting Wrangler: Soluciones para WSL y Deploy Issues](/blog/troubleshooting-wrangler-wsl-deploy)** - Resuelve problemas comunes
 
-### 🏷️ **Explora más sobre CI/CD:**
+### ️ **Explora más sobre CI/CD:**
 - **[Ver todos los posts de GitHub Actions](/blog/tag/github-actions)** - Más workflows y automatizaciones
 - **[Posts sobre Automation & DevOps](/blog/pillar/automation-devops)** - Hub completo de automatización
 
-## 💡 Puntos Clave
+##  Puntos Clave
 
 1. **API Token**: Crea tokens específicos con permisos mínimos necesarios
 2. **Secrets**: Nunca commitees credenciales, usa GitHub Secrets

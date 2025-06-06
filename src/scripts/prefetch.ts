@@ -40,7 +40,7 @@ class PrefetchManager {
       this.initHoverPrefetch();
     }
 
-    console.log('🚀 Prefetch manager initialized');
+    console.log(' Prefetch manager initialized');
   }
 
   private initViewportPrefetch(): void {
@@ -175,11 +175,11 @@ class PrefetchManager {
       // Track success
       link.addEventListener('load', () => {
         this.prefetchedUrls.add(href);
-        console.log(`✅ Prefetched (${trigger}): ${href}`);
+        console.log(` Prefetched (${trigger}): ${href}`);
       });
 
       link.addEventListener('error', () => {
-        console.warn(`❌ Failed to prefetch: ${href}`);
+        console.warn(` Failed to prefetch: ${href}`);
       });
 
     } catch (error) {
@@ -228,7 +228,7 @@ function initPrefetch(): void {
   );
 
   if (isSlowConnection) {
-    console.log('🐌 Slow connection detected, disabling prefetch');
+    console.log(' Slow connection detected, disabling prefetch');
     return;
   }
 

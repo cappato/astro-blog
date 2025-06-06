@@ -19,7 +19,7 @@ class UIInteractionsManager {
     this.initAccessibilityFeatures();
     
     this.initialized = true;
-    console.log('🎛️ UI interactions manager initialized');
+    console.log('️ UI interactions manager initialized');
   }
 
   private initCollapsibleContent(): void {

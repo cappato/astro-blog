@@ -3,23 +3,23 @@ title: "Anatomía de un Sistema de Protocolos Automáticos"
 description: "Implementación técnica detallada del sistema multi-agente que aplica protocolos automáticamente sin sobrecarga cognitiva."
 date: "2024-11-28"
 author: "Matías Cappato"
-tags: ["AI", "Multi-Agent", "Automatización", "Protocolos", "TypeScript", "Arquitectura", "componentes"]
+tags: ["AI", "Multi-developer", "Automatización", "Protocolos", "TypeScript", "Arquitectura", "componentes"]
 postId: "anatomia-sistema-protocolos-automaticos"
 imageAlt: "Anatomía de un Sistema de Protocolos Automáticos - Guía completa"
 ---
 
 En el [post anterior](/blog/protocolos-automaticos-ia-arquitectura) vimos el problema y la visión. Ahora vamos a la implementación técnica completa del sistema que hace que funcione.
 
-## 🎯 Lo que vas a lograr
+##  Lo que vas a lograr
 
 Al final de esta guía tendrás:
 
-- ✅ **Sistema multi-agente funcionando** con coordinación automática
-- ✅ **Scripts de automatización** que aplican protocolos sin fallas
-- ✅ **Validación continua** de compliance en tiempo real
-- ✅ **Captura automática** de lecciones aprendidas
+-  **Sistema multi-agente funcionando** con coordinación automática
+-  **Scripts de automatización** que aplican protocolos sin fallas
+-  **Validación continua** de compliance en tiempo real
+-  **Captura automática** de lecciones aprendidas
 
-## 📋 Prerrequisitos
+##  Prerrequisitos
 
 Antes de empezar necesitas:
 
@@ -27,13 +27,13 @@ Antes de empezar necesitas:
 - Conocimiento básico de sistemas de archivos y git
 - Entender el [problema original](/blog/protocolos-automaticos-ia-arquitectura)
 
-## 🏗️ Arquitectura del Sistema
+## ️ Arquitectura del Sistema
 
 ### **Componentes Principales**
 
 ```
-docs/multi-agent/
-├── agent-assignments.md         # Responsabilidades por agente
+docs/multi-developer/
+├── developer-assignments.md         # Responsabilidades por agente
 ├── work-status.md              # Estado en tiempo real
 ├── conflict-log.md             # Conflictos + lecciones aprendidas
 ├── protocols/                  # Protocolos específicos
@@ -46,7 +46,7 @@ docs/multi-agent/
     └── conflict-resolution.md
 
 scripts/
-└── multi-agent-manager.js     # Motor de automatización
+└── multi-developer-manager.js     # Motor de automatización
 ```
 
 ### **Flujo de Automatización**
@@ -64,48 +64,48 @@ graph TD
     H --> C
 ```
 
-## 🔧 Implementación del Motor Principal
+##  Implementación del Motor Principal
 
-### **multi-agent-manager.js: El Cerebro del Sistema**
+### **multi-developer-manager.js: El Cerebro del Sistema**
 
 ```javascript
 class MultiAgentManager {
   async checkProtocolCompliance() {
-    console.log('📋 Checking protocol compliance...');
+    console.log(' Checking protocol compliance...');
 
     const activeAgents = this.parseActiveAgents();
     const violations = [];
 
-    for (const agent of activeAgents) {
+    for (const developer of activeAgents) {
       // APLICA REGLA: TypeScript Obligatorio
-      const jsFiles = agent.files.filter(file =>
+      const jsFiles = developer.files.filter(file =>
         file.endsWith('.js') && !file.includes('config')
       );
       if (jsFiles.length > 0) {
         violations.push(
-          `Agent ${agent.name}: Using JavaScript instead of TypeScript: ${jsFiles.join(', ')}`
+          `developer ${developer.name}: Using JavaScript instead of TypeScript: ${jsFiles.join(', ')}`
         );
       }
 
       // APLICA REGLA: Status Updates Reales
-      if (agent.lastUpdate === '[YYYY-MM-DD HH:MM]') {
+      if (developer.lastUpdate === '[YYYY-MM-DD HH:MM]') {
         violations.push(
-          `Agent ${agent.name}: Status not updated with real timestamp`
+          `developer ${developer.name}: Status not updated with real timestamp`
         );
       }
 
       // APLICA REGLA: File Ownership
-      const unauthorizedFiles = this.checkFileOwnership(agent);
+      const unauthorizedFiles = this.checkFileOwnership(developer);
       if (unauthorizedFiles.length > 0) {
         violations.push(
-          `Agent ${agent.name}: Working on unauthorized files: ${unauthorizedFiles.join(', ')}`
+          `developer ${developer.name}: Working on unauthorized files: ${unauthorizedFiles.join(', ')}`
         );
       }
     }
 
     // ALERTA INMEDIATA si hay violaciones
     if (violations.length > 0) {
-      console.log('⚠️ Protocol violations detected:');
+      console.log('️ Protocol violations detected:');
       violations.forEach(violation => console.log(`   - ${violation}`));
     }
 
@@ -133,13 +133,13 @@ async captureLesson(lessonData) {
                 conflictLog.slice(insertionPoint);
 
   await fs.writeFile(conflictLogPath, conflictLog);
-  console.log('✅ Lesson captured and integrated');
+  console.log(' Lesson captured and integrated');
 }
 ```
 
-## 🎯 Protocolos Específicos por Agente
+##  Protocolos Específicos por Agente
 
-### **Frontend Agent Protocols**
+### **Frontend developer Protocols**
 
 ```markdown
 # frontend-protocols.md
@@ -155,7 +155,7 @@ async captureLesson(lessonData) {
 - **Validación**: Scripts detectan patrones duplicados > 3 veces
 ```
 
-### **Content Agent Protocols**
+### **Content developer Protocols**
 
 ```markdown
 # content-protocols.md
@@ -171,35 +171,35 @@ async captureLesson(lessonData) {
 - **Validación**: Scripts cuentan links y sugieren relacionados
 ```
 
-## 🚀 Comandos de Automatización
+##  Comandos de Automatización
 
 ### **Validación Continua**
 
 ```bash
 # Valida setup completo + protocolos
-npm run multi-agent:validate
+npm run multi-developer:validate
 
 # Detecta conflictos entre agentes
-npm run multi-agent:check
+npm run multi-developer:check
 
 # Verifica compliance de protocolos
-npm run multi-agent:protocols
+npm run multi-developer:protocols
 
 # Genera reportes de coordinación
-npm run multi-agent:report
+npm run multi-developer:report
 ```
 
 ### **Sistema de Aprendizaje**
 
 ```bash
 # Captura nueva lección aprendida
-npm run multi-agent:learn
+npm run multi-developer:learn
 
 # Analiza patrones en lecciones
-npm run multi-agent:analyze
+npm run multi-developer:analyze
 ```
 
-## 🔍 Detección Automática de Conflictos
+##  Detección Automática de Conflictos
 
 ### **Algoritmo de Detección**
 
@@ -215,8 +215,8 @@ async checkConflicts() {
   // 3. Detectar conflictos de archivos
   const conflicts = [];
   modifiedFiles.forEach(file => {
-    const agentsWorkingOnFile = activeAgents.filter(agent =>
-      agent.files.includes(file)
+    const agentsWorkingOnFile = activeAgents.filter(developer =>
+      developer.files.includes(file)
     );
 
     if (agentsWorkingOnFile.length > 1) {
@@ -234,13 +234,13 @@ async checkConflicts() {
 ### **Alertas Inmediatas**
 
 ```bash
-$ npm run multi-agent:check
-⚠️ Potential conflicts detected:
-   - src/components/Button.astro: Frontend Agent vs Backend Agent
-   - src/utils/helpers.ts: Frontend Agent vs Content Agent
+$ npm run multi-developer:check
+️ Potential conflicts detected:
+   - src/components/Button.astro: Frontend developer vs Backend developer
+   - src/utils/helpers.ts: Frontend developer vs Content developer
 ```
 
-## 📊 Sistema de Métricas y Análisis
+##  Sistema de Métricas y Análisis
 
 ### **Análisis de Patrones Automático**
 
@@ -285,40 +285,40 @@ async analyzePatterns() {
 }
 ```
 
-## ✅ Validación del Sistema
+##  Validación del Sistema
 
 ### **Tests Automáticos**
 
 ```bash
 # El sistema se valida a sí mismo:
-npm run multi-agent:validate
-✅ docs/multi-agent/agent-assignments.md
-✅ docs/multi-agent/work-status.md
-✅ docs/multi-agent/conflict-log.md
-✅ docs/multi-agent/protocols/shared-protocols.md
-✅ Protocol compliance validated
-🎉 Multi-agent setup is valid!
+npm run multi-developer:validate
+ docs/multi-developer/developer-assignments.md
+ docs/multi-developer/work-status.md
+ docs/multi-developer/conflict-log.md
+ docs/multi-developer/protocols/shared-protocols.md
+ Protocol compliance validated
+ Multi-developer setup is valid!
 ```
 
 ### **Compliance en Tiempo Real**
 
 ```bash
-npm run multi-agent:protocols
-📋 Checking protocol compliance...
-✅ Agent Frontend Specialist: Basic compliance check passed
-✅ Agent Content Manager: Basic compliance check passed
-✅ All agents following protocols
+npm run multi-developer:protocols
+ Checking protocol compliance...
+ developer Frontend Specialist: Basic compliance check passed
+ developer Content Manager: Basic compliance check passed
+ All agents following protocols
 ```
 
-## 🎯 Próximos Pasos
+##  Próximos Pasos
 
 En el siguiente post veremos **"Auto-Merge Inteligente: UX sobre Control"** - cómo optimizar el workflow para 0 clicks y máxima fluidez.
 
 ### **Serie Completa:**
-1. ✅ [El Problema de los Protocolos que se Olvidan](/blog/protocolos-automaticos-ia-arquitectura)
-2. ✅ **Anatomía de un Sistema de Protocolos Automáticos** (este post)
-3. 🔄 Auto-Merge Inteligente: UX sobre Control (próximo)
-4. 🔄 Migración de Sistemas: Preservando la Visión
+1.  [El Problema de los Protocolos que se Olvidan](/blog/protocolos-automaticos-ia-arquitectura)
+2.  **Anatomía de un Sistema de Protocolos Automáticos** (este post)
+3.  Auto-Merge Inteligente: UX sobre Control (próximo)
+4.  Migración de Sistemas: Preservando la Visión
 
 ---
 

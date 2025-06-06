@@ -70,7 +70,7 @@ const DEFAULT_URLS = [
 async function discoverUrls() {
   try {
     const sitemapUrl = `${baseUrl}/sitemap.xml`;
-    console.log(`🗺️  Discovering URLs from ${sitemapUrl}`);
+    console.log(`️  Discovering URLs from ${sitemapUrl}`);
     
     const response = await fetch(sitemapUrl);
     const sitemap = await response.text();
@@ -83,11 +83,11 @@ async function discoverUrls() {
         .map(url => url.replace(baseUrl, ''))
         .filter(url => url.length > 0);
       
-      console.log(`✅ Found ${urls.length} URLs in sitemap`);
+      console.log(` Found ${urls.length} URLs in sitemap`);
       return urls;
     }
   } catch (error) {
-    console.warn('⚠️  Could not fetch sitemap, using default URLs');
+    console.warn('️  Could not fetch sitemap, using default URLs');
   }
   
   return DEFAULT_URLS;
@@ -157,11 +157,11 @@ async function checkUrl(url) {
   const fullUrl = url.startsWith('http') ? url : `${baseUrl}${url}`;
   
   try {
-    console.log(`📄 Checking: ${fullUrl}`);
+    console.log(` Checking: ${fullUrl}`);
     
     const response = await fetch(fullUrl);
     if (!response.ok) {
-      console.log(`❌ HTTP ${response.status}: ${response.statusText}`);
+      console.log(` HTTP ${response.status}: ${response.statusText}`);
       return { url: fullUrl, success: false, error: `HTTP ${response.status}` };
     }
     
@@ -171,11 +171,11 @@ async function checkUrl(url) {
     const jsonLdMatches = html.match(/<script[^>]*type="application\/ld\+json"[^>]*>(.*?)<\/script>/gs);
     
     if (!jsonLdMatches || jsonLdMatches.length === 0) {
-      console.log('❌ No JSON-LD schemas found');
+      console.log(' No JSON-LD schemas found');
       return { url: fullUrl, success: false, error: 'No schemas found' };
     }
     
-    console.log(`✅ Found ${jsonLdMatches.length} JSON-LD script(s)`);
+    console.log(` Found ${jsonLdMatches.length} JSON-LD script(s)`);
     
     const results = [];
     let hasErrors = false;
@@ -204,13 +204,13 @@ async function checkUrl(url) {
         // Report issues
         if (issues.length > 0) {
           hasErrors = true;
-          console.log(`   ⚠️  Issues found:`);
+          console.log(`   ️  Issues found:`);
           issues.forEach(issue => console.log(`      - ${issue}`));
         }
         
       } catch (e) {
         hasErrors = true;
-        console.log(`   ❌ Schema ${index + 1}: Invalid JSON - ${e.message}`);
+        console.log(`    Schema ${index + 1}: Invalid JSON - ${e.message}`);
         results.push({ type: 'Invalid', issues: [e.message] });
       }
     });
@@ -225,7 +225,7 @@ async function checkUrl(url) {
     };
     
   } catch (error) {
-    console.error(`❌ Error checking ${fullUrl}:`, error.message);
+    console.error(` Error checking ${fullUrl}:`, error.message);
     console.log('');
     return { url: fullUrl, success: false, error: error.message };
   }
@@ -235,9 +235,9 @@ async function checkUrl(url) {
  * Main validation function
  */
 async function validateSchemas() {
-  console.log('🔍 Schema Validation Tool');
-  console.log(`📍 Environment: ${isDev ? 'Development' : 'Production'}`);
-  console.log(`🌐 Base URL: ${baseUrl}\n`);
+  console.log(' Schema Validation Tool');
+  console.log(` Environment: ${isDev ? 'Development' : 'Production'}`);
+  console.log(` Base URL: ${baseUrl}\n`);
   
   let urlsToCheck;
   
@@ -249,7 +249,7 @@ async function validateSchemas() {
     urlsToCheck = DEFAULT_URLS;
   }
   
-  console.log(`📋 Checking ${urlsToCheck.length} URL(s):\n`);
+  console.log(` Checking ${urlsToCheck.length} URL(s):\n`);
   
   const results = [];
   
@@ -259,26 +259,26 @@ async function validateSchemas() {
   }
   
   // Summary
-  console.log('📊 Summary:');
+  console.log(' Summary:');
   const successful = results.filter(r => r.success).length;
   const failed = results.length - successful;
   
-  console.log(`✅ Successful: ${successful}`);
-  console.log(`❌ Failed: ${failed}`);
+  console.log(` Successful: ${successful}`);
+  console.log(` Failed: ${failed}`);
   
   if (failed > 0) {
-    console.log('\n❌ Failed URLs:');
+    console.log('\n Failed URLs:');
     results.filter(r => !r.success).forEach(r => {
       console.log(`   - ${r.url}: ${r.error || 'Unknown error'}`);
     });
     process.exit(1);
   } else {
-    console.log('\n🎉 All schemas are valid!');
+    console.log('\n All schemas are valid!');
   }
 }
 
 // Run validation
 validateSchemas().catch(error => {
-  console.error('💥 Validation failed:', error);
+  console.error(' Validation failed:', error);
   process.exit(1);
 });

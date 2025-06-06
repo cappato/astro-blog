@@ -91,7 +91,7 @@ const seoData = {
 
 // DEBUG: Verificar que la página se ejecuta
 if (import.meta.env.DEV) {
-  console.log('📄 PILLAR PAGE DEBUG:', { pathname: Astro.url.pathname, pillarId, pillarTitle: pillar.title });
+  console.log(' PILLAR PAGE DEBUG:', { pathname: Astro.url.pathname, pillarId, pillarTitle: pillar.title });
 }
 
 // Breadcrumb personalizado - Nombre específico del pilar
@@ -150,7 +150,7 @@ const customTitle = pillar.title;
     {totalPosts > 0 ? (
       <section>
         <h2 class="text-2xl font-bold mb-8">
-          📚 Artículos de {pillar.title}
+           Artículos de {pillar.title}
         </h2>
 
         <!-- Grid Unificado - 2 columnas desktop, 1 móvil -->

@@ -14,7 +14,7 @@ const REQUEST_TIMEOUT = 15000;
 async function fetchAndParse(url: string): Promise<JSDOM> {
   const response = await fetch(url, {
     headers: {
-      'User-Agent': 'Mozilla/5.0 (compatible; SEO-Test-Bot/1.0)'
+      'User-developer': 'Mozilla/5.0 (compatible; SEO-Test-Bot/1.0)'
     }
   });
   

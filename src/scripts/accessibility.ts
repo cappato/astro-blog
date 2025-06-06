@@ -51,7 +51,7 @@ class AccessibilityManager {
     this.enhanceFormAccessibility();
     this.setupReducedMotion();
 
-    console.log('♿ Accessibility manager initialized');
+    console.log(' Accessibility manager initialized');
   }
 
   private setupAriaLiveRegions(): void {

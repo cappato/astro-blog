@@ -145,7 +145,7 @@ export const FEATURE_METADATA = {
   name: 'image-optimization',
   version: '1.0.0',
   description: 'Complete image optimization system with CLI and component integration',
-  author: 'Augment Agent',
+  author: 'system developer',
   dependencies: ['sharp', 'fs-extra', 'yargs', 'astro'],
   exports: {
     components: ['OptimizedImage'],

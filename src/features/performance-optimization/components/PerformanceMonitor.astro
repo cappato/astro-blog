@@ -56,11 +56,11 @@ const {
             </div>
           </div>
           <div >
-            <small>💡 En desarrollo local algunas métricas pueden aparecer como "—" debido a la velocidad de localhost</small>
+            <small> En desarrollo local algunas métricas pueden aparecer como "—" debido a la velocidad de localhost</small>
           </div>
           <div >
-            <button id="refresh-metrics" >🔄 Refresh</button>
-            <button id="export-metrics" >📊 Export</button>
+            <button id="refresh-metrics" > Refresh</button>
+            <button id="export-metrics" > Export</button>
           </div>
         </div>
       </div>
@@ -86,9 +86,9 @@ const {
         }
 
         init() {
-          console.log('🚀 Performance Monitor initialized');
-          console.log('📊 PerformanceObserver support:', 'PerformanceObserver' in window);
-          console.log('📊 Navigation API support:', 'PerformanceNavigationTiming' in window);
+          console.log(' Performance Monitor initialized');
+          console.log(' PerformanceObserver support:', 'PerformanceObserver' in window);
+          console.log(' Navigation API support:', 'PerformanceNavigationTiming' in window);
 
           // Medir métricas básicas primero
           this.measureBasicMetrics();
@@ -130,7 +130,7 @@ const {
 
         observeLCP() {
           if (!('PerformanceObserver' in window)) {
-            console.warn('⚠️ PerformanceObserver not supported - LCP measurement disabled');
+            console.warn('️ PerformanceObserver not supported - LCP measurement disabled');
             return;
           }
 
@@ -143,15 +143,15 @@ const {
               this.updateUI('lcp', `${this.metrics.lcp}ms`);
               this.logMetric('LCP', this.metrics.lcp, 'ms');
 
-              console.log('🎯 LCP Element:', lastEntry.element);
-              console.log('🎯 LCP URL:', lastEntry.url);
+              console.log(' LCP Element:', lastEntry.element);
+              console.log(' LCP URL:', lastEntry.url);
             });
 
             observer.observe({ entryTypes: ['largest-contentful-paint'] });
             this.observers.push(observer);
-            console.log('✅ LCP Observer initialized');
+            console.log(' LCP Observer initialized');
           } catch (error) {
-            console.error('❌ Error initializing LCP observer:', error);
+            console.error(' Error initializing LCP observer:', error);
           }
         }
 
@@ -291,7 +291,7 @@ const {
 
         logMetric(name, value, unit = '') {
           if (this.options.logToConsole) {
-            console.log(`📊 ${name}: ${value}${unit}`);
+            console.log(` ${name}: ${value}${unit}`);
           }
         }
 
