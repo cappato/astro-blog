@@ -2,15 +2,18 @@ name: PR Automation
 
 on:
   pull_request:
-    types: [opened, edited, synchronize, ready_for_review]
+    types: [opened, edited, synchronize, ready_for_review, labeled]
   pull_request_review:
     types: [submitted]
   check_suite:
+    types: [completed]
+  check_run:
     types: [completed]
   status:
   workflow_run:
     workflows: ["Conventional Commits", "Automated Testing Suite"]
     types: [completed]
+  workflow_dispatch:
 
 permissions:
   contents: write
@@ -60,11 +63,12 @@ jobs:
     runs-on: ubuntu-latest
     if: |
       (github.event_name == 'check_suite' && github.event.check_suite.conclusion == 'success') ||
-      (github.event_name == 'pull_request' && github.event.action == 'ready_for_review') ||
-      (github.event_name == 'pull_request' && github.event.action == 'synchronize') ||
+      (github.event_name == 'check_run' && github.event.check_run.conclusion == 'success') ||
+      (github.event_name == 'pull_request' && (github.event.action == 'ready_for_review' || github.event.action == 'synchronize' || github.event.action == 'labeled')) ||
       (github.event_name == 'pull_request_review' && github.event.review.state == 'approved') ||
       (github.event_name == 'workflow_run' && github.event.workflow_run.conclusion == 'success') ||
-      (github.event_name == 'status')
+      (github.event_name == 'status') ||
+      (github.event_name == 'workflow_dispatch')
 
     steps:
     - name: Auto Merge PR
@@ -86,6 +90,16 @@ jobs:
 
             // Filter PRs that include this commit
             prs = prList.filter(pr => pr.head.sha === context.payload.check_suite.head_sha);
+          } else if (context.eventName === 'check_run') {
+            // For check_run events, find PRs by commit SHA
+            const { data: prList } = await github.rest.pulls.list({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              state: 'open'
+            });
+
+            // Filter PRs that include this commit
+            prs = prList.filter(pr => pr.head.sha === context.payload.check_run.head_sha);
           } else if (context.eventName === 'workflow_run') {
             // For workflow_run events, find PRs by commit SHA
             const { data: prList } = await github.rest.pulls.list({
