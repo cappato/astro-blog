@@ -3,7 +3,7 @@ title: "Deploy Automático con Wrangler y GitHub Actions: Serie Completa"
 description: "Serie completa para automatizar deploys con Wrangler y GitHub Actions. Desde configuración inicial hasta troubleshooting avanzado. Guía paso a paso para CI/CD profesional."
 date: "2024-12-19"
 author: "Matías Cappato"
-tags: ["wrangler", "github-actions", "deploy", "automation", "ci-cd", "cloudflare", "serie", "tutorial"]
+tags: ["wrangler", "github-actions", "deploy", "automation", "ci-cd", "cloudflare", "serie", "tutorial", "TypeScript", "Astro"]
 postId: "deploy-automatico-wrangler-github-actions"
 imageAlt: "Serie completa de Deploy Automático con Wrangler y GitHub Actions"
 ---

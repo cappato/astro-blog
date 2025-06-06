@@ -58,7 +58,15 @@
     "git:setup-protection": "node scripts/setup-branch-protection.js",
     "git:install-hooks": "node scripts/install-git-hooks.js",
     "git:demo": "node scripts/demo-workflow.js",
-    "git:demo-cleanup": "node scripts/demo-workflow.js --cleanup"
+    "git:demo-cleanup": "node scripts/demo-workflow.js --cleanup",
+    "multi-agent": "node scripts/multi-agent-manager.js",
+    "multi-agent:check": "node scripts/multi-agent-manager.js check",
+    "multi-agent:report": "node scripts/multi-agent-manager.js report",
+    "multi-agent:validate": "node scripts/multi-agent-manager.js validate",
+    "multi-agent:protocols": "node scripts/multi-agent-manager.js protocols",
+    "multi-agent:status": "node scripts/multi-agent-manager.js status",
+    "multi-agent:learn": "node scripts/multi-agent-manager.js learn",
+    "multi-agent:analyze": "node scripts/multi-agent-manager.js analyze"
   },
   "dependencies": {
     "@tailwindcss/typography": "^0.5.16",

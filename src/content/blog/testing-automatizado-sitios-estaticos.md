@@ -6,7 +6,7 @@ author: "Matías Cappato"
 image:
   url: "/images/blog/testing-cover.webp"
   alt: "Terminal mostrando resultados de tests automatizados con checkmarks verdes"
-tags: ["testing", "vitest", "performance", "seo-testing", "automation"]
+tags: ["testing", "vitest", "performance", "seo-testing", "automation", "TypeScript", "SEO"]
 draft: false
 ---
 
