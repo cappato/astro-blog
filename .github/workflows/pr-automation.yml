@@ -7,6 +7,9 @@ on:
     types: [submitted]
   check_suite:
     types: [completed]
+  workflow_run:
+    workflows: ["Conventional Commits", "Automated Testing Suite"]
+    types: [completed]
 
 permissions:
   contents: write
@@ -50,7 +53,8 @@ jobs:
       (github.event_name == 'check_suite' && github.event.check_suite.conclusion == 'success') ||
       (github.event_name == 'pull_request' && github.event.action == 'ready_for_review') ||
       (github.event_name == 'pull_request' && github.event.action == 'synchronize') ||
-      (github.event_name == 'pull_request_review' && github.event.review.state == 'approved')
+      (github.event_name == 'pull_request_review' && github.event.review.state == 'approved') ||
+      (github.event_name == 'workflow_run' && github.event.workflow_run.conclusion == 'success')
 
     steps:
     - name: Auto Merge PR
@@ -72,6 +76,16 @@ jobs:
 
             // Filter PRs that include this commit
             prs = prList.filter(pr => pr.head.sha === context.payload.check_suite.head_sha);
+          } else if (context.eventName === 'workflow_run') {
+            // For workflow_run events, find PRs by commit SHA
+            const { data: prList } = await github.rest.pulls.list({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              state: 'open'
+            });
+
+            // Filter PRs that include this commit
+            prs = prList.filter(pr => pr.head.sha === context.payload.workflow_run.head_sha);
           }
 
           console.log(`🔍 Found ${prs.length} PR(s) to check for auto-merge`);
@@ -122,7 +136,17 @@ jobs:
               console.log(`  - Will rely on check runs only`);
             }
 
-            if (allChecksPassed && allStatusesPassed && pr.mergeable !== false) {
+            // Check if ready to merge (allow null mergeable state, only block if explicitly false)
+            const checksReady = allChecksPassed && allStatusesPassed;
+            const notBlocked = pr.mergeable !== false; // Allow null (calculating) and true
+            const readyToMerge = checksReady && notBlocked;
+
+            console.log(`  - Checks ready: ${checksReady}`);
+            console.log(`  - Not blocked: ${notBlocked}`);
+            console.log(`  - Ready to merge: ${readyToMerge}`);
+            console.log(`  - Mergeable state: ${pr.mergeable} (null=calculating, true=ready, false=blocked)`);
+
+            if (readyToMerge) {
               try {
                 await github.rest.pulls.merge({
                   owner: context.repo.owner,
