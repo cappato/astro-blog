@@ -4,9 +4,10 @@ description: "Suite de testing completa para validar automáticamente SEO, perfo
 date: "2024-06-02"
 author: "Matías Cappato"
 image:
-  url: "/images/blog/testing-cover.webp"
-  alt: "Terminal mostrando resultados de tests automatizados con checkmarks verdes"
-tags: ["testing", "vitest", "performance", "seo-testing", "automation", "TypeScript", "SEO"]
+  url: "/images/blog/testing-automatizado.webp"
+  alt: "Testing Automatizado - SEO, Performance y Accesibilidad para sitios estáticos"
+tags: ["SEO", "TypeScript", "automatización", "ci-cd", "deploy", "performance", "seo-testing", "testing", "vitest"]
+postId: "testing-automatizado-sitios-estaticos"
 draft: false
 ---
 

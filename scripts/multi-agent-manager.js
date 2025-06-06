@@ -169,11 +169,11 @@ class MultiAgentManager {
 
   async updateAgentStatus(agentName, statusData) {
     console.log(`📊 Updating status for ${agentName}...`);
-    
+
     try {
       // Create status update from template
       const template = await fs.readFile(`${TEMPLATES_DIR}/status-update.md`, 'utf8');
-      
+
       const timestamp = new Date().toISOString().replace('T', ' ').substring(0, 16);
       let statusUpdate = template
         .replace(/\[AGENT_NAME\]/g, agentName)
@@ -181,13 +181,62 @@ class MultiAgentManager {
         .replace(/\[Brief description\]/g, statusData.description || 'Working on assigned tasks')
         .replace(/\[X\]% complete/g, `${statusData.progress || 0}% complete`)
         .replace(/\[Time estimate\]/g, statusData.eta || 'TBD');
-      
+
       console.log('📝 Status update prepared:');
       console.log(statusUpdate.substring(0, 200) + '...');
-      
+
       return statusUpdate;
     } catch (error) {
       console.error('❌ Error updating agent status:', error.message);
+    }
+  }
+
+  async reportPR(agentName, prData) {
+    console.log(`🔗 Reporting PR for ${agentName}...`);
+
+    try {
+      // Validate required PR data
+      if (!prData.link || !prData.title) {
+        console.error('❌ PR link and title are required');
+        return null;
+      }
+
+      // Load PR report template
+      const templatePath = `${TEMPLATES_DIR}/pr-report.md`;
+      const template = await fs.readFile(templatePath, 'utf-8');
+
+      // Generate timestamp
+      const timestamp = new Date().toISOString().replace('T', ' ').substring(0, 16);
+
+      // Replace template placeholders
+      let prReport = template
+        .replace(/\[AGENT_NAME\]/g, agentName)
+        .replace(/\[YYYY-MM-DD HH:MM\]/g, timestamp)
+        .replace(/\[PR_TITLE\]/g, prData.title)
+        .replace(/\[PR_LINK\]/g, prData.link);
+
+      // Replace change list if provided
+      if (prData.changes && prData.changes.length > 0) {
+        const changesList = prData.changes.map(change => `- ${change}`).join('\n');
+        prReport = prReport.replace(/- \[Cambio principal 1\]\n- \[Cambio principal 2\]\n- \[Cambio principal 3\]/, changesList);
+      }
+
+      console.log('🔗 PR report generated from template');
+      console.log('📋 Please complete the checklist items manually');
+
+      // Append to work status
+      const workStatusPath = `${DOCS_DIR}/work-status.md`;
+      const currentStatus = await fs.readFile(workStatusPath, 'utf-8');
+      const updatedStatus = currentStatus + '\n' + prReport + '\n';
+      await fs.writeFile(workStatusPath, updatedStatus);
+
+      console.log('✅ PR report added to work-status.md');
+      console.log('🎯 Next: Complete the checklist and update status as needed');
+
+      return prReport;
+    } catch (error) {
+      console.error('❌ Error reporting PR:', error.message);
+      return null;
     }
   }
 
@@ -622,6 +671,27 @@ async function main() {
       });
       break;
 
+    case 'pr':
+      const prAgentName = process.argv[3];
+      const prLink = process.argv[4];
+      const prTitle = process.argv[5];
+
+      if (!prAgentName || !prLink || !prTitle) {
+        console.error('❌ Usage: npm run multi-agent pr "Agent Name" "PR_Link" "PR Title"');
+        console.error('Example: npm run multi-agent pr "Ganzo" "https://github.com/user/repo/pull/123" "Fix SEO meta tags"');
+        process.exit(1);
+      }
+
+      await manager.reportPR(prAgentName, {
+        link: prLink,
+        title: prTitle,
+        changes: ['Changes via CLI - please update manually'],
+        testsStatus: '⚠️ Please verify tests',
+        docsStatus: '⚠️ Please verify docs',
+        impact: 'To be specified'
+      });
+      break;
+
     default:
       console.log('🤖 Multi-Agent Manager');
       console.log('');
@@ -633,6 +703,7 @@ async function main() {
       console.log('  learn     - Capture new lesson learned');
       console.log('  analyze   - Analyze lesson patterns');
       console.log('  status    - Update agent status');
+      console.log('  pr        - Report PR creation (follows protocol)');
       console.log('');
       console.log('Usage examples:');
       console.log('  node scripts/multi-agent-manager.js check');
@@ -642,6 +713,7 @@ async function main() {
       console.log('  node scripts/multi-agent-manager.js learn');
       console.log('  node scripts/multi-agent-manager.js analyze');
       console.log('  node scripts/multi-agent-manager.js status "Frontend Agent"');
+      console.log('  node scripts/multi-agent-manager.js pr "Ganzo" "https://github.com/user/repo/pull/123" "Fix SEO meta tags"');
   }
 }
 

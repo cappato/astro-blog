@@ -20,5 +20,5 @@ http://cappato.dev/* https://cappato.dev/:splat 301!
 /blog/null /blog 301
 /blog/page/ /blog 301
 
-# General 404s - redirect any non-existent URL to home
-/* / 301!
+# General 404s - use custom 404 page for intelligent redirects
+/* /404 404
