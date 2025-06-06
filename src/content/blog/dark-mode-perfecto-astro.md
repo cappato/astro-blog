@@ -4,9 +4,10 @@ description: "Implementa un sistema de dark mode sin flash, con persistencia en 
 date: "2024-06-02"
 author: "Matías Cappato"
 image:
-  url: "/images/blog/darkmode-cover.webp"
-  alt: "Interfaz de aplicación mostrando transición entre modo claro y oscuro"
-tags: ["dark-mode", "astro", "ssr", "css-variables", "theme-system", "TypeScript", "componentes"]
+  url: "/images/blog/dark-mode-perfecto-astro.webp"
+  alt: "Dark Mode Perfecto en Astro - Toggle sin flicker y persistencia de tema"
+tags: ["Astro", "TypeScript", "automation", "componentes", "css-variables", "dark-mode", "performance", "ssr", "theme-system"]
+postId: "dark-mode-perfecto-astro"
 draft: false
 ---
 
