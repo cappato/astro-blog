@@ -5,10 +5,15 @@
  * Sistema completo de automatización para creación y gestión de posts
  */
 
-const fs = require('fs');
-const path = require('path');
-const readline = require('readline');
-const { execSync } = require('child_process');
+import fs from 'fs';
+import path from 'path';
+import readline from 'readline';
+import { execSync } from 'child_process';
+import { fileURLToPath } from 'url';
+
+// Para importar el motor de similitud
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
 
 const rl = readline.createInterface({
   input: process.stdin,
@@ -42,8 +47,9 @@ async function main() {
 6. ✂️ Dividir post largo en serie
 7. 🧪 Ejecutar tests completos
 8. 📊 Reporte completo del blog
+9. 🎯 Preview de posts relacionados para post existente
 
-Elige (1-8): `);
+Elige (1-9): `);
   
   switch(action) {
     case '1':
@@ -854,11 +860,11 @@ function askQuestion(question) {
 }
 
 // Ejecutar si es llamado directamente
-if (require.main === module) {
+if (import.meta.url === `file://${process.argv[1]}`) {
   main().catch(console.error);
 }
 
-module.exports = {
+export {
   createNewPost,
   createFromExistingFile,
   analyzeExistingPost,

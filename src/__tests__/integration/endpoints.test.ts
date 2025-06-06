@@ -15,11 +15,8 @@ const REQUEST_TIMEOUT = 10000; // 10 seconds
 let devServer: ChildProcess | null = null;
 
 const parser = new DOMParser({
-  errorHandler: {
-    warning: () => {},
-    error: (msg) => { throw new Error(msg); },
-    fatalError: (msg) => { throw new Error(msg); }
-  }
+  onError: (msg) => { throw new Error(msg); },
+  onWarning: () => {}
 });
 
 // Helper function to make HTTP requests

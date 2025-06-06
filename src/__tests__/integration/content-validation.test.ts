@@ -14,11 +14,8 @@ const SITEMAP_FILE = join(DIST_DIR, 'sitemap.xml');
 const AI_METADATA_FILE = join(DIST_DIR, 'ai-metadata.json');
 
 const parser = new DOMParser({
-  errorHandler: {
-    warning: () => {},
-    error: (msg) => { throw new Error(msg); },
-    fatalError: (msg) => { throw new Error(msg); }
-  }
+  onError: (msg) => { throw new Error(msg); },
+  onWarning: () => {}
 });
 
 describe('Content Validation Tests', () => {
@@ -167,45 +164,46 @@ describe('Content Validation Tests', () => {
 
   describe('AI Metadata Content Quality', () => {
     test('should have required fields', () => {
-      expect(aiMetadata).toHaveProperty('site');
+      expect(aiMetadata).toHaveProperty('name');
       expect(aiMetadata).toHaveProperty('author');
-      expect(aiMetadata).toHaveProperty('content');
-      expect(aiMetadata).toHaveProperty('technical');
+      expect(aiMetadata).toHaveProperty('url');
+      expect(aiMetadata).toHaveProperty('technicalInfo');
     });
 
     test('should have valid site information', () => {
-      expect(aiMetadata.site).toHaveProperty('name');
-      expect(aiMetadata.site).toHaveProperty('url');
-      expect(aiMetadata.site).toHaveProperty('description');
-      
-      expect(aiMetadata.site.url).toBe('https://cappato.dev');
-      expect(aiMetadata.site.name).toBeTruthy();
-      expect(aiMetadata.site.description).toBeTruthy();
+      expect(aiMetadata).toHaveProperty('name');
+      expect(aiMetadata).toHaveProperty('url');
+      expect(aiMetadata).toHaveProperty('description');
+
+      expect(aiMetadata.url).toBe('https://cappato.dev');
+      expect(aiMetadata.name).toBeTruthy();
+      expect(aiMetadata.description).toBeTruthy();
     });
 
     test('should have author information', () => {
       expect(aiMetadata.author).toHaveProperty('name');
-      expect(aiMetadata.author).toHaveProperty('role');
-      
+      expect(aiMetadata.author).toHaveProperty('@type');
+
       expect(aiMetadata.author.name).toBeTruthy();
-      expect(aiMetadata.author.role).toBeTruthy();
+      expect(aiMetadata.author['@type']).toBe('Person');
     });
 
     test('should have technical stack information', () => {
-      expect(aiMetadata.technical).toHaveProperty('framework');
-      expect(aiMetadata.technical).toHaveProperty('languages');
-      expect(aiMetadata.technical).toHaveProperty('tools');
-      
-      expect(Array.isArray(aiMetadata.technical.languages)).toBe(true);
-      expect(Array.isArray(aiMetadata.technical.tools)).toBe(true);
+      expect(aiMetadata.technicalInfo).toHaveProperty('framework');
+      expect(aiMetadata.technicalInfo).toHaveProperty('language');
+      expect(aiMetadata.technicalInfo).toHaveProperty('features');
+
+      expect(aiMetadata.technicalInfo.framework).toBeTruthy();
+      expect(aiMetadata.technicalInfo.language).toBeTruthy();
+      expect(Array.isArray(aiMetadata.technicalInfo.features)).toBe(true);
     });
 
     test('should have content structure', () => {
-      expect(aiMetadata.content).toHaveProperty('sections');
-      expect(aiMetadata.content).toHaveProperty('blog');
-      
-      expect(Array.isArray(aiMetadata.content.sections)).toBe(true);
-      expect(aiMetadata.content.blog).toHaveProperty('enabled');
+      expect(aiMetadata).toHaveProperty('aiInstructions');
+      expect(aiMetadata.aiInstructions).toHaveProperty('primaryTopics');
+
+      expect(Array.isArray(aiMetadata.aiInstructions.primaryTopics)).toBe(true);
+      expect(aiMetadata.aiInstructions.primaryTopics.length).toBeGreaterThan(0);
     });
   });
 
@@ -230,9 +228,9 @@ describe('Content Validation Tests', () => {
     test('site information should be consistent', () => {
       const rssTitle = rssDoc.getElementsByTagName('title')[0]?.textContent;
       const rssLink = rssDoc.getElementsByTagName('link')[0]?.textContent;
-      
-      expect(aiMetadata.site.url).toBe(rssLink);
-      expect(aiMetadata.site.name).toContain('Matías Cappato');
+
+      expect(aiMetadata.url).toBe(rssLink);
+      expect(aiMetadata.name).toContain('Matías Cappato');
     });
   });
 });

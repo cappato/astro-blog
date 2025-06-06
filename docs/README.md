@@ -43,6 +43,9 @@ src/features/feature-name/
 - **[Navigation](./navigation.md)** - Site navigation system
 - **[Favicon](./favicon.md)** - Favicon system documentation
 
+### Multi-Agent Coordination
+- **[Multi-Agent Coordination Framework](./MULTI-AGENT-COORDINATION.md)** - Complete system for managing multiple AI agents working on the same project
+
 ### Development Tools
 - **[PRT](./prt/)** - Project development tools and utilities
 

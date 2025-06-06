@@ -1,0 +1,43 @@
+{
+  "timestamp": "2025-06-05T23:40:37.565Z",
+  "totalLessons": 42,
+  "patterns": [
+    {
+      "type": "repeated_rule_type",
+      "description": "Rule type \"aprendizaje automatico\" appears 2 times",
+      "significance": "medium"
+    },
+    {
+      "type": "repeated_rule_type",
+      "description": "Rule type \"session_2025-01-02_protocolo_compliance_estricto\" appears 3 times",
+      "significance": "high"
+    },
+    {
+      "type": "theme_frequency",
+      "description": "typescript theme appears in 1 lessons",
+      "significance": "low"
+    },
+    {
+      "type": "theme_frequency",
+      "description": "communication theme appears in 2 lessons",
+      "significance": "low"
+    },
+    {
+      "type": "theme_frequency",
+      "description": "testing theme appears in 3 lessons",
+      "significance": "high"
+    }
+  ],
+  "recommendations": [
+    {
+      "type": "process_improvement",
+      "description": "Consider creating automated validation for Rule type \"session_2025-01-02_protocolo_compliance_estricto\" appears 3 times",
+      "priority": "high"
+    },
+    {
+      "type": "training_focus",
+      "description": "Focus on improving testing practices",
+      "priority": "medium"
+    }
+  ]
+}
