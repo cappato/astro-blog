@@ -4,6 +4,15 @@ This directory contains general utility scripts for the project.
 
 ## Available Scripts
 
+### Git Workflow Automation 🆕
+**NEW**: Automated git workflow management for Carlos (Carlitos):
+- Create feature branches automatically
+- Conventional commit messages
+- Auto-push and PR creation
+- Branch cleanup and management
+
+- **`git-workflow.js`** - Complete git automation system
+
 ### PageSpeed Analyzer
 Performance analysis tool for the website.
 

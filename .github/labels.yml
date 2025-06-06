@@ -1,0 +1,133 @@
+# GitHub Labels Configuration
+# Used by Carlos (Carlitos) - PR Automation System
+
+# Type Labels
+- name: "type:feature"
+  color: "0e8a16"
+  description: "New feature or enhancement"
+
+- name: "type:bugfix"
+  color: "d73a49"
+  description: "Bug fix"
+
+- name: "type:documentation"
+  color: "0075ca"
+  description: "Documentation changes"
+
+- name: "type:style"
+  color: "f9d0c4"
+  description: "Code style changes (formatting, etc.)"
+
+- name: "type:refactor"
+  color: "fbca04"
+  description: "Code refactoring"
+
+- name: "type:test"
+  color: "c2e0c6"
+  description: "Test changes"
+
+- name: "type:chore"
+  color: "fef2c0"
+  description: "Maintenance and chores"
+
+# Priority Labels
+- name: "priority:critical"
+  color: "b60205"
+  description: "Critical priority - immediate attention required"
+
+- name: "priority:high"
+  color: "d93f0b"
+  description: "High priority"
+
+- name: "priority:medium"
+  color: "fbca04"
+  description: "Medium priority"
+
+- name: "priority:low"
+  color: "0e8a16"
+  description: "Low priority"
+
+# Status Labels
+- name: "status:review-needed"
+  color: "006b75"
+  description: "Needs review"
+
+- name: "status:changes-requested"
+  color: "d93f0b"
+  description: "Changes requested by reviewer"
+
+- name: "status:approved"
+  color: "0e8a16"
+  description: "Approved by reviewer"
+
+- name: "status:blocked"
+  color: "b60205"
+  description: "Blocked by external dependency"
+
+- name: "status:work-in-progress"
+  color: "fbca04"
+  description: "Work in progress"
+
+# Size Labels
+- name: "size:small"
+  color: "c2e0c6"
+  description: "Small change (1-5 files)"
+
+- name: "size:medium"
+  color: "fbca04"
+  description: "Medium change (6-15 files)"
+
+- name: "size:large"
+  color: "d93f0b"
+  description: "Large change (16+ files)"
+
+# Special Labels
+- name: "auto-merge"
+  color: "0e8a16"
+  description: "Automatically merge when conditions are met"
+
+- name: "breaking-change"
+  color: "b60205"
+  description: "Contains breaking changes"
+
+- name: "needs-testing"
+  color: "fbca04"
+  description: "Needs additional testing"
+
+- name: "good-first-issue"
+  color: "7057ff"
+  description: "Good for newcomers"
+
+- name: "help-wanted"
+  color: "008672"
+  description: "Extra attention is needed"
+
+# Component Labels
+- name: "component:ui"
+  color: "e99695"
+  description: "UI/UX related changes"
+
+- name: "component:api"
+  color: "f9d0c4"
+  description: "API related changes"
+
+- name: "component:build"
+  color: "c5def5"
+  description: "Build system changes"
+
+- name: "component:ci"
+  color: "0052cc"
+  description: "CI/CD related changes"
+
+- name: "component:docs"
+  color: "0075ca"
+  description: "Documentation changes"
+
+# Carlos (Carlitos) Special Labels
+- name: "carlos:automated"
+  color: "5319e7"
+  description: "Created/managed by Carlos automation"
+
+- name: "carlos:workflow"
+  color: "7057ff"
+  description: "Git workflow automation"
