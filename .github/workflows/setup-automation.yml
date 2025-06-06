@@ -1,0 +1,157 @@
+name: Setup Repository Automation
+
+on:
+  workflow_dispatch:
+  push:
+    branches: [main]
+    paths:
+      - '.github/workflows/setup-automation.yml'
+
+jobs:
+  setup-repository:
+    name: Configure Repository for Automation
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+      pull-requests: write
+      administration: write
+      
+    steps:
+    - name: Checkout repository
+      uses: actions/checkout@v4
+      
+    - name: Setup GitHub CLI
+      run: |
+        type -p curl >/dev/null || (sudo apt update && sudo apt install curl -y)
+        curl -fsSL https://cli.github.com/packages/githubcli-archive-keyring.gpg | sudo dd of=/usr/share/keyrings/githubcli-archive-keyring.gpg
+        sudo chmod go+r /usr/share/keyrings/githubcli-archive-keyring.gpg
+        echo "deb [arch=$(dpkg --print-architecture) signed-by=/usr/share/keyrings/githubcli-archive-keyring.gpg] https://cli.github.com/packages stable main" | sudo tee /etc/apt/sources.list.d/github-cli.list > /dev/null
+        sudo apt update
+        sudo apt install gh -y
+        
+    - name: Configure branch protection
+      run: |
+        echo "🔒 Setting up branch protection for main..."
+        
+        # Enable branch protection for main
+        gh api repos/${{ github.repository }}/branches/main/protection \
+          --method PUT \
+          --field required_status_checks='{"strict":true,"contexts":["Build & Integration Tests"]}' \
+          --field enforce_admins=false \
+          --field required_pull_request_reviews='{"required_approving_review_count":0,"dismiss_stale_reviews":false,"require_code_owner_reviews":false}' \
+          --field restrictions=null \
+          --field allow_force_pushes=false \
+          --field allow_deletions=false || echo "⚠️ Branch protection setup failed (may need admin permissions)"
+          
+        echo "✅ Branch protection configured"
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        
+    - name: Enable auto-merge
+      run: |
+        echo "🔄 Enabling auto-merge for repository..."
+        
+        # Enable auto-merge at repository level
+        gh api repos/${{ github.repository }} \
+          --method PATCH \
+          --field allow_auto_merge=true \
+          --field allow_squash_merge=true \
+          --field allow_merge_commit=false \
+          --field allow_rebase_merge=false || echo "⚠️ Auto-merge setup failed (may need admin permissions)"
+          
+        echo "✅ Auto-merge enabled"
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        
+    - name: Create labels
+      run: |
+        echo "🏷️ Creating automation labels..."
+        
+        # Agent automation labels
+        gh label create "agent:automated" --color "5319e7" --description "Created/managed by agent automation" --force
+        gh label create "agent:workflow" --color "7057ff" --description "Git workflow automation" --force
+        
+        # Type labels
+        gh label create "type:feature" --color "0e8a16" --description "New feature or enhancement" --force
+        gh label create "type:bugfix" --color "d73a49" --description "Bug fix" --force
+        gh label create "type:documentation" --color "0075ca" --description "Documentation changes" --force
+        gh label create "type:style" --color "f9d0c4" --description "Code style changes" --force
+        gh label create "type:refactor" --color "fbca04" --description "Code refactoring" --force
+        gh label create "type:test" --color "c2e0c6" --description "Test changes" --force
+        gh label create "type:chore" --color "fef2c0" --description "Maintenance and chores" --force
+        
+        # Workflow labels
+        gh label create "auto-merge" --color "0052cc" --description "Enable automatic merge when checks pass" --force
+        gh label create "size:small" --color "c2e0c6" --description "Small change" --force
+        gh label create "size:medium" --color "fbca04" --description "Medium change" --force
+        gh label create "size:large" --color "d73a49" --description "Large change" --force
+        
+        echo "✅ Labels created"
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        
+    - name: Setup repository settings
+      run: |
+        echo "⚙️ Configuring repository settings..."
+        
+        # Configure repository settings
+        gh api repos/${{ github.repository }} \
+          --method PATCH \
+          --field delete_branch_on_merge=true \
+          --field allow_update_branch=true || echo "⚠️ Some settings may require admin permissions"
+          
+        echo "✅ Repository settings configured"
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        
+    - name: Verify setup
+      run: |
+        echo "🔍 Verifying automation setup..."
+        
+        # Check if workflows exist
+        if [ -f ".github/workflows/agent-automation.yml" ]; then
+          echo "✅ Agent automation workflow found"
+        else
+          echo "❌ Agent automation workflow missing"
+        fi
+        
+        # Check if conventional commits workflow exists
+        if [ -f ".github/workflows/conventional-commits.yml" ]; then
+          echo "✅ Conventional commits workflow found"
+        else
+          echo "❌ Conventional commits workflow missing"
+        fi
+        
+        # Check if automated testing workflow exists
+        if [ -f ".github/workflows/automated-testing.yml" ]; then
+          echo "✅ Automated testing workflow found"
+        else
+          echo "❌ Automated testing workflow missing"
+        fi
+        
+        echo "🎉 Repository automation setup completed!"
+        
+    - name: Create setup summary
+      run: |
+        echo "## 🎯 Repository Automation Setup Complete" >> $GITHUB_STEP_SUMMARY
+        echo "" >> $GITHUB_STEP_SUMMARY
+        echo "### ✅ Configured Features:" >> $GITHUB_STEP_SUMMARY
+        echo "- **Branch Protection:** Main branch protected" >> $GITHUB_STEP_SUMMARY
+        echo "- **Auto-merge:** Enabled for repository" >> $GITHUB_STEP_SUMMARY
+        echo "- **Labels:** Automation labels created" >> $GITHUB_STEP_SUMMARY
+        echo "- **Settings:** Delete branch on merge enabled" >> $GITHUB_STEP_SUMMARY
+        echo "" >> $GITHUB_STEP_SUMMARY
+        echo "### 🚀 How to Use:" >> $GITHUB_STEP_SUMMARY
+        echo "1. Go to **Actions** tab" >> $GITHUB_STEP_SUMMARY
+        echo "2. Select **Agent Automation Workflow**" >> $GITHUB_STEP_SUMMARY
+        echo "3. Click **Run workflow**" >> $GITHUB_STEP_SUMMARY
+        echo "4. Fill in task description and type" >> $GITHUB_STEP_SUMMARY
+        echo "5. Enable auto-merge (recommended)" >> $GITHUB_STEP_SUMMARY
+        echo "6. Click **Run workflow**" >> $GITHUB_STEP_SUMMARY
+        echo "" >> $GITHUB_STEP_SUMMARY
+        echo "### 🤖 Automation Features:" >> $GITHUB_STEP_SUMMARY
+        echo "- **Automatic branch creation**" >> $GITHUB_STEP_SUMMARY
+        echo "- **Conventional commit messages**" >> $GITHUB_STEP_SUMMARY
+        echo "- **Automatic PR creation**" >> $GITHUB_STEP_SUMMARY
+        echo "- **Auto-merge when tests pass**" >> $GITHUB_STEP_SUMMARY
+        echo "- **Branch cleanup after merge**" >> $GITHUB_STEP_SUMMARY

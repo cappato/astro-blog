@@ -1,20 +1,17 @@
 # Scripts Directory
 
-This directory contains general utility scripts for the project.
+This directory contains utility scripts for the project.
 
 ## Available Scripts
 
-### Git Workflow Automation 🆕
-**NEW**: Automated git workflow management for all Augment Agents:
-- Create feature branches automatically
-- Conventional commit messages
-- Auto-push and PR creation
-- Branch cleanup and management
-- **FULLY AUTOMATED** - No user interaction required
+### ⚠️ Git Workflow Automation - MIGRATED TO GITHUB ACTIONS
+**All git workflow automation has been moved to GitHub Actions for better reliability:**
+- **Location**: `.github/workflows/agent-automation.yml`
+- **Trigger**: Manual via GitHub Actions UI
+- **Features**: Complete automated workflow from commit to merge
+- **Benefits**: Professional CI/CD integration, no console operations needed
 
-- **`git-workflow.js`** - Complete git automation system
-- **`agent-create-pr.js`** - Automatic PR creation
-- **`setup-repository.js`** - Repository configuration
+**To use automation**: Go to Actions tab → Agent Automation Workflow → Run workflow
 
 ### PageSpeed Analyzer
 Performance analysis tool for the website.

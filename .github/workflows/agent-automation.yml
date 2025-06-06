@@ -1,0 +1,160 @@
+name: Agent Automation Workflow
+
+on:
+  workflow_dispatch:
+    inputs:
+      task_description:
+        description: 'Description of the task completed'
+        required: true
+        type: string
+      task_type:
+        description: 'Type of task'
+        required: true
+        type: choice
+        options:
+          - feat
+          - fix
+          - docs
+          - style
+          - refactor
+          - test
+          - chore
+      auto_merge:
+        description: 'Enable auto-merge'
+        required: false
+        type: boolean
+        default: true
+
+jobs:
+  agent-workflow:
+    name: Complete Agent Workflow
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+      pull-requests: write
+      checks: write
+      
+    steps:
+    - name: Checkout repository
+      uses: actions/checkout@v4
+      with:
+        fetch-depth: 0
+        token: ${{ secrets.GITHUB_TOKEN }}
+        
+    - name: Setup Git identity
+      run: |
+        git config --global user.name "Augment Agent"
+        git config --global user.email "agent@augment-code.dev"
+        
+    - name: Create feature branch
+      id: branch
+      run: |
+        BRANCH_NAME="${{ inputs.task_type }}/$(echo '${{ inputs.task_description }}' | tr '[:upper:]' '[:lower:]' | sed 's/[^a-z0-9]/-/g' | sed 's/--*/-/g' | sed 's/^-\|-$//g')-$(date +%s)"
+        echo "branch_name=$BRANCH_NAME" >> $GITHUB_OUTPUT
+        git checkout -b "$BRANCH_NAME"
+        echo "✅ Created branch: $BRANCH_NAME"
+        
+    - name: Commit changes
+      run: |
+        git add .
+        if git diff --staged --quiet; then
+          echo "No changes to commit"
+          exit 0
+        fi
+        
+        COMMIT_MSG="${{ inputs.task_type }}: ${{ inputs.task_description }}"
+        git commit -m "$COMMIT_MSG"
+        echo "✅ Changes committed: $COMMIT_MSG"
+        
+    - name: Push branch
+      run: |
+        git push -u origin "${{ steps.branch.outputs.branch_name }}"
+        echo "✅ Branch pushed to remote"
+        
+    - name: Create Pull Request
+      id: pr
+      uses: peter-evans/create-pull-request@v5
+      with:
+        token: ${{ secrets.GITHUB_TOKEN }}
+        branch: ${{ steps.branch.outputs.branch_name }}
+        title: "${{ inputs.task_type }}: ${{ inputs.task_description }}"
+        body: |
+          ## 🤖 Automated PR by Augment Agent
+          
+          **Type:** `${{ inputs.task_type }}`
+          **Branch:** `${{ steps.branch.outputs.branch_name }}`
+          **Base:** `main`
+          
+          ### 📋 Changes:
+          ${{ inputs.task_description }}
+          
+          ### 🧪 Testing:
+          - [x] Automated tests will run
+          - [x] CI/CD pipeline will validate
+          - [x] Quality checks included
+          
+          ### 🔄 Automation:
+          - [x] Created automatically by Augment Agent
+          - [x] Will auto-merge when tests pass
+          - [x] Branch will be deleted after merge
+          
+          ---
+          
+          **🤖 This PR was created automatically by Augment Agent**
+          **⚡ Auto-merge enabled when all checks pass**
+        labels: |
+          agent:automated
+          type:${{ inputs.task_type }}
+          auto-merge
+        draft: false
+        
+    - name: Enable Auto-merge
+      if: inputs.auto_merge == true && steps.pr.outputs.pull-request-number
+      run: |
+        gh pr merge ${{ steps.pr.outputs.pull-request-number }} --auto --squash
+        echo "✅ Auto-merge enabled for PR #${{ steps.pr.outputs.pull-request-number }}"
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        
+    - name: Wait for merge completion
+      if: inputs.auto_merge == true && steps.pr.outputs.pull-request-number
+      run: |
+        echo "⏳ Waiting for PR to be merged..."
+        PR_NUMBER=${{ steps.pr.outputs.pull-request-number }}
+        
+        for i in {1..30}; do
+          STATUS=$(gh pr view $PR_NUMBER --json state --jq '.state')
+          if [ "$STATUS" = "MERGED" ]; then
+            echo "✅ PR #$PR_NUMBER has been merged successfully!"
+            echo "🔗 PR URL: ${{ steps.pr.outputs.pull-request-url }}"
+            exit 0
+          fi
+          echo "Status: $STATUS - Waiting... ($i/30)"
+          sleep 10
+        done
+        
+        echo "⚠️ PR merge is taking longer than expected"
+        echo "🔗 Check PR status: ${{ steps.pr.outputs.pull-request-url }}"
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        
+    - name: Cleanup on failure
+      if: failure()
+      run: |
+        echo "❌ Workflow failed, cleaning up..."
+        git checkout main
+        git branch -D "${{ steps.branch.outputs.branch_name }}" || true
+        git push origin --delete "${{ steps.branch.outputs.branch_name }}" || true
+        
+    - name: Summary
+      if: always()
+      run: |
+        echo "## 🎯 Workflow Summary" >> $GITHUB_STEP_SUMMARY
+        echo "- **Task:** ${{ inputs.task_description }}" >> $GITHUB_STEP_SUMMARY
+        echo "- **Type:** ${{ inputs.task_type }}" >> $GITHUB_STEP_SUMMARY
+        echo "- **Branch:** ${{ steps.branch.outputs.branch_name }}" >> $GITHUB_STEP_SUMMARY
+        if [ "${{ steps.pr.outputs.pull-request-number }}" ]; then
+          echo "- **PR:** #${{ steps.pr.outputs.pull-request-number }}" >> $GITHUB_STEP_SUMMARY
+          echo "- **URL:** ${{ steps.pr.outputs.pull-request-url }}" >> $GITHUB_STEP_SUMMARY
+        fi
+        echo "- **Auto-merge:** ${{ inputs.auto_merge }}" >> $GITHUB_STEP_SUMMARY
