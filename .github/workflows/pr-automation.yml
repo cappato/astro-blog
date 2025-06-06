@@ -61,14 +61,15 @@ jobs:
   auto-merge:
     name: Auto Merge
     runs-on: ubuntu-latest
+    # Simplified condition - let the script logic handle the filtering
     if: |
-      (github.event_name == 'check_suite' && github.event.check_suite.conclusion == 'success') ||
-      (github.event_name == 'check_run' && github.event.check_run.conclusion == 'success') ||
-      (github.event_name == 'pull_request' && (github.event.action == 'ready_for_review' || github.event.action == 'synchronize' || github.event.action == 'labeled')) ||
-      (github.event_name == 'pull_request_review' && github.event.review.state == 'approved') ||
-      (github.event_name == 'workflow_run' && github.event.workflow_run.conclusion == 'success') ||
-      (github.event_name == 'status') ||
-      (github.event_name == 'workflow_dispatch')
+      github.event_name == 'check_suite' ||
+      github.event_name == 'check_run' ||
+      github.event_name == 'pull_request' ||
+      github.event_name == 'pull_request_review' ||
+      github.event_name == 'workflow_run' ||
+      github.event_name == 'status' ||
+      github.event_name == 'workflow_dispatch'
 
     steps:
     - name: Auto Merge PR
