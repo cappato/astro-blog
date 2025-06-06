@@ -80,7 +80,7 @@ class SimpleMultiAgent {
 ```typescript
 async loadBlogContext(): Promise<BlogContext> {
   try {
-    console.log('🎯 Detectada intención de crear post - Cargando contexto...\n');
+    console.log('Detectada intención de crear post - Cargando contexto...\n');
 
     const context = {
       pillars: await this.getCurrentPillars(),
@@ -181,14 +181,14 @@ async getExistingTags(): Promise<TagCount[]> {
 
 ```typescript
 displayBlogContext(context: BlogContext): void {
-  console.log('📋 Contexto del blog cargado:');
-  console.log(`✅ ${context.pillars.length} pilares existentes: ${context.pillars.join(', ')}`);
-  console.log(`✅ ${context.tags.length} tags más usados disponibles para reutilizar`);
-  console.log(`✅ ${context.recentPosts.length} posts recientes analizados para evitar duplicados`);
-  console.log(`✅ ${context.rules}`);
-  console.log(`✅ Templates SEO y workflow de creación listos\n`);
+  console.log('Contexto del blog cargado:');
+  console.log(`${context.pillars.length} pilares existentes: ${context.pillars.join(', ')}`);
+  console.log(`${context.tags.length} tags más usados disponibles para reutilizar`);
+  console.log(`${context.recentPosts.length} posts recientes analizados para evitar duplicados`);
+  console.log(`${context.rules}`);
+  console.log(`Templates SEO y workflow de creación listos\n`);
 
-  console.log('🎯 ¿Sobre qué tema específico quieres crear el post?');
+  console.log('¿Sobre qué tema específico quieres crear el post?');
   console.log('Voy a evaluar automáticamente qué pilar encaja mejor y sugerir tags relevantes.\n');
 }
 ```
@@ -217,7 +217,7 @@ switch (command) {
     break;
   default:
     console.log(`
-🎯 Sistema Multi-agente Simplificado
+Sistema Multi-agente Simplificado
 
 Comandos disponibles:
   validate  - Validar configuración del sistema

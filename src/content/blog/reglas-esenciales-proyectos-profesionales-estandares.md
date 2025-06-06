@@ -40,12 +40,12 @@ La diferencia entre un proyecto amateur y uno profesional no está en la complej
 
 ### Sin Emojis en Contextos Técnicos
 ```yaml
-# ❌ Amateur
-commit: "feat: ✨ nueva feature súper cool 🚀"
-PR: "🔥 Fix importante para el bug 🐛"
-docs: "## 🎯 Objetivos del proyecto"
+# Amateur
+commit: "feat: nueva feature súper cool"
+PR: "Fix importante para el bug"
+docs: "## Objetivos del proyecto"
 
-# ✅ Profesional
+# Profesional
 commit: "feat: implementar autenticación OAuth2"
 PR: "fix: resolver memory leak en image processing"
 docs: "## Objetivos del proyecto"
@@ -55,12 +55,12 @@ docs: "## Objetivos del proyecto"
 
 ### Sin Nombres de Agentes o Referencias a IA
 ```yaml
-# ❌ Amateur
+# Amateur
 commit: "feat: implementado por ganzo"
 PR: "Cambios sugeridos por augment"
 docs: "Creado con ayuda de IA"
 
-# ✅ Profesional
+# Profesional
 commit: "feat: implementar cache distribuido"
 PR: "refactor: optimizar queries de base de datos"
 docs: "Implementación de arquitectura hexagonal"
@@ -70,7 +70,7 @@ docs: "Implementación de arquitectura hexagonal"
 
 ### Comunicación en Español Técnico
 ```yaml
-# ✅ Regla aplicada
+# Regla aplicada
 - Documentación: Español técnico profesional
 - Explicaciones: Español claro y preciso
 - Código: Inglés (estándar internacional)
@@ -81,12 +81,12 @@ docs: "Implementación de arquitectura hexagonal"
 
 ### TypeScript Obligatorio
 ```typescript
-// ❌ Amateur - JavaScript sin tipos
+// Amateur - JavaScript sin tipos
 function processData(data) {
   return data.map(item => item.value * 2);
 }
 
-// ✅ Profesional - TypeScript con tipos estrictos
+// Profesional - TypeScript con tipos estrictos
 interface DataItem {
   id: string;
   value: number;
@@ -106,7 +106,7 @@ function processData(data: DataItem[]): number[] {
 
 ### Testing Continuo Obligatorio
 ```bash
-# ✅ Workflow obligatorio antes de commits
+# Workflow obligatorio antes de commits
 npm run dev      # Verificar desarrollo
 npm run build    # Verificar build
 npm run preview  # Verificar preview
@@ -120,10 +120,10 @@ git commit -m "feat: implementar nueva funcionalidad"
 
 ### Reutilización sobre Creación
 ```typescript
-// ❌ Amateur - crear componente nuevo
+// Amateur - crear componente nuevo
 const NewButton = () => <button className="bg-blue-500">Click</button>;
 
-// ✅ Profesional - reutilizar componente existente
+// Profesional - reutilizar componente existente
 import { Button } from '@/components/ui/Button';
 const MyFeature = () => <Button variant="primary">Click</Button>;
 ```
@@ -138,7 +138,7 @@ const MyFeature = () => <Button variant="primary">Click</Button>;
 
 ### Protocolo de PRs Estricto
 ```yaml
-# ✅ Formato profesional obligatorio
+# Formato profesional obligatorio
 Título: "feat: implementar autenticación OAuth2"
 
 Descripción:
@@ -151,9 +151,9 @@ Implementación de autenticación OAuth2 con Google y GitHub.
 - Tests de integración
 
 ## Testing
-- Tests unitarios: ✅ 15/15 pasando
-- Tests integración: ✅ 8/8 pasando
-- Build: ✅ Exitoso
+- Tests unitarios: 15/15 pasando
+- Tests integración: 8/8 pasando
+- Build: Exitoso
 
 ## Documentación
 - README actualizado con setup OAuth2
@@ -164,12 +164,12 @@ Implementación de autenticación OAuth2 con Google y GitHub.
 
 ### Acciones Destructivas Controladas
 ```bash
-# ❌ Prohibido sin permiso
+# Prohibido sin permiso
 rm -rf components/
 git reset --hard HEAD~5
 npm uninstall react
 
-# ✅ Proceso controlado
+# Proceso controlado
 # 1. Solicitar permiso explícito
 # 2. Explicar razón técnica
 # 3. Confirmar impacto

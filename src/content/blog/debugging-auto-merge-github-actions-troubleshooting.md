@@ -30,7 +30,7 @@ El auto-merge en GitHub Actions es una funcionalidad poderosa, pero puede fallar
 **Causa común**: Condiciones demasiado restrictivas en el workflow.
 
 ```yaml
-# ❌ Problemático - demasiado restrictivo
+# Problemático - demasiado restrictivo
 auto-merge:
   if: github.event_name == 'pull_request' && github.event.action == 'opened' && contains(github.event.label.name, 'auto-merge')
 ```
@@ -38,7 +38,7 @@ auto-merge:
 **Solución**: Simplificar las condiciones y dejar que el script maneje la lógica.
 
 ```yaml
-# ✅ Correcto - condiciones simples
+# Correcto - condiciones simples
 auto-merge:
   if: github.event_name == 'pull_request' || github.event_name == 'check_run' || github.event_name == 'check_suite'
 ```
@@ -52,7 +52,7 @@ auto-merge:
 **Solución**: Agregar validaciones robustas en el script.
 
 ```javascript
-// ✅ Validación robusta
+// Validación robusta
 if (context.eventName !== 'pull_request') {
   console.log(`Event is ${context.eventName}, not pull_request. Skipping validation.`);
   return;
@@ -78,7 +78,7 @@ const title = context.payload.pull_request.title.trim();
 **Solución**: Agregar triggers para eventos de checks.
 
 ```yaml
-# ✅ Triggers completos
+# Triggers completos
 on:
   pull_request:
     types: [opened, synchronize, reopened, labeled]
@@ -218,9 +218,9 @@ jobs:
                 pull_number: context.payload.pull_request.number,
                 merge_method: 'squash'
               });
-              console.log('✅ PR merged successfully');
+              console.log('PR merged successfully');
             } catch (error) {
-              console.log('❌ Merge failed:', error.message);
+              console.log('Merge failed:', error.message);
             }
           }
 ```
