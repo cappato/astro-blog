@@ -1,5 +1,5 @@
 # GitHub Labels Configuration
-# Used by Carlos (Carlitos) - PR Automation System
+# Used by Augment Agent - PR Automation System
 
 # Type Labels
 - name: "type:feature"
@@ -123,11 +123,11 @@
   color: "0075ca"
   description: "Documentation changes"
 
-# Carlos (Carlitos) Special Labels
-- name: "carlos:automated"
+# Agent Automation Labels
+- name: "agent:automated"
   color: "5319e7"
-  description: "Created/managed by Carlos automation"
+  description: "Created/managed by agent automation"
 
-- name: "carlos:workflow"
+- name: "agent:workflow"
   color: "7057ff"
   description: "Git workflow automation"

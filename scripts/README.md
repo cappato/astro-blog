@@ -5,7 +5,7 @@ This directory contains general utility scripts for the project.
 ## Available Scripts
 
 ### Git Workflow Automation 🆕
-**NEW**: Automated git workflow management for Carlos (Carlitos):
+**NEW**: Automated git workflow management for all Augment Agents:
 - Create feature branches automatically
 - Conventional commit messages
 - Auto-push and PR creation
@@ -13,7 +13,7 @@ This directory contains general utility scripts for the project.
 - **FULLY AUTOMATED** - No user interaction required
 
 - **`git-workflow.js`** - Complete git automation system
-- **`carlos-create-pr.js`** - Automatic PR creation
+- **`agent-create-pr.js`** - Automatic PR creation
 - **`setup-repository.js`** - Repository configuration
 
 ### PageSpeed Analyzer

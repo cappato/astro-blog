@@ -186,7 +186,7 @@ const testHooks = async () => {
 };
 
 const main = async () => {
-  console.log('🤖 Carlos (Carlitos) - Git Hooks Installer\n');
+  console.log('🤖 Augment Agent - Git Hooks Installer\n');
   console.log('🛡️  Installing protection hooks for private repository...\n');
   
   try {
@@ -201,7 +201,7 @@ const main = async () => {
     console.log('   ❌ No direct pushes to main/master/develop');
     console.log('   ✅ Conventional commit format enforced');
     console.log('   ✅ Large file detection');
-    console.log('\n🤖 Carlos is now protected from breaking workflow rules!');
+    console.log('\n🤖 Agents are now protected from breaking workflow rules!');
     
     // Test hooks
     await testHooks();

@@ -52,6 +52,6 @@ Closes #(issue_number)
 
 ---
 
-**Created by:** Carlos (Carlitos) - Astro Blog Agent 🤖
+**Created by:** Augment Agent - Astro Blog 🤖
 **Branch:** `{{ branch_name }}`
 **Base:** `{{ base_branch }}`

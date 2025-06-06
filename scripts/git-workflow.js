@@ -2,8 +2,8 @@
 
 /**
  * Git Workflow Automation Script
- * Created by Carlos (Carlitos) - Astro Blog Agent
- * 
+ * Created by Augment Agent - Astro Blog
+ *
  * Automated git workflow management:
  * - Create feature branches automatically
  * - Conventional commit messages
@@ -30,7 +30,8 @@ const CONFIG = {
   conventionalCommits: true,
   autoCreatePR: true,
   autoMergePR: true,
-  carlosMode: true, // Carlos works fully automated
+  autoMergeEnabled: true, // All agents enable auto-merge by default
+  agentMode: true, // All agents work fully automated
   defaultBaseBranch: 'main',
   requireDescription: true
 };
@@ -320,11 +321,17 @@ async function completeWorkflow() {
   // Step 2: Push changes
   await pushChanges();
 
-  // Step 3: Create PR automatically (Carlos mode)
+  // Step 3: Create PR automatically (Agent mode)
   if (CONFIG.autoCreatePR) {
-    if (CONFIG.carlosMode) {
-      console.log('🤖 Carlos mode: Creating PR automatically...');
-      await createPullRequest();
+    if (CONFIG.agentMode) {
+      console.log('🤖 Agent mode: Creating PR automatically...');
+      const prUrl = await createPullRequest();
+
+      // Step 4: Enable auto-merge if PR was created
+      if (prUrl && CONFIG.autoMergeEnabled) {
+        console.log('🔄 Enabling auto-merge...');
+        await enableAutoMerge(prUrl);
+      }
     } else {
       const createPR = await question('Create Pull Request? (y/n): ');
       if (createPR.toLowerCase() === 'y') {
@@ -336,6 +343,32 @@ async function completeWorkflow() {
   console.log('\n✅ Workflow completed successfully!');
 }
 
+async function enableAutoMerge(prUrl) {
+  if (!prUrl) return;
+
+  try {
+    // Extract PR number from URL
+    const prNumber = prUrl.split('/').pop();
+    const apiUrl = `https://api.github.com/repos/cappato/astro-blog/pulls/${prNumber}/merge`;
+
+    // Check if GitHub CLI is available for auto-merge
+    const hasGHCLI = execCommand('which gh', { silent: true, ignoreError: true });
+
+    if (hasGHCLI) {
+      // Use GitHub CLI for auto-merge
+      execCommand(`gh pr merge ${prNumber} --auto --squash`, { silent: true, ignoreError: true });
+      console.log('✅ Auto-merge enabled via GitHub CLI');
+    } else {
+      // Fallback: Try with API (may not work for auto-merge)
+      console.log('⚠️  GitHub CLI not available. Auto-merge may need manual enabling.');
+      console.log(`📋 Manual command: gh pr merge ${prNumber} --auto --squash`);
+    }
+  } catch (error) {
+    console.log('⚠️  Could not enable auto-merge automatically');
+    console.log('📋 Enable manually in GitHub UI or with: gh pr merge --auto --squash');
+  }
+}
+
 // Export for use in other scripts
 export {
   createBranch,
@@ -343,6 +376,7 @@ export {
   pushChanges,
   createPullRequest,
   completeWorkflow,
+  enableAutoMerge,
   getCurrentBranch,
   hasUncommittedChanges,
   getBranchInfo
@@ -350,7 +384,7 @@ export {
 
 // CLI interface
 async function main() {
-  console.log('🤖 Carlos (Carlitos) - Git Workflow Automation\n');
+  console.log('🤖 Augment Agent - Git Workflow Automation\n');
   
   const args = process.argv.slice(2);
   

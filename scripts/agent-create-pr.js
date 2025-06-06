@@ -1,9 +1,9 @@
 #!/usr/bin/env node
 
 /**
- * Carlos Auto PR Creator
- * Created by Carlos (Carlitos) - Astro Blog Agent
- * 
+ * Agent Auto PR Creator
+ * Created by Augment Agent - Astro Blog
+ *
  * Creates Pull Requests automatically using GitHub API
  * No user interaction required - fully automated
  */
@@ -53,28 +53,28 @@ const getBranchInfo = () => {
 const createPRWithCurl = async () => {
   const currentBranch = getCurrentBranch();
   const branchInfo = getBranchInfo();
-  
-  console.log(`🤖 Carlos creating PR for branch: ${currentBranch}`);
-  
+
+  console.log(`🤖 Agent creating PR for branch: ${currentBranch}`);
+
   // Determine PR type and template
   const branchType = currentBranch.split('/')[0];
   const isFeature = branchType === 'feat';
   const isFix = branchType === 'fix';
-  
+
   // Create PR title
-  const title = branchInfo ? 
-    `${branchInfo.type}: ${branchInfo.description}` : 
+  const title = branchInfo ?
+    `${branchInfo.type}: ${branchInfo.description}` :
     `${branchType}: ${currentBranch.split('/').slice(1).join(' ')}`;
-  
+
   // Create PR body
-  const prBody = `## 🤖 Automated PR by Carlos (Carlitos)
+  const prBody = `## 🤖 Automated PR by Augment Agent
 
 **Branch:** \`${currentBranch}\`
 **Type:** ${branchType}
 **Base:** ${CONFIG.defaultBaseBranch}
 
 ### 📋 Changes:
-${branchInfo ? branchInfo.description : 'Automated changes by Carlos'}
+${branchInfo ? branchInfo.description : 'Automated changes by agent'}
 
 ### 🧪 Testing:
 - [x] Automated tests will run
@@ -82,17 +82,17 @@ ${branchInfo ? branchInfo.description : 'Automated changes by Carlos'}
 - [x] Quality checks included
 
 ### 🔄 Automation:
-- [x] Created automatically by Carlos
+- [x] Created automatically by agent
 - [x] Will auto-merge when tests pass
 - [x] Branch will be deleted after merge
 
 ---
 
-**🤖 This PR was created automatically by Carlos (Carlitos) - Astro Blog Agent**
+**🤖 This PR was created automatically by Augment Agent**
 **⚡ Auto-merge enabled when all checks pass**`;
 
   // Prepare labels
-  const labels = ['carlos:automated'];
+  const labels = ['agent:automated'];
   if (isFeature) labels.push('type:feature');
   if (isFix) labels.push('type:bugfix');
   labels.push('auto-merge');
@@ -158,8 +158,8 @@ ${branchInfo ? branchInfo.description : 'Automated changes by Carlos'}
 };
 
 const main = async () => {
-  console.log('🤖 Carlos (Carlitos) - Automatic PR Creator\n');
-  
+  console.log('🤖 Augment Agent - Automatic PR Creator\n');
+
   try {
     await createPRWithCurl();
     console.log('\n✅ PR creation process completed');

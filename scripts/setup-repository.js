@@ -2,8 +2,8 @@
 
 /**
  * Repository Setup Script
- * Created by Carlos (Carlitos) - Astro Blog Agent
- * 
+ * Created by Augment Agent - Astro Blog
+ *
  * Configures GitHub repository settings:
  * - Branch protection rules
  * - Required status checks
