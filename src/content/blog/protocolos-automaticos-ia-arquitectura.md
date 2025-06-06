@@ -1,9 +1,9 @@
 ---
 title: "El Problema de los Protocolos que se Olvidan"
 description: "Descubre cómo diseñé un sistema de protocolos automáticos que permite comunicación casual pero genera respuestas de arquitecto senior sin sobrecarga cognitiva."
-date: "2025-06-06"
+date: "2024-11-27"
 author: "Matías Cappato"
-tags: ["AI", "Arquitectura de Software", "Automatización", "Protocolos", "Developer Experience", "Sistemas Inteligentes", "TypeScript", "componentes"]
+tags: ["AI", "Arquitectura de Software", "Automatización", "Developer Experience", "Protocolos", "Sistemas Inteligentes", "TypeScript", "astro", "automation", "componentes", "testing"]
 postId: "protocolos-automaticos-ia-arquitectura"
 imageAlt: "El Problema de los Protocolos que se Olvidan: Cómo Diseñé un Sistema para que la IA Mantenga Criterio Arquitectónico - Guía completa"
 ---

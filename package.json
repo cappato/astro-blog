@@ -46,8 +46,10 @@
     "blog:analyze": "echo 'Use: npm run blog' and select option 3",
     "blog:images": "echo 'Use: npm run blog' and select option 4",
     "blog:report": "echo 'Use: npm run blog' and select option 8",
+
     "git:automation": "echo '🚀 Git automation moved to GitHub Actions! Go to Actions tab → Agent Automation Workflow'",
     "git:setup-labels": "gh label create --file .github/labels.yml || echo 'GitHub CLI required'",
+
     "multi-agent": "node scripts/multi-agent-manager.js",
     "multi-agent:check": "node scripts/multi-agent-manager.js check",
     "multi-agent:report": "node scripts/multi-agent-manager.js report",
@@ -55,7 +57,8 @@
     "multi-agent:protocols": "node scripts/multi-agent-manager.js protocols",
     "multi-agent:status": "node scripts/multi-agent-manager.js status",
     "multi-agent:learn": "node scripts/multi-agent-manager.js learn",
-    "multi-agent:analyze": "node scripts/multi-agent-manager.js analyze"
+    "multi-agent:analyze": "node scripts/multi-agent-manager.js analyze",
+    "multi-agent:pr": "node scripts/multi-agent-manager.js pr"
   },
   "dependencies": {
     "@tailwindcss/typography": "^0.5.16",

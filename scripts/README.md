@@ -4,6 +4,7 @@ This directory contains utility scripts for the project.
 
 ## Available Scripts
 
+
 ### ⚠️ Git Workflow Automation - MIGRATED TO GITHUB ACTIONS
 **All git workflow automation has been moved to GitHub Actions for better reliability:**
 - **Location**: `.github/workflows/agent-automation.yml`
@@ -12,6 +13,7 @@ This directory contains utility scripts for the project.
 - **Benefits**: Professional CI/CD integration, no console operations needed
 
 **To use automation**: Go to Actions tab → Agent Automation Workflow → Run workflow
+
 
 ### PageSpeed Analyzer
 Performance analysis tool for the website.

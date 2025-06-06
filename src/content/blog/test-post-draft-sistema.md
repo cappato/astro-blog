@@ -1,7 +1,7 @@
 ---
 title: "Test del Sistema de Drafts: Post Oculto para Revisión"
 description: "Post de prueba para verificar el sistema de drafts. Este post está oculto y solo es accesible por link directo para revisión antes de publicación."
-date: "2024-12-19"
+date: "2024-12-01"
 author: "Matías Cappato"
 tags: ["test", "draft", "sistema", "prueba", "testing"]
 postId: "test-post-draft-sistema"

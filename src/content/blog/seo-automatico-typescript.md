@@ -4,9 +4,10 @@ description: "Sistema SEO completo y automático con TypeScript: meta tags intel
 date: "2024-06-02"
 author: "Matías Cappato"
 image:
-  url: "/images/blog/seo-cover.webp"
-  alt: "Dashboard de analytics y métricas SEO en pantalla de computadora"
-tags: ["seo", "typescript", "schema.org", "performance", "meta-tags", "Astro", "componentes"]
+  url: "/images/blog/seo-automatico-typescript.webp"
+  alt: "SEO Automático con TypeScript - Meta tags y Schema.org generados automáticamente"
+tags: ["Astro", "TypeScript", "automation", "componentes", "meta-tags", "performance", "schema.org", "seo"]
+postId: "seo-automatico-typescript"
 draft: false
 ---
 

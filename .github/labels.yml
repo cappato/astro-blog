@@ -1,5 +1,4 @@
 # GitHub Labels Configuration
-# Used by Augment Agent - PR Automation System
 
 # Type Labels
 - name: "type:feature"
@@ -129,5 +128,6 @@
   description: "Created/managed by agent automation"
 
 - name: "agent:workflow"
+
   color: "7057ff"
   description: "Git workflow automation"

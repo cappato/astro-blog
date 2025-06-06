@@ -1,11 +1,13 @@
 ---
 title: "Migración de Sistemas: Preservando la Visión"
 description: "Cómo migré del sistema .augment al framework multi-agente preservando la visión original mientras resolvía problemas de implementación."
-date: "2025-06-06"
+date: "2025-06-05"
 author: "Matías Cappato"
 tags: ["Arquitectura", "Migración", "Sistemas", "Multi-Agent", "Refactoring", "Evolution", "componentes", "testing"]
 postId: "migracion-sistemas-preservando-vision"
-imageAlt: "Migración de Sistemas: Preservando la Visión - Evolución sin perder la esencia"
+image:
+  url: "/images/blog/migracion-sistemas-preservando-vision.webp"
+  alt: "Migración de Sistemas: Preservando la Visión - Evolución sin perder la esencia"
 ---
 
 En esta serie hemos visto el [problema original](/blog/protocolos-automaticos-ia-arquitectura), la [implementación técnica](/blog/anatomia-sistema-protocolos-automaticos) y la [optimización UX](/blog/auto-merge-inteligente-ux-control). Ahora exploramos cómo migrar sistemas preservando la visión original.

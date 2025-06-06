@@ -1,11 +1,11 @@
 ---
 title: "Hola mundo con Astro"
 description: "Primer post para probar el blog en Astro, optimizado para SEO."
-date: "2023-05-24"
+date: "2024-05-01"
 author: "Matías Cappato"
 postId: "bienvenida"
 imageAlt: "Espacio de trabajo con escritorio y computadora"
-tags: ["bienvenida", "astro", "blog"]
+tags: ["Astro", "SEO", "TypeScript", "bienvenida", "blog", "componentes"]
 draft: false
 slug: "bienvenida-a-mi-blog"
 ---

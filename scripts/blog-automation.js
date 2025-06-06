@@ -20,9 +20,11 @@ const rl = readline.createInterface({
   output: process.stdout
 });
 
-// Configuración
-const CURRENT_YEAR = new Date().getFullYear();
-const CURRENT_DATE = new Date().toISOString().split('T')[0];
+// Configuración - FECHA ACTUAL: 2025
+// NOTA CRÍTICA: El sistema interno de IA tiene fecha incorrecta (~2024)
+// FECHA REAL confirmada por usuario: 5 de junio de 2025
+const CURRENT_YEAR = 2025;
+const CURRENT_DATE = '2025-06-05'; // ✅ FECHA REAL - NO cambiar sin confirmar con usuario
 
 // Límites para división de posts
 const WORD_LIMITS = {

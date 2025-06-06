@@ -1,0 +1,152 @@
+---
+/**
+ * 404 Page - Intelligent Redirect System
+ * Handles URL cleanup and smart redirects based on URL patterns
+ */
+
+import MainLayout from '../layouts/MainLayout.astro';
+
+// Get the current URL path for intelligent redirecting
+const currentPath = Astro.url.pathname;
+
+// Determine redirect destination based on URL pattern
+function getRedirectDestination(path: string): string {
+  // Blog-related URLs should redirect to blog
+  if (path.startsWith('/blog/') || path.includes('blog')) {
+    return '/blog';
+  }
+  
+  // Draft URLs should redirect to blog (drafts are not public)
+  if (path.startsWith('/draft/')) {
+    return '/blog';
+  }
+  
+  // Tag/pillar related URLs
+  if (path.includes('/tag/') || path.includes('/pillar/')) {
+    return '/blog';
+  }
+  
+  // API or technical URLs
+  if (path.startsWith('/api/') || path.includes('.json') || path.includes('.xml')) {
+    return '/';
+  }
+  
+  // Default: redirect to home
+  return '/';
+}
+
+const redirectTo = getRedirectDestination(currentPath);
+
+// SEO metadata for 404 page
+const title = "Página no encontrada - Matías Cappato";
+const description = "La página que buscas no existe. Te redirigiremos automáticamente a la página principal.";
+---
+
+<MainLayout 
+  title={title}
+  description={description}
+  type="website"
+>
+  <div class="min-h-screen bg-background flex items-center justify-center px-4">
+    <div class="max-w-md w-full text-center">
+      <!-- 404 Icon -->
+      <div class="mb-8">
+        <div class="text-6xl font-bold text-primary mb-4">404</div>
+        <div class="w-24 h-1 bg-primary mx-auto rounded"></div>
+      </div>
+      
+      <!-- Error Message -->
+      <h1 class="text-2xl font-bold text-foreground mb-4">
+        Página no encontrada
+      </h1>
+      
+      <p class="text-secondary mb-8 leading-relaxed">
+        La página que buscas no existe o ha sido movida. 
+        Te redirigiremos automáticamente en <span id="countdown">3</span> segundos.
+      </p>
+      
+      <!-- Action Buttons -->
+      <div class="space-y-4">
+        <a 
+          href={redirectTo}
+          class="inline-block w-full bg-primary hover:bg-primary-hover text-white font-medium py-3 px-6 rounded-lg transition-colors duration-200"
+        >
+          {redirectTo === '/blog' ? 'Ir al Blog' : 'Ir al Inicio'}
+        </a>
+        
+        <a 
+          href="/"
+          class="inline-block w-full border border-primary text-primary hover:bg-primary hover:text-white font-medium py-3 px-6 rounded-lg transition-colors duration-200"
+        >
+          Página Principal
+        </a>
+      </div>
+      
+      <!-- Debug Info (only in development) -->
+      {import.meta.env.DEV && (
+        <div class="mt-8 p-4 bg-surface rounded-lg text-left">
+          <h3 class="text-sm font-medium text-foreground mb-2">Debug Info:</h3>
+          <p class="text-xs text-secondary">
+            <strong>Path:</strong> {currentPath}<br>
+            <strong>Redirect to:</strong> {redirectTo}
+          </p>
+        </div>
+      )}
+    </div>
+  </div>
+</MainLayout>
+
+<!-- JavaScript for automatic redirect and countdown -->
+<script define:vars={{ redirectTo }}>
+  // Countdown and automatic redirect
+  let countdown = 3;
+  const countdownElement = document.getElementById('countdown');
+  
+  function updateCountdown() {
+    if (countdownElement) {
+      countdownElement.textContent = countdown.toString();
+    }
+    
+    if (countdown <= 0) {
+      // Perform redirect with URL change
+      window.location.href = redirectTo;
+    } else {
+      countdown--;
+      setTimeout(updateCountdown, 1000);
+    }
+  }
+  
+  // Start countdown
+  updateCountdown();
+  
+  // Also handle immediate redirect if user clicks browser back/forward
+  window.addEventListener('pageshow', function(event) {
+    // If page is loaded from cache, redirect immediately
+    if (event.persisted) {
+      window.location.href = redirectTo;
+    }
+  });
+</script>
+
+<!-- Meta refresh as fallback -->
+<meta http-equiv="refresh" content={`3;url=${redirectTo}`} />
+
+<style>
+  /* Ensure smooth transitions */
+  * {
+    transition: color 0.2s ease, background-color 0.2s ease;
+  }
+  
+  /* Loading animation for countdown */
+  #countdown {
+    font-weight: bold;
+    color: var(--color-primary);
+  }
+  
+  /* Responsive adjustments */
+  @media (max-width: 640px) {
+    .text-6xl {
+      font-size: 3rem;
+    }
+  }
+</style>

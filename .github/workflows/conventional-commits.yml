@@ -193,8 +193,6 @@ Examples:
 - \`docs: update README\`
 ` : '**✅ All commits follow conventional format!**'}
 
-*Analysis by Augment Agent - Conventional Commits Validator* 🤖`;
-
           await github.rest.issues.createComment({
             owner: context.repo.owner,
             repo: context.repo.repo,
@@ -253,8 +251,6 @@ chore: update dependencies
 1. **Interactive rebase**: \`git rebase -i HEAD~n\` (where n is number of commits)
 2. **Change commit messages**: Use \`reword\` option
 3. **Force push**: \`git push --force-with-lease\`
-
-*Suggestions by Augment Agent - Commit Helper* 🤖`;
 
           await github.rest.issues.createComment({
             owner: context.repo.owner,

@@ -52,6 +52,5 @@ Closes #(issue_number)
 
 ---
 
-**Created by:** Augment Agent - Astro Blog 🤖
 **Branch:** `{{ branch_name }}`
 **Base:** `{{ base_branch }}`

@@ -4,9 +4,10 @@ description: "Implementa una arquitectura modular en Astro con features reutiliz
 date: "2024-06-02"
 author: "Matías Cappato"
 image:
-  url: "/images/blog/architecture-cover.webp"
-  alt: "Diagrama de arquitectura modular con componentes interconectados"
-tags: ["astro", "arquitectura", "typescript", "modular", "features", "componentes", "SEO"]
+  url: "/images/blog/arquitectura-modular-astro.webp"
+  alt: "Arquitectura Modular en Astro - Diagrama de features reutilizables y componentes modulares"
+tags: ["Astro", "SEO", "TypeScript", "arquitectura", "automation", "componentes", "features", "modular", "testing"]
+postId: "arquitectura-modular-astro"
 draft: false
 ---
 

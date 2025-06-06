@@ -1,9 +1,9 @@
 ---
 title: "Troubleshooting Wrangler: Soluciones para WSL y Deploy Issues"
 description: "Resuelve problemas comunes con Wrangler en WSL, errores de deploy y issues de autenticación. Guía completa de troubleshooting para desarrolladores."
-date: "2024-12-19"
+date: "2024-05-01"
 author: "Matías Cappato"
-tags: ["wrangler", "troubleshooting", "wsl", "deploy", "cloudflare", "problemas", "soluciones", "debugging", "testing", "deployment"]
+tags: ["wrangler", "troubleshooting", "wsl", "deploy", "cloudflare", "problemas", "soluciones", "debugging"]
 postId: "troubleshooting-wrangler-wsl-deploy"
 imageAlt: "Troubleshooting Wrangler - Soluciones para problemas comunes en WSL y deploy"
 ---
