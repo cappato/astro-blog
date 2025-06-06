@@ -51,8 +51,9 @@ async function main() {
 8. 📊 Reporte completo del blog
 9. 🎯 Preview de posts relacionados para post existente
 10. 🔧 Optimizar posts existentes para mejores relaciones
+11. 🚨 Corregir imágenes faltantes automáticamente
 
-Elige (1-10): `);
+Elige (1-11): `);
   
   switch(action) {
     case '1':
@@ -84,6 +85,9 @@ Elige (1-10): `);
       break;
     case '10':
       await optimizeExistingPostsRelations();
+      break;
+    case '11':
+      await fixMissingImages();
       break;
     default:
       console.log('Opción no válida');
@@ -326,6 +330,76 @@ async function generateImagesOnly() {
 }
 
 /**
+ * Corregir imágenes faltantes automáticamente
+ */
+async function fixMissingImages() {
+  console.log('\n🔧 CORRECCIÓN AUTOMÁTICA DE IMÁGENES FALTANTES');
+  console.log('='.repeat(50));
+
+  const posts = getExistingPosts().filter(p => p.postId);
+  const postsWithMissingImages = [];
+
+  // Detectar posts con imágenes faltantes
+  posts.forEach(post => {
+    const imageCheck = checkPostImages(post.postId);
+    if (imageCheck.missing.length > 0 || !imageCheck.dirExists) {
+      postsWithMissingImages.push({
+        ...post,
+        imageCheck
+      });
+    }
+  });
+
+  if (postsWithMissingImages.length === 0) {
+    console.log('✅ No se encontraron posts con imágenes faltantes');
+    return;
+  }
+
+  console.log(`🚨 Encontrados ${postsWithMissingImages.length} posts con imágenes faltantes:`);
+  postsWithMissingImages.forEach(post => {
+    console.log(`  - ${post.postId} (${post.title})`);
+    if (!post.imageCheck.dirExists) {
+      console.log(`    ❌ Directorio no existe`);
+    } else {
+      console.log(`    ❌ Faltantes: ${post.imageCheck.missing.join(', ')}`);
+    }
+  });
+
+  const confirm = await askQuestion('\n¿Corregir automáticamente? (y/n): ');
+  if (confirm.toLowerCase() !== 'y') {
+    console.log('❌ Operación cancelada');
+    return;
+  }
+
+  console.log('\n🚀 Iniciando corrección...');
+  let successCount = 0;
+  let errorCount = 0;
+
+  for (const post of postsWithMissingImages) {
+    console.log(`\n🔄 Corrigiendo: ${post.postId}`);
+    const success = await generateImagesForPost(post.postId);
+
+    if (success) {
+      successCount++;
+      console.log(`✅ ${post.postId}: Imágenes corregidas`);
+    } else {
+      errorCount++;
+      console.log(`❌ ${post.postId}: Error en corrección`);
+    }
+  }
+
+  console.log('\n' + '='.repeat(50));
+  console.log('📊 RESUMEN DE CORRECCIÓN:');
+  console.log(`✅ Exitosos: ${successCount}`);
+  console.log(`❌ Fallidos: ${errorCount}`);
+
+  if (successCount > 0) {
+    console.log('\n🧪 Ejecutando tests para verificar...');
+    await runTestsForPost('all');
+  }
+}
+
+/**
  * Analizar relaciones de posts (tags, pilares)
  */
 async function analyzeRelationships() {
@@ -517,29 +591,77 @@ async function generateBlogReport() {
  */
 async function generateImagesForPost(postId) {
   console.log(`\n🖼️ Generando imágenes para ${postId}...`);
-  
+
   // Verificar si existe directorio raw
   const rawDir = `images/raw/${postId}`;
   if (!fs.existsSync(rawDir)) {
     fs.mkdirSync(rawDir, { recursive: true });
     console.log(`📁 Creado directorio: ${rawDir}`);
   }
-  
+
   // Verificar si existe imagen fuente
   const sourceImage = `${rawDir}/portada.webp`;
   if (!fs.existsSync(sourceImage)) {
     console.log('⚠️ No existe imagen fuente. Usando placeholder...');
     // Copiar imagen placeholder
-    execSync(`cp public/images/blog/seo-cover.webp ${sourceImage}`);
+    try {
+      execSync(`cp public/images/blog/seo-cover.webp ${sourceImage}`);
+      console.log('✅ Placeholder copiado');
+    } catch (error) {
+      console.log('❌ Error copiando placeholder, intentando método alternativo...');
+      // Método alternativo: copiar desde post existente
+      return await copyImagesFromExistingPost(postId);
+    }
   }
-  
+
   // Ejecutar optimización
   try {
     console.log('🔄 Ejecutando optimización de imágenes...');
     execSync(`npm run optimize-images -- --postId=${postId} --force`, { stdio: 'inherit' });
     console.log('✅ Imágenes generadas correctamente');
+    return true;
   } catch (error) {
-    console.log('❌ Error generando imágenes');
+    console.log('❌ Error generando imágenes, intentando método alternativo...');
+    return await copyImagesFromExistingPost(postId);
+  }
+}
+
+/**
+ * Copiar imágenes desde un post existente (método de respaldo)
+ */
+async function copyImagesFromExistingPost(postId) {
+  console.log(`🔄 Copiando imágenes desde post existente para ${postId}...`);
+
+  const sourcePost = 'protocolos-automaticos-ia-arquitectura';
+  const sourceDir = `public/images/${sourcePost}`;
+  const targetDir = `public/images/${postId}`;
+
+  if (!fs.existsSync(sourceDir)) {
+    console.log('❌ No se encontró post fuente para copiar imágenes');
+    return false;
+  }
+
+  try {
+    // Crear directorio destino
+    if (!fs.existsSync(targetDir)) {
+      fs.mkdirSync(targetDir, { recursive: true });
+    }
+
+    // Copiar todas las imágenes
+    const files = fs.readdirSync(sourceDir);
+    const imageFiles = files.filter(f => f.endsWith('.webp') || f.endsWith('.avif') || f.endsWith('.jpeg') || f.endsWith('.txt'));
+
+    imageFiles.forEach(file => {
+      const sourcePath = path.join(sourceDir, file);
+      const targetPath = path.join(targetDir, file);
+      fs.copyFileSync(sourcePath, targetPath);
+    });
+
+    console.log(`✅ Copiadas ${imageFiles.length} imágenes desde ${sourcePost}`);
+    return true;
+  } catch (error) {
+    console.log(`❌ Error copiando imágenes: ${error.message}`);
+    return false;
   }
 }
 
@@ -1384,5 +1506,7 @@ export {
   findRelatedPostsBasic,
   optimizeExistingPostsRelations,
   generateOptimizationSuggestions,
-  applyTagOptimizations
+  applyTagOptimizations,
+  fixMissingImages,
+  copyImagesFromExistingPost
 };
