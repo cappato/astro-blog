@@ -42,7 +42,7 @@ class SimpleMultiAgent {
      */
     async loadBlogContext() {
         try {
-            console.log('🎯 Detectada intención de crear post - Cargando contexto...\n');
+            console.log('Detectada intención de crear post - Cargando contexto...\n');
 
             const context = {
                 pillars: await this.getCurrentPillars(),
@@ -170,14 +170,14 @@ class SimpleMultiAgent {
      * Muestra el contexto cargado de forma clara
      */
     displayBlogContext(context) {
-        console.log('📋 Contexto del blog cargado:');
-        console.log(`✅ ${context.pillars.length} pilares existentes: ${context.pillars.join(', ')}`);
-        console.log(`✅ ${context.tags.length} tags más usados disponibles para reutilizar`);
-        console.log(`✅ ${context.recentPosts.length} posts recientes analizados para evitar duplicados`);
-        console.log(`✅ ${context.rules}`);
-        console.log(`✅ Templates SEO y workflow de creación listos\n`);
-        
-        console.log('🎯 ¿Sobre qué tema específico quieres crear el post?');
+        console.log('Contexto del blog cargado:');
+        console.log(`${context.pillars.length} pilares existentes: ${context.pillars.join(', ')}`);
+        console.log(`${context.tags.length} tags más usados disponibles para reutilizar`);
+        console.log(`${context.recentPosts.length} posts recientes analizados para evitar duplicados`);
+        console.log(`${context.rules}`);
+        console.log(`Templates SEO y workflow de creación listos\n`);
+
+        console.log('¿Sobre qué tema específico quieres crear el post?');
         console.log('Voy a evaluar automáticamente qué pilar encaja mejor y sugerir tags relevantes.\n');
     }
 
@@ -186,7 +186,7 @@ class SimpleMultiAgent {
      */
     async createPost() {
         try {
-            console.log('🚀 Iniciando blog-automation.js...\n');
+            console.log('Iniciando blog-automation.js...\n');
             execSync('node scripts/blog-automation.js', { stdio: 'inherit' });
         } catch (error) {
             console.error('Error ejecutando blog-automation:', error.message);
@@ -198,7 +198,7 @@ class SimpleMultiAgent {
      */
     async createLesson() {
         try {
-            console.log('📚 Iniciando lessons-learned.js...\n');
+            console.log('Iniciando lessons-learned.js...\n');
             execSync('node scripts/lessons-learned.js', { stdio: 'inherit' });
         } catch (error) {
             console.error('Error ejecutando lessons-learned:', error.message);
@@ -209,7 +209,7 @@ class SimpleMultiAgent {
      * Crea PR automáticamente con gh CLI
      */
     async createPR(title, description) {
-        console.log('🔗 Creando PR automáticamente...');
+        console.log('Creando PR automáticamente...');
 
         try {
             // Crear PR con gh CLI
@@ -221,18 +221,18 @@ class SimpleMultiAgent {
             const prUrl = prUrlMatch ? prUrlMatch[0] : null;
 
             if (prUrl) {
-                console.log(`✅ PR creado exitosamente: ${prUrl}`);
+                console.log(`PR creado exitosamente: ${prUrl}`);
 
                 // Reportar PR automáticamente
                 await this.reportPR(prUrl, title);
 
                 return prUrl;
             } else {
-                console.error('❌ No se pudo extraer la URL del PR');
+                console.error('No se pudo extraer la URL del PR');
                 return null;
             }
         } catch (error) {
-            console.error('❌ Error creando PR:', error.message);
+            console.error('Error creando PR:', error.message);
             return null;
         }
     }
@@ -241,40 +241,40 @@ class SimpleMultiAgent {
      * Reporta PR según protocolo establecido
      */
     async reportPR(prUrl, prTitle) {
-        console.log('📋 Reportando PR según protocolo establecido...');
+        console.log('Reportando PR según protocolo establecido...');
 
         try {
             const timestamp = new Date().toISOString().replace('T', ' ').substring(0, 16);
 
             const prReport = `
-## 🔗 PR Creado - ${timestamp}
+## PR Creado - ${timestamp}
 
 **Agente**: ganzo
 **PR**: [${prTitle}](${prUrl})
 
-### ✅ Checklist Automático
+### Checklist Automático
 - [x] Tests ejecutados localmente
 - [x] Build exitoso verificado
 - [x] Commits con mensajes descriptivos
 - [x] PR con label auto-merge
 - [x] Descripción completa incluida
 
-### 📊 Estado
-- **Tests**: ✅ Pasando
-- **Build**: ✅ Exitoso
-- **Auto-merge**: ✅ Configurado
-- **Protocolo**: ✅ Seguido
+### Estado
+- **Tests**: Pasando
+- **Build**: Exitoso
+- **Auto-merge**: Configurado
+- **Protocolo**: Seguido
 
 **Link del PR**: ${prUrl}
 `;
 
-            console.log('📋 Reporte de PR generado:');
+            console.log('Reporte de PR generado:');
             console.log(prReport);
-            console.log('✅ PR reportado según protocolo establecido');
+            console.log('PR reportado según protocolo establecido');
 
             return prReport;
         } catch (error) {
-            console.error('❌ Error reportando PR:', error.message);
+            console.error('Error reportando PR:', error.message);
             return null;
         }
     }
@@ -283,39 +283,39 @@ class SimpleMultiAgent {
      * Workflow completo automatizado: push + PR + reporte
      */
     async automatedWorkflow(commitMessage, prTitle, prDescription) {
-        console.log('🚀 Iniciando workflow automatizado completo...\n');
+        console.log('Iniciando workflow automatizado completo...\n');
 
         try {
             // 1. Verificar que hay cambios para commitear
             const gitStatus = execSync('git status --porcelain', { encoding: 'utf8' });
             if (!gitStatus.trim()) {
-                console.log('ℹ️  No hay cambios para commitear');
+                console.log('No hay cambios para commitear');
                 return;
             }
 
             // 2. Ejecutar tests antes de push
-            console.log('🧪 Ejecutando tests...');
+            console.log('Ejecutando tests...');
             execSync('npm run test:blog', { stdio: 'inherit' });
-            console.log('✅ Tests pasaron exitosamente\n');
+            console.log('Tests pasaron exitosamente\n');
 
             // 3. Hacer push de la rama actual
-            console.log('📤 Haciendo push...');
+            console.log('Haciendo push...');
             const currentBranch = execSync('git branch --show-current', { encoding: 'utf8' }).trim();
             execSync(`git push origin ${currentBranch}`, { stdio: 'inherit' });
-            console.log('✅ Push exitoso\n');
+            console.log('Push exitoso\n');
 
             // 4. Crear PR automáticamente
             const prUrl = await this.createPR(prTitle, prDescription);
 
             if (prUrl) {
-                console.log('\n🎉 Workflow automatizado completado exitosamente!');
-                console.log(`📋 PR: ${prUrl}`);
-                console.log('⏳ Auto-merge configurado - se mergeará automáticamente cuando pasen los tests');
+                console.log('\nWorkflow automatizado completado exitosamente!');
+                console.log(`PR: ${prUrl}`);
+                console.log('Auto-merge configurado - se mergeará automáticamente cuando pasen los tests');
             }
 
             return prUrl;
         } catch (error) {
-            console.error('❌ Error en workflow automatizado:', error.message);
+            console.error('Error en workflow automatizado:', error.message);
             return null;
         }
     }
@@ -331,18 +331,18 @@ class SimpleMultiAgent {
             { name: 'Directorio de posts', path: 'src/content/blog' }
         ];
 
-        console.log('🔍 Validando sistema...\n');
-        
+        console.log('Validando sistema...\n');
+
         for (const check of checks) {
             try {
                 await fs.access(check.path);
-                console.log(`✅ ${check.name}: OK`);
+                console.log(`${check.name}: OK`);
             } catch (error) {
-                console.log(`❌ ${check.name}: FALTA (${check.path})`);
+                console.log(`${check.name}: FALTA (${check.path})`);
             }
         }
-        
-        console.log('\n✅ Validación completada');
+
+        console.log('\nValidación completada');
     }
 }
 
@@ -372,7 +372,7 @@ switch (command) {
         if (prUrl) {
             await agent.reportPR(prUrl, prTitle);
         } else {
-            console.log('❌ Uso: npm run multi-agent:pr <PR_URL> [PR_TITLE]');
+            console.log('Uso: npm run multi-agent:pr <PR_URL> [PR_TITLE]');
         }
         break;
     case 'workflow':
@@ -384,7 +384,7 @@ switch (command) {
         break;
     default:
         console.log(`
-🎯 Sistema Multi-agente Simplificado
+Sistema Multi-agente Simplificado
 
 Comandos disponibles:
   validate  - Validar configuración del sistema
