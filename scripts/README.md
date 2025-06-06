@@ -10,8 +10,11 @@ This directory contains general utility scripts for the project.
 - Conventional commit messages
 - Auto-push and PR creation
 - Branch cleanup and management
+- **FULLY AUTOMATED** - No user interaction required
 
 - **`git-workflow.js`** - Complete git automation system
+- **`carlos-create-pr.js`** - Automatic PR creation
+- **`setup-repository.js`** - Repository configuration
 
 ### PageSpeed Analyzer
 Performance analysis tool for the website.

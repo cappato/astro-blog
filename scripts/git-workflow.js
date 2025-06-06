@@ -29,6 +29,8 @@ const CONFIG = {
   },
   conventionalCommits: true,
   autoCreatePR: true,
+  autoMergePR: true,
+  carlosMode: true, // Carlos works fully automated
   defaultBaseBranch: 'main',
   requireDescription: true
 };
@@ -299,11 +301,16 @@ async function completeWorkflow() {
   // Step 2: Push changes
   await pushChanges();
 
-  // Step 3: Create PR if enabled
+  // Step 3: Create PR automatically (Carlos mode)
   if (CONFIG.autoCreatePR) {
-    const createPR = await question('Create Pull Request? (y/n): ');
-    if (createPR.toLowerCase() === 'y') {
+    if (CONFIG.carlosMode) {
+      console.log('🤖 Carlos mode: Creating PR automatically...');
       await createPullRequest();
+    } else {
+      const createPR = await question('Create Pull Request? (y/n): ');
+      if (createPR.toLowerCase() === 'y') {
+        await createPullRequest();
+      }
     }
   }
 
