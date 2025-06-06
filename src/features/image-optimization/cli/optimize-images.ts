@@ -94,7 +94,7 @@ export class ImageOptimizationCLI {
         setLogLevel('debug');
       }
 
-      logger.info('🖼️  Image Optimization CLI - Modular Feature');
+      logger.info('️  Image Optimization CLI - Modular Feature');
       logger.separator();
 
       // Ensure required directories exist
@@ -168,10 +168,10 @@ export class ImageOptimizationCLI {
     );
 
     if (result.success) {
-      logger.info(`✅ Generated: ${result.outputPath} (${this.formatFileSize(result.size)})`);
+      logger.info(` Generated: ${result.outputPath} (${this.formatFileSize(result.size)})`);
       this.stats.processedImages++;
     } else {
-      logger.error(`❌ Failed to process: ${result.error}`);
+      logger.error(` Failed to process: ${result.error}`);
       this.stats.errorImages++;
     }
 
@@ -220,7 +220,7 @@ export class ImageOptimizationCLI {
         if (!argv['dry-run']) {
           const lqipResult = await imageProcessor.generateLQIP(imagePath, outputDir, 'portada');
           if (lqipResult.success) {
-            logger.debug(`✅ Generated LQIP: ${lqipResult.lqipPath}`);
+            logger.debug(` Generated LQIP: ${lqipResult.lqipPath}`);
           }
         }
       }
@@ -310,7 +310,7 @@ export class ImageOptimizationCLI {
     // Validate image
     const validation = await imageProcessor.validateImage(imagePath);
     if (!validation.valid) {
-      logger.error(`❌ Invalid image ${fileName}: ${validation.error}`);
+      logger.error(` Invalid image ${fileName}: ${validation.error}`);
       this.stats.errorImages++;
       return false;
     }
@@ -324,11 +324,11 @@ export class ImageOptimizationCLI {
     );
 
     if (result.success) {
-      logger.debug(`✅ Generated: ${outputFileName} (${this.formatFileSize(result.size)})`);
+      logger.debug(` Generated: ${outputFileName} (${this.formatFileSize(result.size)})`);
       this.stats.processedImages++;
       return true;
     } else {
-      logger.error(`❌ Failed ${fileName} [${presetName}]: ${result.error}`);
+      logger.error(` Failed ${fileName} [${presetName}]: ${result.error}`);
       this.stats.errorImages++;
       return false;
     }

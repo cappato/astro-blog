@@ -113,17 +113,17 @@ describe('Reading Time Feature', () => {
   describe('TextProcessor Class', () => {
     test('should strip HTML tags', () => {
       const processor = new TextProcessor({ stripHtml: true });
-      const html = '<p>Hello <strong>world</strong>!</p>';
+      const html = '<p> <strong>world</strong>!</p>';
       
       const processed = processor.processText(html);
-      expect(processed).toBe('Hello world!');
+      expect(processed).toBe(' world!');
     });
 
     test('should count words correctly', () => {
       const processor = new TextProcessor();
       
-      expect(processor.countWords('Hello world')).toBe(2);
-      expect(processor.countWords('  Hello   world  ')).toBe(2);
+      expect(processor.countWords(' world')).toBe(2);
+      expect(processor.countWords('     world  ')).toBe(2);
       expect(processor.countWords('')).toBe(0);
     });
 
@@ -142,20 +142,20 @@ describe('Reading Time Feature', () => {
         customPatterns: [/\[.*?\]/g] // Remove square brackets
       });
       
-      const text = 'Hello [world] test';
+      const text = ' [world] test';
       const processed = processor.processText(text);
-      expect(processed).toBe('Hello  test');
+      expect(processed).toBe('  test');
     });
 
     test('should analyze text comprehensively', () => {
       const processor = new TextProcessor();
-      const text = '<p>Hello world</p>';
+      const text = '<p> world</p>';
       
       const analysis = processor.analyzeText(text);
       
       expect(analysis.originalLength).toBe(text.length);
       expect(analysis.wordCount).toBe(2);
-      expect(analysis.processedText).toBe('Hello world');
+      expect(analysis.processedText).toBe(' world');
     });
   });
 
@@ -269,7 +269,7 @@ describe('Reading Time Feature', () => {
     });
 
     test('should handle special characters and unicode', () => {
-      const unicodeText = 'Hola 世界 🌍 café naïve résumé';
+      const unicodeText = 'Hola 世界  café naïve résumé';
       const result = getReadingTime(unicodeText, 200);
       
       expect(result).toBe(1); // Should count words correctly

@@ -10,17 +10,17 @@ imageAlt: "Troubleshooting Wrangler - Soluciones para problemas comunes en WSL y
 
 ¿Tienes problemas con **Wrangler en WSL** o errores en tus deploys? En esta guía encuentras las **soluciones a los problemas más comunes** con Wrangler, desde errores de binarios hasta issues de autenticación.
 
-## 🎯 Problemas que vas a resolver
+##  Problemas que vas a resolver
 
 Esta guía cubre las soluciones para:
 
-- ✅ **Errores de binarios cruzados** en WSL
-- ✅ **Problemas de autenticación** con Cloudflare
-- ✅ **Errores en GitHub Actions** y CI/CD
-- ✅ **Issues de deploy** y configuración
-- ✅ **Workflow completo** de desarrollo optimizado
+-  **Errores de binarios cruzados** en WSL
+-  **Problemas de autenticación** con Cloudflare
+-  **Errores en GitHub Actions** y CI/CD
+-  **Issues de deploy** y configuración
+-  **Workflow completo** de desarrollo optimizado
 
-## 📋 Prerrequisitos
+##  Prerrequisitos
 
 Para seguir esta guía necesitas:
 
@@ -28,7 +28,7 @@ Para seguir esta guía necesitas:
 - GitHub Actions configurado ([guía de CI/CD](/blog/github-actions-deploy-automatico-wrangler))
 - Acceso a terminal y logs de error
 
-## 🚨 Problema #1: Errores de Binarios WSL
+##  Problema #1: Errores de Binarios WSL
 
 ### Síntoma
 
@@ -42,7 +42,7 @@ needs the "@cloudflare/workerd-linux-64" package instead.
 
 WSL mezcla binarios de Windows y Linux, causando conflictos en las dependencias de Wrangler.
 
-### ✅ Solución Definitiva
+###  Solución Definitiva
 
 ```bash
 # 1. Limpiar instalaciones problemáticas
@@ -52,8 +52,8 @@ rm -rf node_modules package-lock.json
 npm install
 
 # 3. Usar SIEMPRE npx en lugar de instalación global
-npx wrangler --version  # ✅ Funciona
-wrangler --version      # ❌ Puede fallar
+npx wrangler --version  #  Funciona
+wrangler --version      #  Puede fallar
 
 # 4. Verificar que funciona
 npx wrangler whoami
@@ -64,16 +64,16 @@ npx wrangler whoami
 **Regla de oro**: En WSL, SIEMPRE usa `npx wrangler` en lugar de `wrangler` global.
 
 ```bash
-# ✅ Correcto
+#  Correcto
 npx wrangler login
 npx wrangler pages deploy dist
 
-# ❌ Problemático en WSL
+#  Problemático en WSL
 wrangler login
 wrangler pages deploy dist
 ```
 
-## 🔐 Problema #2: Errores de Autenticación
+##  Problema #2: Errores de Autenticación
 
 ### Síntoma
 
@@ -89,7 +89,7 @@ Error: You need to be logged in to perform this action
 npx wrangler whoami
 ```
 
-### ✅ Soluciones por Escenario
+###  Soluciones por Escenario
 
 #### Escenario A: No autenticado
 
@@ -125,7 +125,7 @@ Error: Project not found
 Error: Invalid account ID
 ```
 
-### ✅ Diagnóstico y Solución
+###  Diagnóstico y Solución
 
 #### Verificar Secrets
 
@@ -161,7 +161,7 @@ npx wrangler whoami
 # 4. Regenerar y actualizar CLOUDFLARE_API_TOKEN
 ```
 
-## 📦 Problema #4: Errores de Deploy
+##  Problema #4: Errores de Deploy
 
 ### Síntoma A: Proyecto no encontrado
 
@@ -216,7 +216,7 @@ npm run build
 # Verificar .gitignore para excluir archivos innecesarios
 ```
 
-## 🔧 Problema #5: Issues de Configuración
+##  Problema #5: Issues de Configuración
 
 ### wrangler.toml Incorrecto
 
@@ -243,7 +243,7 @@ pages_build_output_dir = "dist"
 }
 ```
 
-## 🔍 Herramientas de Diagnóstico
+##  Herramientas de Diagnóstico
 
 ### Comandos de Verificación
 
@@ -274,7 +274,7 @@ npx wrangler pages deploy dist --project-name=mi-proyecto --verbose
 # GitHub Repo → Actions → Click en workflow → Ver logs detallados
 ```
 
-## 📊 Workflow Completo de Desarrollo
+##  Workflow Completo de Desarrollo
 
 ### Para Desarrollo Local
 
@@ -310,7 +310,7 @@ npm run build
 npm run deploy
 ```
 
-## 🚀 Optimizaciones de Performance
+##  Optimizaciones de Performance
 
 ### Cache en GitHub Actions
 
@@ -337,27 +337,27 @@ npm run deploy:clean
 npm run deploy:ci
 ```
 
-## 💡 Mejores Prácticas
+##  Mejores Prácticas
 
 ### 1. Entorno WSL
 
-- ✅ Siempre usar `npx wrangler`
-- ✅ Limpiar `node_modules` si hay problemas
-- ✅ Verificar autenticación regularmente
+-  Siempre usar `npx wrangler`
+-  Limpiar `node_modules` si hay problemas
+-  Verificar autenticación regularmente
 
 ### 2. GitHub Actions
 
-- ✅ Usar secrets para credenciales
-- ✅ Verificar permisos de API tokens
-- ✅ Monitorear logs de deploy
+-  Usar secrets para credenciales
+-  Verificar permisos de API tokens
+-  Monitorear logs de deploy
 
 ### 3. Desarrollo
 
-- ✅ Test local antes de push
-- ✅ Commits descriptivos
-- ✅ Deploy manual para debugging
+-  Test local antes de push
+-  Commits descriptivos
+-  Deploy manual para debugging
 
-## 🎯 Checklist de Troubleshooting
+##  Checklist de Troubleshooting
 
 Cuando tengas problemas, sigue este checklist:
 
@@ -369,7 +369,7 @@ Cuando tengas problemas, sigue este checklist:
 - [ ] ¿El `wrangler.toml` está configurado correctamente?
 - [ ] ¿Los permisos del API token son correctos?
 
-## 🚀 Conclusión
+##  Conclusión
 
 Con estas soluciones tienes las herramientas para resolver los problemas más comunes con **Wrangler y deploy automático**. Recuerda:
 
@@ -378,11 +378,11 @@ Con estas soluciones tienes las herramientas para resolver los problemas más co
 3. **GitHub Actions**: Secrets y permisos correctos
 4. **Deploy**: Test local primero
 
-### 📚 **Serie Completa:**
+###  **Serie Completa:**
 - **[Configurar Wrangler y Cloudflare Pages](/blog/configurar-wrangler-cloudflare-pages-2024)** - Configuración inicial
 - **[GitHub Actions para Deploy Automático](/blog/github-actions-deploy-automatico-wrangler)** - CI/CD setup
 
-### 🏷️ **Explora más:**
+### ️ **Explora más:**
 - **[Posts sobre Troubleshooting](/blog/tag/troubleshooting)** - Más soluciones
 - **[Automation & DevOps Hub](/blog/pillar/automation-devops)** - Automatización completa
 

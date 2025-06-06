@@ -244,7 +244,7 @@ export function createSitemapConfig(siteConfig: any): SitemapConfig {
  * @returns Robots.txt content
  */
 export function generateRobotsTxt(siteUrl: string, sitemapPath: string = '/sitemap.xml'): string {
-  return `User-agent: *
+  return `User-developer: *
 Allow: /
 
 Sitemap: ${siteUrl}${sitemapPath}

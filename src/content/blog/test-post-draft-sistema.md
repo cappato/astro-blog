@@ -13,22 +13,22 @@ draft: true
 
 Este post está configurado con `draft: true` en el frontmatter, lo que significa que:
 
-## 🔒 Comportamiento en Producción
+##  Comportamiento en Producción
 
-- ❌ **NO aparece** en `/blog` (listado principal)
-- ❌ **NO aparece** en `/blog/tag/test` (páginas de tags)
-- ❌ **NO aparece** en `/rss.xml` (feed RSS)
-- ❌ **NO aparece** en `/sitemap.xml` (sitemap)
-- ❌ **NO se indexa** en buscadores
-- ✅ **SÍ es accesible** por URL directa: `/blog/test-post-draft-sistema`
+-  **NO aparece** en `/blog` (listado principal)
+-  **NO aparece** en `/blog/tag/test` (páginas de tags)
+-  **NO aparece** en `/rss.xml` (feed RSS)
+-  **NO aparece** en `/sitemap.xml` (sitemap)
+-  **NO se indexa** en buscadores
+-  **SÍ es accesible** por URL directa: `/blog/test-post-draft-sistema`
 
-## 🛠️ Comportamiento en Desarrollo
+## ️ Comportamiento en Desarrollo
 
-- ✅ **SÍ aparece** en todos los listados (para testing)
-- ✅ **SÍ aparece** en RSS y sitemap (para verificación)
-- ✅ **Completamente visible** para desarrollo y testing
+-  **SÍ aparece** en todos los listados (para testing)
+-  **SÍ aparece** en RSS y sitemap (para verificación)
+-  **Completamente visible** para desarrollo y testing
 
-## 🎯 Casos de Uso del Sistema Draft
+##  Casos de Uso del Sistema Draft
 
 ### **1. Revisión de Contenido**
 - Crear post con `draft: true`
@@ -46,7 +46,7 @@ Este post está configurado con `draft: true` en el frontmatter, lo que signific
 - Editores revisan por URL directa
 - Aprobación antes de publicación pública
 
-## 🔧 Cómo Usar el Sistema
+##  Cómo Usar el Sistema
 
 ### **Crear Post Draft:**
 ```yaml
@@ -68,7 +68,7 @@ draft: false  # ← Cambiar a false para publicar
 # O simplemente eliminar la línea draft
 ```
 
-## 📊 Verificación del Sistema
+##  Verificación del Sistema
 
 ### **URLs para Probar:**
 
@@ -87,7 +87,7 @@ draft: false  # ← Cambiar a false para publicar
 5. **Sitemap (NO debe aparecer):**
    - https://cappato.dev/sitemap.xml
 
-## ✅ Funcionalidades Completas
+##  Funcionalidades Completas
 
 ### **Imágenes Optimizadas**
 Este post tiene todas las variantes de imagen generadas:
@@ -108,7 +108,7 @@ Este post tiene todas las variantes de imagen generadas:
 - Frontmatter válido
 - Build exitoso
 
-## 🎉 Resultado de la Prueba
+##  Resultado de la Prueba
 
 Si puedes acceder a este post por URL directa pero NO lo ves en:
 - Listado principal del blog
@@ -116,10 +116,10 @@ Si puedes acceder a este post por URL directa pero NO lo ves en:
 - RSS feed
 - Sitemap
 
-**¡El sistema de drafts funciona perfectamente!** ✅
+**¡El sistema de drafts funciona perfectamente!** 
 
 ---
 
-**Estado:** 🔒 Draft - Solo accesible por URL directa  
+**Estado:**  Draft - Solo accesible por URL directa  
 **Próximo paso:** Cambiar `draft: false` para publicar  
 **URL de prueba:** https://cappato.dev/blog/test-post-draft-sistema

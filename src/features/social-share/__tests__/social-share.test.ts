@@ -154,7 +154,7 @@ describe('getDeviceInfo', () => {
     expect(result.screenWidth).toBe(1024);
   });
 
-  it('should detect mobile device by user agent', () => {
+  it('should detect mobile device by user developer', () => {
     vi.stubGlobal('navigator', {
       userAgent: 'Mozilla/5.0 (iPhone; CPU iPhone OS 14_0 like Mac OS X)'
     });

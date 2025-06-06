@@ -10,17 +10,17 @@ imageAlt: "Configuración de Wrangler y Cloudflare Pages - Guía paso a paso par
 
 ¿Quieres configurar **Wrangler y Cloudflare Pages** para tu proyecto pero no sabes por dónde empezar? En esta guía te enseño paso a paso cómo hacer la **configuración inicial de Cloudflare Pages** y preparar tu proyecto para deploy automático.
 
-## 🎯 Lo que vas a lograr
+##  Lo que vas a lograr
 
 Al final de esta guía tendrás:
 
-- ✅ **Wrangler configurado** y funcionando correctamente
-- ✅ **Autenticación con Cloudflare** establecida
-- ✅ **Proyecto en Cloudflare Pages** creado
-- ✅ **Configuración base** lista para deploy
-- ✅ **Resolución de problemas WSL** implementada
+-  **Wrangler configurado** y funcionando correctamente
+-  **Autenticación con Cloudflare** establecida
+-  **Proyecto en Cloudflare Pages** creado
+-  **Configuración base** lista para deploy
+-  **Resolución de problemas WSL** implementada
 
-## 📋 Prerrequisitos
+##  Prerrequisitos
 
 Antes de empezar con la **configuración de Wrangler**, asegúrate de tener:
 
@@ -29,19 +29,19 @@ Antes de empezar con la **configuración de Wrangler**, asegúrate de tener:
 - Node.js y npm instalados
 - Terminal con acceso a npm/npx
 
-💡 **Tip**: Si estás en WSL, esta guía incluye todas las soluciones para problemas comunes.
+ **Tip**: Si estás en WSL, esta guía incluye todas las soluciones para problemas comunes.
 
-## 🚀 Paso 1: Instalación y Autenticación
+##  Paso 1: Instalación y Autenticación
 
 ### 1.1 ¿Instalar Globalmente o Usar npx?
 
 **Recomendación**: Usa `npx wrangler` en lugar de instalación global, especialmente en WSL.
 
 **¿Por qué npx es mejor?**
-- ✅ Evita problemas de binarios cruzados Windows/Linux
-- ✅ Siempre usa la versión más reciente
-- ✅ No requiere instalación global
-- ✅ Funciona en cualquier entorno
+-  Evita problemas de binarios cruzados Windows/Linux
+-  Siempre usa la versión más reciente
+-  No requiere instalación global
+-  Funciona en cualquier entorno
 
 ### 1.2 Autenticación con Cloudflare
 
@@ -62,7 +62,7 @@ npx wrangler whoami
 **Salida esperada**:
 ```
 Getting User settings...
-👤 You are logged in with an OAuth Token, associated with the email 'tu-email@gmail.com'.
+ You are logged in with an OAuth Token, associated with the email 'tu-email@gmail.com'.
 ┌─────────────────────────────────────┬──────────────────────────────────┐
 │ Account Name                        │ Account ID                       │
 ├─────────────────────────────────────┼──────────────────────────────────┤
@@ -70,9 +70,9 @@ Getting User settings...
 └─────────────────────────────────────┴──────────────────────────────────┘
 ```
 
-⚠️ **IMPORTANTE**: Guarda el **Account ID**, lo necesitarás más adelante para GitHub Actions.
+️ **IMPORTANTE**: Guarda el **Account ID**, lo necesitarás más adelante para GitHub Actions.
 
-## 🏗️ Paso 2: Crear Proyecto en Cloudflare Pages
+## ️ Paso 2: Crear Proyecto en Cloudflare Pages
 
 ### 2.1 Crear el Proyecto
 
@@ -83,8 +83,8 @@ npx wrangler pages project create mi-proyecto
 
 **Salida esperada**:
 ```
-✨ Successfully created the 'mi-proyecto' project.
-🌍 View your project at: https://dash.cloudflare.com/[account-id]/pages/view/mi-proyecto
+ Successfully created the 'mi-proyecto' project.
+ View your project at: https://dash.cloudflare.com/[account-id]/pages/view/mi-proyecto
 ```
 
 ### 2.2 Listar Proyectos Existentes
@@ -96,7 +96,7 @@ npx wrangler pages project list
 
 Esto te muestra todos los proyectos que tienes en Cloudflare Pages.
 
-## ⚙️ Paso 3: Configurar wrangler.toml
+## ️ Paso 3: Configurar wrangler.toml
 
 ### 3.1 Crear el Archivo de Configuración
 
@@ -122,13 +122,13 @@ name = "mi-proyecto-preview"
 - **`env.production`**: Configuración para producción
 - **`env.preview`**: Configuración para previews (opcional)
 
-💡 **Consejo**: El `pages_build_output_dir` debe coincidir exactamente con el directorio de salida de Astro.
+ **Consejo**: El `pages_build_output_dir` debe coincidir exactamente con el directorio de salida de Astro.
 
-## 🔧 Paso 4: Resolución de Problemas WSL
+##  Paso 4: Resolución de Problemas WSL
 
 ### 4.1 El Problema Común en WSL
 
-⚠️ **PROBLEMA**: Al usar Wrangler en WSL, es común encontrar este error:
+️ **PROBLEMA**: Al usar Wrangler en WSL, es común encontrar este error:
 
 ```
 Error: You installed workerd on another platform than the one you're currently using.
@@ -138,7 +138,7 @@ needs the "@cloudflare/workerd-linux-64" package instead.
 
 ### 4.2 La Solución Definitiva
 
-✅ **SOLUCIÓN**: Usar `npx wrangler` en lugar de instalación global.
+ **SOLUCIÓN**: Usar `npx wrangler` en lugar de instalación global.
 
 ```bash
 # Si tienes problemas de binarios cruzados
@@ -184,25 +184,25 @@ npm run deploy
 
 **Salida esperada**:
 ```
-✨ Compiled successfully.
-🌍 Uploading... (X files)
-✨ Success! Uploaded X files (X.XX sec)
-🌍 Deploying...
-✨ Deployment complete! Take a peek over at https://xxxxxxxx.mi-proyecto.pages.dev
+ Compiled successfully.
+ Uploading... (X files)
+ Success! Uploaded X files (X.XX sec)
+ Deploying...
+ Deployment complete! Take a peek over at https://xxxxxxxx.mi-proyecto.pages.dev
 ```
 
-🎉 **¡Felicitaciones!** Tu proyecto ya está desplegado en Cloudflare Pages.
+ **¡Felicitaciones!** Tu proyecto ya está desplegado en Cloudflare Pages.
 
-## 🔍 Verificación de la Configuración
+##  Verificación de la Configuración
 
 ### Checklist de Configuración Completa
 
-- ✅ Wrangler autenticado (`npx wrangler whoami`)
-- ✅ Proyecto creado en Cloudflare Pages
-- ✅ Archivo `wrangler.toml` configurado
-- ✅ Scripts de deploy agregados a `package.json`
-- ✅ Deploy manual funcionando
-- ✅ URL de producción accesible
+-  Wrangler autenticado (`npx wrangler whoami`)
+-  Proyecto creado en Cloudflare Pages
+-  Archivo `wrangler.toml` configurado
+-  Scripts de deploy agregados a `package.json`
+-  Deploy manual funcionando
+-  URL de producción accesible
 
 ### Comandos Útiles para Verificar
 
@@ -220,19 +220,19 @@ npx wrangler pages project get mi-proyecto
 npm run deploy
 ```
 
-## 🚀 Próximos Pasos
+##  Próximos Pasos
 
 ¡Excelente! Ya tienes la **configuración base de Wrangler y Cloudflare Pages** funcionando. Ahora puedes continuar con:
 
-### 📚 **Siguiente en la Serie:**
+###  **Siguiente en la Serie:**
 - **[GitHub Actions para Deploy Automático: CI/CD con Wrangler](/blog/github-actions-deploy-automatico-wrangler)** - Automatiza tus deploys con GitHub Actions
 - **[Troubleshooting Wrangler: Soluciones para WSL y Deploy Issues](/blog/troubleshooting-wrangler-wsl-deploy)** - Resuelve problemas comunes
 
-### 🏷️ **Explora más sobre Cloudflare:**
+### ️ **Explora más sobre Cloudflare:**
 - **[Ver todos los posts de Cloudflare](/blog/tag/cloudflare)** - Aprovecha al máximo la plataforma
 - **[Posts sobre Deploy](/blog/tag/deploy)** - Más estrategias de despliegue
 
-## 💡 Puntos Clave
+##  Puntos Clave
 
 1. **npx > instalación global**: Especialmente importante en WSL
 2. **Account ID**: Guárdalo para configurar GitHub Actions

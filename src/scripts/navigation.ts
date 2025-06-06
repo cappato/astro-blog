@@ -74,14 +74,14 @@ class AppManager {
             break;
         }
         this.loadedScripts.add(scriptName);
-        console.log(`📦 Loaded deferred script: ${scriptName}`);
+        console.log(` Loaded deferred script: ${scriptName}`);
       } catch (error) {
         console.warn(`Failed to load script ${scriptName}:`, error);
       }
     });
 
     await Promise.allSettled(scriptPromises);
-    console.log('✅ All deferred scripts loaded');
+    console.log(' All deferred scripts loaded');
   }
 
   public getLoadedScripts(): string[] {

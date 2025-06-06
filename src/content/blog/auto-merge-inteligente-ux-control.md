@@ -12,20 +12,20 @@ image:
 
 En el [post anterior](/blog/anatomia-sistema-protocolos-automaticos) vimos la implementación técnica. Ahora exploramos cómo optimizar la experiencia del usuario eliminando fricción innecesaria del workflow.
 
-## 🎯 El Dilema: Control vs. Fluidez
+##  El Dilema: Control vs. Fluidez
 
 ### **El Problema Tradicional**
 ```
 WORKFLOW TRADICIONAL:
-1. Escribir código ✍️
-2. Commit local 📝
-3. Push a branch 🚀
-4. Crear PR 📋
-5. Esperar review 👀
-6. Aprobar PR ✅
-7. Merge manual 🔀
-8. Deploy manual 🚀
-9. Verificar resultado ✅
+1. Escribir código ️
+2. Commit local 
+3. Push a branch 
+4. Crear PR 
+5. Esperar review 
+6. Aprobar PR 
+7. Merge manual 
+8. Deploy manual 
+9. Verificar resultado 
 
 TIEMPO TOTAL: 15-30 minutos por cambio
 ```
@@ -34,19 +34,19 @@ TIEMPO TOTAL: 15-30 minutos por cambio
 
 > **"Es más fácil revertir un mal PR ocasional que aprobar manualmente cientos de PRs buenos"**
 
-## 🚀 La Solución: Auto-Merge Inteligente
+##  La Solución: Auto-Merge Inteligente
 
 ### **Workflow Optimizado**
 ```
 WORKFLOW AUTO-MERGE:
-1. Escribir código ✍️
-2. Push a main 🚀
-3. ☕ Tomar café mientras se despliega automáticamente
+1. Escribir código ️
+2. Push a main 
+3.  Tomar café mientras se despliega automáticamente
 
 TIEMPO TOTAL: 2-3 minutos
 ```
 
-## 🏗️ Arquitectura del Sistema
+## ️ Arquitectura del Sistema
 
 ### **Componentes Clave**
 
@@ -59,8 +59,8 @@ graph TD
     D -->|No| F[Notificación de fallo]
     E --> G[Deploy a Cloudflare Pages]
     G --> H[Verificación post-deploy]
-    H --> I[✅ Live en producción]
-    F --> J[🚨 Rollback automático]
+    H --> I[ Live en producción]
+    F --> J[ Rollback automático]
 ```
 
 ### **GitHub Actions Workflow**
@@ -107,7 +107,7 @@ jobs:
 ````
 </augment_code_snippet>
 
-## 🛡️ Salvaguardas Inteligentes
+## ️ Salvaguardas Inteligentes
 
 ### **1. Testing Automático Robusto**
 
@@ -154,24 +154,24 @@ if (deploymentFailed) {
 }
 ```
 
-## 🎯 Beneficios Obtenidos
+##  Beneficios Obtenidos
 
 ### **Velocidad Extrema**
-- ⚡ **Deploy en ~2 minutos** desde push
-- 🚀 **0 clicks manuales** para deploy normal
-- 🔄 **Feedback inmediato** en caso de errores
+-  **Deploy en ~2 minutos** desde push
+-  **0 clicks manuales** para deploy normal
+-  **Feedback inmediato** en caso de errores
 
 ### **Calidad Mantenida**
-- ✅ **Tests automáticos** en cada deploy
-- 🛡️ **Validación multi-capa** antes de producción
-- 🔙 **Rollback automático** si algo falla
+-  **Tests automáticos** en cada deploy
+- ️ **Validación multi-capa** antes de producción
+-  **Rollback automático** si algo falla
 
 ### **Experiencia del Desarrollador**
-- 😌 **Menos fricción cognitiva** - focus en código
-- 🎯 **Feedback loop más corto** - errores detectados rápido
-- 💪 **Confianza en el sistema** - funciona consistentemente
+-  **Menos fricción cognitiva** - focus en código
+-  **Feedback loop más corto** - errores detectados rápido
+-  **Confianza en el sistema** - funciona consistentemente
 
-## ⚠️ Cuándo NO Usar Auto-Merge
+## ️ Cuándo NO Usar Auto-Merge
 
 ### **Proyectos Críticos**
 - Sistemas financieros
@@ -188,7 +188,7 @@ if (deploymentFailed) {
 - Arquitectura frágil
 - Dependencias complejas
 
-## 🔧 Implementación Práctica
+##  Implementación Práctica
 
 ### **Paso 1: Setup Básico**
 
@@ -223,14 +223,14 @@ npm run test:setup
 ```bash
 # Test completo del workflow
 git add .
-git commit -m "🚀 Setup auto-merge system"
+git commit -m " Setup auto-merge system"
 git push origin main
 
 # Monitorear en GitHub Actions
 # Verificar deploy en Cloudflare Pages
 ```
 
-## 💡 Lecciones Aprendidas
+##  Lecciones Aprendidas
 
 ### **1. La Confianza se Construye Gradualmente**
 - Empezar con proyectos pequeños
@@ -247,15 +247,15 @@ git push origin main
 - Mantener versiones anteriores disponibles
 - Notificaciones inmediatas de problemas
 
-## 🔄 Próximo en la Serie
+##  Próximo en la Serie
 
 En el siguiente post veremos **"Migración de Sistemas: Preservando la Visión"** - cómo evolucionar sistemas existentes sin perder la esencia original.
 
 ### **Serie Completa:**
-1. ✅ [El Problema de los Protocolos que se Olvidan](/blog/protocolos-automaticos-ia-arquitectura)
-2. ✅ [Anatomía de un Sistema de Protocolos Automáticos](/blog/anatomia-sistema-protocolos-automaticos)
-3. ✅ **Auto-Merge Inteligente: UX sobre Control** (este post)
-4. 🔄 Migración de Sistemas: Preservando la Visión (próximo)
+1.  [El Problema de los Protocolos que se Olvidan](/blog/protocolos-automaticos-ia-arquitectura)
+2.  [Anatomía de un Sistema de Protocolos Automáticos](/blog/anatomia-sistema-protocolos-automaticos)
+3.  **Auto-Merge Inteligente: UX sobre Control** (este post)
+4.  Migración de Sistemas: Preservando la Visión (próximo)
 
 ---
 

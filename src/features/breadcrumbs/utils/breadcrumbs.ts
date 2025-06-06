@@ -28,7 +28,7 @@ export function generateBreadcrumbs(pathname: string, customTitle?: string): Bre
 
   // Fallback: si no hay coincidencia, mostrar solo Home
   return [
-    { label: 'Inicio', href: '/', icon: '🏠' }
+    { label: 'Inicio', href: '/', icon: '' }
   ];
 }
 
