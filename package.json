@@ -52,7 +52,11 @@
     "multi-agent:post": "node scripts/simple-multi-agent.js post",
     "multi-agent:lesson": "node scripts/simple-multi-agent.js lesson",
     "multi-agent:pr": "node scripts/simple-multi-agent.js pr",
-    "multi-agent:workflow": "node scripts/simple-multi-agent.js workflow"
+    "multi-agent:workflow": "node scripts/simple-multi-agent.js workflow",
+    "multi-agent:validate-content": "node scripts/simple-multi-agent.js validate-content",
+    "multi-agent:auto-divide": "node scripts/simple-multi-agent.js auto-divide",
+    "validate:content": "node scripts/intelligent-content-validator.js",
+    "auto:divide": "node scripts/auto-series-divider.js"
   },
   "dependencies": {
     "@tailwindcss/typography": "^0.5.16",

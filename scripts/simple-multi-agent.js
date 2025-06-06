@@ -280,10 +280,42 @@ class SimpleMultiAgent {
     }
 
     /**
-     * Workflow completo automatizado: push + PR + reporte
+     * Validación inteligente de contenido
+     */
+    async intelligentValidation() {
+        console.log('🧠 Ejecutando validación inteligente de contenido...\n');
+
+        try {
+            execSync('node scripts/intelligent-content-validator.js', { stdio: 'inherit' });
+            console.log('✅ Validación inteligente completada\n');
+            return true;
+        } catch (error) {
+            console.log('⚠️ Problemas detectados en validación inteligente\n');
+            return false;
+        }
+    }
+
+    /**
+     * Auto-división de posts largos
+     */
+    async autoSeriesDivision() {
+        console.log('✂️ Ejecutando auto-división de posts largos...\n');
+
+        try {
+            execSync('node scripts/auto-series-divider.js', { stdio: 'inherit' });
+            console.log('✅ Auto-división completada\n');
+            return true;
+        } catch (error) {
+            console.log('⚠️ Error en auto-división:', error.message);
+            return false;
+        }
+    }
+
+    /**
+     * Workflow completo automatizado: validación inteligente + push + PR + reporte
      */
     async automatedWorkflow(commitMessage, prTitle, prDescription) {
-        console.log('🚀 Iniciando workflow automatizado completo...\n');
+        console.log('🚀 Iniciando workflow automatizado inteligente...\n');
 
         try {
             // 1. Verificar que hay cambios para commitear
@@ -293,24 +325,36 @@ class SimpleMultiAgent {
                 return;
             }
 
-            // 2. Ejecutar tests antes de push
-            console.log('🧪 Ejecutando tests...');
-            execSync('npm run test:blog', { stdio: 'inherit' });
-            console.log('✅ Tests pasaron exitosamente\n');
+            // 2. Validación inteligente de contenido
+            console.log('🧠 Validación inteligente de contenido...');
+            const validationPassed = await this.intelligentValidation();
 
-            // 3. Hacer push de la rama actual
+            // 3. Auto-división de posts largos si es necesario
+            console.log('✂️ Verificando necesidad de auto-división...');
+            await this.autoSeriesDivision();
+
+            // 4. Ejecutar tests técnicos
+            console.log('🧪 Ejecutando tests técnicos...');
+            execSync('npm run test:blog', { stdio: 'inherit' });
+            console.log('✅ Tests técnicos pasaron exitosamente\n');
+
+            // 5. Hacer push de la rama actual
             console.log('📤 Haciendo push...');
             const currentBranch = execSync('git branch --show-current', { encoding: 'utf8' }).trim();
             execSync(`git push origin ${currentBranch}`, { stdio: 'inherit' });
             console.log('✅ Push exitoso\n');
 
-            // 4. Crear PR automáticamente
+            // 6. Crear PR automáticamente
             const prUrl = await this.createPR(prTitle, prDescription);
 
             if (prUrl) {
-                console.log('\n🎉 Workflow automatizado completado exitosamente!');
+                console.log('\n🎉 Workflow automatizado inteligente completado exitosamente!');
                 console.log(`📋 PR: ${prUrl}`);
                 console.log('⏳ Auto-merge configurado - se mergeará automáticamente cuando pasen los tests');
+
+                if (!validationPassed) {
+                    console.log('⚠️ Nota: Se detectaron sugerencias de mejora en la validación inteligente');
+                }
             }
 
             return prUrl;
@@ -382,21 +426,41 @@ switch (command) {
         const workflowPrDesc = process.argv[5] || 'Cambios implementados automáticamente por el sistema multi-agente';
         await agent.automatedWorkflow(commitMsg, workflowPrTitle, workflowPrDesc);
         break;
+    case 'validate-content':
+        // Validación inteligente de contenido
+        await agent.intelligentValidation();
+        break;
+    case 'auto-divide':
+        // Auto-división de posts largos
+        await agent.autoSeriesDivision();
+        break;
     default:
         console.log(`
-🎯 Sistema Multi-agente Simplificado
+🎯 Sistema Multi-agente Inteligente
 
-Comandos disponibles:
-  validate  - Validar configuración del sistema
-  context   - Cargar contexto del blog
-  post      - Crear nuevo post (con contexto)
-  lesson    - Crear lección aprendida (con contexto)
-  pr        - Reportar PR según protocolo
-  workflow  - Workflow automatizado completo (tests + push + PR)
+Comandos básicos:
+  validate         - Validar configuración del sistema
+  context          - Cargar contexto del blog
+  post             - Crear nuevo post (con contexto)
+  lesson           - Crear lección aprendida (con contexto)
+  pr               - Reportar PR según protocolo
+
+Comandos inteligentes:
+  validate-content - Validación inteligente de calidad de contenido
+  auto-divide      - Auto-división de posts largos en series
+  workflow         - Workflow automatizado inteligente completo
 
 Uso: npm run multi-agent:[comando]
 
-Workflow automatizado:
+Workflow automatizado inteligente:
   npm run multi-agent:workflow "commit message" "PR title" "PR description"
+
+  Incluye:
+  - 🧠 Validación inteligente de contenido
+  - ✂️ Auto-división de posts largos
+  - 🧪 Tests técnicos
+  - 📤 Push automático
+  - 🔗 Creación de PR
+  - 📋 Reporte según protocolo
         `);
 }
