@@ -65,6 +65,20 @@ const getCurrentBranch = () => {
   return execCommand('git branch --show-current', { silent: true });
 };
 
+const validateNotOnMainBranch = () => {
+  const currentBranch = getCurrentBranch();
+  const protectedBranches = ['main', 'master', 'develop'];
+
+  if (protectedBranches.includes(currentBranch)) {
+    console.error(`🚨 CARLOS PROTECTION: Cannot work directly on ${currentBranch} branch!`);
+    console.error('🤖 Carlos must always work on feature branches.');
+    console.error('✅ Use: npm run git:branch to create a feature branch');
+    process.exit(1);
+  }
+
+  return currentBranch;
+};
+
 const getBranchExists = (branchName) => {
   const result = execCommand(`git branch --list ${branchName}`, { silent: true, ignoreError: true });
   return result && result.trim().length > 0;
@@ -164,7 +178,10 @@ async function createBranch() {
 
 async function commitChanges() {
   console.log('\n📝 Committing changes...\n');
-  
+
+  // CARLOS PROTECTION: Validate not on main branch
+  validateNotOnMainBranch();
+
   // Check for changes
   if (!hasUncommittedChanges()) {
     console.log('ℹ️  No changes to commit');
@@ -216,7 +233,8 @@ function getBranchInfo() {
 async function pushChanges() {
   console.log('\n🚀 Pushing changes...\n');
 
-  const currentBranch = getCurrentBranch();
+  // CARLOS PROTECTION: Validate not on main branch
+  const currentBranch = validateNotOnMainBranch();
 
   // Push to remote
   execCommand(`git push origin ${currentBranch}`);

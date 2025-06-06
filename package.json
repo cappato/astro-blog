@@ -55,6 +55,7 @@
     "git:workflow": "node scripts/git-workflow.js",
     "git:setup": "node scripts/setup-repository.js",
     "git:setup-labels": "gh label create --file .github/labels.yml || echo 'GitHub CLI required'",
+    "git:setup-protection": "node scripts/setup-branch-protection.js",
     "git:demo": "node scripts/demo-workflow.js",
     "git:demo-cleanup": "node scripts/demo-workflow.js --cleanup"
   },
