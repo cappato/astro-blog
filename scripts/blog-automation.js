@@ -48,8 +48,9 @@ async function main() {
 7. 🧪 Ejecutar tests completos
 8. 📊 Reporte completo del blog
 9. 🎯 Preview de posts relacionados para post existente
+10. 🔧 Optimizar posts existentes para mejores relaciones
 
-Elige (1-9): `);
+Elige (1-10): `);
   
   switch(action) {
     case '1':
@@ -76,6 +77,12 @@ Elige (1-9): `);
     case '8':
       await generateBlogReport();
       break;
+    case '9':
+      await previewRelatedPosts();
+      break;
+    case '10':
+      await optimizeExistingPostsRelations();
+      break;
     default:
       console.log('Opción no válida');
   }
@@ -91,6 +98,11 @@ async function createNewPost() {
   
   const title = await askQuestion('Título del post: ');
   const description = await askQuestion('Descripción (120-160 chars): ');
+
+  // Sugerir tags basados en posts existentes
+  const suggestedTags = await suggestTagsForNewPost(title, description);
+  console.log(`\n💡 Tags sugeridos basados en posts similares: ${suggestedTags.join(', ')}`);
+
   const tags = await askQuestion('Tags (separados por comas): ');
   const postId = await askQuestion(`PostId sugerido: ${generatePostId(title)} (Enter para usar o escribir otro): `) || generatePostId(title);
   
@@ -153,7 +165,11 @@ Antes de empezar necesitas:
   // Escribir archivo
   fs.writeFileSync(`src/content/blog/${postId}.md`, content);
   console.log(`✅ Post creado: src/content/blog/${postId}.md`);
-  
+
+  // Mostrar preview de posts relacionados
+  console.log('\n🔗 Analizando posts relacionados...');
+  await showRelatedPostsPreview(postId, tags.split(',').map(t => t.trim()));
+
   // Preguntar si quiere generar imágenes
   const generateImages = await askQuestion('¿Generar imágenes automáticamente? (y/n): ');
   if (generateImages.toLowerCase() === 'y') {
@@ -593,28 +609,34 @@ function analyzeContent(content) {
 function getExistingPosts() {
   const blogDir = 'src/content/blog';
   const files = fs.readdirSync(blogDir).filter(file => file.endsWith('.md'));
-  
+
   return files.map(file => {
     const content = fs.readFileSync(path.join(blogDir, file), 'utf-8');
     const frontmatterMatch = content.match(/^---\s*\n([\s\S]*?)\n---/);
-    
+
     if (frontmatterMatch) {
       const frontmatter = frontmatterMatch[1];
       const titleMatch = frontmatter.match(/title:\s*["'](.+)["']/);
       const postIdMatch = frontmatter.match(/postId:\s*["'](.+)["']/);
-      
+      const draftMatch = frontmatter.match(/draft:\s*(true|false)/);
+
       return {
         slug: file.replace('.md', ''),
         title: titleMatch ? titleMatch[1] : file,
-        postId: postIdMatch ? postIdMatch[1] : null
+        postId: postIdMatch ? postIdMatch[1] : null,
+        draft: draftMatch ? draftMatch[1] === 'true' : false
       };
     }
-    
+
     return {
       slug: file.replace('.md', ''),
       title: file,
-      postId: null
+      postId: null,
+      draft: false
     };
+  }).filter(post => {
+    // En producción, excluir drafts. En desarrollo, incluir todos
+    return process.env.NODE_ENV === 'production' ? !post.draft : true;
   });
 }
 
@@ -707,6 +729,61 @@ function suggestPillarRelationships(posts) {
   });
 
   return suggestions.sort((a, b) => b.posts.length - a.posts.length);
+}
+
+/**
+ * Algoritmo básico para encontrar posts relacionados
+ * Simula el comportamiento del motor de similitud real
+ */
+function findRelatedPostsBasic(currentPost, allPosts) {
+  const currentTags = new Set(currentPost.data.tags || []);
+  const relatedPosts = [];
+
+  allPosts.forEach(post => {
+    // No incluir el post actual
+    if (post.slug === currentPost.slug) return;
+
+    // Leer tags del post candidato
+    const content = fs.readFileSync(`src/content/blog/${post.slug}.md`, 'utf-8');
+    const tagsMatch = content.match(/tags:\s*\[(.*?)\]/);
+    const candidateTags = tagsMatch ?
+      tagsMatch[1].split(',').map(tag => tag.trim().replace(/['"]/g, '')) :
+      [];
+
+    // Calcular similitud basada en tags
+    const candidateTagsSet = new Set(candidateTags);
+    const intersection = new Set([...currentTags].filter(tag => candidateTagsSet.has(tag)));
+    const union = new Set([...currentTags, ...candidateTags]);
+
+    if (intersection.size > 0) {
+      // Jaccard similarity
+      const jaccardSimilarity = intersection.size / union.size;
+
+      // Bonus por tags de alta prioridad
+      const highPriorityTags = ['AI', 'Arquitectura', 'DevOps', 'TypeScript', 'Automatización'];
+      const highPriorityMatches = [...intersection].filter(tag =>
+        highPriorityTags.includes(tag)
+      ).length;
+
+      const bonus = highPriorityMatches * 0.1;
+      const finalScore = Math.min(jaccardSimilarity + bonus, 1);
+
+      // Solo incluir si el score es significativo
+      if (finalScore >= 0.2) {
+        relatedPosts.push({
+          post: post,
+          score: finalScore,
+          matchedTags: [...intersection],
+          reasons: [`${intersection.size} tags en común`]
+        });
+      }
+    }
+  });
+
+  // Ordenar por score y retornar top 3
+  return relatedPosts
+    .sort((a, b) => b.score - a.score)
+    .slice(0, 3);
 }
 
 function divideContentBySections(content, numParts) {
@@ -851,6 +928,435 @@ ${index === 0 ? 'Empezar aquí' : index === parts.length - 1 ? 'Nivel avanzado' 
 **¿Listo para empezar?** 👉 **[Comienza con la Parte 1](/blog/${parts[0].id})**`;
 }
 
+/**
+ * Sugerir tags para un nuevo post basado en posts similares
+ */
+async function suggestTagsForNewPost(title, description) {
+  const posts = getExistingPosts();
+  const searchText = `${title} ${description}`.toLowerCase();
+
+  // Encontrar posts con palabras clave similares
+  const similarPosts = posts.filter(post => {
+    const content = fs.readFileSync(`src/content/blog/${post.slug}.md`, 'utf-8').toLowerCase();
+    const titleWords = title.toLowerCase().split(' ');
+
+    return titleWords.some(word =>
+      word.length > 3 && (content.includes(word) || post.title.toLowerCase().includes(word))
+    );
+  });
+
+  // Extraer tags de posts similares
+  const suggestedTags = new Set();
+  const tagCounts = {};
+
+  similarPosts.forEach(post => {
+    const content = fs.readFileSync(`src/content/blog/${post.slug}.md`, 'utf-8');
+    const tagsMatch = content.match(/tags:\s*\[(.*?)\]/);
+
+    if (tagsMatch) {
+      const tags = tagsMatch[1].split(',').map(tag =>
+        tag.trim().replace(/['"]/g, '')
+      );
+
+      tags.forEach(tag => {
+        if (tag) {
+          tagCounts[tag] = (tagCounts[tag] || 0) + 1;
+          suggestedTags.add(tag);
+        }
+      });
+    }
+  });
+
+  // Ordenar por frecuencia y retornar top 5
+  return Object.entries(tagCounts)
+    .sort((a, b) => b[1] - a[1])
+    .slice(0, 5)
+    .map(([tag]) => tag);
+}
+
+/**
+ * Mostrar preview de posts relacionados para un post recién creado
+ */
+async function showRelatedPostsPreview(postId, tags) {
+  const posts = getExistingPosts();
+  const currentPost = {
+    slug: postId,
+    data: {
+      tags: tags,
+      title: postId.replace(/-/g, ' '),
+      date: new Date()
+    }
+  };
+
+  // Simular el algoritmo de similitud básico
+  const relatedPosts = findRelatedPostsBasic(currentPost, posts);
+
+  if (relatedPosts.length > 0) {
+    console.log('\n📊 Posts relacionados que se mostrarán automáticamente:');
+    relatedPosts.forEach((related, index) => {
+      console.log(`${index + 1}. "${related.post.title}" (${Math.round(related.score * 100)}% similitud)`);
+      console.log(`   Tags coincidentes: ${related.matchedTags.join(', ')}`);
+    });
+  } else {
+    console.log('\n⚠️ No se encontraron posts relacionados. Considera:');
+    console.log('- Revisar tags para mejor conexión con contenido existente');
+    console.log('- Crear más contenido en esta temática');
+  }
+}
+
+/**
+ * Preview de posts relacionados para post existente
+ */
+async function previewRelatedPosts() {
+  console.log('\n🎯 Preview de posts relacionados...\n');
+
+  const posts = getExistingPosts();
+  console.log('Posts disponibles:');
+  posts.forEach((post, index) => {
+    console.log(`${index + 1}. ${post.title} (${post.slug})`);
+  });
+
+  const choice = await askQuestion('Selecciona post (número): ');
+  const selectedPost = posts[parseInt(choice) - 1];
+
+  if (!selectedPost) {
+    console.log('❌ Selección inválida');
+    return;
+  }
+
+  // Leer contenido y extraer tags
+  const content = fs.readFileSync(`src/content/blog/${selectedPost.slug}.md`, 'utf-8');
+  const tagsMatch = content.match(/tags:\s*\[(.*?)\]/);
+  const tags = tagsMatch ?
+    tagsMatch[1].split(',').map(tag => tag.trim().replace(/['"]/g, '')) :
+    [];
+
+  const currentPost = {
+    slug: selectedPost.slug,
+    data: {
+      tags: tags,
+      title: selectedPost.title,
+      date: new Date()
+    }
+  };
+
+  const relatedPosts = findRelatedPostsBasic(currentPost, posts);
+
+  console.log(`\n📊 Posts relacionados para "${selectedPost.title}":`);
+
+  if (relatedPosts.length > 0) {
+    relatedPosts.forEach((related, index) => {
+      console.log(`\n${index + 1}. "${related.post.title}"`);
+      console.log(`   📊 Similitud: ${Math.round(related.score * 100)}%`);
+      console.log(`   🏷️ Tags coincidentes: ${related.matchedTags.join(', ')}`);
+      console.log(`   📝 Slug: ${related.post.slug}`);
+    });
+
+    console.log(`\n✅ Se mostrarán ${relatedPosts.length} posts relacionados automáticamente`);
+  } else {
+    console.log('\n⚠️ No se encontraron posts relacionados');
+    console.log('\n💡 Sugerencias para mejorar las relaciones:');
+    console.log('- Agregar tags más específicos');
+    console.log('- Crear contenido complementario');
+    console.log('- Revisar tags de posts existentes');
+  }
+
+  // Mostrar análisis de tags
+  const tagAnalysis = analyzeTagRelationships(posts);
+  console.log(`\n🏷️ Análisis de tags del post:`);
+  tags.forEach(tag => {
+    const count = tagAnalysis.tagCounts[tag] || 0;
+    console.log(`- "${tag}": usado en ${count} posts`);
+  });
+}
+
+/**
+ * Optimizar posts existentes para mejores relaciones
+ */
+async function optimizeExistingPostsRelations() {
+  console.log('\n🔧 Optimizando posts existentes para mejores relaciones...\n');
+
+  const posts = getExistingPosts();
+  console.log(`📊 Analizando ${posts.length} posts existentes...\n`);
+
+  // Analizar todos los posts y sus relaciones actuales
+  const postsAnalysis = [];
+
+  for (const post of posts) {
+    const content = fs.readFileSync(`src/content/blog/${post.slug}.md`, 'utf-8');
+    const tagsMatch = content.match(/tags:\s*\[(.*?)\]/);
+    const tags = tagsMatch ?
+      tagsMatch[1].split(',').map(tag => tag.trim().replace(/['"]/g, '')) :
+      [];
+
+    const currentPost = {
+      slug: post.slug,
+      data: {
+        tags: tags,
+        title: post.title,
+        date: new Date()
+      }
+    };
+
+    const relatedPosts = findRelatedPostsBasic(currentPost, posts);
+
+    postsAnalysis.push({
+      post: post,
+      tags: tags,
+      relatedCount: relatedPosts.length,
+      relatedPosts: relatedPosts,
+      needsOptimization: relatedPosts.length < 2 || tags.length < 3
+    });
+  }
+
+  // Mostrar resumen del análisis
+  const postsNeedingOptimization = postsAnalysis.filter(p => p.needsOptimization);
+  const postsWithGoodRelations = postsAnalysis.filter(p => !p.needsOptimization);
+
+  console.log('📈 Resumen del análisis:');
+  console.log(`✅ Posts con buenas relaciones: ${postsWithGoodRelations.length}`);
+  console.log(`⚠️ Posts que necesitan optimización: ${postsNeedingOptimization.length}`);
+  console.log(`📊 Promedio de posts relacionados: ${(postsAnalysis.reduce((sum, p) => sum + p.relatedCount, 0) / posts.length).toFixed(1)}`);
+
+  if (postsNeedingOptimization.length === 0) {
+    console.log('\n🎉 ¡Todos los posts tienen buenas relaciones!');
+    return;
+  }
+
+  // Mostrar posts que necesitan optimización
+  console.log('\n⚠️ Posts que necesitan optimización:');
+  postsNeedingOptimization.forEach((analysis, index) => {
+    console.log(`\n${index + 1}. "${analysis.post.title}"`);
+    console.log(`   📊 Posts relacionados actuales: ${analysis.relatedCount}`);
+    console.log(`   🏷️ Tags actuales (${analysis.tags.length}): ${analysis.tags.join(', ')}`);
+
+    if (analysis.relatedCount > 0) {
+      console.log(`   🔗 Relacionados: ${analysis.relatedPosts.map(r => r.post.title).join(', ')}`);
+    }
+  });
+
+  // Preguntar qué hacer
+  const action = await askQuestion(`\n¿Qué quieres hacer?
+1. 🔧 Optimizar automáticamente todos los posts
+2. 🎯 Optimizar posts específicos uno por uno
+3. 📊 Ver sugerencias detalladas sin aplicar cambios
+4. 🚫 Cancelar
+
+Elige (1-4): `);
+
+  switch(action) {
+    case '1':
+      await optimizeAllPostsAutomatically(postsNeedingOptimization);
+      break;
+    case '2':
+      await optimizePostsOneByOne(postsNeedingOptimization);
+      break;
+    case '3':
+      await showDetailedSuggestions(postsNeedingOptimization);
+      break;
+    case '4':
+      console.log('Operación cancelada');
+      break;
+    default:
+      console.log('Opción no válida');
+  }
+}
+
+/**
+ * Optimizar todos los posts automáticamente
+ */
+async function optimizeAllPostsAutomatically(postsNeedingOptimization) {
+  console.log('\n🔧 Optimizando automáticamente todos los posts...\n');
+
+  let optimizedCount = 0;
+
+  for (const analysis of postsNeedingOptimization) {
+    console.log(`🔄 Optimizando: "${analysis.post.title}"`);
+
+    const suggestions = await generateOptimizationSuggestions(analysis);
+
+    if (suggestions.suggestedTags.length > 0) {
+      const success = await applyTagOptimizations(analysis.post, suggestions);
+      if (success) {
+        optimizedCount++;
+        console.log(`   ✅ Optimizado: +${suggestions.suggestedTags.length} tags`);
+      } else {
+        console.log(`   ❌ Error al optimizar`);
+      }
+    } else {
+      console.log(`   ⚠️ No se encontraron mejoras automáticas`);
+    }
+  }
+
+  console.log(`\n🎉 Optimización completada: ${optimizedCount}/${postsNeedingOptimization.length} posts mejorados`);
+
+  // Ejecutar tests para verificar que todo sigue funcionando
+  const runTests = await askQuestion('\n🧪 ¿Ejecutar tests para verificar cambios? (y/n): ');
+  if (runTests.toLowerCase() === 'y') {
+    await runCompleteTests();
+  }
+}
+
+/**
+ * Optimizar posts uno por uno con confirmación
+ */
+async function optimizePostsOneByOne(postsNeedingOptimization) {
+  console.log('\n🎯 Optimización manual post por post...\n');
+
+  for (const analysis of postsNeedingOptimization) {
+    console.log(`\n📝 Post: "${analysis.post.title}"`);
+    console.log(`📊 Estado actual: ${analysis.relatedCount} relacionados, ${analysis.tags.length} tags`);
+
+    const suggestions = await generateOptimizationSuggestions(analysis);
+
+    if (suggestions.suggestedTags.length > 0) {
+      console.log(`💡 Tags sugeridos: ${suggestions.suggestedTags.join(', ')}`);
+      console.log(`🔗 Esto podría crear relaciones con: ${suggestions.potentialRelations.join(', ')}`);
+
+      const apply = await askQuestion('¿Aplicar estas optimizaciones? (y/n): ');
+      if (apply.toLowerCase() === 'y') {
+        const success = await applyTagOptimizations(analysis.post, suggestions);
+        if (success) {
+          console.log('✅ Optimización aplicada');
+        } else {
+          console.log('❌ Error al aplicar optimización');
+        }
+      } else {
+        console.log('⏭️ Saltando este post');
+      }
+    } else {
+      console.log('⚠️ No se encontraron mejoras para este post');
+    }
+  }
+
+  console.log('\n🎉 Optimización manual completada');
+}
+
+/**
+ * Mostrar sugerencias detalladas sin aplicar cambios
+ */
+async function showDetailedSuggestions(postsNeedingOptimization) {
+  console.log('\n📊 Sugerencias detalladas de optimización...\n');
+
+  for (const analysis of postsNeedingOptimization) {
+    console.log(`\n📝 "${analysis.post.title}"`);
+    console.log(`📊 Estado actual:`);
+    console.log(`   - Posts relacionados: ${analysis.relatedCount}`);
+    console.log(`   - Tags actuales: ${analysis.tags.join(', ')}`);
+
+    const suggestions = await generateOptimizationSuggestions(analysis);
+
+    console.log(`💡 Sugerencias:`);
+    if (suggestions.suggestedTags.length > 0) {
+      console.log(`   - Agregar tags: ${suggestions.suggestedTags.join(', ')}`);
+      console.log(`   - Relaciones potenciales: ${suggestions.potentialRelations.join(', ')}`);
+      console.log(`   - Impacto estimado: +${suggestions.estimatedNewRelations} posts relacionados`);
+    } else {
+      console.log(`   - No se encontraron mejoras automáticas`);
+      console.log(`   - Considera revisar manualmente el contenido y tags`);
+    }
+  }
+}
+
+/**
+ * Generar sugerencias de optimización para un post
+ */
+async function generateOptimizationSuggestions(analysis) {
+  const posts = getExistingPosts();
+  const currentTags = new Set(analysis.tags);
+
+  // Analizar contenido del post para encontrar palabras clave
+  const content = fs.readFileSync(`src/content/blog/${analysis.post.slug}.md`, 'utf-8').toLowerCase();
+
+  // Encontrar tags frecuentes que podrían aplicar
+  const tagAnalysis = analyzeTagRelationships(posts);
+  const suggestedTags = [];
+  const potentialRelations = [];
+
+  // Buscar tags populares que aparecen en el contenido pero no están asignados
+  tagAnalysis.topTags.forEach(({ tag, count }) => {
+    if (count >= 2 && !currentTags.has(tag) && suggestedTags.length < 3) {
+      // Verificar si el tag es relevante para el contenido
+      const tagLower = tag.toLowerCase();
+      if (content.includes(tagLower) ||
+          analysis.post.title.toLowerCase().includes(tagLower) ||
+          isSemanticMatch(content, tagLower)) {
+        suggestedTags.push(tag);
+
+        // Encontrar posts que usan este tag
+        const postsWithTag = posts.filter(post => {
+          const postContent = fs.readFileSync(`src/content/blog/${post.slug}.md`, 'utf-8');
+          const tagsMatch = postContent.match(/tags:\s*\[(.*?)\]/);
+          const postTags = tagsMatch ?
+            tagsMatch[1].split(',').map(t => t.trim().replace(/['"]/g, '')) :
+            [];
+          return postTags.includes(tag);
+        });
+
+        potentialRelations.push(...postsWithTag.map(p => p.title).slice(0, 2));
+      }
+    }
+  });
+
+  return {
+    suggestedTags: [...new Set(suggestedTags)],
+    potentialRelations: [...new Set(potentialRelations)],
+    estimatedNewRelations: Math.min(suggestedTags.length * 2, 3)
+  };
+}
+
+/**
+ * Verificar coincidencia semántica básica
+ */
+function isSemanticMatch(content, tag) {
+  const semanticMappings = {
+    'typescript': ['ts', 'type', 'interface', 'generic'],
+    'astro': ['astro', 'component', '.astro'],
+    'seo': ['meta', 'schema', 'search', 'google'],
+    'testing': ['test', 'spec', 'vitest', 'jest'],
+    'performance': ['speed', 'optimization', 'fast', 'cache'],
+    'automation': ['automatic', 'script', 'workflow', 'ci'],
+    'devops': ['deploy', 'build', 'pipeline', 'docker']
+  };
+
+  const keywords = semanticMappings[tag.toLowerCase()] || [];
+  return keywords.some(keyword => content.includes(keyword));
+}
+
+/**
+ * Aplicar optimizaciones de tags a un post
+ */
+async function applyTagOptimizations(post, suggestions) {
+  try {
+    const filePath = `src/content/blog/${post.slug}.md`;
+    const content = fs.readFileSync(filePath, 'utf-8');
+
+    // Extraer tags actuales
+    const tagsMatch = content.match(/tags:\s*\[(.*?)\]/);
+    if (!tagsMatch) {
+      console.log(`⚠️ No se encontraron tags en ${post.slug}`);
+      return false;
+    }
+
+    const currentTags = tagsMatch[1].split(',').map(tag => tag.trim().replace(/['"]/g, ''));
+    const newTags = [...currentTags, ...suggestions.suggestedTags];
+
+    // Crear nueva línea de tags
+    const newTagsLine = `tags: [${newTags.map(tag => `"${tag}"`).join(', ')}]`;
+
+    // Reemplazar en el contenido
+    const updatedContent = content.replace(/tags:\s*\[.*?\]/, newTagsLine);
+
+    // Escribir archivo actualizado
+    fs.writeFileSync(filePath, updatedContent);
+
+    return true;
+  } catch (error) {
+    console.error(`Error optimizando ${post.slug}:`, error.message);
+    return false;
+  }
+}
+
 function askQuestion(question) {
   return new Promise((resolve) => {
     rl.question(question, (answer) => {
@@ -869,5 +1375,12 @@ export {
   createFromExistingFile,
   analyzeExistingPost,
   generateImagesForPost,
-  analyzeContent
+  analyzeContent,
+  suggestTagsForNewPost,
+  showRelatedPostsPreview,
+  previewRelatedPosts,
+  findRelatedPostsBasic,
+  optimizeExistingPostsRelations,
+  generateOptimizationSuggestions,
+  applyTagOptimizations
 };

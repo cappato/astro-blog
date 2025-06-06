@@ -3,7 +3,7 @@ title: "Auto-Merge Inteligente: UX sobre Control"
 description: "Cómo diseñé un sistema de auto-merge que prioriza la experiencia del usuario sobre el control manual, eliminando clicks innecesarios sin sacrificar calidad."
 date: "2025-06-06"
 author: "Matías Cappato"
-tags: ["DevOps", "Automatización", "UX", "GitHub Actions", "Workflow", "Auto-Merge"]
+tags: ["DevOps", "Automatización", "UX", "GitHub Actions", "Workflow", "Auto-Merge", "testing", "deployment"]
 postId: "auto-merge-inteligente-ux-control"
 imageAlt: "Auto-Merge Inteligente: UX sobre Control - Optimización de workflow sin fricción"
 ---

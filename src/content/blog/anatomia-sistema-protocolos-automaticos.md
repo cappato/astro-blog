@@ -3,7 +3,7 @@ title: "Anatomía de un Sistema de Protocolos Automáticos"
 description: "Implementación técnica detallada del sistema multi-agente que aplica protocolos automáticamente sin sobrecarga cognitiva."
 date: "2025-06-06"
 author: "Matías Cappato"
-tags: ["AI", "Multi-Agent", "Automatización", "Protocolos", "TypeScript", "Arquitectura"]
+tags: ["AI", "Multi-Agent", "Automatización", "Protocolos", "TypeScript", "Arquitectura", "componentes"]
 postId: "anatomia-sistema-protocolos-automaticos"
 imageAlt: "Anatomía de un Sistema de Protocolos Automáticos - Guía completa"
 ---

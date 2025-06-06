@@ -3,7 +3,7 @@ title: "GitHub Actions para Deploy Automático: CI/CD con Wrangler"
 description: "Configura GitHub Actions para deploy automático con Wrangler. Aprende a crear workflows CI/CD, configurar secrets y automatizar despliegues a Cloudflare Pages."
 date: "2024-12-19"
 author: "Matías Cappato"
-tags: ["github-actions", "wrangler", "ci-cd", "deploy", "automation", "cloudflare", "workflow", "devops"]
+tags: ["github-actions", "wrangler", "ci-cd", "deploy", "automation", "cloudflare", "workflow", "devops", "Astro", "testing"]
 postId: "github-actions-deploy-automatico-wrangler"
 imageAlt: "GitHub Actions y Wrangler - Configuración de CI/CD para deploy automático"
 ---

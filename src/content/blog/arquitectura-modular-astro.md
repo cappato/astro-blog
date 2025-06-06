@@ -6,7 +6,7 @@ author: "Matías Cappato"
 image:
   url: "/images/blog/architecture-cover.webp"
   alt: "Diagrama de arquitectura modular con componentes interconectados"
-tags: ["astro", "arquitectura", "typescript", "modular", "features"]
+tags: ["astro", "arquitectura", "typescript", "modular", "features", "componentes", "SEO"]
 draft: false
 ---
 

@@ -3,7 +3,7 @@ title: "Migración de Sistemas: Preservando la Visión"
 description: "Cómo migré del sistema .augment al framework multi-agente preservando la visión original mientras resolvía problemas de implementación."
 date: "2025-06-06"
 author: "Matías Cappato"
-tags: ["Arquitectura", "Migración", "Sistemas", "Multi-Agent", "Refactoring", "Evolution"]
+tags: ["Arquitectura", "Migración", "Sistemas", "Multi-Agent", "Refactoring", "Evolution", "componentes", "testing"]
 postId: "migracion-sistemas-preservando-vision"
 imageAlt: "Migración de Sistemas: Preservando la Visión - Evolución sin perder la esencia"
 ---

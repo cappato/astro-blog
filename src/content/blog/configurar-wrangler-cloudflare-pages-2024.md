@@ -3,7 +3,7 @@ title: "Configurar Wrangler y Cloudflare Pages: Guía Completa 2024"
 description: "Aprende a configurar Wrangler y Cloudflare Pages desde cero. Guía paso a paso con autenticación, creación de proyectos y configuración inicial para deploy automático."
 date: "2024-12-19"
 author: "Matías Cappato"
-tags: ["wrangler", "cloudflare", "pages", "configuración", "setup", "deploy", "cloudflare-pages", "wrangler-setup"]
+tags: ["wrangler", "cloudflare", "pages", "configuración", "setup", "deploy", "cloudflare-pages", "wrangler-setup", "Astro", "deployment"]
 postId: "configurar-wrangler-cloudflare-pages-2024"
 imageAlt: "Configuración de Wrangler y Cloudflare Pages - Guía paso a paso para desarrolladores"
 ---

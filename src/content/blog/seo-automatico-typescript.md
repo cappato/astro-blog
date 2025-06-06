@@ -6,7 +6,7 @@ author: "Matías Cappato"
 image:
   url: "/images/blog/seo-cover.webp"
   alt: "Dashboard de analytics y métricas SEO en pantalla de computadora"
-tags: ["seo", "typescript", "schema.org", "performance", "meta-tags"]
+tags: ["seo", "typescript", "schema.org", "performance", "meta-tags", "Astro", "componentes"]
 draft: false
 ---
 

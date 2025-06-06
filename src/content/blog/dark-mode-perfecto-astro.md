@@ -6,7 +6,7 @@ author: "Matías Cappato"
 image:
   url: "/images/blog/darkmode-cover.webp"
   alt: "Interfaz de aplicación mostrando transición entre modo claro y oscuro"
-tags: ["dark-mode", "astro", "ssr", "css-variables", "theme-system"]
+tags: ["dark-mode", "astro", "ssr", "css-variables", "theme-system", "TypeScript", "componentes"]
 draft: false
 ---
 

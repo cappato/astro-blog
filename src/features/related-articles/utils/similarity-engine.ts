@@ -6,9 +6,9 @@
  */
 
 import type { CollectionEntry } from 'astro:content';
-import type { 
-  RelatedArticle, 
-  RelatedArticlesResult, 
+import type {
+  RelatedArticle,
+  RelatedArticlesResult,
   SimilarityContext,
   SimilarityAnalysis,
   RelationReason,
@@ -16,6 +16,7 @@ import type {
 } from '../types/related.types';
 import { DEFAULT_RELATED_CONFIG, EXCLUSION_CONFIG } from '../config/related.config';
 import { detectPostPillar } from '../../content-pillars/config/pillars.config';
+import { shouldIncludePost } from '../../../utils/shared/post-filters';
 
 /**
  * Motor principal de similitud
@@ -315,10 +316,13 @@ export class SimilarityEngine {
     return allPosts.filter(post => {
       // Excluir el post actual
       if (post.slug === currentPost.slug) return false;
-      
+
+      // CRÍTICO: Excluir posts en draft (respeta entorno prod/dev)
+      if (!shouldIncludePost(post)) return false;
+
       // Excluir posts en la lista de exclusión
       if (EXCLUSION_CONFIG.excludedSlugs.includes(post.slug)) return false;
-      
+
       // Aplicar filtros adicionales
       if (filters?.excludeSlugs?.includes(post.slug)) return false;
       
