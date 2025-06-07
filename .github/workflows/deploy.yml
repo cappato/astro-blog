@@ -3,13 +3,14 @@ name: Deploy to Cloudflare Pages
 on:
   push:
     branches: [ main ]
-  pull_request:
-    branches: [ main ]
+  # pull_request:
+  #   branches: [ main ]
 
 jobs:
   deploy:
     runs-on: ubuntu-latest
     name: Deploy to Cloudflare Pages
+    timeout-minutes: 10
     
     steps:
       - name: Checkout
