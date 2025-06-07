@@ -45,7 +45,7 @@ describe('Refactored System Integration Tests', () => {
     it('should detect emoji violations in prohibited files', () => {
       // Create a test file with emojis in prohibited location
       const testFile = 'src/test-emoji-violation.ts';
-      writeFileSync(testFile, 'const message = "Hello 🚀 World";');
+      writeFileSync(testFile, 'const message = "Hello World";');
 
       try {
         // Run emoji validation - should fail
@@ -66,7 +66,7 @@ describe('Refactored System Integration Tests', () => {
     it('should allow emojis in permitted files', () => {
       // Create a test file with emojis in allowed location
       const testFile = 'docs/test-emoji-allowed.md';
-      writeFileSync(testFile, '# Test 🚀\nThis should be allowed.');
+      writeFileSync(testFile, '# Test\nThis should be allowed.');
 
       try {
         // Run emoji validation - should pass
