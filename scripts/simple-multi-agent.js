@@ -209,30 +209,30 @@ class SimpleMultiAgent {
      * Crea PR automáticamente con gh CLI
      */
     async createPR(title, description) {
-        console.log('Creando PR automáticamente...');
+        console.log('Creating PR automatically...');
 
         try {
-            // Crear PR con gh CLI
+            // Create PR with gh CLI
             const prCommand = `gh pr create --title "${title}" --body "${description}" --label "auto-merge"`;
             const prOutput = execSync(prCommand, { encoding: 'utf8' });
 
-            // Extraer URL del PR
+            // Extract PR URL
             const prUrlMatch = prOutput.match(/https:\/\/github\.com\/[^\s]+\/pull\/\d+/);
             const prUrl = prUrlMatch ? prUrlMatch[0] : null;
 
             if (prUrl) {
-                console.log(`PR creado exitosamente: ${prUrl}`);
+                console.log(`PR created successfully: ${prUrl}`);
 
-                // Reportar PR automáticamente
+                // Report PR automatically
                 await this.reportPR(prUrl, title);
 
                 return prUrl;
             } else {
-                console.error('No se pudo extraer la URL del PR');
+                console.error('Could not extract PR URL');
                 return null;
             }
         } catch (error) {
-            console.error('Error creando PR:', error.message);
+            console.error('Error creating PR:', error.message);
             return null;
         }
     }
@@ -241,40 +241,40 @@ class SimpleMultiAgent {
      * Reporta PR según protocolo establecido
      */
     async reportPR(prUrl, prTitle) {
-        console.log('Reportando PR según protocolo establecido...');
+        console.log('Reporting PR according to established protocol...');
 
         try {
             const timestamp = new Date().toISOString().replace('T', ' ').substring(0, 16);
 
             const prReport = `
-## PR Creado - ${timestamp}
+## PR Created - ${timestamp}
 
-**Agente**: ganzo
+**Agent**: ganzo
 **PR**: [${prTitle}](${prUrl})
 
-### Checklist Automático
-- [x] Tests ejecutados localmente
-- [x] Build exitoso verificado
-- [x] Commits con mensajes descriptivos
-- [x] PR con label auto-merge
-- [x] Descripción completa incluida
+### Automatic Checklist
+- [x] Tests executed locally
+- [x] Successful build verified
+- [x] Commits with descriptive messages
+- [x] PR with auto-merge label
+- [x] Complete description included
 
-### Estado
-- **Tests**: Pasando
-- **Build**: Exitoso
-- **Auto-merge**: Configurado
-- **Protocolo**: Seguido
+### Status
+- **Tests**: Passing
+- **Build**: Successful
+- **Auto-merge**: Configured
+- **Protocol**: Followed
 
-**Link del PR**: ${prUrl}
+**PR Link**: ${prUrl}
 `;
 
-            console.log('Reporte de PR generado:');
+            console.log('PR report generated:');
             console.log(prReport);
-            console.log('PR reportado según protocolo establecido');
+            console.log('PR reported according to established protocol');
 
             return prReport;
         } catch (error) {
-            console.error('Error reportando PR:', error.message);
+            console.error('Error reporting PR:', error.message);
             return null;
         }
     }
@@ -283,39 +283,39 @@ class SimpleMultiAgent {
      * Workflow completo automatizado: push + PR + reporte
      */
     async automatedWorkflow(commitMessage, prTitle, prDescription) {
-        console.log('Iniciando workflow automatizado completo...\n');
+        console.log('Starting complete automated workflow...\n');
 
         try {
-            // 1. Verificar que hay cambios para commitear
+            // 1. Check if there are changes to commit
             const gitStatus = execSync('git status --porcelain', { encoding: 'utf8' });
             if (!gitStatus.trim()) {
-                console.log('No hay cambios para commitear');
+                console.log('No changes to commit');
                 return;
             }
 
-            // 2. Ejecutar tests antes de push
-            console.log('Ejecutando tests...');
+            // 2. Run tests before push
+            console.log('Running tests...');
             execSync('npm run test:blog', { stdio: 'inherit' });
-            console.log('Tests pasaron exitosamente\n');
+            console.log('Tests passed successfully\n');
 
-            // 3. Hacer push de la rama actual
-            console.log('Haciendo push...');
+            // 3. Push current branch
+            console.log('Pushing...');
             const currentBranch = execSync('git branch --show-current', { encoding: 'utf8' }).trim();
             execSync(`git push origin ${currentBranch}`, { stdio: 'inherit' });
-            console.log('Push exitoso\n');
+            console.log('Push successful\n');
 
-            // 4. Crear PR automáticamente
+            // 4. Create PR automatically
             const prUrl = await this.createPR(prTitle, prDescription);
 
             if (prUrl) {
-                console.log('\nWorkflow automatizado completado exitosamente!');
+                console.log('\nAutomated workflow completed successfully!');
                 console.log(`PR: ${prUrl}`);
-                console.log('Auto-merge configurado - se mergeará automáticamente cuando pasen los tests');
+                console.log('Auto-merge configured - will merge automatically when tests pass');
             }
 
             return prUrl;
         } catch (error) {
-            console.error('Error en workflow automatizado:', error.message);
+            console.error('Error in automated workflow:', error.message);
             return null;
         }
     }
@@ -376,10 +376,10 @@ switch (command) {
         }
         break;
     case 'workflow':
-        // Workflow automatizado completo
-        const commitMsg = process.argv[3] || 'feat: cambios automáticos';
-        const workflowPrTitle = process.argv[4] || 'feat: implementar cambios automáticos';
-        const workflowPrDesc = process.argv[5] || 'Cambios implementados automáticamente por el sistema multi-agente';
+        // Complete automated workflow
+        const commitMsg = process.argv[3] || 'feat: automatic changes';
+        const workflowPrTitle = process.argv[4] || 'feat: implement automatic changes';
+        const workflowPrDesc = process.argv[5] || 'Changes implemented automatically by the multi-agent system';
         await agent.automatedWorkflow(commitMsg, workflowPrTitle, workflowPrDesc);
         break;
     default:

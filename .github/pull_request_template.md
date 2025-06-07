@@ -1,92 +1,92 @@
-## 📄 Descripción
+## 📄 Description
 
-Explica brevemente qué hace este PR y por qué es necesario.
+Briefly explain what this PR does and why it's necessary.
 
-## 🎯 Tipo de Cambio
+## 🎯 Type of Change
 
-- [ ] 🐛 Bug fix (cambio que corrige un problema)
-- [ ] ✨ Nueva funcionalidad (cambio que agrega funcionalidad)
-- [ ] 💥 Breaking change (cambio que rompe funcionalidad existente)
-- [ ] 📚 Documentación (cambios solo en documentación)
-- [ ] 🔧 Refactoring (cambio que no corrige bugs ni agrega funcionalidad)
-- [ ] ⚡ Performance (cambio que mejora el rendimiento)
-- [ ] 🧪 Tests (agregar o corregir tests)
-- [ ] 🔨 Build/CI (cambios en build o integración continua)
-- [ ] 🎨 Estilo (formateo, espacios, etc. sin cambios de código)
+- [ ] 🐛 Bug fix (change that fixes an issue)
+- [ ] ✨ New feature (change that adds functionality)
+- [ ] 💥 Breaking change (change that breaks existing functionality)
+- [ ] 📚 Documentation (documentation-only changes)
+- [ ] 🔧 Refactoring (change that neither fixes bugs nor adds features)
+- [ ] ⚡ Performance (change that improves performance)
+- [ ] 🧪 Tests (adding or fixing tests)
+- [ ] 🔨 Build/CI (changes to build or continuous integration)
+- [ ] 🎨 Style (formatting, whitespace, etc. without code changes)
 
-## ✅ Checklist de Calidad
+## ✅ Quality Checklist
 
-### 📏 Tamaño del PR
-- [ ] El PR modifica menos de 10 archivos
-- [ ] El PR modifica menos de 300 líneas
-- [ ] Los cambios son atómicos y bien separados
-- [ ] Si es grande, está justificado y no se puede dividir
+### 📏 PR Size
+- [ ] PR modifies less than 10 files
+- [ ] PR modifies less than 300 lines
+- [ ] Changes are atomic and well-separated
+- [ ] If large, it's justified and cannot be split
 
 ### 🧪 Testing
-- [ ] El código fue probado localmente
-- [ ] Se agregaron tests si aplica
-- [ ] Todos los tests existentes pasan (`npm test`)
-- [ ] Build exitoso sin errores (`npm run build`)
+- [ ] Code was tested locally
+- [ ] Tests added if applicable
+- [ ] All existing tests pass (`npm test`)
+- [ ] Successful build without errors (`npm run build`)
 
-### 📝 Documentación y Estándares
-- [ ] El nombre del PR sigue conventional commits
-- [ ] Documentación actualizada si es necesario
-- [ ] No hay archivos con caracteres especiales (acentos, ñ)
-- [ ] Sin emojis en código/documentación técnica
-- [ ] Código sigue estándares del proyecto
+### 📝 Documentation and Standards
+- [ ] PR title follows conventional commits
+- [ ] Documentation updated if necessary
+- [ ] No files with special characters (accents, ñ)
+- [ ] No emojis in code/technical documentation
+- [ ] Code follows project standards
 
-### 🔗 Dependencias y Compatibilidad
-- [ ] No hay dependencias circulares
-- [ ] Cambios de dependencias están justificados
-- [ ] No rompe funcionalidad existente
-- [ ] Compatible con sistemas Windows/Linux/Mac
+### 🔗 Dependencies and Compatibility
+- [ ] No circular dependencies
+- [ ] Dependency changes are justified
+- [ ] Does not break existing functionality
+- [ ] Compatible with Windows/Linux/Mac systems
 
-## 🧪 Testing Realizado
+## 🧪 Testing Performed
 
-Describe qué tests ejecutaste y sus resultados:
+Describe what tests you ran and their results:
 
-- [ ] Tests unitarios: ✅ Pasando / ❌ Fallando
-- [ ] Tests de integración: ✅ Pasando / ❌ Fallando
-- [ ] Build local: ✅ Exitoso / ❌ Fallando
-- [ ] Validación de contenido: ✅ Sin problemas / ❌ Con issues
+- [ ] Unit tests: ✅ Passing / ❌ Failing
+- [ ] Integration tests: ✅ Passing / ❌ Failing
+- [ ] Local build: ✅ Successful / ❌ Failing
+- [ ] Content validation: ✅ No issues / ❌ With issues
 
-## 📸 Screenshots (si aplica)
+## 📸 Screenshots (if applicable)
 
-Si hay cambios visuales, agrega screenshots del antes y después.
+If there are visual changes, add before and after screenshots.
 
-## 🔗 Issues Relacionados
+## 🔗 Related Issues
 
 - Closes #(issue)
 - Related to #(issue)
 - Part of #(issue)
 
-## 🧠 Notas Adicionales
+## 🧠 Additional Notes
 
-¿Algo más que deba saber el revisor?
+Anything else the reviewer should know?
 
-- Decisiones de diseño importantes
-- Limitaciones conocidas
-- Próximos pasos planificados
-- Consideraciones especiales
+- Important design decisions
+- Known limitations
+- Planned next steps
+- Special considerations
 
-## 🚀 Plan de Deploy
+## 🚀 Deployment Plan
 
-- [ ] Este cambio puede deployarse inmediatamente
-- [ ] Requiere coordinación especial
-- [ ] Necesita configuración adicional
-- [ ] Requiere migración de datos
-
----
-
-### 📋 Para el Revisor
-
-**Puntos clave a revisar:**
-- Lógica de negocio correcta
-- Manejo de errores apropiado
-- Performance y escalabilidad
-- Seguridad y validaciones
-- Consistencia con arquitectura existente
+- [ ] This change can be deployed immediately
+- [ ] Requires special coordination
+- [ ] Needs additional configuration
+- [ ] Requires data migration
 
 ---
 
-*Template actualizado con estándares profesionales del proyecto*
+### 📋 For the Reviewer
+
+**Key points to review:**
+- Correct business logic
+- Appropriate error handling
+- Performance and scalability
+- Security and validations
+- Consistency with existing architecture
+
+---
+
+*Template updated with professional project standards*
