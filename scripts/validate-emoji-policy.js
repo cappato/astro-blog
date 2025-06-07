@@ -2,7 +2,18 @@
 
 /**
  * Validador de Política de Emojis
- * Implementa la nueva política balanceada de emojis
+ *
+ * ⚠️  PARTIALLY DEPRECATED: Emoji validation has been migrated to standard tools
+ *
+ * Migration status:
+ * - ✅ Code emoji validation → ESLint (eslint.config.js)
+ * - ✅ Markdown emoji validation → scripts/validate-markdown-emojis.js + markdownlint-cli2
+ * - 🔄 This script still provides comprehensive validation but is being phased out
+ *
+ * New approach:
+ * - npm run lint (ESLint for code)
+ * - npm run lint:md (markdownlint for markdown structure)
+ * - npm run validate:emoji:md (emoji validation for markdown)
  */
 
 import { readFileSync, readdirSync, statSync } from 'fs';
