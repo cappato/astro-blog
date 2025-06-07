@@ -91,6 +91,14 @@ Este documento define los estándares profesionales no negociables del proyecto.
 - **Formato Link**: `https://github.com/cappato/astro-blog/pull/[número]`
 - **Aplicación**: Obligatorio en toda comunicación sobre PRs
 
+#### Tamaño y Calidad de PRs
+- **Ideal**: 4-8 archivos, funcionalidad clara y encapsulada
+- **Límite suave**: 15 archivos (revisar si se puede dividir)
+- **Límites inteligentes**: Adaptativos según tipo (docs, feature, tests)
+- **Validación pre-PR**: Obligatoria con `npm run pr:validate`
+- **Tests locales**: Ejecutar ANTES de crear PR
+- **Sincronización**: Siempre actualizar desde main antes de crear rama
+
 ### Acciones Destructivas
 - **Regla**: NUNCA eliminar sin permiso explícito
 - **Proceso**: Solicitar confirmación antes de cualquier eliminación
@@ -137,6 +145,13 @@ Este documento define los estándares profesionales no negociables del proyecto.
 4. Reportar violaciones detectadas
 5. **OBLIGATORIO**: Incluir link completo al mencionar cualquier PR
 6. **OBLIGATORIO**: Usar formato `https://github.com/cappato/astro-blog/pull/[número]`
+
+#### Workflow Obligatorio para Agentes
+1. **Antes de crear rama**: `git checkout main && git pull origin main`
+2. **Antes de crear PR**: `npm run pr:validate`
+3. **Crear PR inteligente**: `npm run pr:smart` (recomendado)
+4. **Validar tamaño**: Respetar límites adaptativos por tipo de PR
+5. **Tests locales**: Ejecutar build y tests críticos localmente
 
 ### Para Desarrolladores
 1. Configurar git hooks: `npm run setup:hooks`
