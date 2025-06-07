@@ -36,7 +36,7 @@ jobs:
         with:
           apiToken: ${{ secrets.CLOUDFLARE_API_TOKEN }}
           accountId: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
-          projectName: cappato-blog
+          projectName: cappato-dev-blog
           directory: dist
           # Optional: Use wrangler-version to specify a specific version of wrangler to use
           wranglerVersion: '3'
