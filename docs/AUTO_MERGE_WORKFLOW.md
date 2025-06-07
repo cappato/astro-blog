@@ -168,3 +168,5 @@ permissions:
 
 **Última actualización**: 2025-06-07
 **Versión del workflow**: Unificado v1.0
+
+<!-- Re-trigger para sincronizar checks de Cloudflare -->
