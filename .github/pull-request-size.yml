@@ -1,0 +1,62 @@
+# Configuration for PR Size Labeler Action
+# Automatically labels pull requests based on their size
+
+# List of files to exclude from size calculation
+# Files matching these patterns will not be considered when calculating PR size
+exclude_files:
+  - "*.md"          # Exclude markdown files (documentation)
+  - "*.txt"         # Exclude text files
+  - "package-lock.json"  # Exclude lock files
+  - "yarn.lock"     # Exclude lock files
+  - "*.log"         # Exclude log files
+  - "dist/*"        # Exclude build artifacts
+  - "coverage/*"    # Exclude coverage reports
+
+# Configuration for labeling based on the size of the Pull Request
+# Each entry defines a size label, along with thresholds for diff and file count
+label_configs:
+  # Configuration for 'extra small' PRs
+  - size: xs
+    diff: 50      # Threshold for the total lines of code changed (additions + deletions)
+    files: 3      # Threshold for the total number of files changed
+    labels: ["size/xs"]  # Labels to be applied for this size
+
+  # Configuration for 'small' PRs
+  - size: s
+    diff: 200     # Small changes, focused PRs
+    files: 6      # Few files modified
+    labels: ["size/s"]
+
+  # Configuration for 'medium' PRs
+  - size: m
+    diff: 500     # Medium-sized changes
+    files: 10     # Moderate number of files
+    labels: ["size/m", "review-required"]
+
+  # Configuration for 'large' PRs
+  - size: l
+    diff: 1000    # Large changes that need careful review
+    files: 15     # Many files modified
+    labels: ["size/l", "review-required", "split-recommended"]
+
+  # Configuration for 'extra large' PRs
+  - size: xl
+    diff: 2000    # Very large changes
+    files: 25     # Extensive file modifications
+    labels: ["size/xl", "review-required", "split-recommended", "needs-approval"]
+
+  # Configuration for 'extra extra large' PRs (should be rare)
+  - size: xxl
+    diff: 5000    # Massive changes (migrations, major refactors)
+    files: 50     # Extensive modifications
+    labels: ["size/xxl", "review-required", "split-recommended", "needs-approval", "migration"]
+
+# Count only added lines (ignore deletions)
+# Set to true if you want to be more lenient with refactoring PRs that delete a lot of code
+added_lines_only: false
+
+# Additional configuration notes:
+# - Labels are applied automatically based on PR size
+# - Multiple labels can be applied for larger PRs to indicate review requirements
+# - The action will remove previous size labels and apply the current one
+# - Excluded files help focus on actual code changes rather than generated content
