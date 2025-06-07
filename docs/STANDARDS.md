@@ -87,6 +87,9 @@ Este documento define los estándares profesionales no negociables del proyecto.
 - **Idioma**: Español
 - **Contenido**: Título técnico, resumen, cambios, testing
 - **Proceso**: Compartir link inmediatamente tras creación
+- **Regla Estricta**: SIEMPRE incluir link completo del PR al mencionarlo
+- **Formato Link**: `https://github.com/cappato/astro-blog/pull/[número]`
+- **Aplicación**: Obligatorio en toda comunicación sobre PRs
 
 ### Acciones Destructivas
 - **Regla**: NUNCA eliminar sin permiso explícito
@@ -132,6 +135,8 @@ Este documento define los estándares profesionales no negociables del proyecto.
 2. Aplicar estándares automáticamente
 3. Validar output contra estas reglas
 4. Reportar violaciones detectadas
+5. **OBLIGATORIO**: Incluir link completo al mencionar cualquier PR
+6. **OBLIGATORIO**: Usar formato `https://github.com/cappato/astro-blog/pull/[número]`
 
 ### Para Desarrolladores
 1. Configurar git hooks: `npm run setup:hooks`
