@@ -15,8 +15,8 @@ on:
     types: [completed]
   workflow_dispatch:
   schedule:
-    # Ejecutar cada 5 minutos para verificar PRs pendientes de auto-merge
-    - cron: '*/5 * * * *'
+    # Backup check cada 30 minutos (reducido para ahorrar minutos de GitHub Actions)
+    - cron: '*/30 * * * *'
 
 permissions:
   contents: write
