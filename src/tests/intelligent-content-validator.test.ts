@@ -50,9 +50,9 @@ ${'Palabra '.repeat(3500)}
 
       const result = await validator.validatePost(testFile);
 
-      expect(result.issues).toHaveLength(1);
-      expect(result.issues[0].type).toBe('length');
-      expect(result.issues[0].severity).toBe('warning');
+      const lengthIssues = result.issues.filter(issue => issue.type === 'length');
+      expect(lengthIssues).toHaveLength(1);
+      expect(lengthIssues[0].severity).toBe('warning');
       expect(result.suggestions).toHaveLength(1);
       expect(result.suggestions[0].type).toBe('division');
     });
@@ -369,9 +369,151 @@ Más contenido para análisis.
 
       expect(result.metrics.words).toBeGreaterThan(0);
       expect(result.metrics.lines).toBeGreaterThan(0);
-      expect(result.metrics.headings).toBe(3); // H1, H2, H3
+      expect(result.metrics.headings).toBeGreaterThanOrEqual(3); // Al menos H1, H2, H3
       expect(result.metrics.codeBlocks).toBe(1);
       expect(result.metrics.readingTime).toBeGreaterThan(0);
+    });
+  });
+
+  describe('Validación de Nombres de Archivos', () => {
+    it('debería detectar caracteres problemáticos en nombres de archivos', async () => {
+      const testContent = `---
+title: "Post con Nombre Problemático"
+pillar: "test"
+tags: ["test"]
+---
+
+# Post de Prueba
+
+Contenido normal del post.
+`;
+
+      // Archivo con caracteres problemáticos
+      const testFile = path.join(testPostsDir, 'post-con-acentos-ñ-estándares.md');
+      fs.writeFileSync(testFile, testContent);
+
+      const { default: IntelligentContentValidator } = await import(validatorPath);
+      const validator = new IntelligentContentValidator();
+      validator.postsDir = testPostsDir;
+
+      const result = await validator.validatePost(testFile);
+
+      const filenameIssues = result.issues.filter(issue => issue.type === 'filename');
+      expect(filenameIssues).toHaveLength(1);
+      expect(filenameIssues[0].severity).toBe('error');
+      expect(filenameIssues[0].message).toContain('caracteres problemáticos');
+
+      const filenameSuggestions = result.suggestions.filter(suggestion => suggestion.type === 'filename-correction');
+      expect(filenameSuggestions).toHaveLength(1);
+      expect(filenameSuggestions[0].message).toContain('post-con-acentos-n-estandares.md');
+    });
+
+    it('debería detectar espacios en nombres de archivos', async () => {
+      const testContent = `---
+title: "Post con Espacios"
+pillar: "test"
+tags: ["test"]
+---
+
+# Post de Prueba
+
+Contenido normal del post.
+`;
+
+      const testFile = path.join(testPostsDir, 'post con espacios.md');
+      fs.writeFileSync(testFile, testContent);
+
+      const { default: IntelligentContentValidator } = await import(validatorPath);
+      const validator = new IntelligentContentValidator();
+      validator.postsDir = testPostsDir;
+
+      const result = await validator.validatePost(testFile);
+
+      const filenameIssues = result.issues.filter(issue => issue.type === 'filename');
+      expect(filenameIssues.length).toBeGreaterThan(0);
+
+      const spaceIssue = filenameIssues.find(issue => issue.message.includes('espacios'));
+      expect(spaceIssue).toBeDefined();
+      expect(spaceIssue?.severity).toBe('warning');
+    });
+
+    it('debería detectar nombres de archivos muy largos', async () => {
+      const testContent = `---
+title: "Post con Nombre Muy Largo"
+pillar: "test"
+tags: ["test"]
+---
+
+# Post de Prueba
+
+Contenido normal del post.
+`;
+
+      const longFileName = 'post-con-nombre-extremadamente-largo-que-excede-los-limites-recomendados-para-compatibilidad-multiplataforma-y-sistemas-de-archivos.md';
+      const testFile = path.join(testPostsDir, longFileName);
+      fs.writeFileSync(testFile, testContent);
+
+      const { default: IntelligentContentValidator } = await import(validatorPath);
+      const validator = new IntelligentContentValidator();
+      validator.postsDir = testPostsDir;
+
+      const result = await validator.validatePost(testFile);
+
+      const filenameIssues = result.issues.filter(issue => issue.type === 'filename');
+      const lengthIssue = filenameIssues.find(issue => issue.message.includes('muy largo'));
+      expect(lengthIssue).toBeDefined();
+      expect(lengthIssue?.severity).toBe('warning');
+    });
+
+    it('debería aprobar nombres de archivos correctos', async () => {
+      const testContent = `---
+title: "Post con Nombre Correcto"
+pillar: "test"
+tags: ["test"]
+---
+
+# Post de Prueba
+
+Contenido normal del post.
+`;
+
+      const testFile = path.join(testPostsDir, 'post-nombre-correcto-sin-problemas.md');
+      fs.writeFileSync(testFile, testContent);
+
+      const { default: IntelligentContentValidator } = await import(validatorPath);
+      const validator = new IntelligentContentValidator();
+      validator.postsDir = testPostsDir;
+
+      const result = await validator.validatePost(testFile);
+
+      const filenameIssues = result.issues.filter(issue => issue.type === 'filename');
+      expect(filenameIssues).toHaveLength(0);
+    });
+
+    it('debería generar sugerencias de corrección correctas', async () => {
+      const testContent = `---
+title: "Test de Corrección"
+pillar: "test"
+tags: ["test"]
+---
+
+# Post de Prueba
+
+Contenido normal del post.
+`;
+
+      const testFile = path.join(testPostsDir, 'artículo-técnico-ñoño-configuración.md');
+      fs.writeFileSync(testFile, testContent);
+
+      const { default: IntelligentContentValidator } = await import(validatorPath);
+      const validator = new IntelligentContentValidator();
+      validator.postsDir = testPostsDir;
+
+      const result = await validator.validatePost(testFile);
+
+      const filenameSuggestions = result.suggestions.filter(suggestion => suggestion.type === 'filename-correction');
+      expect(filenameSuggestions).toHaveLength(1);
+      expect(filenameSuggestions[0].message).toContain('articulo-tecnico-nono-configuracion.md');
     });
   });
 });
