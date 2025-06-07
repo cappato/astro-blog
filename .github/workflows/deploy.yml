@@ -3,13 +3,14 @@ name: Deploy to Cloudflare Pages
 on:
   push:
     branches: [ main ]
-  pull_request:
-    branches: [ main ]
+  # pull_request:
+  #   branches: [ main ]
 
 jobs:
   deploy:
     runs-on: ubuntu-latest
     name: Deploy to Cloudflare Pages
+    timeout-minutes: 10
     
     steps:
       - name: Checkout
@@ -35,7 +36,7 @@ jobs:
         with:
           apiToken: ${{ secrets.CLOUDFLARE_API_TOKEN }}
           accountId: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
-          projectName: cappato-blog
+          projectName: cappato-dev-blog
           directory: dist
           # Optional: Use wrangler-version to specify a specific version of wrangler to use
           wranglerVersion: '3'
