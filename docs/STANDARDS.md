@@ -16,11 +16,24 @@ Este documento define los estándares profesionales no negociables del proyecto.
 
 ### Contenido y Comunicación
 
-#### Sin Emojis
-- **Aplicación**: Código, commits, PRs, documentación, logs
-- **Razón**: Profesionalismo y accesibilidad
-- **Validación**: Automática via scripts y tests
-- **Excepción**: Ninguna
+#### Política de Emojis
+**PERMITIDO en:**
+- Templates de PR (`.github/*`)
+- Documentación de usuario (`docs/*`)
+- Scripts de automatización (`scripts/*`)
+- Git hooks (`.githooks/*`)
+- README y archivos de ayuda
+- Mensajes de console.log en herramientas
+
+**PROHIBIDO en:**
+- Código fuente (`src/*`)
+- Tests (`tests/*`, `*.test.js`)
+- Archivos de configuración (`*.json`, `*.yml`)
+- Blog posts (`src/content/blog/*`)
+- Componentes (`src/components/*`)
+
+**Razón**: Balance entre profesionalismo en código y usabilidad en herramientas
+**Validación**: Automática via scripts y tests
 
 #### Sin Referencias a IA/Agentes
 - **Aplicación**: Commits, PRs, documentación pública
