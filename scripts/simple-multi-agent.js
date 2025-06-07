@@ -376,10 +376,10 @@ switch (command) {
         }
         break;
     case 'workflow':
-        // Workflow automatizado completo
-        const commitMsg = process.argv[3] || 'feat: cambios automáticos';
-        const workflowPrTitle = process.argv[4] || 'feat: implementar cambios automáticos';
-        const workflowPrDesc = process.argv[5] || 'Cambios implementados automáticamente por el sistema multi-agente';
+        // Complete automated workflow
+        const commitMsg = process.argv[3] || 'feat: automatic changes';
+        const workflowPrTitle = process.argv[4] || 'feat: implement automatic changes';
+        const workflowPrDesc = process.argv[5] || 'Changes implemented automatically by the multi-agent system';
         await agent.automatedWorkflow(commitMsg, workflowPrTitle, workflowPrDesc);
         break;
     default:
