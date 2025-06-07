@@ -286,17 +286,23 @@ class SimpleMultiAgent {
         console.log('Iniciando workflow automatizado completo...\n');
 
         try {
-            // 1. Verificar que hay cambios para commitear
+            // 1. VALIDACIÓN PROACTIVA - ¡Nuevo!
+            console.log('🔍 Ejecutando validación proactiva...');
+            try {
+                execSync('npm run validate:pr-ready', { stdio: 'inherit' });
+                console.log('✅ Validación proactiva exitosa\n');
+            } catch (error) {
+                console.error('❌ Validación proactiva falló');
+                console.error('💡 Corrige los problemas antes de crear el PR');
+                return null;
+            }
+
+            // 2. Verificar que hay cambios para commitear
             const gitStatus = execSync('git status --porcelain', { encoding: 'utf8' });
             if (!gitStatus.trim()) {
                 console.log('No hay cambios para commitear');
                 return;
             }
-
-            // 2. Ejecutar tests antes de push
-            console.log('Ejecutando tests...');
-            execSync('npm run test:blog', { stdio: 'inherit' });
-            console.log('Tests pasaron exitosamente\n');
 
             // 3. Hacer push de la rama actual
             console.log('Haciendo push...');
