@@ -168,9 +168,31 @@ export interface ArticleSchema extends BaseSchema {
 }
 
 /**
+ * FAQ Question and Answer interfaces
+ */
+export interface FAQAnswer {
+  '@type': 'Answer';
+  text: string;
+}
+
+export interface FAQQuestion {
+  '@type': 'Question';
+  name: string;
+  acceptedAnswer: FAQAnswer;
+}
+
+/**
+ * FAQPage schema interface
+ */
+export interface FAQPageSchema extends BaseSchema {
+  '@type': 'FAQPage';
+  mainEntity: FAQQuestion[];
+}
+
+/**
  * Union type for all supported schemas
  */
-export type SupportedSchema = 
+export type SupportedSchema =
   | WebSiteSchema
   | BlogSchema
   | BlogPostingSchema
@@ -180,6 +202,7 @@ export type SupportedSchema =
   | EventSchema
   | ProductSchema
   | ArticleSchema
+  | FAQPageSchema
   | PersonSchema
   | OrganizationSchema;
 
@@ -196,6 +219,7 @@ export const SCHEMA_TYPE_MAP = {
   'Event': 'EventSchema',
   'Product': 'ProductSchema',
   'Article': 'ArticleSchema',
+  'FAQPage': 'FAQPageSchema',
   'Person': 'PersonSchema',
   'Organization': 'OrganizationSchema'
 } as const;
