@@ -32,9 +32,14 @@ describe('Professional Standards Validation', () => {
     const violations: string[] = [];
 
     for (const file of sourceFiles) {
+      // Skip test files that may contain emojis for testing purposes
+      if (file.includes('__tests__') || file.includes('.test.') || file.includes('/tests/')) {
+        continue;
+      }
+
       const content = fs.readFileSync(file, 'utf-8');
       const emojiMatches = content.match(emojiRegex);
-      
+
       if (emojiMatches) {
         violations.push(`${file}: Found emojis: ${emojiMatches.join(', ')}`);
       }
@@ -74,8 +79,13 @@ describe('Professional Standards Validation', () => {
     const violations: string[] = [];
 
     for (const file of sourceFiles) {
+      // Skip test files that may contain agent references for testing purposes
+      if (file.includes('__tests__') || file.includes('.test.') || file.includes('/tests/')) {
+        continue;
+      }
+
       const content = fs.readFileSync(file, 'utf-8');
-      
+
       for (const pattern of forbiddenTerms) {
         const matches = content.match(pattern);
         if (matches) {

@@ -94,7 +94,7 @@ on:
 **Técnica**: Agregar logs detallados para entender qué está pasando.
 
 ```javascript
-console.log('🔍 Debug Info:');
+console.log('Debug Info:');
 console.log('Event name:', context.eventName);
 console.log('Event action:', context.payload.action);
 console.log('PR state:', context.payload.pull_request?.state);
