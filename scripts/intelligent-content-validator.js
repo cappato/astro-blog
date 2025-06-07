@@ -15,7 +15,7 @@ const __dirname = path.dirname(__filename);
 
 class IntelligentContentValidator {
   constructor() {
-    this.postsDir = path.join(__dirname, '../src/content/posts');
+    this.postsDir = path.join(__dirname, '../src/content/blog');
     this.maxPostLength = 3000; // palabras
     this.minHeadingStructure = 3; // mínimo 3 headings
     this.validationResults = [];
@@ -69,6 +69,7 @@ class IntelligentContentValidator {
     validation.metrics = this.analyzeMetrics(content);
     
     // Validaciones específicas
+    this.validateFileName(fileName, validation);
     this.validateLength(content, validation);
     this.validateStructure(content, validation);
     this.validateProfessionalStandards(content, validation);
@@ -93,6 +94,67 @@ class IntelligentContentValidator {
       codeBlocks,
       readingTime: Math.ceil(words / 200) // 200 palabras por minuto
     };
+  }
+
+  /**
+   * Valida nombre del archivo
+   */
+  validateFileName(fileName, validation) {
+    // Caracteres problemáticos para compatibilidad multiplataforma
+    const problematicChars = /[áéíóúüñÁÉÍÓÚÜÑ\s]/g;
+    const matches = fileName.match(problematicChars);
+
+    if (matches && matches.length > 0) {
+      const uniqueChars = [...new Set(matches)].join(', ');
+      validation.issues.push({
+        type: 'filename',
+        severity: 'error',
+        message: `Nombre de archivo con caracteres problemáticos: "${uniqueChars}" - Causa problemas en Windows`
+      });
+
+      // Sugerir nombre corregido
+      const correctedName = fileName
+        .replace(/[áà]/g, 'a')
+        .replace(/[éè]/g, 'e')
+        .replace(/[íì]/g, 'i')
+        .replace(/[óò]/g, 'o')
+        .replace(/[úù]/g, 'u')
+        .replace(/[ü]/g, 'u')
+        .replace(/[ñ]/g, 'n')
+        .replace(/[ÁÀÂÃ]/g, 'A')
+        .replace(/[ÉÈÊ]/g, 'E')
+        .replace(/[ÍÌÎ]/g, 'I')
+        .replace(/[ÓÒÔ]/g, 'O')
+        .replace(/[ÚÙÛ]/g, 'U')
+        .replace(/[Ü]/g, 'U')
+        .replace(/[Ñ]/g, 'N')
+        .replace(/\s+/g, '-')
+        .toLowerCase();
+
+      validation.suggestions.push({
+        type: 'filename-correction',
+        message: `Renombrar archivo a: "${correctedName}"`
+      });
+    }
+
+    // Verificar que no tenga espacios
+    if (fileName.includes(' ')) {
+      validation.issues.push({
+        type: 'filename',
+        severity: 'warning',
+        message: 'Nombre de archivo contiene espacios - usar guiones en su lugar'
+      });
+    }
+
+    // Verificar longitud del nombre
+    const nameWithoutExtension = fileName.replace('.md', '');
+    if (nameWithoutExtension.length > 80) {
+      validation.issues.push({
+        type: 'filename',
+        severity: 'warning',
+        message: `Nombre de archivo muy largo: ${nameWithoutExtension.length} caracteres (máximo recomendado: 80)`
+      });
+    }
   }
 
   /**
@@ -263,7 +325,18 @@ class IntelligentContentValidator {
         message: `${postsWithEmojis.length} posts con violaciones de estándares profesionales - requiere limpieza`
       });
     }
-    
+
+    const postsWithFilenameIssues = this.validationResults.filter(r =>
+      r.issues.some(i => i.type === 'filename')
+    );
+
+    if (postsWithFilenameIssues.length > 0) {
+      recommendations.push({
+        type: 'compatibility',
+        message: `${postsWithFilenameIssues.length} archivos con nombres problemáticos - requiere renombrado para compatibilidad Windows`
+      });
+    }
+
     return recommendations;
   }
 
