@@ -1,102 +1,76 @@
-# Reglas Esenciales del Proyecto
+# Reglas Esenciales - Referencia Rápida
 
-**Versión**: 1.0  
-**Aplicación**: Obligatoria para todos los agentes y desarrollo
-
----
-
-## 🚫 ESTÁNDARES PROFESIONALES (NO NEGOCIABLES)
-
-### Contenido Profesional
-- **Sin emojis**: En código, commits, PRs, documentación o cualquier output
-- **Sin nombres de agentes**: En commits, PRs o contenido público
-- **Sin lenguaje casual**: Mantener tono técnico profesional únicamente
-- **Sin referencias**: A "augment", "agent", firmas raras o menciones de IA
-- **Enfoque técnico**: Todo contenido debe ser puramente técnico y profesional
-- **Validación automática**: Los tests fallan si se violan estas reglas
-
-### Comunicación
-- **Idioma español**: Todas las interacciones en español
-- **Excepción técnica**: Elementos técnicos (código, comandos, nombres de archivos)
-- **Aplicación**: Documentación, explicaciones, comunicación
+**Versión**: 2.0
+**Fuente Autoritativa**: [`docs/STANDARDS.md`](./STANDARDS.md)
 
 ---
 
-## ⚙️ DESARROLLO (FUNDAMENTALES)
+## 📖 Documento Principal
 
-### TypeScript Obligatorio
-- **Regla**: Todo código JavaScript debe usar TypeScript con mejores prácticas
-- **Aplicación**: Archivos .js, .ts, .astro con lógica
-- **Contexto**: Mantener tipado fuerte y aprovechar beneficios de TypeScript
+**Para información completa y detallada, consultar: [`docs/STANDARDS.md`](./STANDARDS.md)**
 
-### Testing Continuo
-- **Antes de commits**: `npm run dev`, `npm run build`, `npm run preview`
-- **Sin excepciones**: Testing obligatorio antes de cualquier commit
-- **Validación**: Funcionalidad crítica + consola limpia
-
-### Reutilización sobre Creación
-- **Regla**: Siempre reutilizar componentes antes de crear nuevos
-- **Aplicación**: Cualquier nueva funcionalidad o vista
-- **Contexto**: Consistencia visual y mantenibilidad del código
-
-### Tailwind Expert Level
-- **Regla**: Usar Tailwind como expertos, evitar CSS custom innecesario
-- **Sistema híbrido**: `@layer components` con `@apply` para patrones repetitivos (3+ veces)
-- **Aplicación**: Todos los estilos y componentes
+Este archivo contiene solo una referencia rápida. El documento `STANDARDS.md` es la fuente única de verdad para todos los estándares del proyecto.
 
 ---
 
-## 🔄 WORKFLOW (OBLIGATORIOS)
+## ⚡ Referencia Rápida
 
-### Protocolo de PRs
-- **Regla**: Al crear un PR, compartir el link inmediatamente
-- **Formato**: Título claro + resumen + estado de tests
-- **Beneficio**: Trazabilidad y colaboración efectiva
-- **Timing**: Inmediatamente después de crear el PR
+### Estándares Profesionales
+- ❌ **Sin emojis** en código, commits, PRs, documentación
+- ❌ **Sin referencias a IA/agentes** en contenido público
+- 🇪🇸 **Idioma español** para documentación y comunicación
+- 📝 **Tono técnico profesional** únicamente
 
-### Acciones Destructivas
-- **Regla**: NUNCA eliminar archivos sin permiso explícito del usuario
-- **Aplicación**: Cualquier operación de eliminación o modificación destructiva
-- **Proceso**: Solicitar confirmación antes de cualquier acción destructiva
+### Desarrollo
+- 🔷 **TypeScript obligatorio** para todo código
+- 🧪 **Testing continuo** antes de commits
+- ♻️ **Reutilización** sobre creación de componentes
+- 🎨 **Tailwind expert level** para estilos
 
-### Aprendizaje Automático
-- **Regla**: Incorporar feedback automáticamente a las reglas
-- **Aplicación**: Cualquier feedback o corrección del usuario
-- **Proceso**: Documentar y aplicar feedback inmediatamente
+### Workflow
+- 🔗 **Compartir PRs** inmediatamente tras creación
+- ⚠️ **Confirmar acciones destructivas** antes de ejecutar
+- 📚 **Aprendizaje automático** de feedback
 
 ---
 
-## 📝 FORMATO DE COMMITS PROFESIONAL
+## 🔧 Comandos Útiles
 
-```
-Descripción técnica breve de los cambios
+```bash
+# Configurar git hooks
+npm run setup:hooks
 
-- Cambio técnico específico 1
-- Cambio técnico específico 2
-- Tests: pasando
-- Documentación: actualizada
+# Validar estándares
+npm run validate:standards
+
+# Testing completo
+npm run dev && npm run build && npm run preview
 ```
 
-## 📋 FORMATO DE PRs PROFESIONAL
+## 📋 Formatos Rápidos
 
+### Commits
 ```
-Título técnico describiendo el cambio
+tipo: descripción técnica breve
+
+- Cambio específico 1
+- Cambio específico 2
+```
+
+### PRs
+```
+Título técnico del cambio
 
 ## Resumen
-Descripción técnica breve de los cambios implementados.
+Descripción técnica breve.
 
 ## Cambios
-- Cambio técnico 1
-- Cambio técnico 2
+- Lista de cambios técnicos
 
 ## Testing
-- Tests pasando
-- Build exitoso
-
-## Documentación
-- Documentación actualizada según necesidad
+- Tests pasando ✅
 ```
 
 ---
 
-**Estas reglas son la base para mantener calidad profesional y consistencia en todo el desarrollo.**
+**📖 Para detalles completos: [`docs/STANDARDS.md`](./STANDARDS.md)**

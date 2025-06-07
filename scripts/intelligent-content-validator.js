@@ -3,7 +3,9 @@
 /**
  * Sistema Inteligente de Validación de Contenido
  * Detecta automáticamente posts largos y valida estructura
- * Estándares profesionales: sin emojis, contenido técnico
+ *
+ * Estándares: docs/STANDARDS.md (fuente autoritativa)
+ * Validaciones: sin emojis, contenido técnico profesional
  */
 
 import fs from 'fs';
