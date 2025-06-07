@@ -266,6 +266,7 @@ jobs:
           echo "✅ Critical test passed! Build successful - auto-merge can proceed."
           if [[ "$QUALITY_RESULT" != "success" || "$UNIT_RESULT" != "success" || "$ENDPOINT_RESULT" != "success" || "$PERF_RESULT" != "success" ]]; then
             echo "⚠️ Some optional tests had issues but auto-merge can proceed since build passed."
+            echo "OPTIONAL_TESTS_FAILED=true" >> $GITHUB_ENV
           fi
           exit 0
         else
@@ -273,3 +274,37 @@ jobs:
           echo "Build result: $BUILD_RESULT"
           exit 1
         fi
+
+    - name: Comment on PR if optional tests failed
+      if: ${{ env.OPTIONAL_TESTS_FAILED == 'true' && github.event_name == 'pull_request' }}
+      uses: actions/github-script@v7
+      with:
+        script: |
+          const comment = `## ⚠️ Optional Tests Status
+
+          **Auto-merge proceeded** because critical tests passed, but some optional tests had issues:
+
+          - **Unit Tests**: ${{ needs.unit-tests.result }}
+          - **Integration Tests**: ${{ needs.integration-tests.result }}
+          - **Endpoint Tests**: ${{ needs.endpoint-tests.result }}
+          - **Quality Checks**: ${{ needs.quality-checks.result }}
+          - **Performance Tests**: ${{ needs.performance-tests.result }}
+
+          ### What this means:
+          - ✅ **Build successful** - Core functionality is working
+          - ⚠️ **Optional tests failed** - Non-critical issues detected
+          - 🚀 **Auto-merge proceeded** - Safe to deploy
+
+          ### Recommended actions:
+          - Review failed test logs for potential improvements
+          - Consider fixing issues in follow-up PRs
+          - Monitor post-merge validation results
+
+          *This comment was generated automatically by the testing system.*`;
+
+          await github.rest.issues.createComment({
+            issue_number: context.issue.number,
+            owner: context.repo.owner,
+            repo: context.repo.repo,
+            body: comment
+          });
