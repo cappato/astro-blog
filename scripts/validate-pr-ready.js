@@ -2,7 +2,14 @@
 
 /**
  * Validación Proactiva de PR
- * Valida ANTES de crear el PR para feedback inmediato
+ *
+ * ⚠️  PARTIALLY DEPRECATED: PR size validation has been replaced by GitHub Action
+ *
+ * Migration status:
+ * - ✅ PR size validation → PR Size Labeler Action (.github/pull-request-size.yml)
+ * - 🔄 Other validations still active (emoji policy, conventional commits, etc.)
+ *
+ * This script still provides value for local validation before creating PRs.
  */
 
 import { execSync } from 'child_process';

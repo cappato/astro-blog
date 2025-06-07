@@ -1,4 +1,4 @@
-name: PR Size Check
+name: PR Size Check (Standard)
 
 on:
   pull_request:
@@ -7,147 +7,21 @@ on:
 permissions:
   contents: read
   pull-requests: write
-  issues: write
 
 jobs:
-  check-pr-size:
-    name: Verificar Tamaño del PR
+  label-pr-size:
+    name: Label PR by Size
     runs-on: ubuntu-latest
     if: github.event.pull_request.draft == false
 
     steps:
-      - name: Verificar tamaño del PR con casos especiales
-        uses: actions/github-script@v7
+      - name: Checkout Repository
+        uses: actions/checkout@v4
+
+      - name: Label PR based on size
+        uses: cbrgm/pr-size-labeler-action@v1.2.1
         with:
-          script: |
-            const pr = await github.rest.pulls.get({
-              owner: context.repo.owner,
-              repo: context.repo.repo,
-              pull_number: context.payload.pull_request.number
-            });
-
-            const total = pr.data.additions + pr.data.deletions;
-            const changedFiles = pr.data.changed_files;
-            const title = pr.data.title.toLowerCase();
-            const labels = pr.data.labels.map(label => label.name.toLowerCase());
-
-            console.log(`PR #${pr.data.number}: ${total} líneas, ${changedFiles} archivos`);
-            console.log(`Título: "${pr.data.title}"`);
-            console.log(`Labels: [${labels.join(', ')}]`);
-
-            // UMBRALES PROGRESIVOS BLOQUEANTES
-            const sizePolicy = {
-              small: {
-                lines: 300,
-                files: 8,
-                action: 'auto-merge',
-                description: 'Tamaño ideal - auto-merge libre'
-              },
-              medium: {
-                lines: 800,
-                files: 10,
-                action: 'auto-merge-warning',
-                description: 'Tamaño moderado - auto-merge con advertencia'
-              },
-              large: {
-                lines: 1500,
-                files: 15,
-                action: 'auto-merge-issue',
-                description: 'Tamaño grande - auto-merge con issue de revisión'
-              },
-              xlarge: {
-                lines: Infinity,
-                files: Infinity,
-                action: 'blocked',
-                description: 'Tamaño extremo - BLOQUEADO, requiere aprobación'
-              }
-            };
-
-            // Detectar casos especiales y overrides
-            const hasEmergencyLabel = labels.includes('size/emergency');
-            const hasMigrationLabel = labels.includes('size/migration');
-            const hasDocumentationLabel = labels.includes('size/documentation');
-
-            const isDocumentation = hasDocumentationLabel ||
-                                   labels.includes('documentation') ||
-                                   title.includes('docs:') ||
-                                   title.includes('documentación');
-
-            const isRefactor = labels.includes('refactor') ||
-                              title.includes('refactor') ||
-                              title.includes('consolidar') ||
-                              title.includes('reorganizar');
-
-            const isMigration = hasMigrationLabel ||
-                               title.includes('migrar') ||
-                               title.includes('migration') ||
-                               title.includes('migración');
-
-            // Determinar umbral aplicable
-            let currentThreshold = 'xlarge';
-            let blockingThreshold = 1500; // Líneas que bloquean auto-merge
-            let blockingFiles = 15;       // Archivos que bloquean auto-merge
-
-            // Aplicar overrides para casos especiales
-            if (hasEmergencyLabel) {
-              console.log('🚨 OVERRIDE: Emergency label detected - bypassing all size limits');
-              blockingThreshold = Infinity;
-              blockingFiles = Infinity;
-            } else if (isMigration) {
-              console.log('🔄 OVERRIDE: Migration detected - relaxed limits');
-              blockingThreshold = 3000;  // Migraciones pueden ser grandes
-              blockingFiles = 25;
-            } else if (isDocumentation && isRefactor) {
-              console.log('📚🔧 OVERRIDE: Documentation + Refactor - relaxed limits');
-              blockingThreshold = 2000;  // Docs + refactor pueden ser grandes
-              blockingFiles = 20;
-            } else if (isDocumentation) {
-              console.log('📚 OVERRIDE: Documentation - moderately relaxed limits');
-              blockingThreshold = 1200;  // Solo docs, un poco más permisivo
-              blockingFiles = 18;
-            }
-
-            // Determinar categoría actual
-            if (total <= sizePolicy.small.lines && changedFiles <= sizePolicy.small.files) {
-              currentThreshold = 'small';
-            } else if (total <= sizePolicy.medium.lines && changedFiles <= sizePolicy.medium.files) {
-              currentThreshold = 'medium';
-            } else if (total <= sizePolicy.large.lines && changedFiles <= sizePolicy.large.files) {
-              currentThreshold = 'large';
-            } else {
-              currentThreshold = 'xlarge';
-            }
-
-            const policy = sizePolicy[currentThreshold];
-            console.log(`📊 PR Categoría: ${currentThreshold.toUpperCase()}`);
-            console.log(`📏 ${policy.description}`);
-            console.log(`🔍 Límite de bloqueo: ${blockingThreshold} líneas, ${blockingFiles} archivos`);
-
-            // LÓGICA DE BLOQUEO
-            const isBlocked = total > blockingThreshold || changedFiles > blockingFiles;
-
-            if (isBlocked) {
-              const msg = `PR BLOQUEADO - Tamaño extremo: ${total} líneas (max: ${blockingThreshold}), ${changedFiles} archivos (max: ${blockingFiles}). Requiere aprobación manual. Opciones: 1) Dividir en PRs más pequeños, 2) Agregar labels: size/emergency, size/migration, size/documentation, 3) Solicitar revisión de maintainer.`;
-
-              console.log('❌ BLOQUEO AUTOMÁTICO ACTIVADO');
-              console.log(`📊 Tamaño: ${total} líneas, ${changedFiles} archivos`);
-              console.log(`🚫 Límites de bloqueo: ${blockingThreshold} líneas, ${blockingFiles} archivos`);
-              console.log('🛡️ Este PR requiere aprobación manual antes del auto-merge');
-
-              core.setFailed(msg);
-            } else {
-              // PR permitido - generar feedback apropiado
-              console.log(`✅ PR PERMITIDO - Categoría: ${currentThreshold.toUpperCase()}`);
-              console.log(`📊 Tamaño: ${total} líneas, ${changedFiles} archivos`);
-
-              if (currentThreshold === 'large') {
-                console.log('⚠️ ADVERTENCIA: PR grande detectado');
-                console.log('📝 Se creará issue automática para revisión post-merge');
-                console.log('💡 Considerar dividir en PRs más pequeños en el futuro');
-              } else if (currentThreshold === 'medium') {
-                console.log('💡 SUGERENCIA: PR moderado');
-                console.log('🔍 Considerar si se puede dividir en cambios más enfocados');
-              } else if (currentThreshold === 'small') {
-                console.log('🎯 Tamaño ideal para revisión y mantenimiento');
-              }
-            }
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          github_repository: ${{ github.repository }}
+          github_pr_number: ${{ github.event.number }}
+          config_file_path: '.github/pull-request-size.yml'
