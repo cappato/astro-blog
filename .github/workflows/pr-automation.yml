@@ -1,30 +1,13 @@
-name: PR Automation
+name: PR Automation (Simplified)
 
 on:
   pull_request:
-    types: [opened, edited, synchronize, ready_for_review, labeled]
-  pull_request_review:
-    types: [submitted]
-  check_suite:
-    types: [completed]
-  check_run:
-    types: [completed]
-  status:
-  workflow_run:
-    workflows: ["Conventional Commits", "Automated Testing Suite"]
-    types: [completed]
+    types: [opened, labeled, ready_for_review]
   workflow_dispatch:
-  schedule:
-    # Backup check cada 30 minutos (reducido para ahorrar minutos de GitHub Actions)
-    - cron: '*/30 * * * *'
 
 permissions:
   contents: write
   pull-requests: write
-  issues: write
-  checks: read
-  statuses: read
-  actions: read
 
 jobs:
   pr-validation:
@@ -77,227 +60,40 @@ jobs:
 
 
 
-  auto-merge:
-    name: Auto Merge
+  enable-auto-merge:
+    name: Enable GitHub Auto-merge
     runs-on: ubuntu-latest
     if: |
-      (github.event_name == 'check_suite' && github.event.check_suite.conclusion == 'success') ||
-      (github.event_name == 'check_run' && github.event.check_run.conclusion == 'success') ||
-      (github.event_name == 'pull_request' && (github.event.action == 'opened' || github.event.action == 'ready_for_review' || github.event.action == 'synchronize' || github.event.action == 'labeled')) ||
-      (github.event_name == 'pull_request_review' && github.event.review.state == 'approved') ||
-      (github.event_name == 'workflow_run' && github.event.workflow_run.conclusion == 'success') ||
-      (github.event_name == 'status') ||
-      (github.event_name == 'workflow_dispatch') ||
-      (github.event_name == 'schedule')
+      github.event_name == 'pull_request' &&
+      (github.event.action == 'opened' || github.event.action == 'labeled') &&
+      contains(github.event.pull_request.labels.*.name, 'auto-merge')
 
     steps:
-    - name: Auto Merge PR
+    - name: Enable GitHub Auto-merge
       uses: actions/github-script@v7
       with:
         script: |
-          console.log("🔍 Starting unified auto-merge check...");
-          console.log(`Event: ${context.eventName}`);
-          console.log(`Repo: ${context.repo.owner}/${context.repo.repo}`);
-          console.log(`Timestamp: ${new Date().toISOString()}`);
+          console.log("🔍 Enabling GitHub native auto-merge...");
+          console.log(`PR #${context.payload.pull_request.number}: ${context.payload.pull_request.title}`);
 
-          let prs = [];
-
-          if (context.eventName === 'pull_request' || context.eventName === 'pull_request_review') {
-            // For PR events, we have direct access to the PR
-            prs = [context.payload.pull_request];
-          } else if (context.eventName === 'check_suite') {
-            // For check_suite events, find PRs by commit SHA
-            const { data: prList } = await github.rest.pulls.list({
+          try {
+            // Enable auto-merge using GitHub's native feature
+            await github.rest.pulls.enableAutoMerge({
               owner: context.repo.owner,
               repo: context.repo.repo,
-              state: 'open'
+              pull_number: context.payload.pull_request.number,
+              merge_method: 'squash'
             });
 
-            // Filter PRs that include this commit
-            prs = prList.filter(pr => pr.head.sha === context.payload.check_suite.head_sha);
-          } else if (context.eventName === 'check_run') {
-            // For check_run events, find PRs by commit SHA
-            const { data: prList } = await github.rest.pulls.list({
-              owner: context.repo.owner,
-              repo: context.repo.repo,
-              state: 'open'
-            });
+            console.log(`✅ Auto-merge enabled for PR #${context.payload.pull_request.number}`);
+            console.log("🎯 GitHub will automatically merge when all checks pass");
 
-            // Filter PRs that include this commit
-            prs = prList.filter(pr => pr.head.sha === context.payload.check_run.head_sha);
-          } else if (context.eventName === 'workflow_run') {
-            // For workflow_run events, find PRs by commit SHA
-            const { data: prList } = await github.rest.pulls.list({
-              owner: context.repo.owner,
-              repo: context.repo.repo,
-              state: 'open'
-            });
+          } catch (error) {
+            console.log(`❌ Failed to enable auto-merge: ${error.message}`);
 
-            // Filter PRs that include this commit
-            prs = prList.filter(pr => pr.head.sha === context.payload.workflow_run.head_sha);
-          } else if (context.eventName === 'status') {
-            // For status events, find PRs by commit SHA
-            const { data: prList } = await github.rest.pulls.list({
-              owner: context.repo.owner,
-              repo: context.repo.repo,
-              state: 'open'
-            });
-
-            // Filter PRs that include this commit
-            prs = prList.filter(pr => pr.head.sha === context.payload.sha);
-          } else if (context.eventName === 'schedule' || context.eventName === 'workflow_dispatch') {
-            // For scheduled runs, check ALL open PRs with auto-merge label
-            console.log('🕐 Scheduled auto-merge check - scanning all open PRs...');
-            const { data: prList } = await github.rest.pulls.list({
-              owner: context.repo.owner,
-              repo: context.repo.repo,
-              state: 'open'
-            });
-
-            // Filter PRs that have auto-merge label
-            prs = prList.filter(pr => pr.labels.some(label => label.name === 'auto-merge'));
-            console.log(`📋 Found ${prs.length} PRs with auto-merge label`);
-          }
-
-          const eventType = context.eventName === 'schedule' ? 'scheduled check' : 'event-triggered check';
-          console.log(`🔍 ${eventType}: Found ${prs.length} PR(s) to check for auto-merge`);
-
-          if (prs.length === 0) {
-            console.log("ℹ️ No PRs found to process. This is normal if:");
-            console.log("  - No open PRs with 'auto-merge' label");
-            console.log("  - Event doesn't match any open PRs");
-            console.log("  - All PRs are already merged");
-            return;
-          }
-
-          for (const pr of prs) {
-            console.log(`\n🔄 Checking PR #${pr.number}: ${pr.title}`);
-            console.log(`  - Author: ${pr.user.login}`);
-            console.log(`  - Branch: ${pr.head.ref} -> ${pr.base.ref}`);
-            console.log(`  - Created: ${pr.created_at}`);
-            console.log(`  - Updated: ${pr.updated_at}`);
-
-            // Check if PR targets main branch
-            if (pr.base.ref !== 'main') {
-              console.log(`⏭️ Skipping PR #${pr.number} - not targeting main branch (targets: ${pr.base.ref})`);
-              continue;
-            }
-
-            // Check if PR has auto-merge label
-            const hasAutoMergeLabel = pr.labels.some(label => label.name === 'auto-merge');
-            console.log(`  - Has auto-merge label: ${hasAutoMergeLabel}`);
-            console.log(`  - Is draft: ${pr.draft}`);
-            console.log(`  - Mergeable: ${pr.mergeable}`);
-            console.log(`  - Target branch: ${pr.base.ref}`);
-
-            if (!hasAutoMergeLabel || pr.draft) {
-              console.log(`⏭️ Skipping PR #${pr.number} - no auto-merge label or is draft`);
-              continue;
-            }
-
-            // Get all checks for this PR
-            const { data: checks } = await github.rest.checks.listForRef({
-              owner: context.repo.owner,
-              repo: context.repo.repo,
-              ref: pr.head.sha
-            });
-
-            // Check if essential checks passed (allow some to be pending/queued)
-            const completedChecks = checks.check_runs.filter(check => check.status === 'completed');
-            const failedChecks = completedChecks.filter(check =>
-              check.conclusion !== 'success' && check.conclusion !== 'neutral'
-            );
-            const allChecksPassed = failedChecks.length === 0;
-
-            console.log(`  - Check runs: ${checks.check_runs.length}`);
-            console.log(`  - Completed checks: ${completedChecks.length}`);
-            console.log(`  - Failed checks: ${failedChecks.length}`);
-            console.log(`  - All completed checks passed: ${allChecksPassed}`);
-
-            // Get status checks (with error handling)
-            let allStatusesPassed = true;
-            try {
-              const { data: statuses } = await github.rest.repos.getCombinedStatusForRef({
-                owner: context.repo.owner,
-                repo: context.repo.repo,
-                ref: pr.head.sha
-              });
-              allStatusesPassed = statuses.state === 'success' || statuses.statuses.length === 0;
-              console.log(`  - Status state: ${statuses.state}`);
-              console.log(`  - All statuses passed: ${allStatusesPassed}`);
-            } catch (error) {
-              console.log(`  - Status checks not accessible, skipping status validation`);
-              console.log(`  - Will rely on check runs only`);
-            }
-
-            // Handle mergeable = null with retry
-            let mergeableState = pr.mergeable;
-            if (mergeableState === null) {
-              console.log('  - Mergeable state is null, waiting for GitHub to calculate...');
-              await new Promise(resolve => setTimeout(resolve, 3000));
-              const { data: refreshedPR } = await github.rest.pulls.get({
-                owner: context.repo.owner,
-                repo: context.repo.repo,
-                pull_number: pr.number
-              });
-              mergeableState = refreshedPR.mergeable;
-              console.log(`  - Refreshed mergeable state: ${mergeableState}`);
-            }
-
-            // Check if ready to merge (more permissive approach)
-            const checksReady = allChecksPassed && allStatusesPassed;
-            const notBlocked = mergeableState !== false; // Allow null (still calculating) and true
-            const readyToMerge = checksReady && notBlocked;
-
-            console.log(`  - Checks ready: ${checksReady}`);
-            console.log(`  - Not blocked: ${notBlocked}`);
-            console.log(`  - Ready to merge: ${readyToMerge}`);
-            console.log(`  - Mergeable state: ${mergeableState} (null=calculating, true=ready, false=blocked)`);
-
-            if (readyToMerge) {
-              try {
-                await github.rest.pulls.merge({
-                  owner: context.repo.owner,
-                  repo: context.repo.repo,
-                  pull_number: pr.number,
-                  commit_title: `${pr.title} (#${pr.number})`,
-                  merge_method: 'squash'
-                });
-
-                console.log(`✅ PR #${pr.number} automatically merged`);
-
-                // Delete the branch
-                try {
-                  await github.rest.git.deleteRef({
-                    owner: context.repo.owner,
-                    repo: context.repo.repo,
-                    ref: `heads/${pr.head.ref}`
-                  });
-                  console.log(`🗑️ Branch ${pr.head.ref} deleted`);
-                } catch (error) {
-                  console.log(`⚠️ Could not delete branch: ${error.message}`);
-                }
-
-              } catch (error) {
-                console.log(`❌ Failed to merge PR #${pr.number}: ${error.message}`);
-
-                // Log more details about the error
-                if (error.status === 405) {
-                  console.log(`   Reason: PR is not in a mergeable state`);
-                } else if (error.status === 409) {
-                  console.log(`   Reason: Merge conflict or head branch was modified`);
-                } else {
-                  console.log(`   Status: ${error.status}`);
-                  console.log(`   Details: ${JSON.stringify(error.response?.data, null, 2)}`);
-                }
-              }
-            } else {
-              console.log(`⏳ PR #${pr.number} not ready for auto-merge`);
-              console.log(`  - Checks passed: ${allChecksPassed}`);
-              console.log(`  - Statuses passed: ${allStatusesPassed}`);
-              console.log(`  - Mergeable: ${mergeableState}`);
+            if (error.status === 422) {
+              console.log("   Reason: Auto-merge requirements not met (checks pending/failing)");
+            } else if (error.status === 404) {
+              console.log("   Reason: PR not found or insufficient permissions");
             }
           }
-
-          console.log("\n🏁 Unified auto-merge check completed");
-          console.log(`Processed ${prs.length} PR(s) at ${new Date().toISOString()}`);

@@ -2,7 +2,16 @@
 
 /**
  * Smart PR Workflow
- * Automated workflow for creating high-quality PRs
+ *
+ * ⚠️  DEPRECATED: This script has been replaced by GitHub native auto-merge
+ *
+ * Migration completed: 2024-12-19
+ * New approach: Use `gh pr create --label auto-merge && gh pr merge --auto --squash`
+ *
+ * This file is kept for reference but should not be used in new workflows.
+ * Use the simplified npm scripts instead:
+ * - npm run pr:create
+ * - npm run pr:smart
  */
 
 import { execSync } from 'child_process';
