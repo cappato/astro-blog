@@ -1,10 +1,10 @@
 name: Deploy to Cloudflare Pages
 
 on:
-  push:
-    branches: [ main ]
-  # pull_request:
+  # Temporalmente deshabilitado hasta configurar secrets
+  # push:
   #   branches: [ main ]
+  workflow_dispatch: # Permitir ejecución manual
 
 jobs:
   deploy:
@@ -31,12 +31,8 @@ jobs:
       - name: Build project
         run: npm run build
 
-      - name: Deploy to Cloudflare Pages
-        uses: cloudflare/pages-action@v1
-        with:
-          apiToken: ${{ secrets.CLOUDFLARE_API_TOKEN }}
-          accountId: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
-          projectName: cappato-dev-blog
-          directory: dist
-          # Optional: Use wrangler-version to specify a specific version of wrangler to use
-          wranglerVersion: '3'
+      - name: Deploy to Cloudflare Pages with Wrangler
+        run: npx wrangler pages deploy dist --project-name=cappato-dev-blog --commit-dirty=true
+        env:
+          CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+          CLOUDFLARE_ACCOUNT_ID: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}

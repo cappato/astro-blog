@@ -36,8 +36,12 @@ src/features/feature-name/
 
 ## 📖 General Documentation
 
-### Project Documentation
+### Project Standards (IMPORTANT)
+- **[STANDARDS.md](./STANDARDS.md)** - **FUENTE ÚNICA DE VERDAD** para todos los estándares
+- **[rules-essential.md](./rules-essential.md)** - Referencia rápida de estándares
 - **[Tech Stack](./tech-stack.md)** - Technologies and tools used
+
+### Project Documentation
 - **[Testing Automation](./testing-automation.md)** - Testing strategy and automation
 - **[Blog Post](./blog-post.md)** - Blog post structure and workflow
 - **[Navigation](./navigation.md)** - Site navigation system

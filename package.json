@@ -59,7 +59,12 @@
     "validate:pr:size": "echo 'Validación de tamaño de PR - usar en GitHub Actions'",
     "validate:all": "npm run validate:content && npm run validate:pr && npm run test:ci",
     "setup:hooks": "bash scripts/install-git-hooks.sh",
-    "setup:dev": "npm install && npm run setup:hooks"
+    "setup:dev": "npm install && npm run setup:hooks",
+    "deploy": "npm run build && npx wrangler pages deploy dist --project-name=cappato-dev-blog --commit-dirty=true",
+    "deploy:clean": "npm run build && npx wrangler pages deploy dist --project-name=cappato-dev-blog",
+    "deploy:ci": "npx wrangler pages deploy dist --project-name=cappato-dev-blog",
+    "pages:list": "npx wrangler pages project list",
+    "wrangler:login": "npx wrangler login"
   },
   "dependencies": {
     "@tailwindcss/typography": "^0.5.16",

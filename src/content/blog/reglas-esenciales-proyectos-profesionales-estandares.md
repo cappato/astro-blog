@@ -324,6 +324,18 @@ npm run quality:report
 npm run metrics:professional
 ```
 
+## Documentación Oficial
+
+Para la implementación completa y actualizada de estos estándares, consultar:
+
+**[Estándares del Proyecto - Documentación Oficial](https://github.com/cappato/astro-blog/blob/main/docs/STANDARDS.md)**
+
+Este documento contiene:
+- Especificaciones técnicas detalladas
+- Configuraciones de automatización
+- Procesos de validación
+- Referencias de implementación
+
 ## Lecciones Aprendidas
 
 ### 1. Automatización es Clave

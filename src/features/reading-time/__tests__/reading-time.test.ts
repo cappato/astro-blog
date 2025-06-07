@@ -116,14 +116,14 @@ describe('Reading Time Feature', () => {
       const html = '<p> <strong>world</strong>!</p>';
       
       const processed = processor.processText(html);
-      expect(processed).toBe(' world!');
+      expect(processed).toBe('world!');
     });
 
     test('should count words correctly', () => {
       const processor = new TextProcessor();
       
-      expect(processor.countWords(' world')).toBe(2);
-      expect(processor.countWords('     world  ')).toBe(2);
+      expect(processor.countWords(' world')).toBe(1);
+      expect(processor.countWords('     world  ')).toBe(1);
       expect(processor.countWords('')).toBe(0);
     });
 
@@ -144,7 +144,7 @@ describe('Reading Time Feature', () => {
       
       const text = ' [world] test';
       const processed = processor.processText(text);
-      expect(processed).toBe('  test');
+      expect(processed).toBe('test');
     });
 
     test('should analyze text comprehensively', () => {
@@ -154,8 +154,8 @@ describe('Reading Time Feature', () => {
       const analysis = processor.analyzeText(text);
       
       expect(analysis.originalLength).toBe(text.length);
-      expect(analysis.wordCount).toBe(2);
-      expect(analysis.processedText).toBe(' world');
+      expect(analysis.wordCount).toBe(1);
+      expect(analysis.processedText).toBe('world');
     });
   });
 

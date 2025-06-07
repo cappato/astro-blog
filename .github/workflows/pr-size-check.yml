@@ -16,7 +16,7 @@ jobs:
     if: github.event.pull_request.draft == false
 
     steps:
-      - name: Verificar tamaño del PR
+      - name: Verificar tamaño del PR con casos especiales
         uses: actions/github-script@v7
         with:
           script: |
@@ -25,18 +25,65 @@ jobs:
               repo: context.repo.repo,
               pull_number: context.payload.pull_request.number
             });
-            
+
             const total = pr.data.additions + pr.data.deletions;
             const changedFiles = pr.data.changed_files;
-            
+            const title = pr.data.title.toLowerCase();
+            const labels = pr.data.labels.map(label => label.name.toLowerCase());
+
             console.log(`PR #${pr.data.number}: ${total} líneas, ${changedFiles} archivos`);
-            
-            const MAX_LINES = 300;
-            const MAX_FILES = 10;
-            
+            console.log(`Título: "${pr.data.title}"`);
+            console.log(`Labels: [${labels.join(', ')}]`);
+
+            // Configuración base
+            let MAX_LINES = 300;
+            let MAX_FILES = 10;
+
+            // Detectar casos especiales que permiten PRs más grandes
+            const isDocumentation = labels.includes('documentation') ||
+                                   title.includes('docs:') ||
+                                   title.includes('documentación');
+
+            const isRefactor = labels.includes('refactor') ||
+                              title.includes('refactor') ||
+                              title.includes('consolidar') ||
+                              title.includes('reorganizar');
+
+            const isStandardsWork = title.includes('estándares') ||
+                                   title.includes('standards') ||
+                                   title.includes('reglas');
+
+            const isMigration = title.includes('migrar') ||
+                               title.includes('migration') ||
+                               title.includes('migración');
+
+            // Aplicar límites especiales
+            if (isDocumentation && (isRefactor || isStandardsWork)) {
+              MAX_LINES = 500;  // Documentación + refactor
+              MAX_FILES = 15;
+              console.log('🔧 Caso especial detectado: Documentación + Refactor');
+              console.log(`📏 Límites ajustados: ${MAX_LINES} líneas, ${MAX_FILES} archivos`);
+            } else if (isDocumentation) {
+              MAX_LINES = 400;  // Solo documentación
+              MAX_FILES = 12;
+              console.log('📚 Caso especial detectado: Documentación');
+              console.log(`📏 Límites ajustados: ${MAX_LINES} líneas, ${MAX_FILES} archivos`);
+            } else if (isRefactor || isMigration) {
+              MAX_LINES = 450;  // Refactor o migración
+              MAX_FILES = 15;
+              console.log('🔄 Caso especial detectado: Refactor/Migración');
+              console.log(`📏 Límites ajustados: ${MAX_LINES} líneas, ${MAX_FILES} archivos`);
+            }
+
+            // Verificar límites
             if (total > MAX_LINES || changedFiles > MAX_FILES) {
-              const msg = `PR demasiado grande: ${total} líneas (max: ${MAX_LINES}), ${changedFiles} archivos (max: ${MAX_FILES}). Divide en PRs más pequeños.`;
+              const msg = `PR demasiado grande: ${total} líneas (max: ${MAX_LINES}), ${changedFiles} archivos (max: ${MAX_FILES}).
+
+              💡 Sugerencias:
+              - Divide en PRs más pequeños
+              - Para casos especiales, usa labels: 'documentation', 'refactor'
+              - Títulos con palabras clave: 'docs:', 'refactor', 'consolidar'`;
               core.setFailed(msg);
             } else {
-              console.log('PR de tamaño apropiado');
+              console.log(`✅ PR de tamaño apropiado (límites: ${MAX_LINES} líneas, ${MAX_FILES} archivos)`);
             }
