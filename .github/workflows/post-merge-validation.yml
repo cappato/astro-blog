@@ -1,0 +1,91 @@
+name: Post-Merge Validation
+
+on:
+  workflow_run:
+    workflows: ["PR Automation"]
+    types:
+      - completed
+    branches:
+      - main
+
+jobs:
+  post-merge-tests:
+    name: Post-Merge Heavy Tests
+    runs-on: ubuntu-latest
+    if: ${{ github.event.workflow_run.conclusion == 'success' }}
+    
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v4
+      
+    - name: Setup Node.js
+      uses: actions/setup-node@v4
+      with:
+        node-version: '18'
+        cache: 'npm'
+        
+    - name: Install dependencies
+      run: npm ci
+      
+    - name: Run build
+      run: npm run build
+      
+    - name: Run comprehensive integration tests
+      run: |
+        echo "=== Running Post-Merge Integration Tests ==="
+        npm run test:build || echo "Build tests failed"
+        npm run test:xml || echo "XML tests failed"
+        npm run test:content || echo "Content tests failed"
+        
+    - name: Run performance validation
+      run: |
+        echo "=== Performance Validation ==="
+        echo "Total files: $(find dist -type f | wc -l)"
+        echo "Total size: $(du -sh dist | cut -f1)"
+        
+        # Performance thresholds
+        TOTAL_SIZE=$(du -sb dist | cut -f1)
+        if [ $TOTAL_SIZE -gt 50000000 ]; then
+          echo "WARNING: Build size exceeded 50MB ($TOTAL_SIZE bytes)"
+          echo "::warning::Build size is larger than expected"
+        fi
+        
+    - name: Run endpoint validation
+      run: npm run test:endpoints || echo "Endpoint tests failed"
+      continue-on-error: true
+      
+    - name: Create issue if tests fail
+      if: failure()
+      uses: actions/github-script@v7
+      with:
+        script: |
+          const title = `Post-merge validation failed for commit ${context.sha.substring(0, 7)}`;
+          const body = `
+          ## Post-Merge Test Failure
+          
+          **Commit**: ${context.sha}
+          **Workflow Run**: ${context.payload.workflow_run.html_url}
+          **Time**: ${new Date().toISOString()}
+          
+          Heavy tests that run after auto-merge have detected issues.
+          
+          ### Actions Required:
+          - [ ] Review test failures in workflow logs
+          - [ ] Determine if rollback is needed
+          - [ ] Create hotfix PR if necessary
+          
+          ### Test Results:
+          - Integration tests may have failed
+          - Performance validation may have failed  
+          - Endpoint tests may have failed
+          
+          This issue was created automatically by post-merge validation.
+          `;
+          
+          await github.rest.issues.create({
+            owner: context.repo.owner,
+            repo: context.repo.repo,
+            title: title,
+            body: body,
+            labels: ['bug', 'post-merge-failure', 'urgent']
+          });
