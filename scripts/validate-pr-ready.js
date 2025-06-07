@@ -19,16 +19,79 @@ class ProactiveValidator {
   async validateAll() {
     console.log('🔍 PROACTIVE PR VALIDATION\n');
     console.log('⚡ Validating BEFORE creating PR for immediate feedback...\n');
-    
+
+    await this.validateMainSync();
     await this.validateGitStatus();
     await this.validatePRSize();
     await this.validateEmojiPolicy();
     await this.validateConventionalCommits();
     await this.validateFileNames();
-    await this.validateTests();
-    
+    await this.validateLocalTests();
+
     this.printResults();
     return this.errors.length === 0;
+  }
+
+  async validateMainSync() {
+    console.log('🔄 Checking main branch synchronization...');
+
+    try {
+      const currentBranch = execSync('git branch --show-current', { encoding: 'utf8' }).trim();
+
+      if (currentBranch === 'main') {
+        this.addWarning('Working directly on main branch', 'Consider creating a feature branch');
+        return;
+      }
+
+      // Fetch latest changes
+      try {
+        execSync('git fetch origin main', { encoding: 'utf8', stdio: 'pipe' });
+        this.addInfo('Fetched latest changes from origin/main');
+      } catch (error) {
+        this.addWarning('Could not fetch from origin', 'Check internet connection');
+      }
+
+      // Check if main is behind origin/main
+      try {
+        const behindCount = execSync(
+          'git rev-list --count main..origin/main',
+          { encoding: 'utf8' }
+        ).trim();
+
+        if (parseInt(behindCount) > 0) {
+          this.addError(
+            `Local main is ${behindCount} commits behind origin/main`,
+            'Run: git checkout main && git pull origin main && git checkout ' + currentBranch
+          );
+        } else {
+          this.addInfo('Local main is up to date with origin');
+        }
+      } catch (error) {
+        this.addWarning('Could not check main sync status', 'Ensure you have access to origin');
+      }
+
+      // Check if current branch is behind main
+      try {
+        const branchBehind = execSync(
+          `git rev-list --count ${currentBranch}..main`,
+          { encoding: 'utf8' }
+        ).trim();
+
+        if (parseInt(branchBehind) > 0) {
+          this.addWarning(
+            `Current branch is ${branchBehind} commits behind main`,
+            `Consider rebasing: git rebase main`
+          );
+        } else {
+          this.addInfo('Current branch is up to date with main');
+        }
+      } catch (error) {
+        this.addWarning('Could not check branch sync status', error.message);
+      }
+
+    } catch (error) {
+      this.addError('Main sync validation failed', error.message);
+    }
   }
 
   async validateGitStatus() {
@@ -148,16 +211,16 @@ class ProactiveValidator {
 
   getPRLimits(prType) {
     const limits = {
-      'docs': { files: 12, lines: 400 },
-      'docs+refactor': { files: 15, lines: 500 },
-      'feature+tests': { files: 12, lines: 350 },
-      'config+feature': { files: 10, lines: 300 },
-      'feature': { files: 8, lines: 250 },
-      'tests': { files: 6, lines: 200 },
-      'config': { files: 5, lines: 150 },
-      'default': { files: 8, lines: 250 }
+      'docs': { files: 12, lines: 500, warning: 'Documentation PRs can be larger but should focus on specific topics' },
+      'docs+refactor': { files: 15, lines: 600, warning: 'Mixed PRs should be split when possible' },
+      'feature+tests': { files: 10, lines: 400, warning: 'Feature with tests is ideal - keep focused' },
+      'config+feature': { files: 8, lines: 300, warning: 'Config changes with features need careful review' },
+      'feature': { files: 6, lines: 250, warning: 'Pure feature PRs should be small and focused' },
+      'tests': { files: 8, lines: 300, warning: 'Test PRs can be larger for comprehensive coverage' },
+      'config': { files: 4, lines: 150, warning: 'Config changes should be minimal and focused' },
+      'default': { files: 6, lines: 250, warning: 'Default limits - consider splitting if larger' }
     };
-    
+
     return limits[prType] || limits.default;
   }
 
@@ -236,15 +299,40 @@ class ProactiveValidator {
     }
   }
 
-  async validateTests() {
-    console.log('🧪 Running tests...');
-    
-    try {
-      execSync('npm run test:blog', { encoding: 'utf8', stdio: 'pipe' });
-      this.addInfo('All tests passed');
-      
-    } catch (error) {
-      this.addError('Tests failed', 'Fix failing tests before creating PR');
+  async validateLocalTests() {
+    console.log('🧪 Running comprehensive local tests...');
+
+    const testCommands = [
+      { cmd: 'npm run build', name: 'Build', critical: true },
+      { cmd: 'npm run lint', name: 'Lint', critical: false },
+      { cmd: 'npm run test:blog', name: 'Blog Tests', critical: true },
+      { cmd: 'npm run test:unit', name: 'Unit Tests', critical: false }
+    ];
+
+    let criticalFailed = false;
+    let optionalFailed = 0;
+
+    for (const test of testCommands) {
+      try {
+        console.log(`  Running ${test.name}...`);
+        execSync(test.cmd, { encoding: 'utf8', stdio: 'pipe' });
+        this.addInfo(`${test.name}: passed`);
+
+      } catch (error) {
+        if (test.critical) {
+          this.addError(`${test.name} failed (critical)`, `Fix before creating PR: ${test.cmd}`);
+          criticalFailed = true;
+        } else {
+          this.addWarning(`${test.name} failed (optional)`, `Consider fixing: ${test.cmd}`);
+          optionalFailed++;
+        }
+      }
+    }
+
+    if (!criticalFailed && optionalFailed === 0) {
+      this.addInfo('All local tests passed - ready for PR');
+    } else if (!criticalFailed) {
+      this.addInfo(`Critical tests passed (${optionalFailed} optional tests failed)`);
     }
   }
 
