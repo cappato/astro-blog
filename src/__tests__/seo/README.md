@@ -4,7 +4,7 @@
 
 Comprehensive SEO validation suite for the live production site at **https://cappato.dev**. These tests verify that all SEO optimizations are working correctly in the real environment.
 
-## 🚀 Quick Start
+##  Quick Start
 
 ### Basic Usage
 ```bash
@@ -186,7 +186,7 @@ npm run test:seo:performance
 npm run test:seo
 ```
 
-#### 🚀 **Scenario 4: Quick Daily Check**
+####  **Scenario 4: Quick Daily Check**
 ```bash
 # Fast verification everything works
 npx vitest run src/__tests__/seo/basic-connectivity.test.ts
@@ -262,4 +262,4 @@ npx vitest run src/__tests__/seo/production.test.ts
 4. **Use specific tests** when debugging particular areas
 5. **Check mobile performance** separately if needed
 
-These tests ensure your SEO optimizations are working correctly in the real world! 🚀
+These tests ensure your SEO optimizations are working correctly in the real world! 

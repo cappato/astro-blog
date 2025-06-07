@@ -1,6 +1,6 @@
 # SEO Tests - Cheat Sheet
 
-## 🚀 Quick Commands
+##  Quick Commands
 
 ### Setup
 ```bash
