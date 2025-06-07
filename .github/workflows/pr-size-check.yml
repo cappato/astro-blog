@@ -35,12 +35,41 @@ jobs:
             console.log(`Título: "${pr.data.title}"`);
             console.log(`Labels: [${labels.join(', ')}]`);
 
-            // Configuración base
-            let MAX_LINES = 300;
-            let MAX_FILES = 10;
+            // UMBRALES PROGRESIVOS BLOQUEANTES
+            const sizePolicy = {
+              small: {
+                lines: 300,
+                files: 8,
+                action: 'auto-merge',
+                description: 'Tamaño ideal - auto-merge libre'
+              },
+              medium: {
+                lines: 800,
+                files: 10,
+                action: 'auto-merge-warning',
+                description: 'Tamaño moderado - auto-merge con advertencia'
+              },
+              large: {
+                lines: 1500,
+                files: 15,
+                action: 'auto-merge-issue',
+                description: 'Tamaño grande - auto-merge con issue de revisión'
+              },
+              xlarge: {
+                lines: Infinity,
+                files: Infinity,
+                action: 'blocked',
+                description: 'Tamaño extremo - BLOQUEADO, requiere aprobación'
+              }
+            };
 
-            // Detectar casos especiales que permiten PRs más grandes
-            const isDocumentation = labels.includes('documentation') ||
+            // Detectar casos especiales y overrides
+            const hasEmergencyLabel = labels.includes('size/emergency');
+            const hasMigrationLabel = labels.includes('size/migration');
+            const hasDocumentationLabel = labels.includes('size/documentation');
+
+            const isDocumentation = hasDocumentationLabel ||
+                                   labels.includes('documentation') ||
                                    title.includes('docs:') ||
                                    title.includes('documentación');
 
@@ -49,41 +78,76 @@ jobs:
                               title.includes('consolidar') ||
                               title.includes('reorganizar');
 
-            const isStandardsWork = title.includes('estándares') ||
-                                   title.includes('standards') ||
-                                   title.includes('reglas');
-
-            const isMigration = title.includes('migrar') ||
+            const isMigration = hasMigrationLabel ||
+                               title.includes('migrar') ||
                                title.includes('migration') ||
                                title.includes('migración');
 
-            // Aplicar límites especiales
-            if (isDocumentation && (isRefactor || isStandardsWork)) {
-              MAX_LINES = 500;  // Documentación + refactor
-              MAX_FILES = 15;
-              console.log('🔧 Caso especial detectado: Documentación + Refactor');
-              console.log(`📏 Límites ajustados: ${MAX_LINES} líneas, ${MAX_FILES} archivos`);
+            // Determinar umbral aplicable
+            let currentThreshold = 'xlarge';
+            let blockingThreshold = 1500; // Líneas que bloquean auto-merge
+            let blockingFiles = 15;       // Archivos que bloquean auto-merge
+
+            // Aplicar overrides para casos especiales
+            if (hasEmergencyLabel) {
+              console.log('🚨 OVERRIDE: Emergency label detected - bypassing all size limits');
+              blockingThreshold = Infinity;
+              blockingFiles = Infinity;
+            } else if (isMigration) {
+              console.log('🔄 OVERRIDE: Migration detected - relaxed limits');
+              blockingThreshold = 3000;  // Migraciones pueden ser grandes
+              blockingFiles = 25;
+            } else if (isDocumentation && isRefactor) {
+              console.log('📚🔧 OVERRIDE: Documentation + Refactor - relaxed limits');
+              blockingThreshold = 2000;  // Docs + refactor pueden ser grandes
+              blockingFiles = 20;
             } else if (isDocumentation) {
-              MAX_LINES = 400;  // Solo documentación
-              MAX_FILES = 12;
-              console.log('📚 Caso especial detectado: Documentación');
-              console.log(`📏 Límites ajustados: ${MAX_LINES} líneas, ${MAX_FILES} archivos`);
-            } else if (isRefactor || isMigration) {
-              MAX_LINES = 450;  // Refactor o migración
-              MAX_FILES = 15;
-              console.log('🔄 Caso especial detectado: Refactor/Migración');
-              console.log(`📏 Límites ajustados: ${MAX_LINES} líneas, ${MAX_FILES} archivos`);
+              console.log('📚 OVERRIDE: Documentation - moderately relaxed limits');
+              blockingThreshold = 1200;  // Solo docs, un poco más permisivo
+              blockingFiles = 18;
             }
 
-            // Verificar límites
-            if (total > MAX_LINES || changedFiles > MAX_FILES) {
-              const msg = `PR demasiado grande: ${total} líneas (max: ${MAX_LINES}), ${changedFiles} archivos (max: ${MAX_FILES}).
+            // Determinar categoría actual
+            if (total <= sizePolicy.small.lines && changedFiles <= sizePolicy.small.files) {
+              currentThreshold = 'small';
+            } else if (total <= sizePolicy.medium.lines && changedFiles <= sizePolicy.medium.files) {
+              currentThreshold = 'medium';
+            } else if (total <= sizePolicy.large.lines && changedFiles <= sizePolicy.large.files) {
+              currentThreshold = 'large';
+            } else {
+              currentThreshold = 'xlarge';
+            }
 
-              💡 Sugerencias:
-              - Divide en PRs más pequeños
-              - Para casos especiales, usa labels: 'documentation', 'refactor'
-              - Títulos con palabras clave: 'docs:', 'refactor', 'consolidar'`;
+            const policy = sizePolicy[currentThreshold];
+            console.log(`📊 PR Categoría: ${currentThreshold.toUpperCase()}`);
+            console.log(`📏 ${policy.description}`);
+            console.log(`🔍 Límite de bloqueo: ${blockingThreshold} líneas, ${blockingFiles} archivos`);
+
+            // LÓGICA DE BLOQUEO
+            const isBlocked = total > blockingThreshold || changedFiles > blockingFiles;
+
+            if (isBlocked) {
+              const msg = `PR BLOQUEADO - Tamaño extremo: ${total} líneas (max: ${blockingThreshold}), ${changedFiles} archivos (max: ${blockingFiles}). Requiere aprobación manual. Opciones: 1) Dividir en PRs más pequeños, 2) Agregar labels: size/emergency, size/migration, size/documentation, 3) Solicitar revisión de maintainer.`;
+
+              console.log('❌ BLOQUEO AUTOMÁTICO ACTIVADO');
+              console.log(`📊 Tamaño: ${total} líneas, ${changedFiles} archivos`);
+              console.log(`🚫 Límites de bloqueo: ${blockingThreshold} líneas, ${blockingFiles} archivos`);
+              console.log('🛡️ Este PR requiere aprobación manual antes del auto-merge');
+
               core.setFailed(msg);
             } else {
-              console.log(`✅ PR de tamaño apropiado (límites: ${MAX_LINES} líneas, ${MAX_FILES} archivos)`);
+              // PR permitido - generar feedback apropiado
+              console.log(`✅ PR PERMITIDO - Categoría: ${currentThreshold.toUpperCase()}`);
+              console.log(`📊 Tamaño: ${total} líneas, ${changedFiles} archivos`);
+
+              if (currentThreshold === 'large') {
+                console.log('⚠️ ADVERTENCIA: PR grande detectado');
+                console.log('📝 Se creará issue automática para revisión post-merge');
+                console.log('💡 Considerar dividir en PRs más pequeños en el futuro');
+              } else if (currentThreshold === 'medium') {
+                console.log('💡 SUGERENCIA: PR moderado');
+                console.log('🔍 Considerar si se puede dividir en cambios más enfocados');
+              } else if (currentThreshold === 'small') {
+                console.log('🎯 Tamaño ideal para revisión y mantenimiento');
+              }
             }
