@@ -14,6 +14,9 @@ on:
     workflows: ["Conventional Commits", "Automated Testing Suite"]
     types: [completed]
   workflow_dispatch:
+  schedule:
+    # Ejecutar cada 5 minutos para verificar PRs pendientes de auto-merge
+    - cron: '*/5 * * * *'
 
 permissions:
   contents: write
@@ -84,7 +87,8 @@ jobs:
       (github.event_name == 'pull_request_review' && github.event.review.state == 'approved') ||
       (github.event_name == 'workflow_run' && github.event.workflow_run.conclusion == 'success') ||
       (github.event_name == 'status') ||
-      (github.event_name == 'workflow_dispatch')
+      (github.event_name == 'workflow_dispatch') ||
+      (github.event_name == 'schedule')
 
     steps:
     - name: Auto Merge PR
@@ -136,9 +140,22 @@ jobs:
 
             // Filter PRs that include this commit
             prs = prList.filter(pr => pr.head.sha === context.payload.sha);
+          } else if (context.eventName === 'schedule' || context.eventName === 'workflow_dispatch') {
+            // For scheduled runs, check ALL open PRs with auto-merge label
+            console.log('🕐 Scheduled auto-merge check - scanning all open PRs...');
+            const { data: prList } = await github.rest.pulls.list({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              state: 'open'
+            });
+
+            // Filter PRs that have auto-merge label
+            prs = prList.filter(pr => pr.labels.some(label => label.name === 'auto-merge'));
+            console.log(`📋 Found ${prs.length} PRs with auto-merge label`);
           }
 
-          console.log(`🔍 Found ${prs.length} PR(s) to check for auto-merge`);
+          const eventType = context.eventName === 'schedule' ? 'scheduled check' : 'event-triggered check';
+          console.log(`🔍 ${eventType}: Found ${prs.length} PR(s) to check for auto-merge`);
 
           for (const pr of prs) {
             console.log(`\n🔄 Checking PR #${pr.number}: ${pr.title}`);
