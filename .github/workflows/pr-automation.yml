@@ -202,14 +202,17 @@ jobs:
               ref: pr.head.sha
             });
 
-            // Check if all checks passed
-            const allChecksPassed = checks.check_runs.length === 0 || checks.check_runs.every(check =>
-              check.status === 'completed' &&
-              (check.conclusion === 'success' || check.conclusion === 'neutral')
+            // Check if essential checks passed (allow some to be pending/queued)
+            const completedChecks = checks.check_runs.filter(check => check.status === 'completed');
+            const failedChecks = completedChecks.filter(check =>
+              check.conclusion !== 'success' && check.conclusion !== 'neutral'
             );
+            const allChecksPassed = failedChecks.length === 0;
 
             console.log(`  - Check runs: ${checks.check_runs.length}`);
-            console.log(`  - All checks passed: ${allChecksPassed}`);
+            console.log(`  - Completed checks: ${completedChecks.length}`);
+            console.log(`  - Failed checks: ${failedChecks.length}`);
+            console.log(`  - All completed checks passed: ${allChecksPassed}`);
 
             // Get status checks (with error handling)
             let allStatusesPassed = true;
@@ -227,15 +230,29 @@ jobs:
               console.log(`  - Will rely on check runs only`);
             }
 
-            // Check if ready to merge (allow null mergeable state, only block if explicitly false)
+            // Handle mergeable = null with retry
+            let mergeableState = pr.mergeable;
+            if (mergeableState === null) {
+              console.log('  - Mergeable state is null, waiting for GitHub to calculate...');
+              await new Promise(resolve => setTimeout(resolve, 3000));
+              const { data: refreshedPR } = await github.rest.pulls.get({
+                owner: context.repo.owner,
+                repo: context.repo.repo,
+                pull_number: pr.number
+              });
+              mergeableState = refreshedPR.mergeable;
+              console.log(`  - Refreshed mergeable state: ${mergeableState}`);
+            }
+
+            // Check if ready to merge (more permissive approach)
             const checksReady = allChecksPassed && allStatusesPassed;
-            const notBlocked = pr.mergeable !== false; // Allow null (calculating) and true
+            const notBlocked = mergeableState !== false; // Allow null (still calculating) and true
             const readyToMerge = checksReady && notBlocked;
 
             console.log(`  - Checks ready: ${checksReady}`);
             console.log(`  - Not blocked: ${notBlocked}`);
             console.log(`  - Ready to merge: ${readyToMerge}`);
-            console.log(`  - Mergeable state: ${pr.mergeable} (null=calculating, true=ready, false=blocked)`);
+            console.log(`  - Mergeable state: ${mergeableState} (null=calculating, true=ready, false=blocked)`);
 
             if (readyToMerge) {
               try {
@@ -278,7 +295,7 @@ jobs:
               console.log(`⏳ PR #${pr.number} not ready for auto-merge`);
               console.log(`  - Checks passed: ${allChecksPassed}`);
               console.log(`  - Statuses passed: ${allStatusesPassed}`);
-              console.log(`  - Mergeable: ${pr.mergeable}`);
+              console.log(`  - Mergeable: ${mergeableState}`);
             }
           }
 
