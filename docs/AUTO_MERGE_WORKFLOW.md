@@ -1,44 +1,51 @@
-# Auto-merge Workflow Documentation
+# Auto-merge Workflow Documentation (GitHub Native)
 
 ## Descripción General
 
-El workflow de auto-merge unificado gestiona el merge automático de PRs que cumplen ciertas condiciones, eliminando la necesidad de intervención manual y acelerando el desarrollo.
+El workflow de auto-merge utiliza la funcionalidad nativa de GitHub para gestionar el merge automático de PRs, eliminando la complejidad de scripts custom y aprovechando las características integradas de la plataforma.
 
-## Archivo Principal
+## Migración Completada
 
-**Ubicación**: `.github/workflows/pr-automation.yml`
+**Fecha**: 2024-12-19
+**Estado**: ✅ Migrado de custom a GitHub nativo
+**Archivo Principal**: `.github/workflows/pr-automation.yml` (simplificado)
 
-## Triggers del Workflow
+## Triggers del Workflow (Simplificados)
 
-### Eventos Inmediatos
-- `pull_request`: [opened, synchronize, ready_for_review, labeled]
-- `check_suite`: [completed]
-- `check_run`: [completed]
-- `pull_request_review`: [submitted]
-- `workflow_run`: [completed]
-- `status`: Cambios en status checks
-
-### Eventos de Backup
-- `schedule`: Cada 5 minutos (`*/5 * * * *`)
+### Eventos Principales
+- `pull_request`: [opened, labeled, ready_for_review]
 - `workflow_dispatch`: Ejecución manual
 
-## Condiciones para Auto-merge
+### Eventos Eliminados (Ya no necesarios)
+- ❌ `check_suite`, `check_run`, `status` - GitHub maneja automáticamente
+- ❌ `schedule` - No necesario con auto-merge nativo
+- ❌ `pull_request_review` - GitHub maneja automáticamente
 
-### Requisitos Obligatorios
+## Funcionamiento con GitHub Nativo
+
+### Requisitos Simplificados
 1. **Label**: PR debe tener label `auto-merge`
-2. **Branch**: PR debe apuntar a `main`
-3. **Estado**: PR no debe ser draft
-4. **Checks**: Todos los checks deben pasar (success/neutral)
-5. **Status**: Todos los status checks deben pasar
-6. **Mergeable**: PR no debe estar bloqueado (conflicts, etc.)
+2. **Workflow**: GitHub Actions habilita auto-merge nativo
+3. **Checks**: GitHub maneja automáticamente las validaciones
+4. **Merge**: GitHub ejecuta el merge cuando todo está listo
 
-### Lógica de Verificación
-```javascript
-const hasAutoMergeLabel = pr.labels.some(label => label.name === 'auto-merge');
-const checksReady = allChecksPassed && allStatusesPassed;
-const notBlocked = pr.mergeable !== false; // Permite null (calculando)
-const readyToMerge = checksReady && notBlocked && !pr.draft;
+### Flujo Simplificado
+```mermaid
+graph TD
+    A[PR creado con label auto-merge] --> B[GitHub Action se dispara]
+    B --> C[Habilita auto-merge nativo]
+    C --> D[GitHub monitorea checks automáticamente]
+    D --> E{¿Todos los checks pasan?}
+    E -->|Sí| F[GitHub hace merge automático]
+    E -->|No| G[Espera hasta que pasen]
+    F --> H[Branch eliminado automáticamente]
 ```
+
+### Ventajas del Enfoque Nativo
+- ✅ **Menos código custom**: De 200+ líneas a ~30 líneas
+- ✅ **Más confiable**: GitHub maneja la lógica internamente
+- ✅ **Mejor UX**: Interfaz nativa en GitHub
+- ✅ **Menos bugs**: No hay lógica custom que falle
 
 ## Comportamiento por Evento
 
