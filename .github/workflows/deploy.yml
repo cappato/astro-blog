@@ -1,9 +1,8 @@
 name: Deploy to Cloudflare Pages
 
 on:
-  # Temporalmente deshabilitado hasta configurar secrets
-  # push:
-  #   branches: [ main ]
+  push:
+    branches: [ main ]
   workflow_dispatch: # Permitir ejecución manual
 
 jobs:
