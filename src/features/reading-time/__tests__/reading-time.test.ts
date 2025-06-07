@@ -123,7 +123,7 @@ describe('Reading Time Feature', () => {
       const processor = new TextProcessor();
       
       expect(processor.countWords(' world')).toBe(1);
-      expect(processor.countWords('     world  ')).toBe(2);
+      expect(processor.countWords('     world  ')).toBe(1);
       expect(processor.countWords('')).toBe(0);
     });
 
