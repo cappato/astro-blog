@@ -57,3 +57,4 @@ Feel free to check [our documentation](https://docs.astro.build) or jump into ou
 **Auto-merge Live Test:** Probando trigger inmediato con pequeña modificación - 2025-06-07
 **Test Status Check Fix:** Verificando eliminación de check problemático de Cloudflare Pages - 2025-06-07
 **Deploy Test:** Verificando deploy correcto desde main con nuevo proyecto cappato-dev-blog - 2025-06-07
+**Git Hooks Test:** Implementando protección de main con pre-push hooks - 2025-06-07
