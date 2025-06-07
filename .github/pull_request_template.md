@@ -1,57 +1,92 @@
-# Pull Request
+## 📄 Descripción
 
-## 📋 Description
-<!-- Provide a brief description of the changes -->
+Explica brevemente qué hace este PR y por qué es necesario.
 
-## 🔄 Type of Change
-<!-- Mark the relevant option with an "x" -->
+## 🎯 Tipo de Cambio
 
-- [ ] 🐛 Bug fix (non-breaking change which fixes an issue)
-- [ ] ✨ New feature (non-breaking change which adds functionality)
-- [ ] 💥 Breaking change (fix or feature that would cause existing functionality to not work as expected)
-- [ ] 📚 Documentation update
-- [ ] 🎨 Style changes (formatting, missing semi colons, etc; no code change)
-- [ ] ♻️ Refactoring (no functional changes, no api changes)
-- [ ] ⚡ Performance improvements
-- [ ] ✅ Test updates
-- [ ] 🔧 Build/CI changes
-- [ ] 🧹 Chore (maintenance tasks)
+- [ ] 🐛 Bug fix (cambio que corrige un problema)
+- [ ] ✨ Nueva funcionalidad (cambio que agrega funcionalidad)
+- [ ] 💥 Breaking change (cambio que rompe funcionalidad existente)
+- [ ] 📚 Documentación (cambios solo en documentación)
+- [ ] 🔧 Refactoring (cambio que no corrige bugs ni agrega funcionalidad)
+- [ ] ⚡ Performance (cambio que mejora el rendimiento)
+- [ ] 🧪 Tests (agregar o corregir tests)
+- [ ] 🔨 Build/CI (cambios en build o integración continua)
+- [ ] 🎨 Estilo (formateo, espacios, etc. sin cambios de código)
 
-## 🧪 Testing
-<!-- Describe the tests that you ran to verify your changes -->
+## ✅ Checklist de Calidad
 
-- [ ] Unit tests pass (`npm run test:unit`)
-- [ ] Integration tests pass (`npm run test:integration`)
-- [ ] Build succeeds (`npm run build`)
-- [ ] Manual testing completed
+### 📏 Tamaño del PR
+- [ ] El PR modifica menos de 10 archivos
+- [ ] El PR modifica menos de 300 líneas
+- [ ] Los cambios son atómicos y bien separados
+- [ ] Si es grande, está justificado y no se puede dividir
 
-### Test Details
-<!-- Provide details about your testing -->
+### 🧪 Testing
+- [ ] El código fue probado localmente
+- [ ] Se agregaron tests si aplica
+- [ ] Todos los tests existentes pasan (`npm test`)
+- [ ] Build exitoso sin errores (`npm run build`)
 
-## 📸 Screenshots (if applicable)
-<!-- Add screenshots to help explain your changes -->
+### 📝 Documentación y Estándares
+- [ ] El nombre del PR sigue conventional commits
+- [ ] Documentación actualizada si es necesario
+- [ ] No hay archivos con caracteres especiales (acentos, ñ)
+- [ ] Sin emojis en código/documentación técnica
+- [ ] Código sigue estándares del proyecto
 
-## 📝 Checklist
-<!-- Mark completed items with an "x" -->
+### 🔗 Dependencias y Compatibilidad
+- [ ] No hay dependencias circulares
+- [ ] Cambios de dependencias están justificados
+- [ ] No rompe funcionalidad existente
+- [ ] Compatible con sistemas Windows/Linux/Mac
 
-- [ ] My code follows the style guidelines of this project
-- [ ] I have performed a self-review of my own code
-- [ ] I have commented my code, particularly in hard-to-understand areas
-- [ ] I have made corresponding changes to the documentation
-- [ ] My changes generate no new warnings
-- [ ] I have added tests that prove my fix is effective or that my feature works
-- [ ] New and existing unit tests pass locally with my changes
-- [ ] Any dependent changes have been merged and published
+## 🧪 Testing Realizado
 
-## 🔗 Related Issues
-<!-- Link to related issues -->
-Closes #(issue_number)
+Describe qué tests ejecutaste y sus resultados:
 
-## 📋 Additional Notes
-<!-- Add any additional notes or context -->
+- [ ] Tests unitarios: ✅ Pasando / ❌ Fallando
+- [ ] Tests de integración: ✅ Pasando / ❌ Fallando
+- [ ] Build local: ✅ Exitoso / ❌ Fallando
+- [ ] Validación de contenido: ✅ Sin problemas / ❌ Con issues
+
+## 📸 Screenshots (si aplica)
+
+Si hay cambios visuales, agrega screenshots del antes y después.
+
+## 🔗 Issues Relacionados
+
+- Closes #(issue)
+- Related to #(issue)
+- Part of #(issue)
+
+## 🧠 Notas Adicionales
+
+¿Algo más que deba saber el revisor?
+
+- Decisiones de diseño importantes
+- Limitaciones conocidas
+- Próximos pasos planificados
+- Consideraciones especiales
+
+## 🚀 Plan de Deploy
+
+- [ ] Este cambio puede deployarse inmediatamente
+- [ ] Requiere coordinación especial
+- [ ] Necesita configuración adicional
+- [ ] Requiere migración de datos
 
 ---
 
-**Created by:** Carlos (Carlitos) - Astro Blog Agent 🤖
-**Branch:** `{{ branch_name }}`
-**Base:** `{{ base_branch }}`
+### 📋 Para el Revisor
+
+**Puntos clave a revisar:**
+- Lógica de negocio correcta
+- Manejo de errores apropiado
+- Performance y escalabilidad
+- Seguridad y validaciones
+- Consistencia con arquitectura existente
+
+---
+
+*Template actualizado con estándares profesionales del proyecto*

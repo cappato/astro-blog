@@ -1,0 +1,141 @@
+name: PR Size Check
+
+on:
+  pull_request:
+    types: [opened, synchronize, reopened]
+
+permissions:
+  contents: read
+  pull-requests: write
+  issues: write
+
+jobs:
+  check-pr-size:
+    name: Verificar Tamaño del PR
+    runs-on: ubuntu-latest
+    if: github.event.pull_request.draft == false
+
+    steps:
+      - name: Verificar tamaño del PR
+        uses: actions/github-script@v7
+        with:
+          script: |
+            const pr = await github.rest.pulls.get({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              pull_number: context.payload.pull_request.number
+            });
+
+            const additions = pr.data.additions;
+            const deletions = pr.data.deletions;
+            const changedFiles = pr.data.changed_files;
+            const total = additions + deletions;
+
+            console.log(`📊 Métricas del PR #${pr.data.number}:`);
+            console.log(`  - Archivos modificados: ${changedFiles}`);
+            console.log(`  - Líneas agregadas: ${additions}`);
+            console.log(`  - Líneas eliminadas: ${deletions}`);
+            console.log(`  - Total de líneas modificadas: ${total}`);
+
+            // Definir límites
+            const MAX_LINES = 300;
+            const WARNING_LINES = 200;
+            const MAX_FILES = 10;
+            const WARNING_FILES = 7;
+
+            let hasErrors = false;
+            let hasWarnings = false;
+            let messages = [];
+
+            // Verificar límites de líneas
+            if (total > MAX_LINES) {
+              hasErrors = true;
+              messages.push(`❌ **Error**: Este PR modifica ${total} líneas (máximo permitido: ${MAX_LINES})`);
+              messages.push(`   📝 **Acción requerida**: Divide el PR en cambios más pequeños`);
+            } else if (total > WARNING_LINES) {
+              hasWarnings = true;
+              messages.push(`⚠️ **Warning**: PR grande con ${total} líneas modificadas (recomendado: <${WARNING_LINES})`);
+              messages.push(`   💡 **Sugerencia**: Considera dividir en PRs más pequeños si es posible`);
+            }
+
+            // Verificar límites de archivos
+            if (changedFiles > MAX_FILES) {
+              hasErrors = true;
+              messages.push(`❌ **Error**: Este PR modifica ${changedFiles} archivos (máximo permitido: ${MAX_FILES})`);
+              messages.push(`   📝 **Acción requerida**: Divide el PR por funcionalidad`);
+            } else if (changedFiles > WARNING_FILES) {
+              hasWarnings = true;
+              messages.push(`⚠️ **Warning**: PR con muchos archivos: ${changedFiles} (recomendado: <${WARNING_FILES})`);
+              messages.push(`   💡 **Sugerencia**: Agrupa cambios relacionados en PRs separados`);
+            }
+
+            // Crear comentario si hay problemas
+            if (hasErrors || hasWarnings) {
+              const commentBody = `## 📏 Análisis de Tamaño del PR
+
+${messages.join('\n')}
+
+### 📋 Buenas Prácticas para PRs
+
+#### ✅ **PRs Ideales:**
+- **Menos de ${WARNING_LINES} líneas** modificadas
+- **Menos de ${WARNING_FILES} archivos** modificados
+- **Un objetivo claro** y específico
+- **Cambios atómicos** y relacionados
+
+#### 🔧 **Cómo Dividir PRs Grandes:**
+1. **Por funcionalidad**: Separa features independientes
+2. **Por tipo**: Tests, documentación, código por separado
+3. **Por componente**: Frontend, backend, configuración
+4. **Por dependencias**: Cambios que no dependen entre sí
+
+#### 💡 **Beneficios de PRs Pequeños:**
+- **Review más rápido** y efectivo
+- **Menos conflictos** de merge
+- **Debugging más fácil** si algo falla
+- **Deploy más seguro** con cambios incrementales
+
+---
+*Este análisis es automático. Si tienes dudas sobre cómo dividir el PR, pregunta en los comentarios.*`;
+
+              // Buscar comentario existente
+              const { data: comments } = await github.rest.issues.listComments({
+                owner: context.repo.owner,
+                repo: context.repo.repo,
+                issue_number: context.payload.pull_request.number
+              });
+
+              const existingComment = comments.find(comment => 
+                comment.user.login === 'github-actions[bot]' && 
+                comment.body.includes('📏 Análisis de Tamaño del PR')
+              );
+
+              if (existingComment) {
+                // Actualizar comentario existente
+                await github.rest.issues.updateComment({
+                  owner: context.repo.owner,
+                  repo: context.repo.repo,
+                  comment_id: existingComment.id,
+                  body: commentBody
+                });
+                console.log('📝 Comentario de análisis actualizado');
+              } else {
+                // Crear nuevo comentario
+                await github.rest.issues.createComment({
+                  owner: context.repo.owner,
+                  repo: context.repo.repo,
+                  issue_number: context.payload.pull_request.number,
+                  body: commentBody
+                });
+                console.log('📝 Comentario de análisis creado');
+              }
+            }
+
+            // Fallar el check si hay errores
+            if (hasErrors) {
+              core.setFailed(`PR demasiado grande: ${total} líneas y ${changedFiles} archivos. Divide en PRs más pequeños.`);
+            } else if (hasWarnings) {
+              console.log(`⚠️ PR grande pero dentro de límites: ${total} líneas, ${changedFiles} archivos`);
+            } else {
+              console.log(`✅ PR de tamaño apropiado: ${total} líneas, ${changedFiles} archivos`);
+            }
