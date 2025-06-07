@@ -9,11 +9,29 @@ import fs from 'fs/promises';
 import path from 'path';
 import { execSync } from 'child_process';
 
+// Feature flags for gradual migration
+const USE_UNIFIED_PR_SYSTEM = process.env.USE_UNIFIED_PR_SYSTEM === 'true';
+
+// Conditional imports
+let UnifiedPRManager, i18n;
+if (USE_UNIFIED_PR_SYSTEM) {
+    const unifiedModule = await import('./unified-pr-manager.js');
+    const i18nModule = await import('./i18n-system.js');
+    UnifiedPRManager = unifiedModule.UnifiedPRManager;
+    i18n = i18nModule.i18n;
+}
+
 class SimpleMultiAgent {
     constructor() {
         this.rulesPath = 'docs/rules-essential.md';
         this.blogAutomationPath = 'scripts/blog-automation.js';
         this.lessonsPath = 'scripts/lessons-learned.js';
+
+        // Initialize unified systems if enabled
+        if (USE_UNIFIED_PR_SYSTEM) {
+            this.prManager = new UnifiedPRManager();
+            this.i18n = i18n;
+        }
         
         // Triggers para detección de intenciones de posts
         this.POST_TRIGGERS = [
@@ -283,20 +301,38 @@ class SimpleMultiAgent {
      * Workflow completo automatizado: push + PR + reporte
      */
     async automatedWorkflow(commitMessage, prTitle, prDescription) {
+        // Use unified system if enabled, otherwise legacy
+        if (USE_UNIFIED_PR_SYSTEM) {
+            console.log('🔄 Using unified PR system...');
+            return await this.prManager.automatedWorkflow({
+                commitMessage,
+                prTitle,
+                prDescription
+            });
+        }
+
+        // Legacy implementation
+        console.log('⚠️  Using legacy workflow system...');
         console.log('Iniciando workflow automatizado completo...\n');
 
         try {
-            // 1. Verificar que hay cambios para commitear
+            // 1. VALIDACIÓN PROACTIVA - ¡Nuevo!
+            console.log('🔍 Ejecutando validación proactiva...');
+            try {
+                execSync('npm run validate:pr-ready', { stdio: 'inherit' });
+                console.log('✅ Validación proactiva exitosa\n');
+            } catch (error) {
+                console.error('❌ Validación proactiva falló');
+                console.error('💡 Corrige los problemas antes de crear el PR');
+                return null;
+            }
+
+            // 2. Verificar que hay cambios para commitear
             const gitStatus = execSync('git status --porcelain', { encoding: 'utf8' });
             if (!gitStatus.trim()) {
                 console.log('No hay cambios para commitear');
                 return;
             }
-
-            // 2. Ejecutar tests antes de push
-            console.log('Ejecutando tests...');
-            execSync('npm run test:blog', { stdio: 'inherit' });
-            console.log('Tests pasaron exitosamente\n');
 
             // 3. Hacer push de la rama actual
             console.log('Haciendo push...');
