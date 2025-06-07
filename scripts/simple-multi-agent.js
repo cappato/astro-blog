@@ -9,11 +9,29 @@ import fs from 'fs/promises';
 import path from 'path';
 import { execSync } from 'child_process';
 
+// Feature flags for gradual migration
+const USE_UNIFIED_PR_SYSTEM = process.env.USE_UNIFIED_PR_SYSTEM === 'true';
+
+// Conditional imports
+let UnifiedPRManager, i18n;
+if (USE_UNIFIED_PR_SYSTEM) {
+    const unifiedModule = await import('./unified-pr-manager.js');
+    const i18nModule = await import('./i18n-system.js');
+    UnifiedPRManager = unifiedModule.UnifiedPRManager;
+    i18n = i18nModule.i18n;
+}
+
 class SimpleMultiAgent {
     constructor() {
         this.rulesPath = 'docs/rules-essential.md';
         this.blogAutomationPath = 'scripts/blog-automation.js';
         this.lessonsPath = 'scripts/lessons-learned.js';
+
+        // Initialize unified systems if enabled
+        if (USE_UNIFIED_PR_SYSTEM) {
+            this.prManager = new UnifiedPRManager();
+            this.i18n = i18n;
+        }
         
         // Triggers para detección de intenciones de posts
         this.POST_TRIGGERS = [
@@ -283,6 +301,18 @@ class SimpleMultiAgent {
      * Workflow completo automatizado: push + PR + reporte
      */
     async automatedWorkflow(commitMessage, prTitle, prDescription) {
+        // Use unified system if enabled, otherwise legacy
+        if (USE_UNIFIED_PR_SYSTEM) {
+            console.log('🔄 Using unified PR system...');
+            return await this.prManager.automatedWorkflow({
+                commitMessage,
+                prTitle,
+                prDescription
+            });
+        }
+
+        // Legacy implementation
+        console.log('⚠️  Using legacy workflow system...');
         console.log('Iniciando workflow automatizado completo...\n');
 
         try {

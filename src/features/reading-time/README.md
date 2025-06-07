@@ -1,10 +1,10 @@
 # Reading Time Feature
 
-## 🎯 Core Purpose
+##  Core Purpose
 
 Framework-agnostic reading time calculation system that estimates how long it takes to read text content. Provides accurate word counting, configurable reading speeds, and localized formatting for blog posts and articles.
 
-## 🏗️ Architecture
+## ️ Architecture
 
 ### Modular Structure
 - **Location**: `src/features/reading-time/`
@@ -13,13 +13,13 @@ Framework-agnostic reading time calculation system that estimates how long it ta
 - **Tests**: 33 comprehensive tests
 
 ### Design Principles
-- ✅ **Framework Agnostic** - Pure TypeScript, works anywhere
-- ✅ **Zero Dependencies** - No external packages required
-- ✅ **Backward Compatible** - Maintains original API
-- ✅ **Highly Configurable** - Customizable speeds, formats, locales
-- ✅ **Self-Contained** - All functionality within feature directory
+-  **Framework Agnostic** - Pure TypeScript, works anywhere
+-  **Zero Dependencies** - No external packages required
+-  **Backward Compatible** - Maintains original API
+-  **Highly Configurable** - Customizable speeds, formats, locales
+-  **Self-Contained** - All functionality within feature directory
 
-## 📋 Specifications
+##  Specifications
 
 ### Core Functionality
 - **Word Counting**: Accurate text processing with HTML/Markdown stripping
@@ -39,12 +39,12 @@ interface ReadingTimeConfig {
 ```
 
 ### Supported Locales
-- 🇪🇸 Spanish: "5 min de lectura"
-- 🇺🇸 English: "5 min read"
-- 🇫🇷 French: "5 min de lecture"
-- 🇩🇪 German: "5 Min. Lesezeit"
-- 🇮🇹 Italian: "5 min di lettura"
-- 🇧🇷 Portuguese: "5 min de leitura"
+-  Spanish: "5 min de lectura"
+-  English: "5 min read"
+-  French: "5 min de lecture"
+-  German: "5 Min. Lesezeit"
+-  Italian: "5 min di lettura"
+-  Portuguese: "5 min de leitura"
 
 ## 🧩 Components
 
@@ -60,7 +60,7 @@ Localized formatting for different languages and templates.
 ### 4. ReadingTime (Main Class)
 Simplified API for common use cases.
 
-## 💡 Examples
+##  Examples
 
 ### Basic Usage (Backward Compatible)
 ```typescript
@@ -93,7 +93,7 @@ console.log(estimates.average.formatted); // "5 min de lectura"
 console.log(estimates.fast.formatted);    // "4 min de lectura"
 ```
 
-## 🔧 Integration
+##  Integration
 
 ### Current Usage
 ```typescript
@@ -105,20 +105,20 @@ const formattedTime = formatReadingTime(readingTime);
 ```
 
 ### Migration Completed
-- ✅ **Phase 1**: Feature modularized
-- ✅ **Phase 2**: Imports updated in PostLayout.astro
-- ✅ **Phase 3**: Old utils/readingTime.ts removed
-- ✅ **Phase 4**: Tests migrated and passing (33 tests)
+-  **Phase 1**: Feature modularized
+-  **Phase 2**: Imports updated in PostLayout.astro
+-  **Phase 3**: Old utils/readingTime.ts removed
+-  **Phase 4**: Tests migrated and passing (33 tests)
 
 ## 🧪 Testing
 
 ### Test Coverage
-- ✅ **33 comprehensive tests** covering all functionality
-- ✅ **Edge cases**: Empty content, HTML/Markdown, Unicode
-- ✅ **Error handling**: Invalid inputs, configuration errors
-- ✅ **Performance**: Large content handling
-- ✅ **Localization**: Multiple language formats
-- ✅ **Backward compatibility**: Original API preserved
+-  **33 comprehensive tests** covering all functionality
+-  **Edge cases**: Empty content, HTML/Markdown, Unicode
+-  **Error handling**: Invalid inputs, configuration errors
+-  **Performance**: Large content handling
+-  **Localization**: Multiple language formats
+-  **Backward compatibility**: Original API preserved
 
 ### Test Commands
 ```bash
@@ -129,7 +129,7 @@ npx vitest run src/features/reading-time/__tests__/reading-time.test.ts
 npm run test:unit
 ```
 
-## 🚨 Error Handling
+##  Error Handling
 
 ### Input Validation
 - Throws error for non-string input
@@ -141,7 +141,7 @@ npm run test:unit
 - Minimum time cannot be negative
 - Format template must include {time} placeholder
 
-## 🎯 AI Context
+##  AI Context
 
 ### Feature Purpose
 Reading time estimation for blog posts and articles to improve user experience by setting reading expectations.
@@ -153,25 +153,25 @@ Reading time estimation for blog posts and articles to improve user experience b
 - **SEO**: Add reading time to structured data
 
 ### Benefits Achieved
-- ✅ **Modular Architecture**: Self-contained, reusable feature
-- ✅ **Zero Dependencies**: No external packages required
-- ✅ **Framework Agnostic**: Works with any JavaScript framework
-- ✅ **Backward Compatible**: Existing code continues to work
-- ✅ **Enhanced API**: New classes provide advanced functionality
-- ✅ **Comprehensive Testing**: 33 tests ensure reliability
-- ✅ **Improved Performance**: Better text processing algorithms
+-  **Modular Architecture**: Self-contained, reusable feature
+-  **Zero Dependencies**: No external packages required
+-  **Framework Agnostic**: Works with any JavaScript framework
+-  **Backward Compatible**: Existing code continues to work
+-  **Enhanced API**: New classes provide advanced functionality
+-  **Comprehensive Testing**: 33 tests ensure reliability
+-  **Improved Performance**: Better text processing algorithms
 
 ---
 
-## 📊 Migration Summary
+##  Migration Summary
 
 | Aspect | Before | After | Status |
 |--------|--------|-------|--------|
-| **Location** | `src/utils/readingTime.ts` | `src/features/reading-time/` | ✅ Migrated |
-| **Tests** | `src/utils/__tests__/` | `src/features/reading-time/__tests__/` | ✅ Migrated |
-| **API** | Basic functions | Enhanced classes + backward compatibility | ✅ Enhanced |
-| **Dependencies** | Zero | Zero | ✅ Maintained |
-| **Usage** | `../utils/readingTime` | `../features/reading-time` | ✅ Updated |
-| **Test Count** | 24 tests | 33 tests | ✅ Expanded |
+| **Location** | `src/utils/readingTime.ts` | `src/features/reading-time/` |  Migrated |
+| **Tests** | `src/utils/__tests__/` | `src/features/reading-time/__tests__/` |  Migrated |
+| **API** | Basic functions | Enhanced classes + backward compatibility |  Enhanced |
+| **Dependencies** | Zero | Zero |  Maintained |
+| **Usage** | `../utils/readingTime` | `../features/reading-time` |  Updated |
+| **Test Count** | 24 tests | 33 tests |  Expanded |
 
 This feature is **production-ready** and **fully tested** with zero external dependencies and complete backward compatibility!
