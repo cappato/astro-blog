@@ -1,0 +1,9 @@
+{
+  "config": {
+    "default": false
+  },
+  "globs": [
+    "README.md"
+  ],
+  "fix": true
+}
