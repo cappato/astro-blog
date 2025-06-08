@@ -42,17 +42,27 @@ function getAllMetaTags(dom: JSDOM): { name: string; content: string; property?:
   }));
 }
 
-// Helper function to find blog post URLs
+// Helper function to find blog post URLs (individual posts, not pillar pages)
 async function findBlogPostUrls(): Promise<string[]> {
   const blogDom = await fetchAndParse(`${PRODUCTION_URL}/blog`);
   const links = blogDom.window.document.querySelectorAll('a[href*="/blog/"]');
-  
+
   const urls = Array.from(links)
     .map(link => link.getAttribute('href'))
-    .filter(href => href && href !== '/blog' && !href.includes('#'))
+    .filter(href => {
+      if (!href || href === '/blog' || href.includes('#')) return false;
+
+      // Exclude pillar pages - these should have type="website", not "article"
+      if (href.includes('/blog/pillars') || href.includes('/blog/pillar/')) return false;
+      if (href.includes('/blog/tag/')) return false;
+
+      // Only include individual blog posts (format: /blog/post-slug)
+      const pathParts = href.split('/').filter(Boolean);
+      return pathParts.length === 2 && pathParts[0] === 'blog';
+    })
     .map(href => href!.startsWith('http') ? href : `${PRODUCTION_URL}${href}`)
     .slice(0, 3); // Test first 3 blog posts
-  
+
   return [...new Set(urls)]; // Remove duplicates
 }
 
