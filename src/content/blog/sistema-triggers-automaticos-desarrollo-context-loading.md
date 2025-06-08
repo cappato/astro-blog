@@ -357,13 +357,10 @@ const YOUR_TRIGGERS = [
 ## Herramientas de Debugging
 
 ```bash
-# Validar sistema
 npm run triggers:validate
 
-# Probar carga de contexto
 npm run triggers:context
 
-# Debug con logs detallados
 DEBUG=true npm run triggers:context
 ```
 

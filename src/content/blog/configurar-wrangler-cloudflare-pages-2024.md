@@ -46,7 +46,6 @@ Antes de empezar con la **configuración de Wrangler**, asegúrate de tener:
 ### 1.2 Autenticación con Cloudflare
 
 ```bash
-# IMPORTANTE: Usar npx para evitar problemas de WSL
 npx wrangler login
 ```
 
@@ -55,7 +54,6 @@ Esto abrirá tu navegador para autenticarte con Cloudflare. Autoriza la aplicaci
 ### 1.3 Verificar Autenticación
 
 ```bash
-# Verificar que estás autenticado correctamente
 npx wrangler whoami
 ```
 
@@ -77,7 +75,6 @@ Getting User settings...
 ### 2.1 Crear el Proyecto
 
 ```bash
-# Crear proyecto (reemplaza 'mi-proyecto' con el nombre real)
 npx wrangler pages project create mi-proyecto
 ```
 
@@ -90,7 +87,6 @@ npx wrangler pages project create mi-proyecto
 ### 2.2 Listar Proyectos Existentes
 
 ```bash
-# Ver todos tus proyectos de Pages
 npx wrangler pages project list
 ```
 
@@ -141,11 +137,9 @@ needs the "@cloudflare/workerd-linux-64" package instead.
  **SOLUCIÓN**: Usar `npx wrangler` en lugar de instalación global.
 
 ```bash
-# Si tienes problemas de binarios cruzados
 rm -rf node_modules package-lock.json
 npm install
 
-# Verificar que npx funciona
 npx wrangler --version
 ```
 
@@ -178,7 +172,6 @@ Agrega estos scripts útiles a tu `package.json`:
 ### 5.2 Probar Deploy Manual
 
 ```bash
-# Primer deploy manual para verificar configuración
 npm run deploy
 ```
 
@@ -207,16 +200,12 @@ npm run deploy
 ### Comandos Útiles para Verificar
 
 ```bash
-# Verificar autenticación
 npx wrangler whoami
 
-# Listar proyectos
 npx wrangler pages project list
 
-# Ver información del proyecto
 npx wrangler pages project get mi-proyecto
 
-# Deploy rápido para testing
 npm run deploy
 ```
 

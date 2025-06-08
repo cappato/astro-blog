@@ -133,7 +133,6 @@ describe('Meta Tags Feature', () => {
 ### **4. Documentation: README Co-localizada**
 
 ```markdown
-# Meta Tags Feature
 
 ## Core Purpose
 Generate SEO-optimized meta tags automatically with validation and best practices.
@@ -154,16 +153,13 @@ import { MetaTags } from '../features/meta-tags/components';
 
 ### ** Plug & Play**
 ```bash
-# Mover feature entre proyectos
 cp -r src/features/meta-tags/ ../otro-proyecto/src/features/
 ```
 
 ### ** Testing Aislado**
 ```bash
-# Test solo una feature
 npm test src/features/meta-tags
 
-# Test todas las features
 npm test src/features/
 ```
 
@@ -209,7 +205,6 @@ describe('SEOEngine', () => {
 
 ### **Paso 4: Documentar**
 ```markdown
-# Feature README.md
 - Propósito
 - API
 - Ejemplos

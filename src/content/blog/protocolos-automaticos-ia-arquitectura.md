@@ -46,7 +46,6 @@ Diseñé un sistema de protocolos automáticos con tres componentes clave:
 
 ### **1. Reglas Dinámicas con Enforcement Levels**
 ```markdown
-# DYNAMIC-RULES.md
 ### TypeScript Obligatorio
 - **Enforcement**: FUNDAMENTAL
 - **Regla**: Todo código JavaScript debe usar TypeScript
@@ -71,9 +70,6 @@ docs/.system/protocols/
 
 ### **3. Sistema de Estado Continuo**
 ```markdown
-# CURRENT-TASK.md - Estado actual
-# TASK-HISTORY.md - Lecciones aprendidas
-# START-HERE.md - Punto de entrada obligatorio
 ```
 
 ##  Mi Visión Original
@@ -111,7 +107,6 @@ Migré los elementos valiosos a un framework automatizado que SÍ funciona:
 
 ### **Scripts que "Adornan" Comunicación Casual**
 ```bash
-# Tu comunicación casual se enriquece automáticamente:
 npm run multi-developer:check        # ¿Ya existe implementación?
 npm run multi-developer:protocols    # ¿Cumple reglas aprendidas?
 npm run multi-developer:analyze      # ¿Qué lecciones aplican?
@@ -128,7 +123,6 @@ if (jsFiles.length > 0) {
 
 ### **Captura Automática de Lecciones**
 ```bash
-# Cada conflicto resuelto genera nueva regla automáticamente:
 npm run multi-developer:learn    # Captura lección aprendida
 npm run multi-developer:analyze  # Analiza patrones y tendencias
 ```

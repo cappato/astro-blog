@@ -97,7 +97,6 @@ Deberías ver ambos secrets listados:
 ### 3.1 Crear Estructura de Directorios
 
 ```bash
-# Crear directorio para workflows
 mkdir -p .github/workflows
 ```
 
@@ -158,10 +157,8 @@ jobs:
 ### 4.1 Commit y Push del Workflow
 
 ```bash
-# Agregar archivos
 git add .github/workflows/deploy.yml
 
-# Commit con mensaje descriptivo
 git commit -m " Add GitHub Actions workflow for automatic deployment
 
  Added deploy.yml workflow
@@ -169,7 +166,6 @@ git commit -m " Add GitHub Actions workflow for automatic deployment
  Set up CI/CD pipeline with Node.js 20
  Ready for automatic deployment on push to main"
 
-# Push para activar el workflow
 git push origin main
 ```
 
@@ -291,13 +287,10 @@ jobs:
 ### Comandos para Verificar Localmente
 
 ```bash
-# Verificar que el build funciona
 npm run build
 
-# Verificar estructura de archivos
 ls -la dist/
 
-# Verificar que wrangler puede acceder al proyecto
 npx wrangler pages project list
 ```
 
@@ -306,14 +299,11 @@ npx wrangler pages project list
 ### Para Desarrollo Diario
 
 ```bash
-# 1. Desarrollo local
 npm run dev
 
-# 2. Commit cambios
 git add .
 git commit -m "feat: nueva funcionalidad"
 
-# 3. Push para deploy automático
 git push origin main  # ← Deploy automático se activa
 ```
 

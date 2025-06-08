@@ -136,7 +136,6 @@ jobs:
 ### **2. Validación Multi-Capa**
 
 ```bash
-# Tests que se ejecutan automáticamente:
 npm run test:unit        # Tests unitarios
 npm run test:build       # Validación de build
 npm run test:content     # Validación de contenido
@@ -193,14 +192,9 @@ if (deploymentFailed) {
 ### **Paso 1: Setup Básico**
 
 ```bash
-# 1. Configurar GitHub Actions
 mkdir -p .github/workflows
 
-# 2. Configurar secrets en GitHub
-# CLOUDFLARE_API_TOKEN
-# CLOUDFLARE_ACCOUNT_ID
 
-# 3. Configurar scripts de testing
 npm run test:setup
 ```
 
@@ -221,13 +215,10 @@ npm run test:setup
 ### **Paso 3: Validar el Sistema**
 
 ```bash
-# Test completo del workflow
 git add .
 git commit -m " Setup auto-merge system"
 git push origin main
 
-# Monitorear en GitHub Actions
-# Verificar deploy en Cloudflare Pages
 ```
 
 ##  Lecciones Aprendidas

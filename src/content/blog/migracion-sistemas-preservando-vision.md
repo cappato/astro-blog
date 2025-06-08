@@ -79,17 +79,10 @@ existente. ¿Querés que extienda el sistema actual?"
 ### **Fase 1: Análisis y Mapeo**
 
 ```bash
-# 1. Auditar sistema existente
 find docs/.system -name "*.md" | xargs wc -l
-# Resultado: 2,847 líneas de protocolos
 
-# 2. Identificar patrones de uso
 grep -r "FUNDAMENTAL\|CRITICAL\|OBLIGATORY" docs/.system/
-# Resultado: 47 reglas con diferentes niveles de enforcement
 
-# 3. Mapear dependencias
-# ¿Qué archivos se leen juntos?
-# ¿Qué reglas se aplican frecuentemente?
 ```
 
 ### **Fase 2: Diseño del Nuevo Sistema**
@@ -113,16 +106,12 @@ grep -r "FUNDAMENTAL\|CRITICAL\|OBLIGATORY" docs/.system/
 ### **Fase 3: Migración Incremental**
 
 ```bash
-# 1. Crear estructura nueva manteniendo la vieja
 mkdir -p docs/multi-developer/{protocols,templates}
 
-# 2. Migrar protocolos por área
 cp docs/.system/protocols/code-quality.md docs/multi-developer/protocols/shared-protocols.md
 
-# 3. Crear scripts de automatización
 npm run multi-developer:setup
 
-# 4. Validar funcionamiento paralelo
 npm run multi-developer:validate
 ```
 
@@ -154,11 +143,9 @@ class MultiAgentManager {
 
 **Comunicación Casual → Respuesta Profesional**
 ```
-# Antes (.system)
 YO: "agregá botón"
 IA: [Lee 7 archivos] → "Revisé componentes existentes..."
 
-# Después (multi-agente)  
 YO: "agregá botón"
 IA: [Scripts automáticos] → "Revisé componentes existentes..."
 ```
@@ -176,25 +163,19 @@ IA: [Scripts automáticos] → "Revisé componentes existentes..."
 
 **De Manual a Automático**
 ```bash
-# Antes: Leer manualmente
 cat docs/.system/protocols/*.md
 
-# Después: Validación automática
 npm run multi-developer:protocols
 ```
 
 **De Memoria a Scripts**
 ```bash
-# Antes: Recordar aplicar reglas
-# Después: Scripts que las aplican automáticamente
 npm run multi-developer:check    # ¿Conflictos?
 npm run multi-developer:analyze  # ¿Lecciones aplicables?
 ```
 
 **De Individual a Multi-Agente**
 ```bash
-# Antes: Un agente con sobrecarga cognitiva
-# Después: Múltiples agentes especializados
 developer 1: Frontend (src/components/*)
 developer 2: Content (src/content/*)
 developer 3: Testing (src/__tests__/*)
@@ -212,15 +193,8 @@ developer 3: Testing (src/__tests__/*)
 ### **2. Migración Incremental > Big Bang**
 
 ```bash
-#  Enfoque Big Bang
 rm -rf docs/.system/
-# Crear todo desde cero
 
-#  Enfoque Incremental  
-# Mantener .system como backup
-# Crear multi-developer en paralelo
-# Migrar funcionalidad gradualmente
-# Validar cada paso
 ```
 
 ### **3. Automatización es la Clave del Éxito**
@@ -249,16 +223,12 @@ rm -rf docs/.system/
 ### **Funcionalidades Nuevas**
 
 ```bash
-# Validación automática
 npm run multi-developer:validate
 
-# Detección de conflictos
 npm run multi-developer:check
 
-# Análisis de lecciones
 npm run multi-developer:analyze
 
-# Reportes completos
 npm run multi-developer:report
 ```
 

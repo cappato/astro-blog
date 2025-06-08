@@ -65,7 +65,6 @@ draft: true  # ← Esto lo hace oculto
 ### **Publicar Post:**
 ```yaml
 draft: false  # ← Cambiar a false para publicar
-# O simplemente eliminar la línea draft
 ```
 
 ##  Verificación del Sistema

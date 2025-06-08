@@ -40,12 +40,10 @@ La diferencia entre un proyecto amateur y uno profesional no está en la complej
 
 ### Sin Emojis en Contextos Técnicos
 ```yaml
-# Amateur
 commit: "feat: nueva feature súper cool"
 PR: "Fix importante para el bug"
 docs: "## Objetivos del proyecto"
 
-# Profesional
 commit: "feat: implementar autenticación OAuth2"
 PR: "fix: resolver memory leak en image processing"
 docs: "## Objetivos del proyecto"
@@ -55,12 +53,10 @@ docs: "## Objetivos del proyecto"
 
 ### Sin Nombres de Agentes o Referencias a IA
 ```yaml
-# Amateur
 commit: "feat: implementado por ganzo"
 PR: "Cambios sugeridos por augment"
 docs: "Creado con ayuda de IA"
 
-# Profesional
 commit: "feat: implementar cache distribuido"
 PR: "refactor: optimizar queries de base de datos"
 docs: "Implementación de arquitectura hexagonal"
@@ -70,7 +66,6 @@ docs: "Implementación de arquitectura hexagonal"
 
 ### Comunicación en Español Técnico
 ```yaml
-# Regla aplicada
 - Documentación: Español técnico profesional
 - Explicaciones: Español claro y preciso
 - Código: Inglés (estándar internacional)
@@ -106,13 +101,11 @@ function processData(data: DataItem[]): number[] {
 
 ### Testing Continuo Obligatorio
 ```bash
-# Workflow obligatorio antes de commits
 npm run dev      # Verificar desarrollo
 npm run build    # Verificar build
 npm run preview  # Verificar preview
 npm run test     # Ejecutar tests
 
-# Solo después de que todo pase:
 git commit -m "feat: implementar nueva funcionalidad"
 ```
 
@@ -138,7 +131,6 @@ const MyFeature = () => <Button variant="primary">Click</Button>;
 
 ### Protocolo de PRs Estricto
 ```yaml
-# Formato profesional obligatorio
 Título: "feat: implementar autenticación OAuth2"
 
 Descripción:
@@ -164,16 +156,10 @@ Implementación de autenticación OAuth2 con Google y GitHub.
 
 ### Acciones Destructivas Controladas
 ```bash
-# Prohibido sin permiso
 rm -rf components/
 git reset --hard HEAD~5
 npm uninstall react
 
-# Proceso controlado
-# 1. Solicitar permiso explícito
-# 2. Explicar razón técnica
-# 3. Confirmar impacto
-# 4. Ejecutar con supervisión
 ```
 
 **Regla**: **Nunca eliminar sin permiso explícito**.
@@ -314,13 +300,10 @@ describe('Professional Standards', () => {
 ## Herramientas de Monitoreo
 
 ```bash
-# Validar estándares actuales
 npm run validate:standards
 
-# Reporte de calidad
 npm run quality:report
 
-# Métricas de profesionalismo
 npm run metrics:professional
 ```
 

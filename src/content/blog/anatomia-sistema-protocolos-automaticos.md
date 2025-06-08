@@ -142,7 +142,6 @@ async captureLesson(lessonData) {
 ### **Frontend developer Protocols**
 
 ```markdown
-# frontend-protocols.md
 
 ### Tailwind Expert Level
 - **Enforcement**: FUNDAMENTAL
@@ -158,7 +157,6 @@ async captureLesson(lessonData) {
 ### **Content developer Protocols**
 
 ```markdown
-# content-protocols.md
 
 ### SEO Optimization
 - **Enforcement**: OBLIGATORY
@@ -176,26 +174,20 @@ async captureLesson(lessonData) {
 ### **Validación Continua**
 
 ```bash
-# Valida setup completo + protocolos
 npm run multi-developer:validate
 
-# Detecta conflictos entre agentes
 npm run multi-developer:check
 
-# Verifica compliance de protocolos
 npm run multi-developer:protocols
 
-# Genera reportes de coordinación
 npm run multi-developer:report
 ```
 
 ### **Sistema de Aprendizaje**
 
 ```bash
-# Captura nueva lección aprendida
 npm run multi-developer:learn
 
-# Analiza patrones en lecciones
 npm run multi-developer:analyze
 ```
 
@@ -290,7 +282,6 @@ async analyzePatterns() {
 ### **Tests Automáticos**
 
 ```bash
-# El sistema se valida a sí mismo:
 npm run multi-developer:validate
  docs/multi-developer/developer-assignments.md
  docs/multi-developer/work-status.md

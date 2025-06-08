@@ -312,7 +312,6 @@ Agrega estos scripts a tu `package.json`:
 ### 5.1 Probar Deploy Manual
 
 ```bash
-# Primer deploy manual para verificar configuración
 npm run deploy
 ```
 
@@ -328,7 +327,6 @@ npm run deploy
 ### 5.2 Activar Deploy Automático
 
 ```bash
-# Commit y push para activar GitHub Actions
 git add .
 git commit -m " Configure deploy automation
 
@@ -366,11 +364,9 @@ Error: You installed workerd on another platform...
 
 **Solución**:
 ```bash
-# Limpiar instalaciones
 rm -rf node_modules package-lock.json
 npm install
 
-# Usar siempre npx
 npx wrangler --version  #  Funciona
 wrangler --version      #  Puede fallar
 ```
@@ -384,7 +380,6 @@ Error: Authentication required
 
 **Solución**:
 ```bash
-# Re-autenticar
 npx wrangler login
 npx wrangler whoami
 ```
@@ -398,11 +393,8 @@ npx wrangler whoami
 
 **Solución**:
 ```bash
-# Verificar Account ID
 npx wrangler whoami
 
-# Recrear secrets si es necesario
-# GitHub → Settings → Secrets → Actions
 ```
 
 ##  Workflow Completo de Desarrollo
@@ -410,13 +402,10 @@ npx wrangler whoami
 ### Para Desarrollo Diario
 
 ```bash
-# 1. Desarrollo local
 npm run dev
 
-# 2. Deploy rápido para testing
 npm run deploy
 
-# 3. Si está bien, deploy a producción
 git add .
 git commit -m "feat: nueva funcionalidad"
 git push origin main  # Deploy automático
@@ -425,14 +414,11 @@ git push origin main  # Deploy automático
 ### Para Features Grandes
 
 ```bash
-# 1. Crear branch
 git checkout -b feature/nueva-funcionalidad
 
-# 2. Desarrollar y probar
 npm run dev
 npm run deploy  # Preview
 
-# 3. Merge a main
 git checkout main
 git merge feature/nueva-funcionalidad
 git push origin main  # Deploy automático

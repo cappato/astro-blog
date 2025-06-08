@@ -18,7 +18,6 @@ El **testing manual** de sitios web es lento, propenso a errores y no escala. Te
 La mayoría de desarrolladores validan sus sitios **manualmente**:
 
 ```bash
-#  Proceso manual típico
 1. Abrir Lighthouse
 2. Revisar meta tags manualmente  
 3. Validar Schema.org en herramientas online
@@ -370,7 +369,6 @@ export default defineConfig({
 ### **CI/CD Pipeline**
 
 ```yaml
-# .github/workflows/test.yml
 name: Automated Testing
 
 on:
@@ -463,19 +461,13 @@ jobs:
 ### **Test-Driven Development**
 
 ```bash
-# 1. Escribir test primero
 npm run test:watch src/features/new-feature
 
-# 2. Implementar feature
-# ... código ...
 
-# 3. Validar que pasa
 npm run test:unit
 
-# 4. Test de integración
 npm run test:integration
 
-# 5. Build y test de producción
 npm run build
 npm run test:seo:production
 ```

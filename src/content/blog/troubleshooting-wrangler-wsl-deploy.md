@@ -45,17 +45,13 @@ WSL mezcla binarios de Windows y Linux, causando conflictos en las dependencias 
 ###  Solución Definitiva
 
 ```bash
-# 1. Limpiar instalaciones problemáticas
 rm -rf node_modules package-lock.json
 
-# 2. Reinstalar dependencias
 npm install
 
-# 3. Usar SIEMPRE npx en lugar de instalación global
 npx wrangler --version  #  Funciona
 wrangler --version      #  Puede fallar
 
-# 4. Verificar que funciona
 npx wrangler whoami
 ```
 
@@ -64,11 +60,9 @@ npx wrangler whoami
 **Regla de oro**: En WSL, SIEMPRE usa `npx wrangler` en lugar de `wrangler` global.
 
 ```bash
-#  Correcto
 npx wrangler login
 npx wrangler pages deploy dist
 
-#  Problemático en WSL
 wrangler login
 wrangler pages deploy dist
 ```
@@ -85,7 +79,6 @@ Error: You need to be logged in to perform this action
 ### Diagnóstico
 
 ```bash
-# Verificar estado de autenticación
 npx wrangler whoami
 ```
 
@@ -94,17 +87,14 @@ npx wrangler whoami
 #### Escenario A: No autenticado
 
 ```bash
-# Re-autenticar
 npx wrangler login
 
-# Verificar
 npx wrangler whoami
 ```
 
 #### Escenario B: Token expirado
 
 ```bash
-# Logout y login nuevamente
 npx wrangler logout
 npx wrangler login
 ```
@@ -137,10 +127,8 @@ Error: Invalid account ID
 #### Verificar Account ID
 
 ```bash
-# Obtener Account ID correcto
 npx wrangler whoami
 
-# Copiar el Account ID y actualizar en GitHub Secrets
 ```
 
 #### Verificar API Token
@@ -153,12 +141,8 @@ npx wrangler whoami
 #### Recrear Secrets si es Necesario
 
 ```bash
-# 1. Obtener datos actualizados
 npx wrangler whoami
 
-# 2. Ir a GitHub → Settings → Secrets → Actions
-# 3. Actualizar CLOUDFLARE_ACCOUNT_ID
-# 4. Regenerar y actualizar CLOUDFLARE_API_TOKEN
 ```
 
 ##  Problema #4: Errores de Deploy
@@ -171,13 +155,10 @@ Error: Project "mi-proyecto" not found
 
 **Solución**:
 ```bash
-# Listar proyectos existentes
 npx wrangler pages project list
 
-# Crear proyecto si no existe
 npx wrangler pages project create mi-proyecto
 
-# Verificar nombre en wrangler.toml
 cat wrangler.toml
 ```
 
@@ -189,14 +170,10 @@ Error: Could not find directory "dist"
 
 **Solución**:
 ```bash
-# Verificar que el build funciona
 npm run build
 
-# Verificar directorio de salida
 ls -la dist/
 
-# Actualizar wrangler.toml si es necesario
-# pages_build_output_dir = "dist"  # o el directorio correcto
 ```
 
 ### Síntoma C: Archivos muy grandes
@@ -207,13 +184,10 @@ Error: File too large for upload
 
 **Solución**:
 ```bash
-# Verificar tamaño de archivos
 du -sh dist/*
 
-# Optimizar build si es necesario
 npm run build
 
-# Verificar .gitignore para excluir archivos innecesarios
 ```
 
 ##  Problema #5: Issues de Configuración
@@ -248,30 +222,22 @@ pages_build_output_dir = "dist"
 ### Comandos de Verificación
 
 ```bash
-# Verificar autenticación
 npx wrangler whoami
 
-# Listar proyectos
 npx wrangler pages project list
 
-# Verificar configuración del proyecto
 npx wrangler pages project get mi-proyecto
 
-# Test de deploy (sin hacer deploy real)
 npm run build && echo "Build successful"
 
-# Verificar versión de Wrangler
 npx wrangler --version
 ```
 
 ### Logs Útiles
 
 ```bash
-# Deploy con logs detallados
 npx wrangler pages deploy dist --project-name=mi-proyecto --verbose
 
-# Verificar logs de GitHub Actions
-# GitHub Repo → Actions → Click en workflow → Ver logs detallados
 ```
 
 ##  Workflow Completo de Desarrollo
@@ -279,16 +245,12 @@ npx wrangler pages deploy dist --project-name=mi-proyecto --verbose
 ### Para Desarrollo Local
 
 ```bash
-# 1. Desarrollo
 npm run dev
 
-# 2. Test de build
 npm run build
 
-# 3. Deploy de prueba (opcional)
 npm run deploy
 
-# 4. Si todo está bien, commit y push
 git add .
 git commit -m "feat: nueva funcionalidad"
 git push origin main  # Deploy automático
@@ -297,16 +259,12 @@ git push origin main  # Deploy automático
 ### Para Debugging
 
 ```bash
-# 1. Verificar autenticación
 npm run wrangler:whoami
 
-# 2. Verificar proyectos
 npm run pages:list
 
-# 3. Test de build local
 npm run build
 
-# 4. Deploy manual para debugging
 npm run deploy
 ```
 
@@ -327,13 +285,10 @@ Asegúrate de que tu workflow use cache:
 ### Scripts Optimizados
 
 ```bash
-# Para desarrollo rápido (permite dirty commits)
 npm run deploy
 
-# Para producción (requiere commits limpios)
 npm run deploy:clean
 
-# Para CI/CD (sin npx)
 npm run deploy:ci
 ```
 

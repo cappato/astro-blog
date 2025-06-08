@@ -30,7 +30,6 @@ El auto-merge en GitHub Actions es una funcionalidad poderosa, pero puede fallar
 **Causa común**: Condiciones demasiado restrictivas en el workflow.
 
 ```yaml
-# Problemático - demasiado restrictivo
 auto-merge:
   if: github.event_name == 'pull_request' && github.event.action == 'opened' && contains(github.event.label.name, 'auto-merge')
 ```
@@ -38,7 +37,6 @@ auto-merge:
 **Solución**: Simplificar las condiciones y dejar que el script maneje la lógica.
 
 ```yaml
-# Correcto - condiciones simples
 auto-merge:
   if: github.event_name == 'pull_request' || github.event_name == 'check_run' || github.event_name == 'check_suite'
 ```
@@ -78,7 +76,6 @@ const title = context.payload.pull_request.title.trim();
 **Solución**: Agregar triggers para eventos de checks.
 
 ```yaml
-# Triggers completos
 on:
   pull_request:
     types: [opened, synchronize, reopened, labeled]
@@ -116,7 +113,6 @@ console.log('Checks status:', context.payload.check_run?.conclusion);
 **Solución**: Usar el auto-merge nativo de GitHub como fallback.
 
 ```bash
-# Habilitar auto-merge nativo
 gh pr merge $PR_NUMBER --auto --squash
 ```
 
@@ -236,16 +232,12 @@ jobs:
 ## Herramientas de Debugging
 
 ```bash
-# Ver logs de workflow
 gh run list --workflow=pr-automation.yml
 
-# Ver logs específicos de un run
 gh run view RUN_ID --log
 
-# Ver estado de checks de un PR
 gh pr checks PR_NUMBER
 
-# Habilitar auto-merge manualmente
 gh pr merge PR_NUMBER --auto --squash
 ```
 
