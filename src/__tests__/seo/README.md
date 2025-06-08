@@ -1,6 +1,23 @@
 # SEO Production Tests
 
-## 🎯 Overview
+⚠️  **DEPRECATED: This custom SEO testing system has been migrated to standard tools**
+
+## Migration Status
+- ✅ **SEO audits** → Lighthouse CI
+- ✅ **Accessibility testing** → axe-core + Playwright
+- ✅ **HTML validation** → html-validate
+- ✅ **Schema.org validation** → scripts/validate-schema-org.js + AJV
+- ✅ **GitHub Actions** → .github/workflows/seo-testing.yml
+- 🔄 **This system is maintained for backward compatibility but is being phased out**
+
+## New Approach
+- `npx lhci autorun` (Lighthouse CI for comprehensive SEO audits)
+- `npx playwright test --config=playwright-a11y.config.js` (accessibility testing)
+- `npx html-validate` (HTML validation)
+- `node scripts/validate-schema-org.js` (Schema.org validation)
+- GitHub Actions for automated testing
+
+## Legacy Overview
 
 Comprehensive SEO validation suite for the live production site at **https://cappato.dev**. These tests verify that all SEO optimizations are working correctly in the real environment.
 
