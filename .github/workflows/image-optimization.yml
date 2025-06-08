@@ -1,0 +1,220 @@
+name: Image Optimization
+
+# Automatic image optimization using standard tools
+# Replaces custom image optimization system with industry-standard workflow
+
+on:
+  push:
+    paths:
+      - 'images/raw/**'
+      - 'src/content/blog/**/*.md'
+  pull_request:
+    paths:
+      - 'images/raw/**'
+      - 'src/content/blog/**/*.md'
+  workflow_dispatch:
+    inputs:
+      force:
+        description: 'Force regeneration of all images'
+        required: false
+        default: 'false'
+        type: boolean
+      postId:
+        description: 'Process specific post ID only'
+        required: false
+        type: string
+
+jobs:
+  optimize-images:
+    runs-on: ubuntu-latest
+    
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+          fetch-depth: 0
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          cache: 'npm'
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Check for images to optimize
+        id: check-images
+        run: |
+          if [ -d "images/raw" ] && [ "$(find images/raw -name '*.jpg' -o -name '*.jpeg' -o -name '*.png' -o -name '*.webp' | wc -l)" -gt 0 ]; then
+            echo "has-images=true" >> $GITHUB_OUTPUT
+            echo "Found images to optimize"
+          else
+            echo "has-images=false" >> $GITHUB_OUTPUT
+            echo "No images found to optimize"
+          fi
+
+      - name: Optimize images with standard tools
+        if: steps.check-images.outputs.has-images == 'true'
+        run: |
+          # Build optimization command
+          CMD="node scripts/optimize-images-standard.js"
+          
+          # Add postId if specified
+          if [ -n "${{ github.event.inputs.postId }}" ]; then
+            CMD="$CMD --postId=${{ github.event.inputs.postId }}"
+          fi
+          
+          # Add force flag if specified
+          if [ "${{ github.event.inputs.force }}" = "true" ]; then
+            CMD="$CMD --force"
+          fi
+          
+          # Add debug for CI
+          CMD="$CMD --debug"
+          
+          echo "Running: $CMD"
+          $CMD
+
+      - name: Check for optimized images
+        id: check-optimized
+        if: steps.check-images.outputs.has-images == 'true'
+        run: |
+          if [ -d "public/images" ] && [ "$(find public/images -name '*.webp' -o -name '*.avif' -o -name '*.jpeg' | wc -l)" -gt 0 ]; then
+            echo "has-optimized=true" >> $GITHUB_OUTPUT
+            echo "Optimized images generated"
+            
+            # Show optimization results
+            echo "📊 Optimization Results:"
+            find public/images -name '*.webp' -o -name '*.avif' -o -name '*.jpeg' | wc -l | xargs echo "Generated files:"
+            
+            # Calculate total size
+            TOTAL_SIZE=$(find public/images -name '*.webp' -o -name '*.avif' -o -name '*.jpeg' -exec stat -f%z {} \; | awk '{sum+=$1} END {print sum}')
+            echo "Total optimized size: $(echo $TOTAL_SIZE | numfmt --to=iec-i --suffix=B)"
+          else
+            echo "has-optimized=false" >> $GITHUB_OUTPUT
+            echo "No optimized images generated"
+          fi
+
+      - name: Commit optimized images
+        if: steps.check-optimized.outputs.has-optimized == 'true'
+        run: |
+          git config --local user.email "action@github.com"
+          git config --local user.name "GitHub Action"
+          
+          # Add optimized images
+          git add public/images/
+          
+          # Check if there are changes to commit
+          if git diff --staged --quiet; then
+            echo "No changes to commit"
+          else
+            # Create commit message
+            COMMIT_MSG="feat: optimize images with standard tools"
+            
+            if [ -n "${{ github.event.inputs.postId }}" ]; then
+              COMMIT_MSG="$COMMIT_MSG for post ${{ github.event.inputs.postId }}"
+            fi
+            
+            if [ "${{ github.event.inputs.force }}" = "true" ]; then
+              COMMIT_MSG="$COMMIT_MSG (forced regeneration)"
+            fi
+            
+            # Count optimized files
+            OPTIMIZED_COUNT=$(git diff --staged --name-only | grep -E '\.(webp|avif|jpeg)$' | wc -l)
+            COMMIT_MSG="$COMMIT_MSG
+
+Generated $OPTIMIZED_COUNT optimized image variants using imagemin:
+- WebP format for modern browsers
+- AVIF format for maximum compression  
+- JPEG fallback for compatibility
+
+Tools used: imagemin + imagemin-webp + imagemin-avif + imagemin-mozjpeg"
+            
+            git commit -m "$COMMIT_MSG"
+            
+            echo "✅ Committed optimized images"
+          fi
+
+      - name: Push changes
+        if: steps.check-optimized.outputs.has-optimized == 'true' && github.event_name != 'pull_request'
+        uses: ad-m/github-push-action@master
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          branch: ${{ github.ref }}
+
+      - name: Create PR comment with results
+        if: steps.check-optimized.outputs.has-optimized == 'true' && github.event_name == 'pull_request'
+        uses: actions/github-script@v7
+        with:
+          script: |
+            const fs = require('fs');
+            const path = require('path');
+            
+            // Count optimized files
+            let webpCount = 0;
+            let avifCount = 0;
+            let jpegCount = 0;
+            
+            try {
+              const findFiles = (dir, ext) => {
+                if (!fs.existsSync(dir)) return 0;
+                return fs.readdirSync(dir, { recursive: true })
+                  .filter(file => file.endsWith(ext)).length;
+              };
+              
+              webpCount = findFiles('public/images', '.webp');
+              avifCount = findFiles('public/images', '.avif');
+              jpegCount = findFiles('public/images', '.jpeg');
+            } catch (error) {
+              console.log('Error counting files:', error);
+            }
+            
+            const comment = `## 🖼️ Image Optimization Results
+            
+            ✅ **Images optimized successfully with standard tools!**
+            
+            📊 **Generated files:**
+            - 🟢 WebP: ${webpCount} files
+            - 🔵 AVIF: ${avifCount} files  
+            - 🟡 JPEG: ${jpegCount} files
+            
+            🛠️ **Tools used:**
+            - \`imagemin\` for optimization pipeline
+            - \`imagemin-webp\` for WebP generation
+            - \`imagemin-avif\` for AVIF generation
+            - \`imagemin-mozjpeg\` for JPEG optimization
+            
+            This replaces the custom image optimization system with industry-standard tools.`;
+            
+            github.rest.issues.createComment({
+              issue_number: context.issue.number,
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              body: comment
+            });
+
+      - name: Summary
+        if: always()
+        run: |
+          echo "## Image Optimization Summary" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          
+          if [ "${{ steps.check-images.outputs.has-images }}" = "true" ]; then
+            echo "✅ **Images found and processed**" >> $GITHUB_STEP_SUMMARY
+            
+            if [ "${{ steps.check-optimized.outputs.has-optimized }}" = "true" ]; then
+              echo "✅ **Optimization successful**" >> $GITHUB_STEP_SUMMARY
+              echo "" >> $GITHUB_STEP_SUMMARY
+              echo "**Tools used:**" >> $GITHUB_STEP_SUMMARY
+              echo "- imagemin (optimization pipeline)" >> $GITHUB_STEP_SUMMARY
+              echo "- imagemin-webp (WebP generation)" >> $GITHUB_STEP_SUMMARY
+              echo "- imagemin-avif (AVIF generation)" >> $GITHUB_STEP_SUMMARY
+              echo "- imagemin-mozjpeg (JPEG optimization)" >> $GITHUB_STEP_SUMMARY
+            else
+              echo "⚠️ **No optimized images generated**" >> $GITHUB_STEP_SUMMARY
+            fi
+          else
+            echo "ℹ️ **No images found to optimize**" >> $GITHUB_STEP_SUMMARY
+          fi
