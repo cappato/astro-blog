@@ -369,10 +369,10 @@ describe('Sitemap Feature', () => {
   });
 
   describe('SitemapEndpointHandler', () => {
-    let handler: SitemapEndpointHandler;
+    let handler: MockSitemapEndpointHandler;
 
     beforeEach(() => {
-      handler = new SitemapEndpointHandler(TEST_CONFIG);
+      handler = new MockSitemapEndpointHandler(TEST_CONFIG);
     });
 
     it('should handle successful request', () => {
@@ -407,8 +407,8 @@ describe('Sitemap Feature', () => {
 
     it('should handle errors gracefully', () => {
       const invalidConfig = {} as SitemapConfig;
-      const invalidHandler = new SitemapEndpointHandler(invalidConfig);
-      
+      const invalidHandler = new MockSitemapEndpointHandler(invalidConfig);
+
       const response = invalidHandler.handleRequest([createMockPost()]);
       expect(response.status).toBe(500);
       expect(response.body).toContain('Sitemap generation error');
