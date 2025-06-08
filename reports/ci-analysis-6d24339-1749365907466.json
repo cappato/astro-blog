@@ -1,0 +1,70 @@
+{
+  "timestamp": "2025-06-08T06:58:27.466Z",
+  "commit": "6d24339b5d3dbd02e7a1a0afa5a28f0b8872ca18",
+  "summary": {
+    "total": 11,
+    "success": 0,
+    "failed": 7,
+    "skipped": 4,
+    "pending": 0
+  },
+  "failed_checks": [
+    {
+      "name": "Test Summary",
+      "started_at": "2025-06-08T06:40:52Z",
+      "completed_at": "2025-06-08T06:40:59Z",
+      "duration": "7s",
+      "details_url": "https://github.com/cappato/astro-blog/actions/runs/15515796298/job/43682510371",
+      "html_url": "https://github.com/cappato/astro-blog/actions/runs/15515796298/job/43682510371"
+    },
+    {
+      "name": "PR Validation",
+      "started_at": "2025-06-08T06:40:47Z",
+      "completed_at": "2025-06-08T06:40:52Z",
+      "duration": "5s",
+      "details_url": "https://github.com/cappato/astro-blog/actions/runs/15515796297/job/43682508609",
+      "html_url": "https://github.com/cappato/astro-blog/actions/runs/15515796297/job/43682508609"
+    },
+    {
+      "name": "Verificar Tamaño del PR",
+      "started_at": "2025-06-08T06:40:47Z",
+      "completed_at": "2025-06-08T06:40:52Z",
+      "duration": "5s",
+      "details_url": "https://github.com/cappato/astro-blog/actions/runs/15515796299/job/43682508602",
+      "html_url": "https://github.com/cappato/astro-blog/actions/runs/15515796299/job/43682508602"
+    },
+    {
+      "name": "Auto Merge",
+      "started_at": "2025-06-08T06:40:47Z",
+      "completed_at": "2025-06-08T06:40:53Z",
+      "duration": "6s",
+      "details_url": "https://github.com/cappato/astro-blog/actions/runs/15515796297/job/43682508600",
+      "html_url": "https://github.com/cappato/astro-blog/actions/runs/15515796297/job/43682508600"
+    },
+    {
+      "name": "Validate Conventional Commits",
+      "started_at": "2025-06-08T06:40:47Z",
+      "completed_at": "2025-06-08T06:40:52Z",
+      "duration": "5s",
+      "details_url": "https://github.com/cappato/astro-blog/actions/runs/15515796305/job/43682508598",
+      "html_url": "https://github.com/cappato/astro-blog/actions/runs/15515796305/job/43682508598"
+    },
+    {
+      "name": "Unit Tests",
+      "started_at": "2025-06-08T06:40:47Z",
+      "completed_at": "2025-06-08T06:40:52Z",
+      "duration": "5s",
+      "details_url": "https://github.com/cappato/astro-blog/actions/runs/15515796298/job/43682508593",
+      "html_url": "https://github.com/cappato/astro-blog/actions/runs/15515796298/job/43682508593"
+    },
+    {
+      "name": "Build Only (Fast)",
+      "started_at": "2025-06-08T06:40:47Z",
+      "completed_at": "2025-06-08T06:40:52Z",
+      "duration": "5s",
+      "details_url": "https://github.com/cappato/astro-blog/actions/runs/15515796298/job/43682508592",
+      "html_url": "https://github.com/cappato/astro-blog/actions/runs/15515796298/job/43682508592"
+    }
+  ],
+  "successful_checks": []
+}
