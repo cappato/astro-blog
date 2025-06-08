@@ -8,8 +8,6 @@ postId: "reglas-rigidas-vs-escalamiento-progresivo"
 imageAlt: "Escalamiento progresivo vs reglas rígidas: sistemas adaptativos que funcionan en la vida real"
 ---
 
-# Por qué las reglas rígidas fracasan en la vida real
-
 *Publicado el 7 de enero de 2025 — 5 min de lectura*
 
 ---
