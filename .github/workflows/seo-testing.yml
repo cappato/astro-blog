@@ -3,6 +3,11 @@ name: SEO Testing
 # Comprehensive SEO testing using industry-standard tools
 # Replaces custom SEO testing system with Lighthouse CI and standard audits
 
+permissions:
+  contents: read
+  pull-requests: write
+  issues: write
+
 on:
   push:
     branches: [main]

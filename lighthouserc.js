@@ -5,7 +5,7 @@
  * Provides comprehensive SEO, performance, accessibility, and best practices testing.
  */
 
-module.exports = {
+export default {
   ci: {
     // Build configuration
     collect: {
