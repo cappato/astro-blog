@@ -5,7 +5,6 @@
 
 import { describe, test, expect } from 'vitest';
 import { existsSync } from 'fs';
-import { join } from 'path';
 
 describe('Simple Verification Tests', () => {
   test('should verify project structure', () => {
@@ -26,6 +25,6 @@ describe('Simple Verification Tests', () => {
 
   test('should verify basic math works', () => {
     expect(2 + 2).toBe(4);
-    expect(''.length).toBe(5);
+    expect('hello'.length).toBe(5);
   });
 });
