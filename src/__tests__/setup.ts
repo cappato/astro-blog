@@ -21,7 +21,9 @@ Object.defineProperty(window, 'localStorage', {
 });
 
 // Mock fetch for tests that might need it
-global.fetch = vi.fn().mockImplementation(async (url: string) => {
+const mockFetch = vi.fn().mockImplementation(async (url: string) => {
+  console.log('Mock fetch called with:', url);
+
   // Mock successful response for production URLs
   if (typeof url === 'string' && url.includes('cappato.dev')) {
     return {
@@ -33,50 +35,69 @@ global.fetch = vi.fn().mockImplementation(async (url: string) => {
           if (name === 'content-encoding') return 'gzip';
           if (name === 'cache-control') return 'public, max-age=3600';
           return null;
+        },
+        has: (name: string) => {
+          return ['content-type', 'content-encoding', 'cache-control'].includes(name.toLowerCase());
         }
       },
-      text: async () => `
-        <!DOCTYPE html>
-        <html lang="es">
-        <head>
-          <meta charset="UTF-8">
-          <meta name="viewport" content="width=device-width, initial-scale=1.0">
-          <title>Matías Cappato - Desarrollador Full Stack</title>
-          <meta name="description" content="Desarrollador Full Stack especializado en tecnologías web modernas">
-          <meta property="og:title" content="Matías Cappato - Desarrollador Full Stack">
-          <meta property="og:description" content="Desarrollador Full Stack especializado en tecnologías web modernas">
-          <meta name="twitter:card" content="summary_large_image">
-          <meta name="robots" content="index, follow">
-          <meta name="theme-color" content="#1a1a1a">
-          <link rel="canonical" href="https://cappato.dev">
-          <script type="application/ld+json">
-          {
-            "@context": "https://schema.org",
-            "@type": "WebSite",
-            "name": "Matías Cappato",
-            "url": "https://cappato.dev"
-          }
-          </script>
-        </head>
-        <body>
-          <h1>Matías Cappato</h1>
-          <p>Desarrollador Full Stack</p>
-        </body>
-        </html>
-      `
+      text: async () => `<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Matías Cappato - Desarrollador Full Stack</title>
+  <meta name="description" content="Desarrollador Full Stack especializado en tecnologías web modernas">
+  <meta property="og:title" content="Matías Cappato - Desarrollador Full Stack">
+  <meta property="og:description" content="Desarrollador Full Stack especializado en tecnologías web modernas">
+  <meta property="og:url" content="https://cappato.dev">
+  <meta property="og:type" content="website">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="Matías Cappato - Desarrollador Full Stack">
+  <meta name="twitter:description" content="Desarrollador Full Stack especializado en tecnologías web modernas">
+  <meta name="robots" content="index, follow">
+  <meta name="theme-color" content="#1a1a1a">
+  <link rel="canonical" href="https://cappato.dev">
+  <link rel="icon" type="image/x-icon" href="/favicon.ico">
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "WebSite",
+    "name": "Matías Cappato",
+    "url": "https://cappato.dev"
+  }
+  </script>
+</head>
+<body>
+  <h1>Matías Cappato</h1>
+  <p>Desarrollador Full Stack especializado en tecnologías web modernas</p>
+</body>
+</html>`,
+      json: async () => ({}),
+      blob: async () => new Blob(),
+      arrayBuffer: async () => new ArrayBuffer(0)
     };
   }
-  
+
   // Default mock response for other URLs
   return {
     ok: false,
     status: 404,
     headers: {
-      get: () => null
+      get: () => null,
+      has: () => false
     },
-    text: async () => 'Not Found'
+    text: async () => 'Not Found',
+    json: async () => ({}),
+    blob: async () => new Blob(),
+    arrayBuffer: async () => new ArrayBuffer(0)
   };
 });
+
+// Use vi.stubGlobal for better Vitest integration
+vi.stubGlobal('fetch', mockFetch);
+
+// Debug: Verify fetch is mocked
+console.log('Setup: fetch mock applied', typeof global.fetch);
 
 // Mock matchMedia for responsive tests
 Object.defineProperty(window, 'matchMedia', {
