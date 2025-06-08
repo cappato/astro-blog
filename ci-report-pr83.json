@@ -1,0 +1,61 @@
+{
+  "timestamp": "2025-06-08T07:24:13.835Z",
+  "pr": {
+    "number": "83",
+    "title": "fix: update Node.js to v20 and resolve test failures",
+    "branch": "fix/node20-and-test-fixes",
+    "author": "cappato",
+    "sha": "772c3181b3cd23dc4ebdfd54a98160a7f3427cdd"
+  },
+  "summary": {
+    "total": 11,
+    "success": 0,
+    "failed": 6,
+    "skipped": 4,
+    "pending": 1
+  },
+  "failed_checks": [
+    {
+      "name": "Build Only (Fast)",
+      "started_at": "2025-06-08T07:23:41Z",
+      "completed_at": "2025-06-08T07:23:46Z",
+      "duration": "5s",
+      "details_url": "https://github.com/cappato/astro-blog/actions/runs/15516125762/job/43683234155"
+    },
+    {
+      "name": "Verificar Tamaño del PR",
+      "started_at": "2025-06-08T07:23:41Z",
+      "completed_at": "2025-06-08T07:23:46Z",
+      "duration": "5s",
+      "details_url": "https://github.com/cappato/astro-blog/actions/runs/15516125760/job/43683234153"
+    },
+    {
+      "name": "Unit Tests",
+      "started_at": "2025-06-08T07:23:41Z",
+      "completed_at": "2025-06-08T07:23:46Z",
+      "duration": "5s",
+      "details_url": "https://github.com/cappato/astro-blog/actions/runs/15516125762/job/43683234152"
+    },
+    {
+      "name": "Validate Conventional Commits",
+      "started_at": "2025-06-08T07:23:41Z",
+      "completed_at": "2025-06-08T07:23:46Z",
+      "duration": "5s",
+      "details_url": "https://github.com/cappato/astro-blog/actions/runs/15516125763/job/43683234141"
+    },
+    {
+      "name": "PR Validation",
+      "started_at": "2025-06-08T07:23:41Z",
+      "completed_at": "2025-06-08T07:23:46Z",
+      "duration": "5s",
+      "details_url": "https://github.com/cappato/astro-blog/actions/runs/15516125758/job/43683234136"
+    },
+    {
+      "name": "Auto Merge",
+      "started_at": "2025-06-08T07:23:41Z",
+      "completed_at": "2025-06-08T07:23:47Z",
+      "duration": "6s",
+      "details_url": "https://github.com/cappato/astro-blog/actions/runs/15516125758/job/43683234130"
+    }
+  ]
+}

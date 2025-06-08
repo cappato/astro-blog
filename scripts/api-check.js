@@ -213,14 +213,19 @@ async function getCheckLogs(check, token, checkNumber) {
           });
         }
 
-        // Try to get logs (note: this requires additional permissions)
-        try {
-          const logsApiUrl = `https://api.github.com/repos/cappato/astro-blog/actions/runs/${runId}/logs`;
-          console.log(`   Logs available at: ${logsApiUrl}`);
-          console.log(`   Or view in browser: ${check.details_url}`);
-        } catch (logError) {
-          console.log(`   View logs at: ${check.details_url}`);
+        // Try to get specific error information from job steps
+        const failedSteps = failedJob.steps.filter(step => step.conclusion === 'failure');
+        if (failedSteps.length > 0) {
+          console.log(`   Specific failures:`);
+          failedSteps.forEach(step => {
+            console.log(`     - Step: ${step.name}`);
+            console.log(`     - Started: ${new Date(step.started_at).toLocaleString()}`);
+            console.log(`     - Completed: ${new Date(step.completed_at).toLocaleString()}`);
+            console.log(`     - Duration: ${calculateDuration(step.started_at, step.completed_at)}`);
+          });
         }
+
+        console.log(`   View detailed logs: ${check.details_url}`);
       }
     }
 
