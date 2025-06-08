@@ -82,7 +82,8 @@
     "deploy:clean": "npm run build && npx wrangler pages deploy dist --project-name=cappato-dev-blog",
     "deploy:ci": "npx wrangler pages deploy dist --project-name=cappato-dev-blog",
     "pages:list": "npx wrangler pages project list",
-    "wrangler:login": "npx wrangler login"
+    "wrangler:login": "npx wrangler login",
+    "prepare": "husky"
   },
   "dependencies": {
     "@tailwindcss/typography": "^0.5.16",
@@ -106,6 +107,7 @@
     "fs-extra": "^11.2.0",
     "glob": "^10.3.10",
     "html-validate": "^9.5.5",
+    "husky": "^9.1.7",
     "imagemin": "^9.0.1",
     "imagemin-avif": "^0.1.6",
     "imagemin-mozjpeg": "^10.0.0",
@@ -113,6 +115,7 @@
     "imagemin-webp": "^8.0.0",
     "jsdom": "^26.1.0",
     "lighthouse": "^12.6.1",
+    "lint-staged": "^16.1.0",
     "markdownlint-cli2": "^0.18.1",
     "playwright": "^1.52.0",
     "postcss": "^8.4.31",
@@ -134,5 +137,9 @@
     "tsx": "^4.19.4",
     "vitest": "^3.1.4",
     "yargs": "^17.7.2"
+  },
+  "lint-staged": {
+    "*.{js,ts,astro}": "eslint --fix",
+    "*.md": "markdownlint-cli2 --fix"
   }
 }
