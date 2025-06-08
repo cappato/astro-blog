@@ -1,0 +1,76 @@
+# markdownlint-cli2 configuration for professional content standards
+# https://github.com/DavidAnson/markdownlint-cli2
+
+# Glob patterns for files to lint
+globs:
+  - "**/*.md"
+  - "!node_modules/**"
+  - "!dist/**"
+  - "!.git/**"
+
+# markdownlint configuration
+config:
+  # Default rules
+  default: true
+  
+  # Line length - allow longer lines for technical content
+  MD013:
+    line_length: 120
+    code_blocks: false
+    tables: false
+    headings: false
+  
+  # Allow multiple headings with same content (common in technical docs)
+  MD024: false
+  
+  # Allow inline HTML (needed for Astro components)
+  MD033: false
+  
+  # Allow bare URLs (common in technical documentation)
+  MD034: false
+  
+  # First line in file should be top level heading - disabled for blog posts
+  MD041: false
+  
+  # Custom rule: No emojis in professional content
+  # Note: This is handled by a custom script since markdownlint doesn't have built-in emoji detection
+  
+# Custom configuration for different file types
+overrides:
+  # Blog posts - stricter rules
+  - files: ["src/content/blog/**/*.md"]
+    config:
+      MD013:
+        line_length: 100
+      # Enforce consistent heading style
+      MD003:
+        style: "atx"
+      # Require blank lines around headings
+      MD022: true
+      # Require blank lines around lists
+      MD032: true
+  
+  # Documentation - more relaxed
+  - files: ["docs/**/*.md", "README.md"]
+    config:
+      MD013:
+        line_length: 150
+      # Allow HTML in documentation
+      MD033: false
+  
+  # Scripts documentation - allow console output examples
+  - files: ["scripts/**/*.md"]
+    config:
+      MD013: false
+      MD033: false
+      MD034: false
+
+# Fix mode - automatically fix issues when possible
+fix: false
+
+# Output format
+outputFormatters:
+  - ["markdownlint-cli2-formatter-default"]
+
+# Custom rules directory (if we add custom emoji detection)
+# customRules: ["./scripts/markdownlint-rules"]
