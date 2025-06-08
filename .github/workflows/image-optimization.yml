@@ -123,14 +123,7 @@ jobs:
             
             # Count optimized files
             OPTIMIZED_COUNT=$(git diff --staged --name-only | grep -E '\.(webp|avif|jpeg)$' | wc -l)
-            COMMIT_MSG="$COMMIT_MSG
-
-Generated $OPTIMIZED_COUNT optimized image variants using imagemin:
-- WebP format for modern browsers
-- AVIF format for maximum compression  
-- JPEG fallback for compatibility
-
-Tools used: imagemin + imagemin-webp + imagemin-avif + imagemin-mozjpeg"
+            COMMIT_MSG="$COMMIT_MSG - Generated $OPTIMIZED_COUNT optimized image variants using imagemin (WebP/AVIF/JPEG) with standard tools"
             
             git commit -m "$COMMIT_MSG"
             
