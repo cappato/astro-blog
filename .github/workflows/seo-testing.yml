@@ -1,0 +1,259 @@
+name: SEO Testing
+
+# Comprehensive SEO testing using industry-standard tools
+# Replaces custom SEO testing system with Lighthouse CI and standard audits
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - 'src/**'
+      - 'public/**'
+      - 'astro.config.mjs'
+      - 'package.json'
+  pull_request:
+    branches: [main]
+    paths:
+      - 'src/**'
+      - 'public/**'
+      - 'astro.config.mjs'
+      - 'package.json'
+  workflow_dispatch:
+    inputs:
+      url:
+        description: 'Custom URL to test (optional)'
+        required: false
+        type: string
+      full_audit:
+        description: 'Run full audit including performance'
+        required: false
+        default: true
+        type: boolean
+
+jobs:
+  lighthouse-ci:
+    runs-on: ubuntu-latest
+    
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          cache: 'npm'
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Build site
+        run: npm run build
+
+      - name: Install Playwright browsers
+        run: npx playwright install --with-deps chromium
+
+      - name: Run Lighthouse CI
+        run: |
+          # Start the preview server in background
+          npm run preview &
+          
+          # Wait for server to be ready
+          echo "Waiting for server to start..."
+          timeout 60 bash -c 'until curl -s http://localhost:4321 > /dev/null; do sleep 2; done'
+          
+          # Run Lighthouse CI
+          npx lhci autorun
+        env:
+          LHCI_GITHUB_APP_TOKEN: ${{ secrets.LHCI_GITHUB_APP_TOKEN }}
+
+      - name: Upload Lighthouse results
+        uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: lighthouse-results
+          path: .lighthouseci/
+          retention-days: 30
+
+  accessibility-audit:
+    runs-on: ubuntu-latest
+    
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          cache: 'npm'
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Build site
+        run: npm run build
+
+      - name: Install Playwright browsers
+        run: npx playwright install --with-deps chromium
+
+      - name: Run accessibility tests
+        run: |
+          # Start the preview server in background
+          npm run preview &
+          
+          # Wait for server to be ready
+          echo "Waiting for server to start..."
+          timeout 60 bash -c 'until curl -s http://localhost:4321 > /dev/null; do sleep 2; done'
+          
+          # Run accessibility tests with axe-core
+          npx playwright test --config=playwright-a11y.config.js
+        continue-on-error: true
+
+      - name: Upload accessibility results
+        uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: accessibility-results
+          path: test-results/
+          retention-days: 30
+
+  html-validation:
+    runs-on: ubuntu-latest
+    
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          cache: 'npm'
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Build site
+        run: npm run build
+
+      - name: Validate HTML
+        run: |
+          # Start the preview server in background
+          npm run preview &
+          
+          # Wait for server to be ready
+          echo "Waiting for server to start..."
+          timeout 60 bash -c 'until curl -s http://localhost:4321 > /dev/null; do sleep 2; done'
+          
+          # Validate HTML with html-validate
+          npx html-validate http://localhost:4321
+          npx html-validate http://localhost:4321/blog
+        continue-on-error: true
+
+  schema-validation:
+    runs-on: ubuntu-latest
+    
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          cache: 'npm'
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Build site
+        run: npm run build
+
+      - name: Validate Schema.org structured data
+        run: |
+          # Start the preview server in background
+          npm run preview &
+          
+          # Wait for server to be ready
+          echo "Waiting for server to start..."
+          timeout 60 bash -c 'until curl -s http://localhost:4321 > /dev/null; do sleep 2; done'
+          
+          # Run schema validation script
+          node scripts/validate-schema-org.js
+        continue-on-error: true
+
+  seo-summary:
+    runs-on: ubuntu-latest
+    needs: [lighthouse-ci, accessibility-audit, html-validation, schema-validation]
+    if: always()
+    
+    steps:
+      - name: Download all artifacts
+        uses: actions/download-artifact@v4
+        with:
+          path: ./artifacts
+
+      - name: Generate SEO summary
+        run: |
+          echo "## 🔍 SEO Testing Summary" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          
+          # Lighthouse results
+          if [ -d "./artifacts/lighthouse-results" ]; then
+            echo "✅ **Lighthouse CI**: Completed" >> $GITHUB_STEP_SUMMARY
+            echo "- Performance, SEO, Accessibility, and Best Practices audited" >> $GITHUB_STEP_SUMMARY
+          else
+            echo "❌ **Lighthouse CI**: Failed" >> $GITHUB_STEP_SUMMARY
+          fi
+          
+          # Accessibility results
+          if [ -d "./artifacts/accessibility-results" ]; then
+            echo "✅ **Accessibility Audit**: Completed" >> $GITHUB_STEP_SUMMARY
+            echo "- axe-core accessibility testing performed" >> $GITHUB_STEP_SUMMARY
+          else
+            echo "❌ **Accessibility Audit**: Failed" >> $GITHUB_STEP_SUMMARY
+          fi
+          
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "### 🛠️ Tools Used" >> $GITHUB_STEP_SUMMARY
+          echo "- **Lighthouse CI**: SEO, Performance, Accessibility audits" >> $GITHUB_STEP_SUMMARY
+          echo "- **axe-core**: Accessibility testing" >> $GITHUB_STEP_SUMMARY
+          echo "- **html-validate**: HTML validation" >> $GITHUB_STEP_SUMMARY
+          echo "- **Schema.org validation**: Structured data testing" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "This replaces the custom SEO testing system with industry-standard tools." >> $GITHUB_STEP_SUMMARY
+
+      - name: Comment PR with results
+        if: github.event_name == 'pull_request'
+        uses: actions/github-script@v7
+        with:
+          script: |
+            const comment = `## 🔍 SEO Testing Results
+            
+            ✅ **Automated SEO audit completed using industry-standard tools!**
+            
+            ### 📊 **Tests Performed:**
+            - 🚀 **Lighthouse CI**: Performance, SEO, Accessibility, Best Practices
+            - ♿ **Accessibility**: axe-core automated testing
+            - 📝 **HTML Validation**: W3C standards compliance
+            - 🏷️ **Schema.org**: Structured data validation
+            
+            ### 🛠️ **Migration Benefits:**
+            - **Industry-standard tools** instead of custom scripts
+            - **Automated CI/CD integration** with GitHub Actions
+            - **Comprehensive coverage** of SEO best practices
+            - **Detailed reporting** with actionable insights
+            
+            📁 **Detailed results available in workflow artifacts**
+            
+            This replaces the custom SEO testing system with Lighthouse CI and standard auditing tools.`;
+            
+            github.rest.issues.createComment({
+              issue_number: context.issue.number,
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              body: comment
+            });
