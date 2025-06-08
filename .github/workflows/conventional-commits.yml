@@ -31,7 +31,7 @@ jobs:
             pull_number: context.payload.pull_request.number
           });
 
-          const conventionalPattern = /^(feat|fix|docs|style|refactor|test|chore|perf|ci|build)(\(.+\))?: .{1,50}/;
+          const conventionalPattern = /^(feat|fix|docs|style|refactor|test|chore|perf|ci|build)(\(.+\))?: .{1,72}/;
           const mergePattern = /^Merge (pull request|branch)/;
 
           const analysis = {

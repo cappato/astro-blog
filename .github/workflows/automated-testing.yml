@@ -25,8 +25,8 @@ jobs:
       run: npm ci
       
     - name: Run unit tests
-      run: npm run test:unit || echo "Unit tests had some failures but continuing..."
-      continue-on-error: true
+      run: npm run test:unit
+      continue-on-error: false
       
     - name: Upload unit test results
       uses: actions/upload-artifact@v4
@@ -255,23 +255,24 @@ jobs:
         echo "Quality Checks: ${{ needs.quality-checks.result }}"
         echo "Performance Tests: ${{ needs.performance-tests.result }}"
 
-        # Check critical tests (build is most important for auto-merge)
+        # Check critical tests (build and unit tests are most important for auto-merge)
         BUILD_RESULT="${{ needs.build-only.result }}"
-        QUALITY_RESULT="${{ needs.quality-checks.result }}"
         UNIT_RESULT="${{ needs.unit-tests.result }}"
+        QUALITY_RESULT="${{ needs.quality-checks.result }}"
         ENDPOINT_RESULT="${{ needs.endpoint-tests.result }}"
         PERF_RESULT="${{ needs.performance-tests.result }}"
 
-        if [[ "$BUILD_RESULT" == "success" ]]; then
-          echo "✅ Critical test passed! Build successful - auto-merge can proceed."
-          if [[ "$QUALITY_RESULT" != "success" || "$UNIT_RESULT" != "success" || "$ENDPOINT_RESULT" != "success" || "$PERF_RESULT" != "success" ]]; then
-            echo "⚠️ Some optional tests had issues but auto-merge can proceed since build passed."
+        if [[ "$BUILD_RESULT" == "success" && "$UNIT_RESULT" == "success" ]]; then
+          echo "✅ Critical tests passed! Build and unit tests successful - auto-merge can proceed."
+          if [[ "$QUALITY_RESULT" != "success" || "$ENDPOINT_RESULT" != "success" || "$PERF_RESULT" != "success" ]]; then
+            echo "⚠️ Some optional tests had issues but auto-merge can proceed since critical tests passed."
             echo "OPTIONAL_TESTS_FAILED=true" >> $GITHUB_ENV
           fi
           exit 0
         else
-          echo "❌ Critical test failed. Build failed - blocking auto-merge."
+          echo "❌ Critical tests failed. Build or unit tests failed - blocking auto-merge."
           echo "Build result: $BUILD_RESULT"
+          echo "Unit tests result: $UNIT_RESULT"
           exit 1
         fi
 
