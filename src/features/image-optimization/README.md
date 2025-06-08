@@ -1,6 +1,21 @@
 # Image Optimization
 
-## Purpose
+⚠️  **DEPRECATED: This custom system has been migrated to standard tools**
+
+## Migration Status
+- ✅ **Image optimization** → imagemin + plugins
+- ✅ **CLI interface** → scripts/optimize-images-standard.js
+- ✅ **GitHub Actions** → .github/workflows/image-optimization.yml
+- ✅ **Configuration** → imagemin.config.js
+- 🔄 **This system is maintained for backward compatibility but is being phased out**
+
+## New Approach
+- `npm run optimize:images` (new standard script)
+- GitHub Actions for automatic optimization
+- imagemin with industry-standard plugins
+- Simplified configuration
+
+## Legacy Purpose
 Framework-agnostic image optimization engine that generates multiple formats (WebP, AVIF, JPEG), social media variants, thumbnails, and LQIP placeholders. Achieves 89.4% average file size reduction while maintaining visual quality. Pure TypeScript engine with CLI interface.
 
 ## Architecture
