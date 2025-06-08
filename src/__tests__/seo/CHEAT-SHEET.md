@@ -1,6 +1,6 @@
 # SEO Tests - Cheat Sheet
 
-## 🚀 Quick Commands
+## Quick Commands
 
 ### Setup
 ```bash
@@ -35,7 +35,7 @@ npm run test:seo:production
 npm run test:seo
 ```
 
-## 📋 When to Use Each Test
+## When to Use Each Test
 
 | Scenario | Command | Time |
 |----------|---------|------|
@@ -46,7 +46,7 @@ npm run test:seo
 | **Monthly audit** | `npm run test:seo` | 2-3m |
 | **Before release** | `npm run test:seo` | 2-3m |
 
-## 🔧 Debug Commands
+## Debug Commands
 
 ```bash
 # Verbose output
@@ -59,40 +59,40 @@ npx vitest run src/__tests__/seo/production.test.ts
 npx vitest run src/__tests__/seo/production.test.ts -t "should have title tag"
 ```
 
-## ✅ What Each Test Checks
+## What Each Test Checks
 
 ### Basic Connectivity
-- ✅ Site responds (200 status)
-- ✅ Returns HTML content
-- ✅ Contains site name
-- ✅ Reasonable response time
+- Site responds (200 status)
+- Returns HTML content
+- Contains site name
+- Reasonable response time
 
 ### Meta Tags
-- ✅ Title, description, keywords
-- ✅ Open Graph (Facebook)
-- ✅ Twitter Cards
-- ✅ Description length (50-160 chars)
-- ✅ No duplicate meta tags
+- Title, description, keywords
+- Open Graph (Facebook)
+- Twitter Cards
+- Description length (50-160 chars)
+- No duplicate meta tags
 
 ### Performance
-- ✅ Response time < 3 seconds
-- ✅ Page size < 1MB
-- ✅ Image optimization
-- ✅ Resource count limits
-- ✅ Core Web Vitals indicators
+- Response time < 3 seconds
+- Page size < 1MB
+- Image optimization
+- Resource count limits
+- Core Web Vitals indicators
 
 ### Schema.org
-- ✅ JSON-LD structured data
-- ✅ WebSite/Person schemas
-- ✅ Article schemas for blog posts
-- ✅ Rich snippets potential
+- JSON-LD structured data
+- WebSite/Person schemas
+- Article schemas for blog posts
+- Rich snippets potential
 
 ### Production Health
-- ✅ All of the above combined
-- ✅ RSS/Sitemap accessibility
-- ✅ Cross-page consistency
+- All of the above combined
+- RSS/Sitemap accessibility
+- Cross-page consistency
 
-## 🚨 Common Issues & Solutions
+## Common Issues & Solutions
 
 ### Slow Response
 ```bash
@@ -122,7 +122,7 @@ npm run test:seo:schema
 ```
 **Solution**: Fix JSON-LD syntax, complete required fields
 
-## 💡 Pro Tips
+## Pro Tips
 
 1. **Start with basic test** - fastest way to check if site is working
 2. **Use specific tests** - faster than running everything
@@ -130,29 +130,29 @@ npm run test:seo:schema
 4. **Monthly full audit** - comprehensive health check
 5. **Check mobile separately** - performance can vary
 
-## 📊 Expected Results
+## Expected Results
 
-### ✅ Success
+### Success
 ```
-✓ should connect to production site
-✓ should have proper meta description
-✓ should have fast response time
-✓ should have valid structured data
+PASS should connect to production site
+PASS should have proper meta description
+PASS should have fast response time
+PASS should have valid structured data
 
 Test Files  1 passed (1)
 Tests  X passed (X)
 ```
 
-### ❌ Failure
+### Failure
 ```
 × should have proper meta description
   → Description too short: 45 chars (need 50-160)
 
-× should have fast response time  
+× should have fast response time
   → 4.2s exceeds 3s limit
 ```
 
-## 🎯 Recommended Workflow
+## Recommended Workflow
 
 ### Daily
 ```bash

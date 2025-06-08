@@ -101,13 +101,13 @@ pillar: "test"
 tags: ["test"]
 ---
 
-# Post de Prueba 🚀
+# Post de Prueba
 
-Este post tiene emojis 😊 que violan los estándares profesionales.
+Este post tiene emojis que violan los estándares profesionales.
 
-## Sección 📋
+## Sección
 
-Más contenido con emojis ✅ que deben ser detectados.
+Más contenido con emojis que deben ser detectados.
 `;
 
       const testFile = path.join(testPostsDir, 'post-emojis.md');
