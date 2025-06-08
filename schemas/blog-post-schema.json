@@ -1,0 +1,168 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "https://cappato.dev/schemas/blog-post-schema.json",
+  "title": "Blog Post Schema.org Validation",
+  "description": "JSON Schema for validating Schema.org structured data in blog posts",
+  "type": "object",
+  "required": ["@context", "@type"],
+  "properties": {
+    "@context": {
+      "type": "string",
+      "const": "https://schema.org",
+      "description": "Schema.org context"
+    },
+    "@type": {
+      "type": "string",
+      "enum": ["BlogPosting", "Article", "TechArticle"],
+      "description": "Schema.org type for blog content"
+    },
+    "headline": {
+      "type": "string",
+      "minLength": 10,
+      "maxLength": 110,
+      "description": "Article headline (SEO optimized length)"
+    },
+    "description": {
+      "type": "string",
+      "minLength": 50,
+      "maxLength": 300,
+      "description": "Article description for SEO"
+    },
+    "author": {
+      "oneOf": [
+        {
+          "type": "object",
+          "required": ["@type", "name"],
+          "properties": {
+            "@type": {
+              "type": "string",
+              "const": "Person"
+            },
+            "name": {
+              "type": "string",
+              "minLength": 2
+            },
+            "url": {
+              "type": "string",
+              "format": "uri"
+            }
+          }
+        },
+        {
+          "type": "string",
+          "minLength": 2
+        }
+      ]
+    },
+    "datePublished": {
+      "type": "string",
+      "format": "date-time",
+      "description": "Publication date in ISO format"
+    },
+    "dateModified": {
+      "type": "string",
+      "format": "date-time",
+      "description": "Last modification date"
+    },
+    "image": {
+      "oneOf": [
+        {
+          "type": "string",
+          "format": "uri"
+        },
+        {
+          "type": "object",
+          "required": ["@type", "url"],
+          "properties": {
+            "@type": {
+              "type": "string",
+              "const": "ImageObject"
+            },
+            "url": {
+              "type": "string",
+              "format": "uri"
+            },
+            "width": {
+              "type": "integer",
+              "minimum": 1
+            },
+            "height": {
+              "type": "integer",
+              "minimum": 1
+            }
+          }
+        }
+      ]
+    },
+    "publisher": {
+      "type": "object",
+      "required": ["@type", "name"],
+      "properties": {
+        "@type": {
+          "type": "string",
+          "enum": ["Person", "Organization"]
+        },
+        "name": {
+          "type": "string",
+          "minLength": 2
+        },
+        "logo": {
+          "type": "object",
+          "required": ["@type", "url"],
+          "properties": {
+            "@type": {
+              "type": "string",
+              "const": "ImageObject"
+            },
+            "url": {
+              "type": "string",
+              "format": "uri"
+            }
+          }
+        }
+      }
+    },
+    "mainEntityOfPage": {
+      "type": "string",
+      "format": "uri",
+      "description": "Canonical URL of the page"
+    },
+    "keywords": {
+      "oneOf": [
+        {
+          "type": "string"
+        },
+        {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "minLength": 1
+          },
+          "minItems": 1,
+          "maxItems": 15
+        }
+      ]
+    },
+    "wordCount": {
+      "type": "integer",
+      "minimum": 300,
+      "description": "Minimum word count for quality content"
+    },
+    "timeRequired": {
+      "type": "string",
+      "pattern": "^PT\\d+M$",
+      "description": "Reading time in ISO 8601 duration format (e.g., PT5M)"
+    }
+  },
+  "additionalProperties": true,
+  "if": {
+    "properties": {
+      "@type": {
+        "const": "BlogPosting"
+      }
+    }
+  },
+  "then": {
+    "required": ["headline", "datePublished", "author", "publisher"]
+  }
+}
