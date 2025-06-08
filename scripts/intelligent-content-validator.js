@@ -2,8 +2,23 @@
 
 /**
  * Sistema Inteligente de Validación de Contenido
- * Detecta automáticamente posts largos y valida estructura
  *
+ * ⚠️  PARTIALLY DEPRECATED: Blog validation has been migrated to standard tools
+ *
+ * Migration status:
+ * - ✅ Frontmatter validation → Astro Content Collections (Zod schema)
+ * - ✅ Markdown structure → remark-lint + markdownlint-cli2
+ * - ✅ Schema.org validation → JSON Schema + AJV
+ * - ✅ Basic validation → scripts/validate-blog-posts.js
+ * - 🔄 This script still provides advanced content analysis but is being phased out
+ *
+ * New approach:
+ * - npm run validate:blog (new unified validation)
+ * - Astro build (automatic Zod validation)
+ * - npm run lint:md (markdown structure)
+ *
+ * Legacy functionality:
+ * Detecta automáticamente posts largos y valida estructura
  * Estándares: docs/STANDARDS.md (fuente autoritativa)
  * Validaciones: sin emojis, contenido técnico profesional
  */
