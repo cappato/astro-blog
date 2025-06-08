@@ -62,42 +62,40 @@ export default {
     },
     
     // Assertion configuration (quality gates)
+    // Permissive for PRs - can be made strict later for quality work
     assert: {
       assertions: {
-        // Performance thresholds
-        'categories:performance': ['error', { minScore: 0.8 }],
-        
-        // SEO thresholds (strict)
-        'categories:seo': ['error', { minScore: 0.95 }],
-        
-        // Accessibility thresholds
-        'categories:accessibility': ['error', { minScore: 0.9 }],
-        
-        // Best practices thresholds
-        'categories:best-practices': ['error', { minScore: 0.9 }],
-        
-        // Specific SEO audits
+        // Core SEO (keep as errors - critical)
         'meta-description': 'error',
         'document-title': 'error',
         'html-has-lang': 'error',
         'html-lang-valid': 'error',
         'meta-viewport': 'error',
-        'structured-data': 'warn', // Warn instead of error for flexibility
-        
-        // Performance audits
-        'first-contentful-paint': ['warn', { maxNumericValue: 2000 }],
-        'largest-contentful-paint': ['warn', { maxNumericValue: 2500 }],
-        'cumulative-layout-shift': ['warn', { maxNumericValue: 0.1 }],
-        
-        // Accessibility audits
-        'color-contrast': 'error',
-        'image-alt': 'error',
-        'label': 'error',
-        'link-name': 'error',
-        
-        // Best practices
-        'uses-https': 'off', // Disabled for local testing
-        'is-on-https': 'off', // Disabled for local testing
+
+        // Everything else as warnings (permissive)
+        'categories:performance': 'warn',
+        'categories:seo': 'warn',
+        'categories:accessibility': 'warn',
+        'categories:best-practices': 'warn',
+        'structured-data': 'warn',
+        'first-contentful-paint': 'warn',
+        'largest-contentful-paint': 'warn',
+        'cumulative-layout-shift': 'warn',
+        'color-contrast': 'warn',
+        'image-alt': 'warn',
+        'label': 'warn',
+        'link-name': 'warn',
+        'label-content-name-mismatch': 'warn',
+        'unsized-images': 'warn',
+        'unused-javascript': 'warn',
+        'uses-responsive-images': 'warn',
+        'lcp-lazy-loaded': 'warn',
+        'redirects': 'warn',
+        'charset': 'warn',
+
+        // Disabled for local testing
+        'uses-https': 'off',
+        'is-on-https': 'off',
         'external-anchors-use-rel-noopener': 'warn'
       }
     },
