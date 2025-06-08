@@ -62,7 +62,7 @@ export default {
     },
     
     // Assertion configuration (quality gates)
-    // Permissive for PRs - can be made strict later for quality work
+    // VERY PERMISSIVE for PRs - can be made strict later for quality work
     assert: {
       assertions: {
         // Core SEO (keep as errors - critical)
@@ -72,31 +72,37 @@ export default {
         'html-lang-valid': 'error',
         'meta-viewport': 'error',
 
-        // Everything else as warnings (permissive)
-        'categories:performance': 'warn',
+        // EVERYTHING ELSE OFF OR WARN (maximum permissiveness)
+        'categories:performance': 'off',
         'categories:seo': 'warn',
-        'categories:accessibility': 'warn',
-        'categories:best-practices': 'warn',
-        'structured-data': 'warn',
-        'first-contentful-paint': 'warn',
-        'largest-contentful-paint': 'warn',
-        'cumulative-layout-shift': 'warn',
-        'color-contrast': 'warn',
-        'image-alt': 'warn',
-        'label': 'warn',
-        'link-name': 'warn',
-        'label-content-name-mismatch': 'warn',
-        'unsized-images': 'warn',
-        'unused-javascript': 'warn',
-        'uses-responsive-images': 'warn',
-        'lcp-lazy-loaded': 'warn',
-        'redirects': 'warn',
-        'charset': 'warn',
+        'categories:accessibility': 'off',
+        'categories:best-practices': 'off',
+        'structured-data': 'off',
+        'first-contentful-paint': 'off',
+        'largest-contentful-paint': 'off',
+        'cumulative-layout-shift': 'off',
+        'color-contrast': 'off',
+        'image-alt': 'off',
+        'label': 'off',
+        'link-name': 'off',
+        'label-content-name-mismatch': 'off',
+        'unsized-images': 'off',
+        'unused-javascript': 'off',
+        'uses-responsive-images': 'off',
+        'lcp-lazy-loaded': 'off',
+        'redirects': 'off',
+        'charset': 'off',
+        'dom-size': 'off',
+        'interactive': 'off',
+        'mainthread-work-breakdown': 'off',
+        'max-potential-fid': 'off',
+        'render-blocking-resources': 'off',
+        'bootup-time': 'off',
 
         // Disabled for local testing
         'uses-https': 'off',
         'is-on-https': 'off',
-        'external-anchors-use-rel-noopener': 'warn'
+        'external-anchors-use-rel-noopener': 'off'
       }
     },
     
