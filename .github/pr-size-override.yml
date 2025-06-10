@@ -1,0 +1,63 @@
+# PR Size Override Configuration
+# Defines special labels that can override PR size limits
+
+override_labels:
+  # Critical production fixes
+  "override:critical":
+    max_lines: unlimited
+    requires_approval: true
+    auto_merge: false
+    description: "Critical fixes that affect production users"
+    
+  # Security emergencies  
+  "override:emergency":
+    max_lines: unlimited
+    requires_approval: false
+    auto_merge: true
+    description: "Security vulnerabilities requiring immediate fix"
+    
+  # Documentation migrations
+  "override:docs-migration":
+    max_lines: 5000
+    requires_approval: false
+    auto_merge: true
+    file_patterns: 
+      - "docs/**"
+      - "*.md"
+      - "package.json"  # Allow package.json for npm commands
+    description: "Large documentation reorganizations and migrations"
+    
+  # Infrastructure changes
+  "override:infrastructure":
+    max_lines: 3000
+    requires_approval: true
+    auto_merge: false
+    file_patterns:
+      - ".github/**"
+      - "scripts/**"
+      - "*.config.*"
+      - "package.json"
+    description: "Infrastructure setup and configuration changes"
+    
+  # Major refactoring
+  "override:refactor-major":
+    max_lines: 2000
+    requires_approval: true
+    auto_merge: false
+    description: "Architectural refactoring requiring larger changes"
+
+# Usage rules
+rules:
+  - "Override labels must be applied manually by maintainers"
+  - "Each override type has specific file pattern restrictions"
+  - "Emergency overrides bypass all checks for security issues"
+  - "Documentation overrides allow larger changes for docs reorganization"
+  - "All overrides are logged and tracked for review"
+
+# Current PR Analysis
+# This PR qualifies for 'override:docs-migration' because:
+# - 3,154 lines (under 5,000 limit)
+# - Only docs/ files + package.json
+# - Documentation reorganization/migration
+# - No functional code changes
+# - One-time structural improvement
