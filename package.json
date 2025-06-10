@@ -79,6 +79,8 @@
     "git:pr": "node scripts/git-workflow.js create-pr",
     "git:status": "node scripts/git-workflow.js status",
     "git:complete": "node scripts/git-workflow.js complete",
+    "pr:workflow-complete": "node scripts/complete-pr-workflow.js",
+    "pr:validate": "node scripts/validate-pr-ready.js",
     "deploy": "npm run build && npx wrangler pages deploy dist --project-name=cappato-dev-blog --commit-dirty=true",
     "deploy:clean": "npm run build && npx wrangler pages deploy dist --project-name=cappato-dev-blog",
     "deploy:ci": "npx wrangler pages deploy dist --project-name=cappato-dev-blog",

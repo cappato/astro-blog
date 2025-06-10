@@ -42,6 +42,7 @@
 | **2.1** | `pr-workflow.md` | Sistema de PRs, límites reales y overrides | Crear/gestionar PRs |
 | **2.2** | `git-workflow.md` | Flujo Git y comandos ganzo | Commits, branches, push |
 | **2.3** | `testing-workflow.md` | Estrategias de testing | Antes de PRs, debugging |
+| **2.4** | `unified-pr-workflow.md` | **FLUJO ÚNICO CORREGIDO** | **Crear PRs sin fallos** |
 
 ### **Cuándo usar Workflows:**
 - ✅ Vas a crear un PR
@@ -111,9 +112,10 @@
 ```
 
 ### **Pre-selección Inteligente:**
-- **Crear post**: Automáticamente sugerir `1.1, 2.1, 3.1`
-- **Fix bug**: Automáticamente sugerir `1.2, 2.1, 4.1, 4.3`
+- **Crear post**: Automáticamente sugerir `1.1, 2.4, 3.1`
+- **Fix bug**: Automáticamente sugerir `1.2, 2.4, 4.1, 4.3`
 - **Setup inicial**: Automáticamente sugerir `1.1, 1.2, 1.3`
+- **Crear PR**: Automáticamente sugerir `2.4` - **FLUJO ÚNICO RECOMENDADO**
 - **Problema complejo**: Automáticamente sugerir `4.1, 4.2, 4.3`
 - **Documentar experiencia**: Automáticamente sugerir `4.3`
 
