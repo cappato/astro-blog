@@ -55,6 +55,12 @@
 **Solución**: Verificar package.json antes de documentar
 **Aplicación**: Validación cruzada scripts vs documentación
 
+### **Lección 8.1: Desalineación de Reglas**
+**Problema**: Reglas documentadas diferentes a reglas implementadas en workflows
+**Solución**: Sincronizar documentación con implementación real
+**Aplicación**: Documentar límites reales (1500 base, overrides automáticos)
+**Ejemplo**: Documentábamos 300 líneas pero workflow permitía 1500+
+
 ### **Lección 9: Ejemplos Genéricos**
 **Problema**: Ejemplos inventados no ayudan
 **Solución**: Usar siempre ejemplos reales del proyecto

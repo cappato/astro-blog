@@ -116,11 +116,17 @@ npm run multi-agent:workflow "commit message" "PR title" "PR description"
 
 ## **📋 Protocolo de PR Estándar**
 
-### **Tamaños de PR**
-- **0-300 líneas**: Auto-merge automático
-- **301-800 líneas**: Warning, revisar si se puede dividir
-- **801-1500 líneas**: Crea issue de review
-- **>1500 líneas**: Bloquea auto-merge, requiere aprobación humana
+### **Tamaños de PR y Límites Reales**
+- **0-300 líneas**: Auto-merge ideal ✅
+- **301-800 líneas**: Auto-merge con warning ⚠️
+- **801-1500 líneas**: Auto-merge con issue de review 📋
+- **>1500 líneas**: **BLOQUEADO** sin override 🚫
+
+### **Overrides Automáticos**
+- **Documentación**: Hasta 1,200 líneas (detección automática)
+- **Docs + Refactor**: Hasta 2,000 líneas (reorganización)
+- **Migration**: Hasta 5,000 líneas (migraciones grandes)
+- **Emergency**: Sin límite (con etiqueta manual) humana
 
 ### **Comando de Reporte PR**
 ```bash

@@ -104,10 +104,45 @@ El sistema automáticamente:
 
 ### **Labels de Control:**
 - `auto-merge` - **OBLIGATORIO** para auto-merge
-- `size:small` - PR pequeño (0-300 líneas)
-- `size:medium` - PR mediano (301-800 líneas)
-- `size:large` - PR grande (801-1500 líneas)
-- `size:xl` - PR extra grande (>1500 líneas)
+- `size:small` - PR pequeño (0-300 líneas) - Auto-merge libre
+- `size:medium` - PR mediano (301-800 líneas) - Auto-merge con warning
+- `size:large` - PR grande (801-1500 líneas) - Auto-merge con issue de revisión
+- `size:xl` - PR extra grande (>1500 líneas) - **BLOQUEADO** sin override
+
+### **Límites de Bloqueo por Tipo:**
+- **Base**: 1,500 líneas (bloquea auto-merge)
+- **Documentación**: 1,200 líneas (override automático)
+- **Docs + Refactor**: 2,000 líneas (override automático)
+- **Migration**: 5,000 líneas (override automático)
+- **Emergency**: Sin límite (override manual)
+
+---
+
+## 🏷️ **Sistema de Overrides de Tamaño**
+
+### **Overrides Automáticos (por detección de contenido):**
+
+| Tipo | Límite | Detección | Auto-merge |
+|------|--------|-----------|------------|
+| **Base** | 1,500 líneas | Por defecto | ❌ Bloqueado |
+| **Documentation** | 1,200 líneas | `docs:` en título, archivos `docs/` | ✅ Permitido |
+| **Docs + Refactor** | 2,000 líneas | `docs:` + `reorganize/refactor` | ✅ Permitido |
+| **Migration** | 5,000 líneas | `migration/reorganize/complete` | ✅ Permitido |
+
+### **Overrides Manuales (por etiquetas):**
+
+| Etiqueta | Límite | Requiere Aprobación | Uso |
+|----------|--------|-------------------|-----|
+| `size/emergency` | Sin límite | ❌ No | Emergencias de seguridad |
+| `size/migration` | 5,000 líneas | ❌ No | Migraciones grandes |
+| `size/documentation` | 1,200 líneas | ❌ No | Solo documentación |
+| `override:critical` | Sin límite | ✅ Sí | Fixes críticos producción |
+
+### **Reglas de Aplicación:**
+- ✅ **Detección automática** por título y archivos modificados
+- ✅ **Overrides en cascada** (más específico gana)
+- ✅ **Logging completo** de qué override se aplicó
+- ✅ **Validación de patrones** de archivos para cada tipo
 
 ---
 

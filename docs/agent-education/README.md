@@ -39,7 +39,7 @@
 
 | # | Archivo | Propósito | Cuándo Usar |
 |---|---------|-----------|-------------|
-| **2.1** | `pr-workflow.md` | Sistema de PRs y auto-merge | Crear/gestionar PRs |
+| **2.1** | `pr-workflow.md` | Sistema de PRs, límites reales y overrides | Crear/gestionar PRs |
 | **2.2** | `git-workflow.md` | Flujo Git y comandos ganzo | Commits, branches, push |
 | **2.3** | `testing-workflow.md` | Estrategias de testing | Antes de PRs, debugging |
 
