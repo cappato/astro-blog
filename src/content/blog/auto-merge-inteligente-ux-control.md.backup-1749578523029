@@ -1,19 +1,13 @@
 ---
 title: "Auto-Merge Inteligente: UX sobre Control"
 description: "Cómo diseñé un sistema de auto-merge que prioriza la experiencia del usuario sobre el control manual, eliminando clicks innecesarios sin sacrificar calidad."
-date: "2024-11-29"
+date: "2025-06-05"
 author: "Matías Cappato"
 tags: ["Auto-Merge", "Automatización", "DevOps", "GitHub Actions", "UX", "Workflow", "ci-cd", "cloudflare", "deployment", "testing"]
 postId: "auto-merge-inteligente-ux-control"
 image:
   url: "/images/blog/auto-merge-inteligente-ux-control.webp"
   alt: "Auto-Merge Inteligente: UX sobre Control - Optimización de workflow sin fricción"
-# Serie
-series: "protocolos-automaticos"
-seriesName: "Protocolos Automáticos"
-seriesDescription: "Serie sobre implementación de protocolos automáticos en desarrollo"
-seriesOrder: 3
-seriesTotal: 4
 ---
 
 En el [post anterior](/blog/anatomia-sistema-protocolos-automaticos) vimos la implementación técnica. Ahora exploramos cómo optimizar la experiencia del usuario eliminando fricción innecesaria del workflow.

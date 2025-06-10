@@ -1,0 +1,193 @@
+---
+/**
+ * SharedImage Component
+ * Sistema optimizado de imágenes compartidas para series de blog posts
+ * 
+ * Features:
+ * - Imágenes compartidas para series
+ * - Fallback a imágenes individuales
+ * - Soporte para múltiples variantes
+ * - Optimización automática de formatos
+ */
+
+interface Props {
+  /** ID de la serie (si el post pertenece a una serie) */
+  series?: string;
+  /** ID único del post */
+  postId: string;
+  /** Texto alternativo para la imagen */
+  alt: string;
+  /** Variante de imagen a usar */
+  variant?: 'main' | 'og' | 'thumb' | 'lqip';
+  /** Clases CSS adicionales */
+  class?: string;
+  /** Ancho de la imagen (para optimización) */
+  width?: number;
+  /** Alto de la imagen (para optimización) */
+  height?: number;
+  /** Carga lazy por defecto */
+  loading?: 'lazy' | 'eager';
+  /** Prioridad de fetch */
+  fetchpriority?: 'high' | 'low' | 'auto';
+}
+
+const { 
+  series, 
+  postId, 
+  alt, 
+  variant = 'main',
+  class: className = '',
+  width,
+  height,
+  loading = 'lazy',
+  fetchpriority = 'auto'
+} = Astro.props;
+
+// Mapeo de variantes a nombres de archivo
+const variantMap = {
+  main: 'portada.webp',
+  og: 'portada-og.webp', 
+  thumb: 'portada-thumb.webp',
+  lqip: 'portada-lqip.webp'
+};
+
+const fileName = variantMap[variant];
+
+// Determinar ruta de imagen
+let imagePath: string;
+let fallbackPath: string;
+
+if (series) {
+  // Usar imagen compartida de la serie
+  imagePath = `/images/shared/series/${series}/${fileName}`;
+  // Fallback a imagen individual del post
+  fallbackPath = `/images/${postId}/${fileName}`;
+} else {
+  // Usar imagen individual del post
+  imagePath = `/images/${postId}/${fileName}`;
+  // Fallback a imagen standalone compartida
+  fallbackPath = `/images/shared/standalone/${postId}/${fileName}`;
+}
+
+// Generar srcset para diferentes formatos
+const webpPath = imagePath;
+const avifPath = imagePath.replace('.webp', '-avif.avif');
+
+// Atributos de imagen optimizados
+const imageAttrs = {
+  src: imagePath,
+  alt,
+  loading,
+  fetchpriority,
+  class: className,
+  ...(width && { width }),
+  ...(height && { height })
+};
+
+// Generar LQIP si es necesario
+const lqipPath = series 
+  ? `/images/shared/series/${series}/portada-lqip.webp`
+  : `/images/${postId}/portada-lqip.webp`;
+---
+
+<!-- Picture element con soporte para múltiples formatos -->
+<picture class="shared-image">
+  <!-- AVIF para navegadores modernos -->
+  <source 
+    srcset={avifPath} 
+    type="image/avif"
+  />
+  
+  <!-- WebP como fallback principal -->
+  <source 
+    srcset={webpPath} 
+    type="image/webp"
+  />
+  
+  <!-- Imagen principal con todos los atributos -->
+  <img 
+    {...imageAttrs}
+    onerror={`this.src='${fallbackPath}'`}
+  />
+</picture>
+
+<!-- Preload para LQIP si es above-the-fold -->
+{loading === 'eager' && (
+  <link 
+    rel="preload" 
+    href={lqipPath} 
+    as="image" 
+    type="image/webp"
+  />
+)}
+
+<style>
+  .shared-image {
+    display: block;
+    width: 100%;
+    height: auto;
+  }
+  
+  .shared-image img {
+    width: 100%;
+    height: auto;
+    border-radius: 0.5rem;
+    transition: transform 0.2s ease-in-out;
+  }
+  
+  .shared-image img:hover {
+    transform: scale(1.02);
+  }
+  
+  /* Placeholder mientras carga */
+  .shared-image img[loading="lazy"] {
+    background: linear-gradient(90deg, #f0f0f0 25%, #e0e0e0 50%, #f0f0f0 75%);
+    background-size: 200% 100%;
+    animation: loading 1.5s infinite;
+  }
+  
+  @keyframes loading {
+    0% { background-position: 200% 0; }
+    100% { background-position: -200% 0; }
+  }
+  
+  /* Dark mode support */
+  @media (prefers-color-scheme: dark) {
+    .shared-image img[loading="lazy"] {
+      background: linear-gradient(90deg, #2a2a2a 25%, #1a1a1a 50%, #2a2a2a 75%);
+    }
+  }
+</style>
+
+<script>
+  // Mejorar experiencia de carga con intersection observer
+  if ('IntersectionObserver' in window) {
+    const imageObserver = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          const img = entry.target as HTMLImageElement;
+          
+          // Precargar imagen AVIF si está disponible
+          const picture = img.closest('picture');
+          const avifSource = picture?.querySelector('source[type="image/avif"]') as HTMLSourceElement;
+          
+          if (avifSource && avifSource.srcset) {
+            const link = document.createElement('link');
+            link.rel = 'preload';
+            link.href = avifSource.srcset;
+            link.as = 'image';
+            link.type = 'image/avif';
+            document.head.appendChild(link);
+          }
+          
+          imageObserver.unobserve(img);
+        }
+      });
+    });
+    
+    // Observar todas las imágenes lazy
+    document.querySelectorAll('.shared-image img[loading="lazy"]').forEach(img => {
+      imageObserver.observe(img);
+    });
+  }
+</script>

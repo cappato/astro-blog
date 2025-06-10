@@ -54,18 +54,16 @@ cp mi-imagen-principal.jpg images/raw/mi-nuevo-post/portada.webp
 npm run optimize-images -- --postId=mi-nuevo-post --force --debug
 ```
 
-**Esto genera automáticamente (OPTIMIZADO - 6 variantes):**
+**Esto genera automáticamente:**
 - ✅ `portada.webp` - Imagen principal
 - ✅ `portada-avif.avif` - Formato AVIF moderno
 - ✅ `portada-og.webp` - Open Graph para redes sociales
+- ✅ `portada-og-jpg.jpeg` - JPEG para compatibilidad
+- ✅ `portada-og-avif.avif` - AVIF para Open Graph
 - ✅ `portada-thumb.webp` - **Miniatura para listados** ← CRÍTICO
 - ✅ `portada-lqip.webp` - Low Quality Image Placeholder
 - ✅ `portada-lqip.txt` - Datos del LQIP
-
-**Variantes eliminadas (redundantes):**
-- ❌ `portada-og-jpg.jpeg` - WebP es más eficiente
-- ❌ `portada-og-avif.avif` - Redundante con portada-avif.avif
-- ❌ `portada-wsp.webp` - Usar portada-og.webp para redes sociales
+- ✅ `portada-wsp.webp` - Versión para WhatsApp/Social
 
 ### **Paso 4: Verificar con Tests (OBLIGATORIO)**
 

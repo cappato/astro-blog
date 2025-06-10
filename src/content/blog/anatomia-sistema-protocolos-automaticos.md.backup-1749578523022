@@ -6,12 +6,6 @@ author: "Matías Cappato"
 tags: ["AI", "Multi-developer", "Automatización", "Protocolos", "TypeScript", "Arquitectura", "componentes"]
 postId: "anatomia-sistema-protocolos-automaticos"
 imageAlt: "Anatomía de un Sistema de Protocolos Automáticos - Guía completa"
-# Serie
-series: "protocolos-automaticos"
-seriesName: "Protocolos Automáticos"
-seriesDescription: "Serie sobre implementación de protocolos automáticos en desarrollo"
-seriesOrder: 2
-seriesTotal: 4
 ---
 
 En el [post anterior](/blog/protocolos-automaticos-ia-arquitectura) vimos el problema y la visión. Ahora vamos a la implementación técnica completa del sistema que hace que funcione.

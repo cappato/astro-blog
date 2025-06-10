@@ -6,12 +6,6 @@ author: "Matías Cappato"
 tags: ["github-actions", "wrangler", "ci-cd", "deploy", "automation", "cloudflare", "workflow", "devops"]
 postId: "github-actions-deploy-automatico-wrangler"
 imageAlt: "GitHub Actions y Wrangler - Configuración de CI/CD para deploy automático"
-# Serie
-series: "deploy-wrangler"
-seriesName: "Deploy Automático con Wrangler"
-seriesDescription: "Serie completa sobre deploy automático con Wrangler y GitHub Actions"
-seriesOrder: 2
-seriesTotal: 3
 ---
 
 ¿Ya tienes **Wrangler configurado** y quieres automatizar tus deploys? En esta guía te enseño cómo configurar **GitHub Actions para deploy automático** con Wrangler, creando un pipeline CI/CD profesional.

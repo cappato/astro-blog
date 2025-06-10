@@ -1,19 +1,13 @@
 ---
 title: "Migración de Sistemas: Preservando la Visión"
 description: "Cómo migré del sistema .system al framework multi-agente preservando la visión original mientras resolvía problemas de implementación."
-date: "2024-11-30"
+date: "2025-06-05"
 author: "Matías Cappato"
 tags: ["Arquitectura", "Migración", "Sistemas", "Multi-developer", "Refactoring", "Evolution", "componentes", "testing"]
 postId: "migracion-sistemas-preservando-vision"
 image:
   url: "/images/blog/migracion-sistemas-preservando-vision.webp"
   alt: "Migración de Sistemas: Preservando la Visión - Evolución sin perder la esencia"
-# Serie
-series: "protocolos-automaticos"
-seriesName: "Protocolos Automáticos"
-seriesDescription: "Serie sobre implementación de protocolos automáticos en desarrollo"
-seriesOrder: 4
-seriesTotal: 4
 ---
 
 En esta serie hemos visto el [problema original](/blog/protocolos-automaticos-ia-arquitectura), la [implementación técnica](/blog/anatomia-sistema-protocolos-automaticos) y la [optimización UX](/blog/auto-merge-inteligente-ux-control). Ahora exploramos cómo migrar sistemas preservando la visión original.
