@@ -87,11 +87,23 @@
 
 ---
 
-## **🎯 Flujo de Educación Recomendado**
+## **Flujo de Educación Recomendado**
+
+### **Educación Rápida (RECOMENDADO):**
+```bash
+# Opción 1: Startup súper rápido (2 minutos)
+npm run agent:ready
+
+# Opción 2: Sistema completo (5 minutos)
+npm run agent:educate
+
+# Opción 3: Un solo archivo
+# Leer: docs/AGENT-STARTUP.md
+```
 
 ### **Para Nuevos Agentes:**
-1. **Leer Onboarding completo** (1.1 → 1.2 → 1.3)
-2. **Revisar Workflows relevantes** según tarea
+1. **Ejecutar**: `npm run agent:ready` (contiene todo lo esencial)
+2. **Revisar Workflows relevantes** según tarea (especialmente 2.4)
 3. **Consultar Features** si es necesario
 4. **Usar Troubleshooting** cuando surjan problemas
 

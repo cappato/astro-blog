@@ -17,17 +17,24 @@
 
 ## **🚫 Política de Emojis**
 
-### **✅ PERMITIDOS (Documentación y Scripts)**
-- **Documentación**: README, guías, documentos de ayuda
-- **Scripts**: Archivos de automatización y herramientas
-- **Logs**: Mensajes de debug y desarrollo
-- **Comentarios**: Explicaciones en código
+### **✅ PERMITIDOS (Solo Scripts y Logs)**
+- **Scripts**: Archivos de automatización (.js en scripts/)
+- **Logs**: Mensajes de debug y desarrollo (console.log)
+- **Comentarios de código**: Solo en explicaciones técnicas
 
-### **❌ PROHIBIDOS (Código Fuente)**
+### **❌ PROHIBIDOS (Todo lo demás)**
+- **Archivos .md**: NUNCA emojis en markdown (incluye docs/)
 - **Código TypeScript/JavaScript**: Variables, funciones, clases
 - **Archivos de configuración**: package.json, tsconfig.json, etc.
 - **Templates**: Archivos .astro, componentes
 - **Estilos**: CSS, archivos de estilo
+- **Documentación**: README.md, guías, docs/ - SIN EMOJIS
+
+### **🚨 REGLA CRÍTICA: ARCHIVOS .MD SIN EMOJIS**
+- **Razón**: Accesibilidad, legibilidad, profesionalismo
+- **Incluye**: Todos los archivos en docs/, README.md, CHANGELOG.md
+- **Excepción**: NINGUNA - archivos .md siempre sin emojis
+- **Validación**: `npm run validate:emoji` debe bloquear
 
 ### **Razón de la Política**
 - **Accesibilidad**: Lectores de pantalla pueden tener problemas

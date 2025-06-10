@@ -5,18 +5,14 @@
  * Implementa la nueva política balanceada de emojis
  */
 
-import { readFileSync, readdirSync, statSync } from 'fs';
-import { join, extname } from 'path';
+const { readFileSync, readdirSync, statSync } = require('fs');
+const { join, extname } = require('path');
 
 const EMOJI_REGEX = /[\u{1F600}-\u{1F64F}]|[\u{1F300}-\u{1F5FF}]|[\u{1F680}-\u{1F6FF}]|[\u{1F1E0}-\u{1F1FF}]|[\u{2600}-\u{26FF}]|[\u{2700}-\u{27BF}]/gu;
 
 const ALLOWED_PATHS = [
-  '.github/',
-  'docs/',
-  'scripts/',
-  '.githooks/',
-  'README.md',
-  'CHANGELOG.md'
+  'scripts/',  // Only scripts directory
+  '.githooks/'
 ];
 
 const PROHIBITED_PATHS = [
@@ -26,6 +22,7 @@ const PROHIBITED_PATHS = [
 ];
 
 const PROHIBITED_EXTENSIONS = [
+  '.md',     // CRITICAL: No emojis in markdown files
   '.json',
   '.yml',
   '.yaml',
@@ -197,7 +194,7 @@ class EmojiPolicyValidator {
 
   validate() {
     console.log('🔍 Validating emoji policy...\n');
-    console.log('📋 Policy: Emojis allowed in documentation/tools, prohibited in source code\n');
+    console.log('📋 Policy: Emojis ONLY in scripts/console.log, PROHIBITED in .md files and source code\n');
     
     this.scanDirectory();
     this.printResults();
@@ -207,10 +204,10 @@ class EmojiPolicyValidator {
 }
 
 // Run if called directly
-if (import.meta.url === `file://${process.argv[1]}`) {
+if (require.main === module) {
   const validator = new EmojiPolicyValidator();
   const isCompliant = validator.validate();
   process.exit(isCompliant ? 0 : 1);
 }
 
-export { EmojiPolicyValidator };
+module.exports = { EmojiPolicyValidator };
