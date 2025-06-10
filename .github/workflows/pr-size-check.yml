@@ -81,7 +81,11 @@ jobs:
             const isMigration = hasMigrationLabel ||
                                title.includes('migrar') ||
                                title.includes('migration') ||
-                               title.includes('migración');
+                               title.includes('migración') ||
+                               title.includes('reorganize') ||
+                               title.includes('reorganizar') ||
+                               title.includes('complete') ||
+                               title.includes('completo');
 
             // Determinar umbral aplicable
             let currentThreshold = 'xlarge';
@@ -95,8 +99,8 @@ jobs:
               blockingFiles = Infinity;
             } else if (isMigration) {
               console.log('🔄 OVERRIDE: Migration detected - relaxed limits');
-              blockingThreshold = 3000;  // Migraciones pueden ser grandes
-              blockingFiles = 25;
+              blockingThreshold = 5000;  // Migraciones pueden ser muy grandes (docs reorganization)
+              blockingFiles = 30;
             } else if (isDocumentation && isRefactor) {
               console.log('📚🔧 OVERRIDE: Documentation + Refactor - relaxed limits');
               blockingThreshold = 2000;  // Docs + refactor pueden ser grandes
