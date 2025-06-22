@@ -87,6 +87,8 @@
     "wrangler:login": "npx wrangler login"
   },
   "dependencies": {
+    "@esbuild/linux-x64": "^0.25.5",
+    "@rollup/rollup-linux-x64-gnu": "^4.44.0",
     "@tailwindcss/typography": "^0.5.16",
     "astro": "^5.8.0"
   },

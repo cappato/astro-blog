@@ -11,6 +11,8 @@ import DeferredScripts from '../../features/performance-optimization/components/
 import Breadcrumbs from '../../features/breadcrumbs/components/Breadcrumbs.astro';
 // import PerformanceMonitor from '../../features/performance-optimization/components/PerformanceMonitor.astro';
 
+import type { CollectionEntry } from 'astro:content';
+
 interface Props {
   title: string;
   description?: string;
@@ -21,18 +23,20 @@ interface Props {
   publishedDate?: string;
   modifiedDate?: string;
   customTitle?: string; // Para breadcrumbs
+  entry?: CollectionEntry<'blog'>; // Para schemas de blog posts
 }
 
 const {
   title,
-  description = "Matías Cappato - Desarrollador web especializado en crear experiencias digitales modernas y accesibles.",
+  description = "Desarrollador Web Full Stack especializado en React, TypeScript y tecnologías modernas. Blog sobre desarrollo web y tutoriales.",
   image,
   imageAlt,
   type = 'website',
   keywords = [],
   publishedDate,
   modifiedDate,
-  customTitle
+  customTitle,
+  entry
 } = Astro.props;
 
 // Convertir fechas a objetos Date si son strings
@@ -75,7 +79,7 @@ const currentUrl = Astro.url.pathname;
   <Favicons />
 
   <!-- Schema.org structured data - FULLY AUTOMATED -->
-  <AutoSchema />
+  <AutoSchema post={entry} />
 
   <CommonScripts />
 

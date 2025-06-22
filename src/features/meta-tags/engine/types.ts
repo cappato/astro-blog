@@ -244,9 +244,11 @@ export const DEFAULT_META_CONFIG: MetaTagConfig = {
 
 /**
  * Default validation rules
+ * Note: maxTitleLength accounts for branding suffix ` | Matías Cappato` (18 chars)
+ * So effective title limit is 78 - 18 = 60 chars for the base title
  */
 export const DEFAULT_VALIDATION_RULES: ValidationRules = {
-  maxTitleLength: 60,
+  maxTitleLength: 78, // Increased to accommodate branding suffix
   maxDescriptionLength: 160,
   minDescriptionLength: 50,
   requiredImageDimensions: {

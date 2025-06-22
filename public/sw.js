@@ -13,7 +13,8 @@ const STATIC_ASSETS = [
   '/',
   '/blog',
   '/blog/pillars',
-  '/_astro/main.css', // Adjust based on actual build output
+  // CSS files are handled dynamically by Vite in dev mode
+  // In production, they'll be in /_astro/ with hashed names
   '/images/logo/logo-modern.webp',
   '/favicon.ico'
 ];

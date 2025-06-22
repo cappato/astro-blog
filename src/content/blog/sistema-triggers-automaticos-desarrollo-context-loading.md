@@ -1,5 +1,5 @@
 ---
-title: "Sistema de Triggers Automáticos para Desarrollo: Context Loading Inteligente"
+title: "Sistema de Triggers Automáticos para Desarrollo: Context"
 description: "Implementa un sistema de triggers que detecta intenciones y carga contexto automáticamente. Mejora la experiencia de desarrollo con automatización inteligente."
 date: "2025-06-05"
 author: "Matías Cappato"

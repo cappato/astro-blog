@@ -1,6 +1,6 @@
 ---
-title: "Por qué las reglas rígidas fallan en la vida real (y qué hacer en su lugar)"
-description: "¿Por qué las reglas rígidas suelen fallar cuando más las necesitamos? Descubre cómo aplicar escalamiento progresivo para tomar mejores decisiones en el trabajo, las finanzas y la vida personal."
+title: "Por qué las reglas rígidas fallan en la vida real (y qué"
+description: "¿Por qué las reglas rígidas suelen fallar cuando más las necesitamos? Descubre cómo aplicar escalamiento progresivo para tomar mejores decisiones en el..."
 date: "2025-01-07"
 author: "Matías Cappato"
 tags: ["escalamiento-progresivo", "sistemas-adaptativos", "toma-decisiones", "flexibilidad", "antifragilidad", "reglas-rigidas", "productividad", "management", "vida-personal"]
