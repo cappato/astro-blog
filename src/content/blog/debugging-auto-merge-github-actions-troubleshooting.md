@@ -1,5 +1,5 @@
 ---
-title: "Debugging Auto-merge en GitHub Actions: Guía Completa de Troubleshooting"
+title: "Debugging Auto-merge en GitHub Actions: Guía Completa de"
 description: "Aprende a debuggear y solucionar problemas comunes de auto-merge en GitHub Actions. Guía paso a paso con ejemplos reales y troubleshooting."
 date: "2025-06-05"
 author: "Matías Cappato"

@@ -1,5 +1,5 @@
 ---
-title: "Reglas Esenciales para Proyectos Profesionales: Estándares de Calidad"
+title: "Reglas Esenciales para Proyectos Profesionales: Estándares"
 description: "Descubre las reglas esenciales que transforman proyectos amateur en desarrollos profesionales. Estándares probados para calidad y consistencia."
 date: "2025-06-05"
 author: "Matías Cappato"
