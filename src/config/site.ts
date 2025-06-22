@@ -12,7 +12,7 @@ export const SITE_INFO = {
   title: 'Matías Cappato',
   
   /** Descripción del sitio */
-  description: 'Desarrollador Web Full Stack especializado en React, TypeScript y tecnologías modernas. Blog sobre desarrollo web, tutoriales y experiencias.',
+  description: 'Desarrollador Web Full Stack especializado en React, TypeScript y tecnologías modernas. Blog sobre desarrollo web y tutoriales.',
   
   /** Autor principal */
   author: {
@@ -240,7 +240,7 @@ export const BLOG_POST_CONFIG = {
   /** SEO configuration */
   seo: {
     blogTitle: 'Blog | Matías Cappato',
-    blogDescription: 'Artículos sobre desarrollo web, programación, tecnología y más por Matías Cappato. Aprende sobre JavaScript, React, Node.js y las últimas tendencias en desarrollo.',
+    blogDescription: 'Artículos sobre desarrollo web, programación y tecnología por Matías Cappato. Aprende JavaScript, React, Node.js y las últimas tendencias.',
     tagTitleTemplate: 'Artículos sobre {tag} | Blog | Matías Cappato',
     tagDescriptionTemplate: 'Descubre todos los artículos sobre {tag} en el blog de Matías Cappato. Aprende sobre desarrollo web, programación y tecnología.'
   },
@@ -452,8 +452,8 @@ export const SCHEMA_CONFIG = {
   autoDetection: {
     patterns: {
       'home': ['^/$', '^https?://[^/]+/$'],
-      'blog-post': ['/blog/', '/posts/'],
-      'blog-index': ['/blog$', '/posts$'],
+      'blog-post': ['^/blog/[^/]+$', '^/posts/[^/]+$'], // Only direct blog post URLs, not subdirectories
+      'blog-index': ['^/blog$', '^/posts$', '^/blog/$', '^/posts/$', '^/blog/pillars$', '^/blog/tag/', '^/blog/pillar/'],
       'portfolio': ['/portfolio/', '/work/'],
       'project': ['/projects/', '/project/'],
       'course': ['/courses/', '/course/'],
