@@ -184,12 +184,10 @@ export function isCoverImage(filename: string): boolean {
 }
 
 /**
- * Get preset for cover images - OPTIMIZADO: Solo variantes esenciales
- * Reducido de 9 a 6 variantes para mejorar performance
+ * Get preset for cover images (returns all presets except default)
  */
 export function getCoverImagePresets(): string[] {
-  // Solo variantes esenciales (eliminadas: og-jpg, og-avif, wsp)
-  return ['og', 'thumb', 'avif', 'lqip'];
+  return getPresetNames().filter(name => name !== 'default');
 }
 
 /**
@@ -251,7 +249,7 @@ export function getPresetByPurpose(
  */
 export function getRecommendedPresets(): Record<string, string[]> {
   return {
-    blog_post: ['default', 'og', 'thumb', 'avif', 'lqip'], // OPTIMIZADO: eliminadas variantes redundantes
+    blog_post: ['default', 'og', 'og-jpg', 'thumb', 'avif', 'lqip'],
     social_media: ['og', 'og-jpg', 'wsp', 'og-avif'],
     thumbnails: ['thumb'],
     modern_browsers: ['avif', 'og-avif'],

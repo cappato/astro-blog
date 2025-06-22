@@ -1,0 +1,320 @@
+---
+/**
+ * SeriesNavigation Component
+ * Navegación entre posts de una serie con indicador de progreso
+ * 
+ * Features:
+ * - Lista completa de posts en la serie
+ * - Indicador visual del post actual
+ * - Progreso de la serie
+ * - Enlaces a posts anteriores/siguientes
+ * - Responsive design
+ */
+
+import { getCollection } from 'astro:content';
+import type { CollectionEntry } from 'astro:content';
+
+interface Props {
+  /** ID de la serie */
+  series: string;
+  /** Nombre de la serie */
+  seriesName: string;
+  /** Descripción de la serie */
+  seriesDescription?: string;
+  /** Orden del post actual */
+  currentOrder: number;
+  /** Total de posts en la serie */
+  seriesTotal: number;
+  /** Slug del post actual */
+  currentSlug: string;
+  /** Clase CSS adicional */
+  class?: string;
+}
+
+const { 
+  series, 
+  seriesName, 
+  seriesDescription, 
+  currentOrder, 
+  seriesTotal, 
+  currentSlug,
+  class: className = ''
+} = Astro.props;
+
+// Obtener todos los posts de la serie
+const allPosts = await getCollection('blog');
+const seriesPosts = allPosts
+  .filter(post => post.data.series === series)
+  .sort((a, b) => (a.data.seriesOrder || 0) - (b.data.seriesOrder || 0))
+  .filter(post => !post.data.draft);
+
+// Calcular navegación
+const currentIndex = seriesPosts.findIndex(post => post.slug === currentSlug);
+const previousPost = currentIndex > 0 ? seriesPosts[currentIndex - 1] : null;
+const nextPost = currentIndex < seriesPosts.length - 1 ? seriesPosts[currentIndex + 1] : null;
+
+// Calcular progreso
+const progressPercentage = Math.round((currentOrder / seriesTotal) * 100);
+---
+
+<nav class={`series-navigation ${className}`} aria-label={`Navegación de la serie: ${seriesName}`}>
+  <!-- Encabezado de la serie -->
+  <header class="series-header">
+    <div class="series-info">
+      <h3 class="series-title">
+        <span class="series-label">Serie:</span>
+        {seriesName}
+      </h3>
+      {seriesDescription && (
+        <p class="series-description">{seriesDescription}</p>
+      )}
+    </div>
+    
+    <!-- Indicador de progreso -->
+    <div class="series-progress">
+      <div class="progress-info">
+        <span class="progress-text">
+          Parte {currentOrder} de {seriesTotal}
+        </span>
+        <span class="progress-percentage">
+          {progressPercentage}%
+        </span>
+      </div>
+      <div class="progress-bar">
+        <div 
+          class="progress-fill" 
+          style={`width: ${progressPercentage}%`}
+          role="progressbar"
+          aria-valuenow={currentOrder}
+          aria-valuemin={1}
+          aria-valuemax={seriesTotal}
+          aria-label={`Progreso de la serie: ${currentOrder} de ${seriesTotal}`}
+        ></div>
+      </div>
+    </div>
+  </header>
+
+  <!-- Lista de posts de la serie -->
+  <section class="series-posts">
+    <h4 class="posts-title">Posts en esta serie:</h4>
+    <ol class="posts-list">
+      {seriesPosts.map((post, index) => {
+        const isCurrentPost = post.slug === currentSlug;
+        const postOrder = post.data.seriesOrder || index + 1;
+        const isCompleted = postOrder < currentOrder;
+        
+        return (
+          <li class={`post-item ${isCurrentPost ? 'current' : ''} ${isCompleted ? 'completed' : ''}`}>
+            {isCurrentPost ? (
+              <span class="post-link current-post" aria-current="page">
+                <span class="post-number">{postOrder}.</span>
+                <span class="post-title">{post.data.title}</span>
+                <span class="current-indicator">← Estás aquí</span>
+              </span>
+            ) : (
+              <a href={`/blog/${post.slug}/`} class="post-link">
+                <span class="post-number">{postOrder}.</span>
+                <span class="post-title">{post.data.title}</span>
+                {isCompleted && <span class="completed-indicator">✓</span>}
+              </a>
+            )}
+          </li>
+        );
+      })}
+    </ol>
+  </section>
+
+  <!-- Navegación anterior/siguiente -->
+  <footer class="series-navigation-controls">
+    <div class="nav-buttons">
+      {previousPost ? (
+        <a href={`/blog/${previousPost.slug}/`} class="nav-button prev-button">
+          <span class="nav-direction">← Anterior</span>
+          <span class="nav-title">{previousPost.data.title}</span>
+        </a>
+      ) : (
+        <div class="nav-button prev-button disabled">
+          <span class="nav-direction">← Anterior</span>
+          <span class="nav-title">Primer post de la serie</span>
+        </div>
+      )}
+
+      {nextPost ? (
+        <a href={`/blog/${nextPost.slug}/`} class="nav-button next-button">
+          <span class="nav-direction">Siguiente →</span>
+          <span class="nav-title">{nextPost.data.title}</span>
+        </a>
+      ) : (
+        <div class="nav-button next-button disabled">
+          <span class="nav-direction">Siguiente →</span>
+          <span class="nav-title">Último post de la serie</span>
+        </div>
+      )}
+    </div>
+  </footer>
+</nav>
+
+<style>
+  .series-navigation {
+    @apply bg-gray-50 dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-lg p-6 my-8;
+  }
+
+  /* Encabezado */
+  .series-header {
+    @apply mb-6;
+  }
+
+  .series-info {
+    @apply mb-4;
+  }
+
+  .series-title {
+    @apply text-lg font-semibold text-gray-900 dark:text-gray-100 mb-2;
+  }
+
+  .series-label {
+    @apply text-sm font-medium text-blue-600 dark:text-blue-400 uppercase tracking-wide;
+  }
+
+  .series-description {
+    @apply text-sm text-gray-600 dark:text-gray-400 leading-relaxed;
+  }
+
+  /* Progreso */
+  .series-progress {
+    @apply space-y-2;
+  }
+
+  .progress-info {
+    @apply flex justify-between items-center text-sm;
+  }
+
+  .progress-text {
+    @apply font-medium text-gray-700 dark:text-gray-300;
+  }
+
+  .progress-percentage {
+    @apply text-blue-600 dark:text-blue-400 font-semibold;
+  }
+
+  .progress-bar {
+    @apply w-full bg-gray-200 dark:bg-gray-700 rounded-full h-2;
+  }
+
+  .progress-fill {
+    @apply bg-blue-600 dark:bg-blue-500 h-2 rounded-full transition-all duration-300 ease-out;
+  }
+
+  /* Lista de posts */
+  .series-posts {
+    @apply mb-6;
+  }
+
+  .posts-title {
+    @apply text-base font-medium text-gray-900 dark:text-gray-100 mb-3;
+  }
+
+  .posts-list {
+    @apply space-y-2;
+  }
+
+  .post-item {
+    @apply relative;
+  }
+
+  .post-link {
+    @apply flex items-center p-3 rounded-md transition-colors duration-200;
+  }
+
+  .post-link:not(.current-post) {
+    @apply hover:bg-gray-100 dark:hover:bg-gray-700 text-gray-700 dark:text-gray-300;
+  }
+
+  .post-link:not(.current-post):hover {
+    @apply text-blue-600 dark:text-blue-400;
+  }
+
+  .current-post {
+    @apply bg-blue-50 dark:bg-blue-900/20 text-blue-900 dark:text-blue-100 font-medium;
+  }
+
+  .post-item.completed .post-link {
+    @apply text-green-700 dark:text-green-400;
+  }
+
+  .post-number {
+    @apply font-mono text-sm font-semibold mr-3 min-w-[2rem];
+  }
+
+  .post-title {
+    @apply flex-1;
+  }
+
+  .current-indicator {
+    @apply text-xs text-blue-600 dark:text-blue-400 font-medium ml-2;
+  }
+
+  .completed-indicator {
+    @apply text-green-600 dark:text-green-400 ml-2;
+  }
+
+  /* Navegación */
+  .series-navigation-controls {
+    @apply border-t border-gray-200 dark:border-gray-700 pt-4;
+  }
+
+  .nav-buttons {
+    @apply grid grid-cols-1 md:grid-cols-2 gap-4;
+  }
+
+  .nav-button {
+    @apply flex flex-col p-4 rounded-md border border-gray-200 dark:border-gray-700 transition-colors duration-200;
+  }
+
+  .nav-button:not(.disabled) {
+    @apply hover:bg-gray-50 dark:hover:bg-gray-700 hover:border-blue-300 dark:hover:border-blue-600;
+  }
+
+  .nav-button.disabled {
+    @apply opacity-50 cursor-not-allowed bg-gray-100 dark:bg-gray-800;
+  }
+
+  .nav-direction {
+    @apply text-sm font-medium text-blue-600 dark:text-blue-400 mb-1;
+  }
+
+  .nav-title {
+    @apply text-sm text-gray-700 dark:text-gray-300 line-clamp-2;
+  }
+
+  .next-button {
+    @apply text-right;
+  }
+
+  /* Responsive */
+  @media (max-width: 768px) {
+    .series-navigation {
+      @apply p-4;
+    }
+
+    .progress-info {
+      @apply flex-col items-start gap-1;
+    }
+
+    .nav-buttons {
+      @apply grid-cols-1;
+    }
+
+    .next-button {
+      @apply text-left;
+    }
+  }
+
+  /* Utilidades */
+  .line-clamp-2 {
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+  }
+</style>

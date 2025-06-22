@@ -79,6 +79,7 @@
     "git:pr": "node scripts/git-workflow.js create-pr",
     "git:status": "node scripts/git-workflow.js status",
     "git:complete": "node scripts/git-workflow.js complete",
+    "onboarding": "echo '📚 Iniciando onboarding del agente...' && echo '📖 Leyendo documentación crítica...' && cat docs/agent-education/onboarding/project-identity.md && echo '\\n📋 Leyendo estándares...' && cat docs/agent-education/onboarding/standards.md && echo '\\n✅ Onboarding completado. Agente listo para trabajar.'",
     "deploy": "npm run build && npx wrangler pages deploy dist --project-name=cappato-dev-blog --commit-dirty=true",
     "deploy:clean": "npm run build && npx wrangler pages deploy dist --project-name=cappato-dev-blog",
     "deploy:ci": "npx wrangler pages deploy dist --project-name=cappato-dev-blog",

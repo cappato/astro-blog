@@ -6,12 +6,6 @@ author: "Matías Cappato"
 tags: ["automation", "ci-cd", "cloudflare", "cloudflare-pages", "configuración", "deploy", "pages", "setup", "wrangler", "wrangler-setup"]
 postId: "configurar-wrangler-cloudflare-pages-2024"
 imageAlt: "Configuración de Wrangler y Cloudflare Pages - Guía paso a paso para desarrolladores"
-# Serie
-series: "deploy-wrangler"
-seriesName: "Deploy Automático con Wrangler"
-seriesDescription: "Serie completa sobre deploy automático con Wrangler y GitHub Actions"
-seriesOrder: 1
-seriesTotal: 3
 ---
 
 ¿Quieres configurar **Wrangler y Cloudflare Pages** para tu proyecto pero no sabes por dónde empezar? En esta guía te enseño paso a paso cómo hacer la **configuración inicial de Cloudflare Pages** y preparar tu proyecto para deploy automático.

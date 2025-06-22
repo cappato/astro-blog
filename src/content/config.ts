@@ -17,7 +17,13 @@ const blogCollection = defineCollection({
     imageAlt: z.string().optional(),
     tags: z.array(z.string()).optional(),
     draft: z.boolean().optional().default(false),
-    slug: z.string().optional()
+    slug: z.string().optional(),
+    // Sistema de series
+    series: z.string().optional(),
+    seriesName: z.string().optional(),
+    seriesDescription: z.string().optional(),
+    seriesOrder: z.number().optional(),
+    seriesTotal: z.number().optional()
   })
 });
 
